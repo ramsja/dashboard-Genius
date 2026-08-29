@@ -32,11 +32,19 @@ O en Render, ve a:
 
 ## Paso 4: Ejecutar Schema SQL
 
-1. En Supabase, ve a **SQL Editor**
-2. Click en "New Query"
-3. Copia todo el contenido de `schema-normalizado.sql`
-4. Pégalo en el editor
-5. Click "Run"
+**OPCIÓN A: Automático (Recomendado)**
+```bash
+node setup-db.js
+```
+
+**OPCIÓN B: Manual en Supabase**
+1. Ve a https://supabase.com/dashboard
+2. Entra en tu proyecto: **dashboard-Genius**
+3. Click en **SQL Editor**
+4. Click en "New Query"
+5. Copia todo el contenido de `schema-normalizado.sql` (del repo)
+6. Pégalo en el editor
+7. Click "Run"
 
 Esto creará:
 - ✅ Tablas normalizadas (usuarios, disciplinas, tipos_apuesta, apuestas, transacciones, etc.)
