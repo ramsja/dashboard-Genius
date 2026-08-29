@@ -351,7 +351,15 @@ const server = http.createServer(async (req, res) => {
       const ext = path.extname(filePath).toLowerCase();
       const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
-      res.writeHead(200, { 'Content-Type': contentType });
+      // Headers anti-caché para HTML
+      const headers = {
+        'Content-Type': contentType,
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0, private',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      };
+
+      res.writeHead(200, headers);
       res.end(data);
     });
 
