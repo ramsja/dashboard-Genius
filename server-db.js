@@ -156,34 +156,22 @@ const RUTAS_PUBLICAS = new Set(['/login.html', '/api/login']);
 async function cargarDatosAutomatico() {
   if (!supabase) return;
 
+  if (!process.env.BO_USERNAME || !process.env.BO_PASSWORD) {
+    console.log('⚠️ Faltan BO_USERNAME/BO_PASSWORD, no se puede sincronizar con Novusbet');
+    return;
+  }
+
+  // Siempre trae datos REALES al arrancar (reemplaza cualquier dato de
+  // prueba que hubiera quedado). sync-novusbet.js solo borra la tabla
+  // justo antes de insertar los nuevos registros, así que si el login o
+  // la descarga fallan, los datos existentes quedan intactos.
   try {
-    console.log('📊 Verificando datos en Supabase...');
-    const { count, error } = await supabase
-      .from('transacciones_novusbet')
-      .select('*', { count: 'exact', head: true });
-
-    if (error) throw error;
-
-    if (!count || count === 0) {
-      console.log('📝 No hay transacciones. Intentando sincronizar datos REALES desde Novusbet...');
-
-      if (process.env.BO_USERNAME && process.env.BO_PASSWORD) {
-        try {
-          const { main: sincronizarNovusbet } = require('./sync-novusbet');
-          const total = await sincronizarNovusbet();
-          console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
-          return;
-        } catch (syncErr) {
-          console.log('⚠️ No se pudo sincronizar con Novusbet ahora mismo:', syncErr.message);
-        }
-      } else {
-        console.log('⚠️ Faltan BO_USERNAME/BO_PASSWORD, no se puede sincronizar con Novusbet');
-      }
-    } else {
-      console.log(`✅ Base de datos ya tiene ${count} transacciones`);
-    }
-  } catch (error) {
-    console.log('⚠️ Error verificando datos:', error.message);
+    console.log('📝 Sincronizando datos REALES desde Novusbet...');
+    const { main: sincronizarNovusbet } = require('./sync-novusbet');
+    const total = await sincronizarNovusbet();
+    console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
+  } catch (syncErr) {
+    console.log('⚠️ No se pudo sincronizar con Novusbet ahora mismo:', syncErr.message);
   }
 }
 
