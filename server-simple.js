@@ -103,7 +103,7 @@ const server = http.createServer((req, res) => {
 
   // Archivos estáticos
   if (pathname === '/' || pathname === '') {
-    pathname = '/inicio.html';
+    pathname = '/dashboard.html';
   }
 
   const filePath = path.join(DASHBOARD_DIR, pathname);
