@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel de control diario</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: #161d2f;
+        --panel-soft: #1d2942;
+        --line: #2e3d5e;
+        --text: #edf3ff;
+        --muted: #a7b9d8;
+        --green: #30c48d;
+        --amber: #f5b942;
+        --red: #f87171;
+        --blue: #60a5fa;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px 80px; }
+      h1 { margin-bottom: 8px; }
+      .muted { color: var(--muted); }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+        margin: 24px 0 30px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 18px;
+      }
+      .card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+      .card .value {
+        margin-top: 12px;
+        font-size: clamp(24px, 3vw, 38px);
+        font-weight: 700;
+      }
+      .status-row { display: flex; gap: 10px; flex-wrap: wrap; }
+      .pill {
+        display: inline-flex;
+        border-radius: 100px;
+        padding: 6px 12px;
+        font-size: 12px;
+        border: 1px solid var(--line);
+        background: var(--panel-soft);
+      }
+      .table-wrap {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+      th { background: var(--panel-soft); color: var(--muted); }
+      tr:last-child td { border-bottom: none; }
+      .tag {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 11px;
+        color: white;
+      }
+      .activo { background: rgba(48,196,141,0.2); color: #96f0c8; }
+      .inactivo { background: rgba(245,185,66,0.2); color: #ffd88a; }
+      .desconectado { background: rgba(248,113,113,0.2); color: #ffb5b5; }
+      .suspendido { background: rgba(96,165,250,0.2); color: #bfe1ff; }
+      .otros { background: rgba(148,163,184,0.2); color: #dfe9ff; }
+      .error { color: #ffb5b5; margin-top: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Panel de control diario</h1>
+      <div class="muted" id="generatedAt">Cargando resumen…</div>
+
+      <div class="grid" id="stats"></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Discipline</th>
+              <th>Activo</th>
+              <th>Inactivo</th>
+              <th>Desconectado</th>
+              <th>Suspendido</th>
+              <th>Otros</th>
+            </tr>
+          </thead>
+          <tbody id="statusTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      async function loadData() {
+        const summaryUrl = '../reportes/clientes-resumen.json';
+        const fieldsUrl = '../reportes/resumen-campos.json';
+
+        try {
+          const [summaryRes, fieldsRes] = await Promise.all([
+            fetch(summaryUrl),
+            fetch(fieldsUrl)
+          ]);
+
+          if (!summaryRes.ok || !fieldsRes.ok) {
+            throw new Error('No se pudo cargar el resumen generado.');
+          }
+
+          const summary = await summaryRes.json();
+          const fields = await fieldsRes.json();
+
+          renderSummary(summary, fields);
+        } catch (error) {
+          document.body.insertAdjacentHTML(
+            'beforeend',
+            '<div class="container"><div class="error">' + error.message + '</div></div>'
+          );
+          console.error(error);
+        }
+      }
+
+      function renderSummary(summary, fields) {
+        const stats = document.getElementById('stats');
+        const statuses = [
+          ['activo', 'Activos', 'green'],
+          ['inactivo', 'Inactivos', 'amber'],
+          ['desconectado', 'Desconectados', 'red'],
+          ['suspendido', 'Suspendidos', 'blue'],
+          ['otros', 'Otros', 'blue']
+        ];
+
+        stats.innerHTML = statuses.map(([key, label, color]) => {
+          const value = summary.totals?.[key] ?? 0;
+          return `
+            <div class="card">
+              <div class="label">${label}</div>
+              <div class="value" style="color: var(--${color});">${value}</div>
+            </div>
+          `;
+        }).join('');
+
+        document.getElementById('generatedAt').textContent = `Actualizado: ${summary.generated_at}`;
+
+        const rows = Object.entries(fields.disciplines || {}).map(([discipline, count]) => {
+          const statusTotals = summary.totals || {};
+          return `
+            <tr>
+              <td><span class="tag ${discipline === 'deportes' ? 'activo' : discipline === 'casino' ? 'inactivo' : 'otros'}">${discipline}</span></td>
+              <td>${statusTotals.activo ?? 0}</td>
+              <td>${statusTotals.inactivo ?? 0}</td>
+              <td>${statusTotals.desconectado ?? 0}</td>
+              <td>${statusTotals.suspendido ?? 0}</td>
+              <td>${statusTotals.otros ?? 0}</td>
+            </tr>
+          `;
+        });
+
+        document.getElementById('statusTable').innerHTML = rows.join('');
+      }
+
+      loadData();
+    </script>
+  </body>
+</html>

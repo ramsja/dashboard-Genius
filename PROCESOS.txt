@@ -1,0 +1,63 @@
+KALI LINUX LAB — PROCESOS
+=========================
+Alcance: evidencias propias, esta PC / WSL, objetivos con autorizacion escrita.
+Prohibido: atacar terceros, exploits, malware, DoS.
+Gestor PERMANENTE: GROK (manager del lab). Consola Windows o:
+  powershell -File C:\Users\Riesgos\kali-lab\manager.ps1 <comando>
+  manager.ps1 conectar | ciclo | dirigir "P1 1.1.1.1"
+
+HERRAMIENTAS NUEVAS
+-------------------
+P1  Localizar IP
+    Que hace : DNS, reverse, WHOIS, geolocalizacion, ASN, CDN
+    Entrada  : IP, dominio, o archivo con IPs
+    Script   : herramientas/localizar-ip.sh
+    Salida   : reportes/ip-*.txt
+
+P2  Detectar fuerza bruta
+    Que hace : encuentra IPs que pegan a SSH/HTTP/login (fallos, spray, hydra)
+    Entrada  : log o carpeta (por defecto evidencias/)
+    Script   : herramientas/detectar-fuerza-bruta.sh
+    Salida   : reportes/fuerza-bruta-*.txt
+
+P3  Extraer datos
+    Que hace : saca IPs, emails, URLs, hashes, JWT, claves de archivos/pcap
+    Entrada  : archivo o carpeta
+    Script   : herramientas/extraer-datos.sh
+    Salida   : reportes/datos-*.txt
+
+P4  Demo fuerza bruta LOCAL
+    Que hace : hydra SOLO contra 127.0.0.1 (login de laboratorio)
+    Script   : herramientas/demo-fuerza-bruta-local.sh
+
+P10 Informe forense
+    Que hace : caso, hash SHA-256, copia, P2+P3, timeline, YARA
+    Script   : herramientas/informe-forense.sh
+    Salida   : casos\CASO-fecha\
+
+P11 Auditoria del lab
+    Que hace : Lynis + inventario de tools (esta VM)
+    Script   : herramientas/auditoria-lab.sh
+
+P12 PCAP forense
+    Que hace : tshark sobre un .pcap TUYO
+    Script   : herramientas/pcap-forense.sh
+
+P13 Red neuronal de sensibilidad
+    Que hace : puntua riesgo de puerta (cabeceras/candado) y a que es sensible
+    Script   : herramientas/red-vulnerabilidad.sh
+    Salida   : reportes\red-neuronal-para-gente.txt
+
+PROCESOS YA EXISTENTES
+----------------------
+P5  Estado del lab          check-lab.sh / manager.ps1 status
+P6  Instalar herramientas   install-tools.sh / manager.ps1 tools
+P7  Pruebas locales         pruebas-lab.sh  (nmap solo localhost)
+P8  Analisis HTTPS lectura  mostrar-analisis-www.sh  (DNS/TLS/headers, sin exploit)
+P9  Protocolos/certificados pruebas-protocolos.sh
+
+CARPETAS
+--------
+  evidencias\   logs y dumps para analizar (tuyos o de demo)
+  reportes\     salida de P1 P2 P3
+  analisis-www\ ultimo analisis HTTPS
