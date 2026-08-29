@@ -1,326 +1,379 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dashboard Genius - Centro de Control</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Genius - Panel Principal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
-        :root {
-            --bg: #0b1020;
-            --panel: #161d2f;
-            --panel-soft: #1d2942;
-            --line: #2e3d5e;
-            --text: #edf3ff;
-            --muted: #a7b9d8;
-            --green: #30c48d;
-            --amber: #f5b942;
-            --red: #f87171;
-            --blue: #60a5fa;
-        }
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-        }
-        .header {
-            background: linear-gradient(135deg, #0b1020 0%, #1a1f2e 100%);
-            border-bottom: 1px solid var(--line);
-            padding: 40px 20px;
-            text-align: center;
-        }
-        .logo {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        .title {
-            font-size: 32px;
-            color: #60a5fa;
-            margin: 0 0 8px 0;
-        }
-        .subtitle {
-            color: var(--muted);
-            font-size: 16px;
-            margin: 0;
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        header h1 { font-size: 36px; margin-bottom: 5px; }
+        header p { opacity: 0.9; font-size: 14px; }
+        .container { max-width: 2000px; margin: 0 auto; padding: 30px 20px; }
 
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin-bottom: 50px;
-        }
-        .menu-card {
-            background: var(--panel);
-            border: 2px solid var(--line);
-            border-radius: 12px;
-            padding: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-        }
-        .menu-card:hover {
-            border-color: #60a5fa;
-            box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
-            transform: translateY(-4px);
-        }
-        .menu-icon {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
-        .menu-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #60a5fa;
-            margin-bottom: 8px;
-        }
-        .menu-desc {
-            color: var(--muted);
-            font-size: 13px;
-            margin-bottom: 15px;
-            flex-grow: 1;
-        }
-        .menu-link {
-            display: inline-block;
-            color: #60a5fa;
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .menu-link:hover {
-            text-decoration: underline;
-        }
+        /* KPIs */
+        .kpis-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 30px 0; }
+        .kpi { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); border-left: 5px solid #667eea; }
+        .kpi-value { font-size: 36px; font-weight: bold; color: #667eea; margin: 10px 0; }
+        .kpi-label { font-size: 12px; color: #999; text-transform: uppercase; font-weight: 600; }
 
-        .status-section {
-            background: var(--panel);
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-        .status-title {
-            color: #60a5fa;
-            font-size: 18px;
-            margin: 0 0 15px 0;
-        }
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-        }
-        .status-item {
-            background: var(--panel-soft);
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #60a5fa;
-        }
-        .status-label {
-            color: var(--muted);
-            font-size: 12px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        .status-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #30c48d;
-        }
-        .status-item.warning .status-value {
-            color: var(--amber);
-        }
-        .status-item.error .status-value {
-            color: var(--red);
-        }
+        /* Grid de secciones */
+        .sections-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 25px; margin: 30px 0; }
+        .section { background: white; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); overflow: hidden; }
+        .section-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; }
+        .section-header h2 { font-size: 18px; margin: 0; }
+        .section-content { padding: 20px; }
 
-        .quick-links {
-            background: rgba(96, 165, 250, 0.1);
-            border: 1px solid #2e3d5e;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-        .quick-links-title {
-            color: #60a5fa;
-            font-weight: bold;
-            margin: 0 0 12px 0;
-        }
-        .links-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .links-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid #2e3d5e;
-        }
-        .links-list li:last-child {
-            border-bottom: none;
-        }
-        .links-list a {
-            color: #60a5fa;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .links-list a:hover {
-            text-decoration: underline;
-        }
+        /* Tablas */
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f9f9f9; padding: 12px; text-align: left; font-weight: 600; font-size: 12px; border-bottom: 2px solid #e0e0e0; text-transform: uppercase; color: #667eea; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+        tr:hover { background: #fafafa; }
 
-        .footer {
-            text-align: center;
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid var(--line);
-        }
+        /* Badges */
+        .badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-deportes { background: #d4edda; color: #155724; }
+        .badge-casino { background: #cfe2ff; color: #084298; }
+        .badge-otros { background: #e2e3e5; color: #383d41; }
+        .badge-admin { background: #e7d4f5; color: #6f42c1; }
+        .badge-editor { background: #fff3cd; color: #856404; }
+        .badge-jugador { background: #d1ecf1; color: #0c5460; }
 
-        .badge {
-            display: inline-block;
-            background: #30c48d;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
-            margin-left: 8px;
+        /* Charts */
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin: 30px 0; }
+        .chart-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
+        .chart-title { font-size: 16px; font-weight: 600; margin-bottom: 15px; color: #333; }
+
+        .status { text-align: center; font-size: 12px; color: #999; padding: 10px; }
+        .loading { text-align: center; padding: 40px; color: #999; }
+        .numero { text-align: right; font-weight: 500; }
+
+        @media (max-width: 1200px) {
+            .sections-grid { grid-template-columns: 1fr; }
+            .charts-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">🎯</div>
-        <h1 class="title">Dashboard Genius</h1>
-        <p class="subtitle">Centro de Control Centralizado <span class="badge">EN VIVO</span></p>
-    </div>
+    <header>
+        <div class="container">
+            <h1>🎯 Dashboard Genius - Panel Principal</h1>
+            <p>Sistema Integral de Apuestas • Última actualización: <span id="actualizacion">--:--:--</span></p>
+        </div>
+    </header>
 
     <div class="container">
-        <!-- Estado Sistema -->
-        <div class="status-section">
-            <h3 class="status-title">📊 Estado del Sistema</h3>
-            <div class="status-grid">
-                <div class="status-item">
-                    <div class="status-label">Servidor</div>
-                    <div class="status-value">✓</div>
+        <!-- KPIs Principales -->
+        <div class="kpis-row">
+            <div class="kpi">
+                <div class="kpi-label">Transacciones</div>
+                <div class="kpi-value" id="kpi-transacciones">0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Monto Total</div>
+                <div class="kpi-value" id="kpi-monto">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Usuarios</div>
+                <div class="kpi-value" id="kpi-usuarios">0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Disciplinas</div>
+                <div class="kpi-value" id="kpi-disciplinas">0</div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title">📊 Transacciones por Disciplina</div>
+                <canvas id="chartDisciplinas"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">💰 Top 5 Usuarios por Monto</div>
+                <canvas id="chartTopUsuarios"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">🎮 Juegos Más Jugados</div>
+                <canvas id="chartJuegos"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">👥 Usuarios por Tipología</div>
+                <canvas id="chartTipologia"></canvas>
+            </div>
+        </div>
+
+        <!-- Secciones -->
+        <div class="sections-grid">
+            <!-- Transacciones -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>💳 Últimas Transacciones</h2>
                 </div>
-                <div class="status-item">
-                    <div class="status-label">WebSocket</div>
-                    <div class="status-value">✓</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Tipo</th>
+                                <th>Monto</th>
+                                <th>Disciplina</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-transacciones">
+                            <tr><td colspan="4" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="status-item">
-                    <div class="status-label">Usuarios</div>
-                    <div class="status-value">231</div>
+            </div>
+
+            <!-- Disciplinas -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>⚽ Resumen Disciplinas</h2>
                 </div>
-                <div class="status-item">
-                    <div class="status-label">Transacciones</div>
-                    <div class="status-value">500+</div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Disciplina</th>
+                                <th>Transacciones</th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-disciplinas">
+                            <tr><td colspan="3" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Usuarios -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>👤 Usuarios del Sistema</h2>
+                </div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Tipo</th>
+                                <th>Saldo</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-usuarios">
+                            <tr><td colspan="4" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Juegos Populares -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>🎯 Juegos Populares</h2>
+                </div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Juego</th>
+                                <th>Apuestas</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-juegos">
+                            <tr><td colspan="3" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <!-- Enlaces Rápidos -->
-        <div class="quick-links">
-            <h3 class="quick-links-title">🔗 Enlaces Rápidos</h3>
-            <ul class="links-list">
-                <li>📊 <a href="/index-realtime.html">Dashboard Tiempo Real</a></li>
-                <li>📥 <a href="/descargas.html">Centro de Descargas</a></li>
-                <li>📈 <a href="/api/resumen">API Resumen</a></li>
-                <li>👥 <a href="/api/usuarios">API Usuarios</a></li>
-                <li>💳 <a href="/api/transacciones">API Transacciones</a></li>
-            </ul>
-        </div>
-
-        <!-- Menu Principal -->
-        <h2 style="margin-top: 0; color: #60a5fa;">Selecciona una opción</h2>
-        <div class="menu-grid">
-            <!-- Dashboard -->
-            <a href="/index-realtime.html" class="menu-card">
-                <div class="menu-icon">📊</div>
-                <div class="menu-title">Dashboard</div>
-                <div class="menu-desc">Ver datos en tiempo real con gráficos y estadísticas en vivo</div>
-                <div class="menu-link">Abrir Dashboard →</div>
-            </a>
-
-            <!-- Descargas -->
-            <a href="/descargas.html" class="menu-card">
-                <div class="menu-icon">📥</div>
-                <div class="menu-title">Descargar Reportes</div>
-                <div class="menu-desc">Exporta datos en CSV, JSON y Excel para análisis offline</div>
-                <div class="menu-link">Ir a Descargas →</div>
-            </a>
-
-            <!-- APIs -->
-            <a href="#apis" class="menu-card" onclick="mostrarAPIs(event)">
-                <div class="menu-icon">⚙️</div>
-                <div class="menu-title">APIs REST</div>
-                <div class="menu-desc">Accede a los datos mediante APIs REST para integraciones</div>
-                <div class="menu-link">Ver APIs →</div>
-            </a>
-
-            <!-- Documentación -->
-            <a href="https://github.com/ramsja/dashboard-Genius/tree/claude/estructura-estudio-kozee8" target="_blank" class="menu-card">
-                <div class="menu-icon">📚</div>
-                <div class="menu-title">Documentación</div>
-                <div class="menu-desc">Guías completas de instalación, setup y uso de Dashboard Genius</div>
-                <div class="menu-link">Ver Docs →</div>
-            </a>
-
-            <!-- Supabase -->
-            <a href="https://supabase.com" target="_blank" class="menu-card">
-                <div class="menu-icon">🗄️</div>
-                <div class="menu-title">Base de Datos</div>
-                <div class="menu-desc">Accede a Supabase PostgreSQL para administrar la BD</div>
-                <div class="menu-link">Ir a Supabase →</div>
-            </a>
-
-            <!-- GitHub -->
-            <a href="https://github.com/ramsja/dashboard-Genius" target="_blank" class="menu-card">
-                <div class="menu-icon">💻</div>
-                <div class="menu-title">GitHub</div>
-                <div class="menu-desc">Código fuente, issues y pull requests del proyecto</div>
-                <div class="menu-link">Ir a GitHub →</div>
-            </a>
-        </div>
-
-        <!-- Sección de APIs -->
-        <div id="apis-section" style="display: none;">
-            <div class="status-section">
-                <h3 class="status-title">⚙️ APIs REST Disponibles</h3>
-                <div style="color: var(--muted); font-size: 13px; line-height: 1.8;">
-                    <p><strong>GET /api/resumen</strong> - Resumen del día (usuarios, estados)</p>
-                    <p><strong>GET /api/campos</strong> - Breakdown por disciplina</p>
-                    <p><strong>GET /api/usuarios</strong> - Lista de usuarios (max 100)</p>
-                    <p><strong>GET /api/transacciones</strong> - Transacciones recientes (max 100)</p>
-                    <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--line);">
-                        <strong>Descargas:</strong>
-                    </p>
-                    <p><strong>GET /download/usuarios.csv</strong> - Usuarios en CSV</p>
-                    <p><strong>GET /download/transacciones.csv</strong> - Transacciones en CSV</p>
-                    <p><strong>GET /download/reporte-completo.json</strong> - Reporte completo</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>🎯 Dashboard Genius • Powered by Node.js + Supabase + WebSocket</p>
-            <p>Rama: <code>claude/estructura-estudio-kozee8</code></p>
-            <p id="datetime"></p>
+        <div class="status">
+            Dashboard Genius • Auto-actualiza cada 30 segundos • Conectado a Supabase
         </div>
     </div>
 
     <script>
-        function mostrarAPIs(e) {
-            e.preventDefault();
-            const section = document.getElementById('apis-section');
-            section.style.display = section.style.display === 'none' ? 'block' : 'none';
-            section.scrollIntoView({ behavior: 'smooth' });
+        let datos = { transacciones: [], usuarios: [], disciplinas: [] };
+
+        async function cargarDatos() {
+            try {
+                const [trans, usuarios, disc] = await Promise.all([
+                    fetch('/api/transacciones-novusbet').then(r => r.json()).catch(() => []),
+                    fetch('/api/usuarios').then(r => r.json()).catch(() => []),
+                    fetch('/api/disciplinas').then(r => r.json()).catch(() => [])
+                ]);
+
+                datos = { transacciones: trans || [], usuarios: usuarios || [], disciplinas: disc || [] };
+
+                actualizarUI();
+                document.getElementById('actualizacion').textContent = new Date().toLocaleTimeString('es-ES');
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
 
-        document.getElementById('datetime').textContent = new Date().toLocaleString('es-SV');
+        function actualizarUI() {
+            const t = datos.transacciones;
+            const u = datos.usuarios;
+            const monto = t.reduce((s, x) => s + (x.monto || 0), 0);
+            const disc = new Set(t.map(x => x.disciplina)).size;
+
+            document.getElementById('kpi-transacciones').textContent = t.length;
+            document.getElementById('kpi-monto').textContent = '$' + monto.toFixed(2);
+            document.getElementById('kpi-usuarios').textContent = u.length;
+            document.getElementById('kpi-disciplinas').textContent = disc;
+
+            actualizarTablas();
+            actualizarGraficos();
+        }
+
+        function actualizarTablas() {
+            // Transacciones
+            let html = datos.transacciones.slice(0, 8).map(t => `
+                <tr>
+                    <td><strong>${t.usuario}</strong></td>
+                    <td>${t.tipo_transaccion}</td>
+                    <td class="numero">$${(t.monto || 0).toFixed(2)}</td>
+                    <td><span class="badge badge-${t.disciplina}">${t.disciplina}</span></td>
+                </tr>
+            `).join('');
+            document.getElementById('tabla-transacciones').innerHTML = html || '<tr><td colspan="4" class="loading">Sin datos</td></tr>';
+
+            // Disciplinas
+            const discData = {};
+            datos.transacciones.forEach(t => {
+                const d = t.disciplina || 'otros';
+                if (!discData[d]) discData[d] = { count: 0, monto: 0 };
+                discData[d].count += 1;
+                discData[d].monto += t.monto || 0;
+            });
+            html = Object.entries(discData).map(([d, v]) => `
+                <tr>
+                    <td><span class="badge badge-${d}">${d}</span></td>
+                    <td class="numero">${v.count}</td>
+                    <td class="numero">$${v.monto.toFixed(2)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tabla-disciplinas').innerHTML = html || '<tr><td colspan="3" class="loading">Sin datos</td></tr>';
+
+            // Usuarios
+            html = datos.usuarios.slice(0, 8).map(u => {
+                const tipo = u.tipo_usuario_id === 1 ? 'Admin' : u.tipo_usuario_id === 2 ? 'Editor' : 'Jugador';
+                return `<tr>
+                    <td><strong>${u.username}</strong></td>
+                    <td><span class="badge badge-${tipo.toLowerCase()}">${tipo}</span></td>
+                    <td class="numero">$${(u.saldo_cuenta || 0).toFixed(2)}</td>
+                    <td>${u.estado}</td>
+                </tr>`;
+            }).join('');
+            document.getElementById('tabla-usuarios').innerHTML = html || '<tr><td colspan="4" class="loading">Sin datos</td></tr>';
+
+            // Juegos
+            const juegos = {};
+            datos.transacciones.forEach(t => {
+                const j = (t.descripcion || 'Otros').split('-')[0].trim();
+                juegos[j] = (juegos[j] || 0) + 1;
+            });
+            const total = datos.transacciones.length || 1;
+            html = Object.entries(juegos)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8)
+                .map(([j, c]) => `
+                    <tr>
+                        <td>${j}</td>
+                        <td class="numero">${c}</td>
+                        <td class="numero">${((c/total)*100).toFixed(1)}%</td>
+                    </tr>
+                `).join('');
+            document.getElementById('tabla-juegos').innerHTML = html || '<tr><td colspan="3" class="loading">Sin datos</td></tr>';
+        }
+
+        function actualizarGraficos() {
+            // Disciplinas
+            const discData = {};
+            datos.transacciones.forEach(t => {
+                const d = t.disciplina || 'otros';
+                discData[d] = (discData[d] || 0) + 1;
+            });
+
+            try {
+                document.getElementById('chartDisciplinas').parentElement.replaceChild(
+                    document.createElement('canvas'),
+                    document.getElementById('chartDisciplinas')
+                );
+                const nc1 = document.createElement('canvas');
+                nc1.id = 'chartDisciplinas';
+                document.getElementById('chartDisciplinas').parentElement.appendChild(nc1);
+            } catch (e) {}
+
+            new Chart(document.getElementById('chartDisciplinas'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(discData),
+                    datasets: [{ data: Object.values(discData), backgroundColor: ['#667eea', '#764ba2', '#f093fb'] }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // Top usuarios
+            const usrMonto = {};
+            datos.transacciones.forEach(t => {
+                usrMonto[t.usuario] = (usrMonto[t.usuario] || 0) + (t.monto || 0);
+            });
+            const top5 = Object.entries(usrMonto).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+            new Chart(document.getElementById('chartTopUsuarios'), {
+                type: 'bar',
+                data: {
+                    labels: top5.map(u => u[0].substring(0, 12)),
+                    datasets: [{ label: 'Monto', data: top5.map(u => u[1]), backgroundColor: '#667eea' }]
+                },
+                options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+            });
+
+            // Juegos
+            const juegos = {};
+            datos.transacciones.forEach(t => {
+                const j = (t.descripcion || 'Otros').split('-')[0].trim();
+                juegos[j] = (juegos[j] || 0) + 1;
+            });
+            const top8 = Object.entries(juegos).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+            new Chart(document.getElementById('chartJuegos'), {
+                type: 'bar',
+                data: {
+                    labels: top8.map(j => j[0].substring(0, 12)),
+                    datasets: [{ label: 'Apuestas', data: top8.map(j => j[1]), backgroundColor: '#764ba2' }]
+                },
+                options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+            });
+
+            // Tipología
+            const tipo = {};
+            datos.usuarios.forEach(u => {
+                const t = u.tipo_usuario_id === 1 ? 'Admin' : u.tipo_usuario_id === 2 ? 'Editor' : 'Jugador';
+                tipo[t] = (tipo[t] || 0) + 1;
+            });
+
+            new Chart(document.getElementById('chartTipologia'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(tipo),
+                    datasets: [{ data: Object.values(tipo), backgroundColor: ['#667eea', '#764ba2', '#f093fb'] }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        cargarDatos();
+        setInterval(cargarDatos, 30000);
     </script>
 </body>
 </html>
