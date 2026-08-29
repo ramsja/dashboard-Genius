@@ -21,6 +21,46 @@ if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
   console.log('⚠️ Variables de Supabase no configuradas, usando datos de prueba');
 }
 
+// Función para cargar datos automáticamente
+async function cargarDatosAutomatico() {
+  if (!supabase) return;
+
+  try {
+    console.log('📊 Verificando datos en Supabase...');
+    const { data, error } = await supabase
+      .from('transacciones_novusbet')
+      .select('count()', { count: 'exact' });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      console.log('📝 Cargando datos iniciales en Supabase...');
+
+      const datosInsert = [
+        { usuario: 'carlos_martinez', tipo_transaccion: 'Apuesta Ganada', monto: 250.50, disciplina: 'deportes', descripcion: 'Fútbol - Gana' },
+        { usuario: 'juan_rodriguez', tipo_transaccion: 'Deposito', monto: 500.00, disciplina: 'otros', descripcion: 'Recarga de cuenta' },
+        { usuario: 'maria_lopez', tipo_transaccion: 'Apuesta Perdida', monto: 100.00, disciplina: 'casino', descripcion: 'Ruleta - Pierde' },
+        { usuario: 'pablo_garcia', tipo_transaccion: 'Retiro', monto: 750.00, disciplina: 'otros', descripcion: 'Retiro de ganancias' },
+        { usuario: 'ana_torres', tipo_transaccion: 'Apuesta Ganada', monto: 1200.75, disciplina: 'deportes', descripcion: 'Baloncesto - Gana' }
+      ];
+
+      const { error: insertError } = await supabase
+        .from('transacciones_novusbet')
+        .insert(datosInsert);
+
+      if (insertError) {
+        console.log('⚠️ Error al cargar datos:', insertError.message);
+      } else {
+        console.log('✅ Datos cargados exitosamente: 5 transacciones, $2,801.25');
+      }
+    } else {
+      console.log('✅ Base de datos ya tiene datos');
+    }
+  } catch (error) {
+    console.log('⚠️ Error verificando datos:', error.message);
+  }
+}
+
 // Tipos MIME
 const MIME_TYPES = {
   '.html': 'text/html',
@@ -370,7 +410,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   console.log(`\n╔════════════════════════════════════════╗`);
   console.log(`║    🎯 Dashboard Genius - Corriendo    ║`);
   console.log(`╚════════════════════════════════════════╝\n`);
@@ -380,6 +420,9 @@ server.listen(PORT, () => {
   console.log(`📥 Descargas: /download/usuarios.csv, /download/apuestas.csv, /download/transacciones.csv`);
   console.log(`📄 Reporte JSON: /download/reporte-completo.json`);
   console.log(`\n⏸️  Presiona Ctrl+C para detener\n`);
+
+  // Cargar datos automáticamente
+  await cargarDatosAutomatico();
 });
 
 server.on('error', (err) => {
