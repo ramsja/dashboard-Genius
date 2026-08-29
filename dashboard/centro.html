@@ -244,20 +244,31 @@
     <script>
         let datos = { transacciones: [], usuarios: [], disciplinas: [] };
 
+        async function fetchJSON(url) {
+            const r = await fetch(url);
+            if (r.status === 401) {
+                window.location.href = '/login.html';
+                throw new Error('No autenticado');
+            }
+            return r.json();
+        }
+
         async function cargarDatos() {
             try {
-                const [trans, usuarios, disc] = await Promise.all([
-                    fetch('/api/transacciones-novusbet').then(r => r.json()).catch(() => []),
-                    fetch('/api/usuarios').then(r => r.json()).catch(() => []),
-                    fetch('/api/disciplinas').then(r => r.json()).catch(() => [])
+                const [trans, usuarios, disc, resumen] = await Promise.all([
+                    fetchJSON('/api/transacciones-novusbet').catch(() => []),
+                    fetchJSON('/api/usuarios').catch(() => []),
+                    fetchJSON('/api/disciplinas').catch(() => []),
+                    fetchJSON('/api/transacciones-resumen').catch(() => null)
                 ]);
 
-                datos = { transacciones: trans || [], usuarios: usuarios || [], disciplinas: disc || [] };
+                datos = { transacciones: trans || [], usuarios: usuarios || [], disciplinas: disc || [], resumen };
 
                 actualizarUI();
                 document.getElementById('actualizacion').textContent = new Date().toLocaleTimeString('es-ES');
             } catch (error) {
                 console.error('Error:', error);
+                return;
             }
 
             cargarEstadoSync();
@@ -288,13 +299,23 @@
         function actualizarUI() {
             const t = datos.transacciones;
             const u = datos.usuarios;
-            const monto = t.reduce((s, x) => s + (x.monto || 0), 0);
-            const disc = new Set(t.map(x => x.disciplina)).size;
+            const r = datos.resumen;
 
-            document.getElementById('kpi-transacciones').textContent = t.length;
-            document.getElementById('kpi-monto').textContent = '$' + monto.toFixed(2);
-            document.getElementById('kpi-usuarios').textContent = u.length;
-            document.getElementById('kpi-disciplinas').textContent = disc;
+            // Los KPIs usan el resumen agregado (cubre TODAS las filas reales),
+            // no solo la muestra de 1000 que trae la tabla de transacciones
+            if (r && r.total_transacciones !== undefined) {
+                document.getElementById('kpi-transacciones').textContent = r.total_transacciones.toLocaleString('es-ES');
+                document.getElementById('kpi-monto').textContent = '$' + r.monto_total.toFixed(2);
+                document.getElementById('kpi-usuarios').textContent = r.usuarios_unicos;
+                document.getElementById('kpi-disciplinas').textContent = Object.keys(r.por_disciplina || {}).length;
+            } else {
+                const monto = t.reduce((s, x) => s + (x.monto || 0), 0);
+                const disc = new Set(t.map(x => x.disciplina)).size;
+                document.getElementById('kpi-transacciones').textContent = t.length;
+                document.getElementById('kpi-monto').textContent = '$' + monto.toFixed(2);
+                document.getElementById('kpi-usuarios').textContent = u.length;
+                document.getElementById('kpi-disciplinas').textContent = disc;
+            }
 
             actualizarTablas();
             actualizarGraficos();
@@ -315,14 +336,17 @@
             `).join('');
             document.getElementById('tabla-transacciones').innerHTML = html || '<tr><td colspan="7" class="loading">Sin datos</td></tr>';
 
-            // Disciplinas
-            const discData = {};
-            datos.transacciones.forEach(t => {
-                const d = t.disciplina || 'otros';
-                if (!discData[d]) discData[d] = { count: 0, monto: 0 };
-                discData[d].count += 1;
-                discData[d].monto += t.monto || 0;
-            });
+            // Disciplinas (usa el resumen agregado sobre TODAS las filas si existe)
+            const discData = (datos.resumen && datos.resumen.por_disciplina) || (() => {
+                const d = {};
+                datos.transacciones.forEach(t => {
+                    const k = t.disciplina || 'otros';
+                    if (!d[k]) d[k] = { count: 0, monto: 0 };
+                    d[k].count += 1;
+                    d[k].monto += t.monto || 0;
+                });
+                return d;
+            })();
             html = Object.entries(discData).map(([d, v]) => `
                 <tr>
                     <td><span class="badge badge-${d}">${d}</span></td>
@@ -332,14 +356,17 @@
             `).join('');
             document.getElementById('tabla-disciplinas').innerHTML = html || '<tr><td colspan="3" class="loading">Sin datos</td></tr>';
 
-            // Estados de clientes
-            const estadoData = {};
-            datos.transacciones.forEach(t => {
-                const e = t.estado_cliente || 'otros';
-                if (!estadoData[e]) estadoData[e] = { count: 0, monto: 0 };
-                estadoData[e].count += 1;
-                estadoData[e].monto += t.monto || 0;
-            });
+            // Estados de clientes (idem, agregado completo)
+            const estadoData = (datos.resumen && datos.resumen.por_estado_cliente) || (() => {
+                const e = {};
+                datos.transacciones.forEach(t => {
+                    const k = t.estado_cliente || 'otros';
+                    if (!e[k]) e[k] = { count: 0, monto: 0 };
+                    e[k].count += 1;
+                    e[k].monto += t.monto || 0;
+                });
+                return e;
+            })();
             html = Object.entries(estadoData).map(([e, v]) => `
                 <tr>
                     <td><span class="badge badge-${e}">${e}</span></td>
@@ -382,12 +409,16 @@
         }
 
         function actualizarGraficos() {
-            // Disciplinas
-            const discData = {};
-            datos.transacciones.forEach(t => {
-                const d = t.disciplina || 'otros';
-                discData[d] = (discData[d] || 0) + 1;
-            });
+            // Disciplinas (usa el resumen agregado sobre TODAS las filas si existe)
+            let discData = {};
+            if (datos.resumen && datos.resumen.por_disciplina) {
+                Object.entries(datos.resumen.por_disciplina).forEach(([d, v]) => discData[d] = v.count);
+            } else {
+                datos.transacciones.forEach(t => {
+                    const d = t.disciplina || 'otros';
+                    discData[d] = (discData[d] || 0) + 1;
+                });
+            }
 
             try {
                 document.getElementById('chartDisciplinas').parentElement.replaceChild(

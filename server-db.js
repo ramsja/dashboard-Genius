@@ -426,25 +426,42 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // API: RESUMEN POR DISCIPLINA NOVUSBET
+    // API: RESUMEN POR DISCIPLINA NOVUSBET (agregados sobre TODAS las filas,
+    // no solo las primeras 1000 que Supabase devuelve por defecto)
     if (pathname === '/api/transacciones-resumen') {
-      let resumen = {};
+      let resumen = {
+        total_transacciones: 0,
+        monto_total: 0,
+        usuarios_unicos: 0,
+        por_disciplina: {},
+        por_estado_cliente: {},
+      };
+
       if (supabase) {
         const { data } = await supabase
           .from('transacciones_novusbet')
-          .select('disciplina, monto');
+          .select('disciplina, estado_cliente, monto, usuario')
+          .range(0, 49999);
 
         if (data) {
-          resumen = { deportes: 0, casino: 0, otros: 0, total: 0 };
-          data.forEach(t => {
+          const usuariosSet = new Set();
+          data.forEach((t) => {
             const disc = (t.disciplina || 'otros').toLowerCase();
-            if (resumen[disc] !== undefined) {
-              resumen[disc] += (t.monto || 0);
-            } else {
-              resumen[disc] = (t.monto || 0);
-            }
-            resumen.total += (t.monto || 0);
+            const estado = (t.estado_cliente || 'otros').toLowerCase();
+
+            if (!resumen.por_disciplina[disc]) resumen.por_disciplina[disc] = { count: 0, monto: 0 };
+            resumen.por_disciplina[disc].count += 1;
+            resumen.por_disciplina[disc].monto += t.monto || 0;
+
+            if (!resumen.por_estado_cliente[estado]) resumen.por_estado_cliente[estado] = { count: 0, monto: 0 };
+            resumen.por_estado_cliente[estado].count += 1;
+            resumen.por_estado_cliente[estado].monto += t.monto || 0;
+
+            resumen.monto_total += t.monto || 0;
+            resumen.total_transacciones += 1;
+            if (t.usuario) usuariosSet.add(t.usuario);
           });
+          resumen.usuarios_unicos = usuariosSet.size;
         }
       }
 
