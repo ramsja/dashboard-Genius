@@ -19,9 +19,11 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const BO_USERNAME = process.env.BO_USERNAME || '';
 const BO_PASSWORD = process.env.BO_PASSWORD || '';
 
-// Rango de fechas: por defecto últimos 30 días (evita quedar en 0 registros
-// cuando no hubo movimientos exactamente "hoy")
-const DAYS_BACK = parseInt(process.env.SYNC_DAYS_BACK || '30', 10);
+// Rango de fechas: por defecto solo HOY. Este negocio mueve decenas de miles
+// de transacciones por día (~32,700/día medido en producción), así que un
+// rango de varios días puede superar el millón de registros y la
+// exportación de Novusbet nunca termina de prepararse (queda colgada).
+const DAYS_BACK = parseInt(process.env.SYNC_DAYS_BACK || '0', 10);
 const now = new Date();
 const startDate = new Date(now.getTime() - DAYS_BACK * 24 * 60 * 60 * 1000);
 const START_DATE = process.env.START_DATE || startDate.toISOString().split('T')[0];
