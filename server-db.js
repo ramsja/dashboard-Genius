@@ -15,10 +15,25 @@ const DASHBOARD_DIR = path.join(__dirname, 'dashboard');
 
 // Configurar Supabase (cliente admin con service key para poder leer/escribir todo)
 let supabase = null;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
-if (process.env.SUPABASE_URL && SUPABASE_KEY) {
-  supabase = createClient(process.env.SUPABASE_URL, SUPABASE_KEY);
-  console.log('✅ Conectado a Supabase');
+// .trim() y limpieza de comillas: es común pegar la URL/key en Render con
+// comillas o espacios de sobra, lo que rompe new URL() dentro del cliente.
+function limpiarEnvVar(valor) {
+  if (!valor) return '';
+  return valor.trim().replace(/^["']|["']$/g, '');
+}
+
+const SUPABASE_URL = limpiarEnvVar(process.env.SUPABASE_URL);
+const SUPABASE_KEY = limpiarEnvVar(process.env.SUPABASE_SERVICE_KEY) || limpiarEnvVar(process.env.SUPABASE_ANON_KEY);
+
+if (SUPABASE_URL && SUPABASE_KEY) {
+  try {
+    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('✅ Conectado a Supabase');
+  } catch (err) {
+    console.log('❌ SUPABASE_URL o SUPABASE_SERVICE_KEY inválidas:', err.message);
+    console.log('   Revisa que no tengan comillas ni espacios en Render → Environment');
+    supabase = null;
+  }
 } else {
   console.log('⚠️ Variables de Supabase no configuradas, usando datos de prueba');
 }
@@ -621,4 +636,15 @@ server.listen(PORT, async () => {
 server.on('error', (err) => {
   console.error('❌ Error del servidor:', err);
   process.exit(1);
+});
+
+// Red de seguridad: un error inesperado en cualquier parte (ej. una tarea
+// en segundo plano como la re-sincronización) NUNCA debe tumbar el proceso
+// completo y dejar el dashboard sin servir.
+process.on('uncaughtException', (err) => {
+  console.error('❌ Excepción no capturada (el servidor sigue corriendo):', err.message);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('❌ Promesa rechazada sin manejar (el servidor sigue corriendo):', reason);
 });
