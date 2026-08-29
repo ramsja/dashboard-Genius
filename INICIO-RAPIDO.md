@@ -131,7 +131,7 @@ curl https://dashboard-genius.onrender.com/api/transacciones-novusbet | jq '.[:2
 
 ```env
 # .env.local (ya configurado)
-SUPABASE_URL=https://lkxxhutzlgkiirbohv.supabase.co
+SUPABASE_URL=https://lkxqhutzlgkiiirtbohv.supabase.co
 SUPABASE_SERVICE_KEY=sb_secret_...
 
 BO_USERNAME=FinanceSV
