@@ -327,7 +327,11 @@ function classifyDiscipline(record) {
 }
 
 function classifyClientStatus(record) {
-  const text = Object.values(record).join(' ').toLowerCase();
+  // El campo "estado" del CSV (si existe) manda sobre el resto del texto
+  const estadoCampo = getField(record, 'estado', 'status', 'estado del jugador', 'estado del cliente').toLowerCase();
+  const text = (estadoCampo + ' ' + Object.values(record).join(' ')).toLowerCase();
+
+  if (/congelad|frozen/.test(text)) return 'congelado';
   if (/\bactivo\b|\bactive\b|\bonline\b|conectado/.test(text)) return 'activo';
   if (/\binactivo\b|\binactive\b|\boffline\b|sin actividad/.test(text)) return 'inactivo';
   if (/desconectado|disconnected|\blogout\b|cerrado/.test(text)) return 'desconectado';
@@ -350,30 +354,44 @@ async function uploadToSupabase(records) {
 
   console.log(`📤 Cargando ${records.length} registros en Supabase (transacciones_novusbet)...`);
 
+  const numero = (valor) => parseFloat((valor || '').toString().replace(/[^0-9.-]/g, '')) || 0;
+
   const formattedRecords = records.map((record) => ({
     usuario: getField(record, 'usuario', 'user', 'username', 'cliente', 'nombre') || 'N/A',
-    tipo_transaccion: getField(record, 'tipo', 'type', 'tipo de transacción', 'transaction_type') || 'N/A',
-    monto: parseFloat(getField(record, 'monto', 'amount', 'total').replace(/[^0-9.-]/g, '')) || 0,
+    tipo_transaccion: getField(record, 'tipo de transacción', 'tipo', 'type', 'transaction_type') || 'N/A',
+    monto: numero(getField(record, 'monto', 'amount', 'total')),
     disciplina: classifyDiscipline(record),
     estado_cliente: classifyClientStatus(record),
-    descripcion: getField(record, 'descripcion', 'description', 'descripción'),
-    fecha: getField(record, 'fecha', 'created_at', 'date') || new Date().toISOString(),
+    descripcion: getField(record, 'descripcion', 'description', 'descripción', 'grupo causal'),
+    fecha: getField(record, 'crear hora', 'fecha', 'created_at', 'date') || new Date().toISOString(),
+    casa_apuestas: getField(record, 'casa de apuestas', 'casa', 'site'),
+    id_usuario_novusbet: getField(record, 'id de usuario', 'id_usuario', 'user_id'),
+    moneda: getField(record, 'moneda', 'currency'),
+    ingresos: numero(getField(record, 'ingresos', 'income')),
+    comision: numero(getField(record, 'comisión', 'comision', 'commission')),
+    saldo: numero(getField(record, 'saldo', 'balance')),
+    saldo_actual: numero(getField(record, 'saldo actual', 'current_balance')),
+    billeteras: getField(record, 'billeteras', 'wallet', 'wallets'),
+    grupo_causal: getField(record, 'grupo causal', 'causal', 'causal_group'),
     datos_raw: JSON.stringify(record),
   }));
 
   // Limpiar datos anteriores del mismo rango para evitar duplicados en cada sync
   await supabase.from('transacciones_novusbet').delete().neq('id', 0);
 
-  const BATCH_SIZE = 500;
+  const BATCH_SIZE = 1000;
   let inserted = 0;
   for (let i = 0; i < formattedRecords.length; i += BATCH_SIZE) {
     const batch = formattedRecords.slice(i, i + BATCH_SIZE);
-    const { data, error } = await supabase.from('transacciones_novusbet').insert(batch).select();
+    const { error } = await supabase.from('transacciones_novusbet').insert(batch);
     if (error) {
       console.error('❌ Error insertando lote:', error.message);
       throw error;
     }
-    inserted += data?.length || batch.length;
+    inserted += batch.length;
+    if ((i / BATCH_SIZE) % 5 === 0) {
+      console.log(`  ...${inserted}/${formattedRecords.length} insertados`);
+    }
   }
 
   console.log(`✅ ${inserted} registros cargados en Supabase`);

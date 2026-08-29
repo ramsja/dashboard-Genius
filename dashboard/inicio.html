@@ -40,6 +40,12 @@
         .badge-admin { background: #e7d4f5; color: #6f42c1; }
         .badge-editor { background: #fff3cd; color: #856404; }
         .badge-jugador { background: #d1ecf1; color: #0c5460; }
+        .badge-activo { background: #d4edda; color: #155724; }
+        .badge-congelado { background: #cfe2ff; color: #084298; }
+        .badge-inactivo { background: #e2e3e5; color: #383d41; }
+        .badge-desconectado { background: #fff3cd; color: #856404; }
+        .badge-suspendido { background: #f8d7da; color: #721c24; }
+        .badge-otros { background: #e2e3e5; color: #383d41; }
 
         /* Charts */
         .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin: 30px 0; }
@@ -119,14 +125,17 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Casa</th>
+                                <th>ID Usuario</th>
                                 <th>Usuario</th>
                                 <th>Tipo</th>
                                 <th>Monto</th>
                                 <th>Disciplina</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-transacciones">
-                            <tr><td colspan="4" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -147,6 +156,27 @@
                             </tr>
                         </thead>
                         <tbody id="tabla-disciplinas">
+                            <tr><td colspan="3" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Estados de Clientes -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>🟢 Estados de Clientes</h2>
+                </div>
+                <div class="section-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Estado</th>
+                                <th>Transacciones</th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-estados">
                             <tr><td colspan="3" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
@@ -249,13 +279,16 @@
             // Transacciones
             let html = datos.transacciones.slice(0, 8).map(t => `
                 <tr>
+                    <td>${t.casa_apuestas || '-'}</td>
+                    <td>${t.id_usuario_novusbet || '-'}</td>
                     <td><strong>${t.usuario}</strong></td>
                     <td>${t.tipo_transaccion}</td>
                     <td class="numero">$${(t.monto || 0).toFixed(2)}</td>
                     <td><span class="badge badge-${t.disciplina}">${t.disciplina}</span></td>
+                    <td><span class="badge badge-${t.estado_cliente || 'otros'}">${t.estado_cliente || 'otros'}</span></td>
                 </tr>
             `).join('');
-            document.getElementById('tabla-transacciones').innerHTML = html || '<tr><td colspan="4" class="loading">Sin datos</td></tr>';
+            document.getElementById('tabla-transacciones').innerHTML = html || '<tr><td colspan="7" class="loading">Sin datos</td></tr>';
 
             // Disciplinas
             const discData = {};
@@ -273,6 +306,23 @@
                 </tr>
             `).join('');
             document.getElementById('tabla-disciplinas').innerHTML = html || '<tr><td colspan="3" class="loading">Sin datos</td></tr>';
+
+            // Estados de clientes
+            const estadoData = {};
+            datos.transacciones.forEach(t => {
+                const e = t.estado_cliente || 'otros';
+                if (!estadoData[e]) estadoData[e] = { count: 0, monto: 0 };
+                estadoData[e].count += 1;
+                estadoData[e].monto += t.monto || 0;
+            });
+            html = Object.entries(estadoData).map(([e, v]) => `
+                <tr>
+                    <td><span class="badge badge-${e}">${e}</span></td>
+                    <td class="numero">${v.count}</td>
+                    <td class="numero">$${v.monto.toFixed(2)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tabla-estados').innerHTML = html || '<tr><td colspan="3" class="loading">Sin datos</td></tr>';
 
             // Usuarios
             html = datos.usuarios.slice(0, 8).map(u => {
