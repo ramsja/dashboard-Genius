@@ -5,11 +5,8 @@
 
 require('dotenv').config({ path: '.env.local' });
 const https = require('https');
-const http = require('http');
 const { URL } = require('url');
 const { createClient } = require('@supabase/supabase-js');
-const fs = require('fs');
-const path = require('path');
 
 // Configuración
 const BASE_URL = 'https://headoffice.novusbet.com';
@@ -19,14 +16,21 @@ const EXPORT_URL = `${BASE_URL}/backoffice/transactions-v2/export`;
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-const BO_USERNAME = process.env.BO_USERNAME || 'FinanceSV';
-const BO_PASSWORD = process.env.BO_PASSWORD || 'Anma07covi*';
+const BO_USERNAME = process.env.BO_USERNAME || '';
+const BO_PASSWORD = process.env.BO_PASSWORD || '';
+
+// Rango de fechas: por defecto últimos 30 días (evita quedar en 0 registros
+// cuando no hubo movimientos exactamente "hoy")
+const DAYS_BACK = parseInt(process.env.SYNC_DAYS_BACK || '30', 10);
+const now = new Date();
+const startDate = new Date(now.getTime() - DAYS_BACK * 24 * 60 * 60 * 1000);
+const START_DATE = process.env.START_DATE || startDate.toISOString().split('T')[0];
+const END_DATE = process.env.END_DATE || now.toISOString().split('T')[0];
 
 const TIMEOUT = 120000;
 const MAX_EXPORT_ATTEMPTS = 200;
 const EXPORT_WAIT_SECONDS = 3;
 
-// User Agent
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -92,195 +96,248 @@ function extractCSRFToken(html) {
 async function login() {
   console.log('🔐 Conectando a Novusbet...');
 
-  try {
-    // 1. Obtener página de login
-    const loginPageRes = await httpsRequest('GET', LOGIN_URL);
-    if (loginPageRes.status !== 200) {
-      throw new Error(`Login page error: ${loginPageRes.status}`);
-    }
-
-    const token = extractCSRFToken(loginPageRes.body);
-    if (!token) {
-      throw new Error('CSRF token not found');
-    }
-
-    const cookie = extractCookie(loginPageRes);
-
-    // 2. Enviar credenciales
-    const body = new URLSearchParams();
-    body.append('_token', token);
-    body.append('username', BO_USERNAME);
-    body.append('password', BO_PASSWORD);
-
-    const loginRes = await httpsRequest('POST', LOGIN_URL, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': cookie,
-        'Referer': LOGIN_URL,
-        'Origin': BASE_URL,
-      },
-      body: body.toString(),
-    });
-
-    if (loginRes.status !== 301 && loginRes.status !== 302) {
-      throw new Error(`Login failed: ${loginRes.status}`);
-    }
-
-    const newCookie = extractCookie(loginRes);
-    const finalCookie = newCookie || cookie;
-
-    console.log('✅ Autenticación exitosa');
-    return { token, cookie: finalCookie };
-  } catch (err) {
-    console.error('❌ Error en login:', err.message);
-    throw err;
+  const loginPageRes = await httpsRequest('GET', LOGIN_URL);
+  if (loginPageRes.status !== 200) {
+    throw new Error(`Login page error: ${loginPageRes.status}`);
   }
+
+  const token = extractCSRFToken(loginPageRes.body);
+  if (!token) {
+    throw new Error('CSRF token not found');
+  }
+
+  const cookie = extractCookie(loginPageRes);
+
+  const body = new URLSearchParams();
+  body.append('_token', token);
+  body.append('username', BO_USERNAME);
+  body.append('password', BO_PASSWORD);
+
+  const loginRes = await httpsRequest('POST', LOGIN_URL, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Cookie': cookie,
+      'Referer': LOGIN_URL,
+      'Origin': BASE_URL,
+    },
+    body: body.toString(),
+  });
+
+  const location = loginRes.headers['location'] || '';
+  const validRedirect =
+    (loginRes.status === 301 || loginRes.status === 302 || loginRes.status === 303) &&
+    location.includes('/backoffice/dashboard');
+
+  if (!validRedirect) {
+    throw new Error(`Login failed: HTTP ${loginRes.status}, Location: ${location}`);
+  }
+
+  const newCookie = extractCookie(loginRes);
+  const finalCookie = newCookie || cookie;
+
+  console.log('✅ Autenticación exitosa');
+  return { token, cookie: finalCookie };
 }
 
 // ============================================================
 // DESCARGAR CSV
 // ============================================================
 
-async function downloadCSV(token, cookie) {
-  console.log('📥 Descargando transacciones...');
-
-  const today = new Date().toISOString().split('T')[0];
+function buildPayload(token) {
   const payload = new URLSearchParams();
   payload.append('site_id[]', '1049');
   payload.append('user_type', '2');
   payload.append('subusers', '0');
-  payload.append('per_page', '1000');
-  payload.append('from-date', `${today} 00:00`);
-  payload.append('to-date', `${today} 23:59`);
+  payload.append('causal_product_id[]', process.env.CAUSAL_PRODUCT_ID || '');
+  payload.append('per_page', '50');
+  payload.append('from-date', `${START_DATE} 00:00`);
+  payload.append('to-date', `${END_DATE} 23:59`);
   payload.append('_token', token);
+  return payload;
+}
 
-  try {
-    // Iniciar exportación
-    const initRes = await httpsRequest('POST', EXPORT_URL, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': cookie,
-        'X-Requested-With': 'XMLHttpRequest',
-        'Referer': TRANSACTIONS_URL,
-        'Origin': BASE_URL,
-      },
-      body: payload.toString(),
-    });
+async function downloadCSV(token, cookie) {
+  console.log(`📥 Descargando transacciones (${START_DATE} → ${END_DATE})...`);
 
-    if (initRes.status !== 200) {
-      throw new Error(`Export init failed: ${initRes.status}`);
-    }
+  const payload = buildPayload(token);
 
-    const initJson = JSON.parse(initRes.body);
-    const scrollId = initJson.scrollId;
+  const initRes = await httpsRequest('POST', EXPORT_URL, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Cookie': cookie,
+      'X-Requested-With': 'XMLHttpRequest',
+      'Referer': TRANSACTIONS_URL,
+      'Origin': BASE_URL,
+    },
+    body: payload.toString(),
+  });
 
-    if (!scrollId) {
-      throw new Error('No scrollId received');
-    }
-
-    console.log(`✅ Exportación iniciada (scrollId: ${scrollId})`);
-
-    // Esperar preparación
-    let downloadReady = false;
-    let attempts = 0;
-
-    while (!downloadReady && attempts < MAX_EXPORT_ATTEMPTS) {
-      attempts++;
-      payload.set('scrollId', scrollId);
-
-      const statusRes = await httpsRequest('POST', EXPORT_URL, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Cookie': cookie,
-          'X-Requested-With': 'XMLHttpRequest',
-          'Referer': TRANSACTIONS_URL,
-          'Origin': BASE_URL,
-        },
-        body: payload.toString(),
-      });
-
-      const statusJson = JSON.parse(statusRes.body);
-      const isReady = statusJson.download === true || statusJson.download === 1 || statusJson.download === '1';
-
-      if (attempts % 20 === 0) {
-        console.log(`  Intento ${attempts}/${MAX_EXPORT_ATTEMPTS} - ${statusJson.itemsCount || 0} registros`);
-      }
-
-      if (isReady) {
-        downloadReady = true;
-        break;
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, EXPORT_WAIT_SECONDS * 1000));
-    }
-
-    if (!downloadReady) {
-      throw new Error(`Export timeout after ${attempts} attempts`);
-    }
-
-    console.log('📊 Descargando archivo...');
-
-    // Descargar CSV
-    payload.set('download', '1');
-    const downloadRes = await httpsRequest('POST', EXPORT_URL, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': cookie,
-        'X-Requested-With': 'XMLHttpRequest',
-        'Referer': TRANSACTIONS_URL,
-        'Origin': BASE_URL,
-      },
-      body: payload.toString(),
-    });
-
-    if (downloadRes.status !== 200) {
-      throw new Error(`Download failed: ${downloadRes.status}`);
-    }
-
-    return downloadRes.body;
-  } catch (err) {
-    console.error('❌ Error descargando CSV:', err.message);
-    throw err;
+  if (initRes.status !== 200) {
+    throw new Error(`Export init failed: ${initRes.status}. Body: ${initRes.body.slice(0, 300)}`);
   }
+
+  let initJson;
+  try {
+    initJson = JSON.parse(initRes.body);
+  } catch (e) {
+    throw new Error(`Respuesta no es JSON: ${initRes.body.slice(0, 300)}`);
+  }
+
+  const scrollId = initJson.scrollId;
+  if (!initJson.response || !scrollId) {
+    throw new Error(`No scrollId received. Respuesta: ${JSON.stringify(initJson).slice(0, 300)}`);
+  }
+
+  console.log(`✅ Exportación iniciada (scrollId: ${scrollId})`);
+
+  let downloadReady = false;
+  let attempts = 0;
+  let lastJson = initJson;
+
+  while (!downloadReady && attempts < MAX_EXPORT_ATTEMPTS) {
+    attempts++;
+    payload.set('scrollId', String(lastJson.scrollId || scrollId));
+
+    const statusRes = await httpsRequest('POST', EXPORT_URL, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': cookie,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Referer': TRANSACTIONS_URL,
+        'Origin': BASE_URL,
+      },
+      body: payload.toString(),
+    });
+
+    const statusJson = JSON.parse(statusRes.body);
+    lastJson = statusJson;
+    const isReady = statusJson.download === true || statusJson.download === 1 || statusJson.download === '1';
+
+    if (attempts % 10 === 0 || isReady) {
+      console.log(`  Intento ${attempts}/${MAX_EXPORT_ATTEMPTS} - itemsCount=${statusJson.itemsCount || 0} download=${statusJson.download}`);
+    }
+    lastJson = { itemsCount: statusJson.itemsCount, download: statusJson.download, response: statusJson.response, scrollId: statusJson.scrollId };
+
+    if (isReady) {
+      downloadReady = true;
+      break;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, EXPORT_WAIT_SECONDS * 1000));
+  }
+
+  if (!downloadReady) {
+    throw new Error(`Export timeout after ${attempts} attempts. Última respuesta: ${JSON.stringify(lastJson).slice(0, 300)}`);
+  }
+
+  console.log('📊 Descargando archivo...');
+
+  payload.set('download', '1');
+  const downloadRes = await httpsRequest('POST', EXPORT_URL, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Cookie': cookie,
+      'X-Requested-With': 'XMLHttpRequest',
+      'Referer': TRANSACTIONS_URL,
+      'Origin': BASE_URL,
+    },
+    body: payload.toString(),
+  });
+
+  if (downloadRes.status !== 200) {
+    throw new Error(`Download failed: ${downloadRes.status}`);
+  }
+
+  return downloadRes.body;
 }
 
 // ============================================================
 // PROCESAR CSV Y CARGAR EN SUPABASE
 // ============================================================
 
-function classifyDiscipline(row) {
-  const text = Object.values(row).join(' ').toLowerCase();
-  if (text.includes('casino') || text.includes('slot') || text.includes('live')) {
-    return 'casino';
-  }
-  if (text.includes('deport') || text.includes('futbol') || text.includes('sport')) {
-    return 'deportes';
-  }
-  return 'otros';
-}
-
+// Parser CSV robusto: soporta comillas, comas dentro de campos y ; como delimitador
 function parseCSV(content) {
-  const lines = content.split('\n');
-  if (lines.length < 2) return [];
+  const cleaned = content.replace(/^﻿/, '');
+  const delimiter = (cleaned.split('\n')[0].match(/;/g) || []).length >
+    (cleaned.split('\n')[0].match(/,/g) || []).length ? ';' : ',';
 
-  const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
+  const rows = [];
+  let row = [];
+  let field = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < cleaned.length; i++) {
+    const char = cleaned[i];
+    const next = cleaned[i + 1];
+
+    if (inQuotes) {
+      if (char === '"' && next === '"') {
+        field += '"';
+        i++;
+      } else if (char === '"') {
+        inQuotes = false;
+      } else {
+        field += char;
+      }
+    } else {
+      if (char === '"') {
+        inQuotes = true;
+      } else if (char === delimiter) {
+        row.push(field);
+        field = '';
+      } else if (char === '\n' || char === '\r') {
+        if (char === '\r' && next === '\n') i++;
+        row.push(field);
+        field = '';
+        if (row.some((v) => v !== '')) rows.push(row);
+        row = [];
+      } else {
+        field += char;
+      }
+    }
+  }
+  if (field !== '' || row.length > 0) {
+    row.push(field);
+    if (row.some((v) => v !== '')) rows.push(row);
+  }
+
+  if (rows.length < 2) return [];
+
+  const headers = rows[0].map((h) => h.trim().toLowerCase());
   const records = [];
 
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
-
-    const values = line.split(',');
+  for (let i = 1; i < rows.length; i++) {
     const record = {};
-
     headers.forEach((header, idx) => {
-      record[header] = values[idx] ? values[idx].trim() : '';
+      record[header] = (rows[i][idx] || '').trim();
     });
-
     records.push(record);
   }
 
   return records;
+}
+
+function classifyDiscipline(record) {
+  const text = Object.values(record).join(' ').toLowerCase();
+  if (/casino|slot|live casino|pragmatic|betsoft/.test(text)) return 'casino';
+  if (/sport|deport|futbol|fútbol|basket|tenis/.test(text)) return 'deportes';
+  return 'otros';
+}
+
+function classifyClientStatus(record) {
+  const text = Object.values(record).join(' ').toLowerCase();
+  if (/\bactivo\b|\bactive\b|\bonline\b|conectado/.test(text)) return 'activo';
+  if (/\binactivo\b|\binactive\b|\boffline\b|sin actividad/.test(text)) return 'inactivo';
+  if (/desconectado|disconnected|\blogout\b|cerrado/.test(text)) return 'desconectado';
+  if (/bloqueado|blocked|suspendido|suspended|pendiente/.test(text)) return 'suspendido';
+  return 'otros';
+}
+
+function getField(record, ...names) {
+  for (const name of names) {
+    if (record[name] !== undefined && record[name] !== '') return record[name];
+  }
+  return '';
 }
 
 async function uploadToSupabase(records) {
@@ -289,55 +346,36 @@ async function uploadToSupabase(records) {
     return;
   }
 
-  console.log(`📤 Cargando ${records.length} registros en Supabase...`);
+  console.log(`📤 Cargando ${records.length} registros en Supabase (transacciones_novusbet)...`);
 
   const formattedRecords = records.map((record) => ({
-    usuario: record.usuario || record.user || record.username || 'N/A',
-    tipo_transaccion: record.tipo || record.type || 'N/A',
-    monto: parseFloat(record.monto || record.amount || 0),
+    usuario: getField(record, 'usuario', 'user', 'username', 'cliente', 'nombre') || 'N/A',
+    tipo_transaccion: getField(record, 'tipo', 'type', 'tipo de transacción', 'transaction_type') || 'N/A',
+    monto: parseFloat(getField(record, 'monto', 'amount', 'total').replace(/[^0-9.-]/g, '')) || 0,
     disciplina: classifyDiscipline(record),
-    descripcion: record.descripcion || record.description || '',
-    fecha: record.fecha || new Date().toISOString(),
+    estado_cliente: classifyClientStatus(record),
+    descripcion: getField(record, 'descripcion', 'description', 'descripción'),
+    fecha: getField(record, 'fecha', 'created_at', 'date') || new Date().toISOString(),
     datos_raw: JSON.stringify(record),
   }));
 
-  try {
-    // Crear tabla si no existe
-    const { error: createError } = await supabase.rpc('execute_sql', {
-      sql: `
-        CREATE TABLE IF NOT EXISTS transacciones_novusbet (
-          id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-          usuario TEXT NOT NULL,
-          tipo_transaccion TEXT,
-          monto NUMERIC,
-          disciplina TEXT,
-          descripcion TEXT,
-          fecha TIMESTAMPTZ DEFAULT NOW(),
-          datos_raw JSONB,
-          created_at TIMESTAMPTZ DEFAULT NOW()
-        );
-        CREATE INDEX IF NOT EXISTS idx_novusbet_usuario ON transacciones_novusbet(usuario);
-        CREATE INDEX IF NOT EXISTS idx_novusbet_disciplina ON transacciones_novusbet(disciplina);
-      `,
-    });
+  // Limpiar datos anteriores del mismo rango para evitar duplicados en cada sync
+  await supabase.from('transacciones_novusbet').delete().neq('id', 0);
 
-    // Insertar registros
-    const { data, error } = await supabase
-      .from('transacciones_novusbet')
-      .insert(formattedRecords)
-      .select();
-
+  const BATCH_SIZE = 500;
+  let inserted = 0;
+  for (let i = 0; i < formattedRecords.length; i += BATCH_SIZE) {
+    const batch = formattedRecords.slice(i, i + BATCH_SIZE);
+    const { data, error } = await supabase.from('transacciones_novusbet').insert(batch).select();
     if (error) {
-      console.error('❌ Error inserting records:', error.message);
+      console.error('❌ Error insertando lote:', error.message);
       throw error;
     }
-
-    console.log(`✅ ${data?.length || formattedRecords.length} registros cargados`);
-    return data;
-  } catch (err) {
-    console.error('❌ Error en Supabase:', err.message);
-    throw err;
+    inserted += data?.length || batch.length;
   }
+
+  console.log(`✅ ${inserted} registros cargados en Supabase`);
+  return inserted;
 }
 
 // ============================================================
@@ -346,35 +384,50 @@ async function uploadToSupabase(records) {
 
 async function main() {
   try {
-    // Validar configuración
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-      console.error('❌ Faltan SUPABASE_URL o SUPABASE_SERVICE_KEY en .env.local');
+    if (!BO_USERNAME || !BO_PASSWORD) {
+      console.error('❌ Faltan BO_USERNAME o BO_PASSWORD en .env.local');
       process.exit(1);
     }
 
-    supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+    if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+      supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+    } else {
+      console.log('⚠️ Faltan credenciales de Supabase, solo se descargará y clasificará el CSV');
+    }
 
-    // 1. Login
     const { token, cookie } = await login();
-
-    // 2. Descargar CSV
     const csvContent = await downloadCSV(token, cookie);
-
-    // 3. Procesar
     const records = parseCSV(csvContent);
+
     console.log(`\n📊 ${records.length} transacciones procesadas`);
 
-    // 4. Cargar en Supabase
+    const disciplinas = {};
+    const estados = {};
+    records.forEach((r) => {
+      const d = classifyDiscipline(r);
+      const e = classifyClientStatus(r);
+      disciplinas[d] = (disciplinas[d] || 0) + 1;
+      estados[e] = (estados[e] || 0) + 1;
+    });
+    console.log('   Por disciplina:', disciplinas);
+    console.log('   Por estado cliente:', estados);
+
     if (records.length > 0) {
       await uploadToSupabase(records);
+    } else {
+      console.log('⚠️ No se encontraron transacciones en el rango de fechas indicado');
     }
 
     console.log('\n✅ Sincronización completada');
-    console.log('🌐 Dashboard se actualizará en https://dashboard-genius.onrender.com');
+    return records.length;
   } catch (err) {
     console.error('\n❌ Error fatal:', err.message);
-    process.exit(1);
+    throw err;
   }
 }
 
-main();
+if (require.main === module) {
+  main().catch(() => process.exit(1));
+}
+
+module.exports = { main };

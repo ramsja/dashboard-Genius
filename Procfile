@@ -1,1 +1,1 @@
-web: node auto-setup.js
+web: node server-db.js

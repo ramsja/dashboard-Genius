@@ -7,58 +7,184 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 
 const PORT = process.env.PORT || 3000;
 const DASHBOARD_DIR = path.join(__dirname, 'dashboard');
 
-// Configurar Supabase
+// Configurar Supabase (cliente admin con service key para poder leer/escribir todo)
 let supabase = null;
-if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
-  supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+if (process.env.SUPABASE_URL && SUPABASE_KEY) {
+  supabase = createClient(process.env.SUPABASE_URL, SUPABASE_KEY);
   console.log('✅ Conectado a Supabase');
 } else {
   console.log('⚠️ Variables de Supabase no configuradas, usando datos de prueba');
 }
 
-// Función para cargar datos automáticamente
+// ============================================================
+// AUTENTICACIÓN (usuario administrativo)
+// ============================================================
+
+const sesiones = new Map(); // sessionId -> { username, expires }
+const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 horas
+let adminTableLista = false; // se activa solo si admin_usuarios existe y responde bien
+
+function hashPassword(password, salt) {
+  return crypto.scryptSync(password, salt, 64).toString('hex');
+}
+
+function generarSessionId() {
+  return crypto.randomBytes(24).toString('hex');
+}
+
+function parseCookies(req) {
+  const header = req.headers.cookie || '';
+  const out = {};
+  header.split(';').forEach((part) => {
+    const idx = part.indexOf('=');
+    if (idx === -1) return;
+    out[part.slice(0, idx).trim()] = decodeURIComponent(part.slice(idx + 1).trim());
+  });
+  return out;
+}
+
+function getSessionFromRequest(req) {
+  const cookies = parseCookies(req);
+  const sid = cookies['dg_session'];
+  if (!sid) return null;
+  const sesion = sesiones.get(sid);
+  if (!sesion) return null;
+  if (sesion.expires < Date.now()) {
+    sesiones.delete(sid);
+    return null;
+  }
+  return { sid, ...sesion };
+}
+
+async function ensureAdminUser() {
+  if (!supabase) return;
+
+  const username = process.env.ADMIN_USERNAME || 'admin';
+  const password = process.env.ADMIN_PASSWORD || 'DashboardGenius2026!';
+
+  try {
+    const { data, error } = await supabase
+      .from('admin_usuarios')
+      .select('id, username')
+      .eq('username', username)
+      .maybeSingle();
+
+    if (error) {
+      if (error.code === '42P01' || /does not exist/i.test(error.message || '')) {
+        console.log('⚠️ La tabla admin_usuarios no existe todavía. Ejecuta el SQL de setup en Supabase. El dashboard queda ABIERTO sin login hasta entonces.');
+      } else {
+        console.log('⚠️ Error verificando usuario admin:', error.message);
+      }
+      return;
+    }
+
+    adminTableLista = true;
+
+    if (!data) {
+      const salt = crypto.randomBytes(16).toString('hex');
+      const passwordHash = hashPassword(password, salt);
+
+      const { error: insertError } = await supabase.from('admin_usuarios').insert({
+        username,
+        password_hash: passwordHash,
+        salt,
+        rol: 'admin',
+      });
+
+      if (insertError) {
+        console.log('⚠️ Error creando usuario admin:', insertError.message);
+      } else {
+        console.log(`✅ Usuario administrativo creado → usuario: "${username}" contraseña: "${password}"`);
+        console.log('   (Cámbiala luego con la variable de entorno ADMIN_PASSWORD)');
+      }
+    } else {
+      console.log(`✅ Usuario administrativo "${username}" ya existe`);
+    }
+  } catch (err) {
+    console.log('⚠️ Error en ensureAdminUser:', err.message);
+  }
+}
+
+async function verificarCredenciales(username, password) {
+  if (!supabase) return false;
+
+  const { data, error } = await supabase
+    .from('admin_usuarios')
+    .select('username, password_hash, salt')
+    .eq('username', username)
+    .maybeSingle();
+
+  if (error || !data) return false;
+
+  const hash = hashPassword(password, data.salt);
+  const hashBuf = Buffer.from(hash, 'hex');
+  const storedBuf = Buffer.from(data.password_hash, 'hex');
+
+  if (hashBuf.length !== storedBuf.length) return false;
+  return crypto.timingSafeEqual(hashBuf, storedBuf);
+}
+
+// Rutas que no requieren sesión iniciada
+const RUTAS_PUBLICAS = new Set(['/login.html', '/api/login']);
+
+// ============================================================
+// CARGA DE DATOS REALES DESDE NOVUSBET
+// ============================================================
+
 async function cargarDatosAutomatico() {
   if (!supabase) return;
 
   try {
     console.log('📊 Verificando datos en Supabase...');
-    const { data, error } = await supabase
+    const { count, error } = await supabase
       .from('transacciones_novusbet')
-      .select('count()', { count: 'exact' });
+      .select('*', { count: 'exact', head: true });
 
     if (error) throw error;
 
-    if (!data || data.length === 0) {
-      console.log('📝 Cargando datos iniciales en Supabase...');
+    if (!count || count === 0) {
+      console.log('📝 No hay transacciones. Intentando sincronizar datos REALES desde Novusbet...');
 
-      const datosInsert = [
-        { usuario: 'carlos_martinez', tipo_transaccion: 'Apuesta Ganada', monto: 250.50, disciplina: 'deportes', descripcion: 'Fútbol - Gana' },
-        { usuario: 'juan_rodriguez', tipo_transaccion: 'Deposito', monto: 500.00, disciplina: 'otros', descripcion: 'Recarga de cuenta' },
-        { usuario: 'maria_lopez', tipo_transaccion: 'Apuesta Perdida', monto: 100.00, disciplina: 'casino', descripcion: 'Ruleta - Pierde' },
-        { usuario: 'pablo_garcia', tipo_transaccion: 'Retiro', monto: 750.00, disciplina: 'otros', descripcion: 'Retiro de ganancias' },
-        { usuario: 'ana_torres', tipo_transaccion: 'Apuesta Ganada', monto: 1200.75, disciplina: 'deportes', descripcion: 'Baloncesto - Gana' }
-      ];
-
-      const { error: insertError } = await supabase
-        .from('transacciones_novusbet')
-        .insert(datosInsert);
-
-      if (insertError) {
-        console.log('⚠️ Error al cargar datos:', insertError.message);
+      if (process.env.BO_USERNAME && process.env.BO_PASSWORD) {
+        try {
+          const { main: sincronizarNovusbet } = require('./sync-novusbet');
+          const total = await sincronizarNovusbet();
+          console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
+          return;
+        } catch (syncErr) {
+          console.log('⚠️ No se pudo sincronizar con Novusbet ahora mismo:', syncErr.message);
+        }
       } else {
-        console.log('✅ Datos cargados exitosamente: 5 transacciones, $2,801.25');
+        console.log('⚠️ Faltan BO_USERNAME/BO_PASSWORD, no se puede sincronizar con Novusbet');
       }
     } else {
-      console.log('✅ Base de datos ya tiene datos');
+      console.log(`✅ Base de datos ya tiene ${count} transacciones`);
     }
   } catch (error) {
     console.log('⚠️ Error verificando datos:', error.message);
   }
+}
+
+// Re-sincroniza cada 6 horas para mantener datos reales frescos
+function programarResincronizacion() {
+  const SEIS_HORAS = 6 * 60 * 60 * 1000;
+  setInterval(async () => {
+    if (!process.env.BO_USERNAME || !process.env.BO_PASSWORD) return;
+    try {
+      console.log('🔄 Re-sincronizando transacciones reales desde Novusbet...');
+      const { main: sincronizarNovusbet } = require('./sync-novusbet');
+      await sincronizarNovusbet();
+    } catch (err) {
+      console.log('⚠️ Error en re-sincronización:', err.message);
+    }
+  }, SEIS_HORAS);
 }
 
 // Tipos MIME
@@ -130,6 +256,67 @@ const server = http.createServer(async (req, res) => {
   console.log(`📡 ${req.method} ${pathname}`);
 
   try {
+    // LOGIN
+    if (pathname === '/api/login' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => (body += chunk));
+      req.on('end', async () => {
+        try {
+          const { username, password } = JSON.parse(body || '{}');
+          const ok = await verificarCredenciales(username, password);
+
+          if (!ok) {
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Usuario o contraseña incorrectos' }));
+            return;
+          }
+
+          const sid = generarSessionId();
+          sesiones.set(sid, { username, expires: Date.now() + SESSION_TTL_MS });
+
+          res.writeHead(200, {
+            'Content-Type': 'application/json',
+            'Set-Cookie': `dg_session=${sid}; HttpOnly; Path=/; Max-Age=${SESSION_TTL_MS / 1000}; SameSite=Lax`
+          });
+          res.end(JSON.stringify({ ok: true }));
+        } catch (e) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Solicitud inválida' }));
+        }
+      });
+      return;
+    }
+
+    // LOGOUT
+    if (pathname === '/api/logout') {
+      const sesion = getSessionFromRequest(req);
+      if (sesion) sesiones.delete(sesion.sid);
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+        'Set-Cookie': 'dg_session=; HttpOnly; Path=/; Max-Age=0'
+      });
+      res.end(JSON.stringify({ ok: true }));
+      return;
+    }
+
+    // Verificación de sesión para todo lo demás (si hay usuarios admin configurados)
+    if (!RUTAS_PUBLICAS.has(pathname)) {
+      const requiereLogin = supabase !== null && adminTableLista;
+      if (requiereLogin) {
+        const sesion = getSessionFromRequest(req);
+        if (!sesion) {
+          if (pathname.startsWith('/api/') || pathname.startsWith('/download/')) {
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'No autenticado' }));
+            return;
+          }
+          res.writeHead(302, { Location: '/login.html' });
+          res.end();
+          return;
+        }
+      }
+    }
+
     // API: USUARIOS
     if (pathname === '/api/usuarios') {
       let usuarios;
@@ -421,8 +608,14 @@ server.listen(PORT, async () => {
   console.log(`📄 Reporte JSON: /download/reporte-completo.json`);
   console.log(`\n⏸️  Presiona Ctrl+C para detener\n`);
 
-  // Cargar datos automáticamente
-  await cargarDatosAutomatico();
+  // Usuario administrativo
+  await ensureAdminUser();
+
+  // Cargar datos automáticamente (no bloquea el arranque, corre en paralelo)
+  cargarDatosAutomatico();
+
+  // Mantener datos reales frescos cada 6 horas
+  programarResincronizacion();
 });
 
 server.on('error', (err) => {
