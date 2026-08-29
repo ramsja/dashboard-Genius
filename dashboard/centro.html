@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Operaciones - Dashboard Genius</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; color: #333; }
+        header { background: linear-gradient(135deg, #1a5f7a 0%, #0d3d52 100%); color: white; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { font-size: 28px; margin-bottom: 5px; }
+        .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 30px 0; }
+        .kpi { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
+        .kpi-value { font-size: 32px; font-weight: bold; color: #1a5f7a; margin: 10px 0; }
+        .kpi-label { font-size: 12px; color: #999; text-transform: uppercase; font-weight: 600; }
+        .controls { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 14px; }
+        .btn-primary { background: #1a5f7a; color: white; }
+        .btn-secondary { background: #e74c3c; color: white; }
+        .btn-info { background: #3498db; color: white; }
+        input[type="text"] { flex: 1; min-width: 250px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .table-container { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .table-header { background: #1a5f7a; color: white; padding: 20px; }
+        .table-header h2 { font-size: 18px; margin: 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f9f9f9; padding: 15px; text-align: left; font-weight: 600; font-size: 12px; border-bottom: 2px solid #e0e0e0; text-transform: uppercase; color: #1a5f7a; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; }
+        tr:hover { background: #f9f9f9; }
+        .status { padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: capitalize; }
+        .status.activo { background: #d4edda; color: #155724; }
+        .status.inactivo { background: #fff3cd; color: #856404; }
+        .status.desconectado { background: #f8d7da; color: #721c24; }
+        .number { text-align: right; font-weight: 500; }
+        .loading { text-align: center; padding: 40px; color: #999; }
+        .success { background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin: 30px 0; }
+        .chart-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .chart-title { font-size: 16px; font-weight: 600; margin-bottom: 15px; color: #1a5f7a; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🎯 Centro de Operaciones</h1>
+            <p>Base de datos en línea - <span id="actualizacion">Actualizando...</span></p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- KPIs -->
+        <div class="kpis">
+            <div class="kpi">
+                <div class="kpi-label">Total Usuarios</div>
+                <div class="kpi-value" id="total-usuarios">-</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Activos</div>
+                <div class="kpi-value" id="total-activos">-</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Inactivos</div>
+                <div class="kpi-value" id="total-inactivos">-</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Saldo Total</div>
+                <div class="kpi-value" id="saldo-total">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Ganancias</div>
+                <div class="kpi-value" id="ganancias-total">$0</div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts">
+            <div class="chart-container">
+                <div class="chart-title">Estados de Usuarios</div>
+                <canvas id="chartEstados"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Top 5 Usuarios por Saldo</div>
+                <canvas id="chartTop5"></canvas>
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Buscar usuario..." />
+            <button class="btn btn-info" onclick="descargarCSV()">📥 Descargar CSV</button>
+            <button class="btn btn-secondary" onclick="descargarJSON()">📄 JSON</button>
+            <button class="btn btn-primary" onclick="cargarDatos()">🔄 Actualizar</button>
+        </div>
+
+        <!-- Tabla -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>📊 Listado de Usuarios</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                        <th>Saldo</th>
+                        <th>Ganancias</th>
+                        <th>Pérdidas</th>
+                        <th>Última Actividad</th>
+                    </tr>
+                </thead>
+                <tbody id="usuarios-tabla">
+                    <tr><td colspan="9" class="loading">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let datosGlobales = { usuarios: [], disciplinas: [] };
+
+        async function cargarDatos() {
+            try {
+                const usuarios = await fetch('/api/usuarios').then(r => r.json());
+                const disciplinas = await fetch('/api/disciplinas').then(r => r.json());
+                
+                datosGlobales = { usuarios: usuarios || [], disciplinas: disciplinas || [] };
+                
+                actualizarKPIs();
+                actualizarTabla();
+                actualizarGraficos();
+                
+                document.getElementById('actualizacion').textContent = new Date().toLocaleTimeString('es-ES');
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function actualizarKPIs() {
+            const usuarios = datosGlobales.usuarios;
+            const total = usuarios.length;
+            const activos = usuarios.filter(u => u.estado === 'activo').length;
+            const inactivos = usuarios.filter(u => u.estado === 'inactivo').length;
+            const saldoTotal = usuarios.reduce((sum, u) => sum + (u.saldo_cuenta || 0), 0);
+            const gananciasTotal = usuarios.reduce((sum, u) => sum + (u.ganancias_totales || 0), 0);
+
+            document.getElementById('total-usuarios').textContent = total;
+            document.getElementById('total-activos').textContent = activos;
+            document.getElementById('total-inactivos').textContent = inactivos;
+            document.getElementById('saldo-total').textContent = '$' + saldoTotal.toFixed(2);
+            document.getElementById('ganancias-total').textContent = '$' + gananciasTotal.toFixed(2);
+        }
+
+        function actualizarTabla() {
+            const filtro = document.getElementById('searchInput').value.toLowerCase();
+            let usuarios = datosGlobales.usuarios;
+
+            if (filtro) {
+                usuarios = usuarios.filter(u =>
+                    (u.username && u.username.toLowerCase().includes(filtro)) ||
+                    (u.nombre_completo && u.nombre_completo.toLowerCase().includes(filtro))
+                );
+            }
+
+            let html = '';
+            usuarios.forEach(u => {
+                const estado = u.estado || 'desconocido';
+                const fecha = u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '-';
+                html += `
+                    <tr>
+                        <td>${u.id}</td>
+                        <td><strong>${u.username}</strong></td>
+                        <td>${u.nombre_completo || '-'}</td>
+                        <td>${u.email || '-'}</td>
+                        <td><span class="status ${estado}">${estado}</span></td>
+                        <td class="number">$${(u.saldo_cuenta || 0).toFixed(2)}</td>
+                        <td class="number">$${(u.ganancias_totales || 0).toFixed(2)}</td>
+                        <td class="number">$${(u.perdidas_totales || 0).toFixed(2)}</td>
+                        <td>${fecha}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('usuarios-tabla').innerHTML = html || '<tr><td colspan="9" class="loading">No hay usuarios</td></tr>';
+        }
+
+        function actualizarGraficos() {
+            const usuarios = datosGlobales.usuarios;
+
+            // Gráfico de estados
+            const estados = {};
+            usuarios.forEach(u => {
+                const estado = u.estado || 'desconocido';
+                estados[estado] = (estados[estado] || 0) + 1;
+            });
+
+            const ctx1 = document.getElementById('chartEstados').getContext('2d');
+            new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(estados),
+                    datasets: [{
+                        data: Object.values(estados),
+                        backgroundColor: ['#28a745', '#ffc107', '#dc3545', '#6c757d']
+                    }]
+                },
+                options: { responsive: true }
+            });
+
+            // Top 5 usuarios por saldo
+            const top5 = usuarios.sort((a, b) => (b.saldo_cuenta || 0) - (a.saldo_cuenta || 0)).slice(0, 5);
+            const ctx2 = document.getElementById('chartTop5').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: top5.map(u => u.username),
+                    datasets: [{
+                        label: 'Saldo',
+                        data: top5.map(u => u.saldo_cuenta || 0),
+                        backgroundColor: '#1a5f7a'
+                    }]
+                },
+                options: { responsive: true, indexAxis: 'y' }
+            });
+        }
+
+        function descargarCSV() {
+            const usuarios = datosGlobales.usuarios;
+            const headers = ['id', 'username', 'nombre_completo', 'email', 'estado', 'saldo_cuenta', 'ganancias_totales'];
+            const csv = [headers.join(',')];
+            
+            usuarios.forEach(u => {
+                csv.push([u.id, u.username, u.nombre_completo || '', u.email || '', u.estado, u.saldo_cuenta || 0, u.ganancias_totales || 0].join(','));
+            });
+
+            const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'usuarios.csv';
+            a.click();
+        }
+
+        function descargarJSON() {
+            const blob = new Blob([JSON.stringify(datosGlobales, null, 2)], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dashboard.json';
+            a.click();
+        }
+
+        document.getElementById('searchInput').addEventListener('input', actualizarTabla);
+        
+        cargarDatos();
+        setInterval(cargarDatos, 30000);
+    </script>
+</body>
+</html>
