@@ -1,0 +1,21 @@
+{
+  "name": "dashboard-genius",
+  "version": "1.0.0",
+  "description": "Dashboard en tiempo real para GeniusBet",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "load-data": "node load-real-data.js",
+    "watch-data": "node watch-real-data.js",
+    "tunnel": "ngrok http 3000",
+    "dev:real": "npm start & npm run watch-data",
+    "dev:tunnel": "ngrok http 3000"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.4",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "ws": "^8.14.2"
+  }
+}

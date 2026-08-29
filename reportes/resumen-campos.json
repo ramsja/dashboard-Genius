@@ -1,0 +1,13 @@
+{
+  "disciplines": {
+    "casino": 71,
+    "deportes": 129,
+    "otros": 31
+  },
+  "metadata": {
+    "total_records": 231,
+    "last_update": "29/08/2026, 03:27:29 p. m. UTC",
+    "data_source": "transacciones_producto_2026-08-28.csv",
+    "filtering_applied": false
+  }
+}

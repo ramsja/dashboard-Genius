@@ -1,0 +1,26 @@
+{
+  "totals": {
+    "activo": 175,
+    "inactivo": 56,
+    "desconectado": 11,
+    "suspendido": 4,
+    "otros": 2
+  },
+  "generated_at": "29/08/2026, 03:27:29 p. m. UTC",
+  "status_by_discipline": {
+    "deportes": {
+      "activo": 113,
+      "inactivo": 33,
+      "desconectado": 7,
+      "suspendido": 2,
+      "otros": 1
+    },
+    "casino": {
+      "activo": 61,
+      "inactivo": 22,
+      "desconectado": 3,
+      "suspendido": 1,
+      "otros": 0
+    }
+  }
+}

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Panel de control diario</title>
+    <title>Panel de control en tiempo real</title>
     <style>
       :root {
         --bg: #0b1020;
@@ -26,6 +26,26 @@
       }
       .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px 80px; }
       h1 { margin-bottom: 8px; }
+      .header-row { display: flex; justify-content: space-between; align-items: center; }
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #666;
+        animation: pulse 2s infinite;
+      }
+      .status-dot.connected { background: var(--green); }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
       .muted { color: var(--muted); }
       .grid {
         display: grid;
@@ -38,12 +58,18 @@
         border: 1px solid var(--line);
         border-radius: 14px;
         padding: 18px;
+        transition: all 0.3s ease;
+      }
+      .card.updating {
+        border-color: var(--blue);
+        box-shadow: 0 0 12px rgba(96, 165, 250, 0.2);
       }
       .card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; }
       .card .value {
         margin-top: 12px;
         font-size: clamp(24px, 3vw, 38px);
         font-weight: 700;
+        transition: color 0.3s ease;
       }
       .status-row { display: flex; gap: 10px; flex-wrap: wrap; }
       .pill {
@@ -64,6 +90,7 @@
       th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; }
       th { background: var(--panel-soft); color: var(--muted); }
       tr:last-child td { border-bottom: none; }
+      tr.updated td { background: rgba(96, 165, 250, 0.1); }
       .tag {
         display: inline-block;
         border-radius: 999px;
@@ -81,8 +108,16 @@
   </head>
   <body>
     <div class="container">
-      <h1>Panel de control diario</h1>
-      <div class="muted" id="generatedAt">Cargando resumen…</div>
+      <div class="header-row">
+        <div>
+          <h1>Panel de control en tiempo real</h1>
+          <div class="muted" id="generatedAt">Cargando resumen…</div>
+        </div>
+        <div class="status-indicator">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusText">Conectando...</span>
+        </div>
+      </div>
 
       <div class="grid" id="stats"></div>
 
@@ -104,31 +139,53 @@
     </div>
 
     <script>
-      async function loadData() {
-        const summaryUrl = '../reportes/clientes-resumen.json';
-        const fieldsUrl = '../reportes/resumen-campos.json';
+      let ws = null;
+      const statusDot = document.getElementById('statusDot');
+      const statusText = document.getElementById('statusText');
 
-        try {
-          const [summaryRes, fieldsRes] = await Promise.all([
-            fetch(summaryUrl),
-            fetch(fieldsUrl)
-          ]);
+      function connectWebSocket() {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        ws = new WebSocket(`${protocol}//${window.location.host}`);
 
-          if (!summaryRes.ok || !fieldsRes.ok) {
-            throw new Error('No se pudo cargar el resumen generado.');
+        ws.onopen = () => {
+          console.log('✅ Conectado al servidor en tiempo real');
+          statusDot.classList.add('connected');
+          statusText.textContent = 'Conectado';
+        };
+
+        ws.onmessage = (event) => {
+          const message = JSON.parse(event.data);
+
+          if (message.type === 'init' || message.type === 'update') {
+            if (message.type === 'update') {
+              console.log('🔄 Datos actualizados en tiempo real');
+              highlightUpdates();
+            }
+            renderSummary(message.resumen, message.campos);
           }
+        };
 
-          const summary = await summaryRes.json();
-          const fields = await fieldsRes.json();
+        ws.onerror = (error) => {
+          console.error('❌ Error WebSocket:', error);
+          statusDot.classList.remove('connected');
+          statusText.textContent = 'Error de conexión';
+        };
 
-          renderSummary(summary, fields);
-        } catch (error) {
-          document.body.insertAdjacentHTML(
-            'beforeend',
-            '<div class="container"><div class="error">' + error.message + '</div></div>'
-          );
-          console.error(error);
-        }
+        ws.onclose = () => {
+          console.log('❌ Desconectado del servidor');
+          statusDot.classList.remove('connected');
+          statusText.textContent = 'Desconectado';
+          // Reintentar conexión en 3 segundos
+          setTimeout(connectWebSocket, 3000);
+        };
+      }
+
+      function highlightUpdates() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          card.classList.add('updating');
+          setTimeout(() => card.classList.remove('updating'), 1000);
+        });
       }
 
       function renderSummary(summary, fields) {
@@ -176,7 +233,8 @@
         document.getElementById('statusTable').innerHTML = rows.join('');
       }
 
-      loadData();
+      // Iniciar conexión WebSocket
+      connectWebSocket();
     </script>
   </body>
 </html>

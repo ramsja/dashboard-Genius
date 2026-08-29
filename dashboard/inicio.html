@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard Genius - Centro de Control</title>
+    <style>
+        :root {
+            --bg: #0b1020;
+            --panel: #161d2f;
+            --panel-soft: #1d2942;
+            --line: #2e3d5e;
+            --text: #edf3ff;
+            --muted: #a7b9d8;
+            --green: #30c48d;
+            --amber: #f5b942;
+            --red: #f87171;
+            --blue: #60a5fa;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        .header {
+            background: linear-gradient(135deg, #0b1020 0%, #1a1f2e 100%);
+            border-bottom: 1px solid var(--line);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 32px;
+            color: #60a5fa;
+            margin: 0 0 8px 0;
+        }
+        .subtitle {
+            color: var(--muted);
+            font-size: 16px;
+            margin: 0;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        .menu-card {
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        .menu-card:hover {
+            border-color: #60a5fa;
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+            transform: translateY(-4px);
+        }
+        .menu-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+        .menu-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #60a5fa;
+            margin-bottom: 8px;
+        }
+        .menu-desc {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        .menu-link {
+            display: inline-block;
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .menu-link:hover {
+            text-decoration: underline;
+        }
+
+        .status-section {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .status-title {
+            color: #60a5fa;
+            font-size: 18px;
+            margin: 0 0 15px 0;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .status-item {
+            background: var(--panel-soft);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #60a5fa;
+        }
+        .status-label {
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .status-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #30c48d;
+        }
+        .status-item.warning .status-value {
+            color: var(--amber);
+        }
+        .status-item.error .status-value {
+            color: var(--red);
+        }
+
+        .quick-links {
+            background: rgba(96, 165, 250, 0.1);
+            border: 1px solid #2e3d5e;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .quick-links-title {
+            color: #60a5fa;
+            font-weight: bold;
+            margin: 0 0 12px 0;
+        }
+        .links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .links-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #2e3d5e;
+        }
+        .links-list li:last-child {
+            border-bottom: none;
+        }
+        .links-list a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .links-list a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--line);
+        }
+
+        .badge {
+            display: inline-block;
+            background: #30c48d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🎯</div>
+        <h1 class="title">Dashboard Genius</h1>
+        <p class="subtitle">Centro de Control Centralizado <span class="badge">EN VIVO</span></p>
+    </div>
+
+    <div class="container">
+        <!-- Estado Sistema -->
+        <div class="status-section">
+            <h3 class="status-title">📊 Estado del Sistema</h3>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-label">Servidor</div>
+                    <div class="status-value">✓</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">WebSocket</div>
+                    <div class="status-value">✓</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Usuarios</div>
+                    <div class="status-value">231</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Transacciones</div>
+                    <div class="status-value">500+</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enlaces Rápidos -->
+        <div class="quick-links">
+            <h3 class="quick-links-title">🔗 Enlaces Rápidos</h3>
+            <ul class="links-list">
+                <li>📊 <a href="/index-realtime.html">Dashboard Tiempo Real</a></li>
+                <li>📥 <a href="/descargas.html">Centro de Descargas</a></li>
+                <li>📈 <a href="/api/resumen">API Resumen</a></li>
+                <li>👥 <a href="/api/usuarios">API Usuarios</a></li>
+                <li>💳 <a href="/api/transacciones">API Transacciones</a></li>
+            </ul>
+        </div>
+
+        <!-- Menu Principal -->
+        <h2 style="margin-top: 0; color: #60a5fa;">Selecciona una opción</h2>
+        <div class="menu-grid">
+            <!-- Dashboard -->
+            <a href="/index-realtime.html" class="menu-card">
+                <div class="menu-icon">📊</div>
+                <div class="menu-title">Dashboard</div>
+                <div class="menu-desc">Ver datos en tiempo real con gráficos y estadísticas en vivo</div>
+                <div class="menu-link">Abrir Dashboard →</div>
+            </a>
+
+            <!-- Descargas -->
+            <a href="/descargas.html" class="menu-card">
+                <div class="menu-icon">📥</div>
+                <div class="menu-title">Descargar Reportes</div>
+                <div class="menu-desc">Exporta datos en CSV, JSON y Excel para análisis offline</div>
+                <div class="menu-link">Ir a Descargas →</div>
+            </a>
+
+            <!-- APIs -->
+            <a href="#apis" class="menu-card" onclick="mostrarAPIs(event)">
+                <div class="menu-icon">⚙️</div>
+                <div class="menu-title">APIs REST</div>
+                <div class="menu-desc">Accede a los datos mediante APIs REST para integraciones</div>
+                <div class="menu-link">Ver APIs →</div>
+            </a>
+
+            <!-- Documentación -->
+            <a href="https://github.com/ramsja/dashboard-Genius/tree/claude/estructura-estudio-kozee8" target="_blank" class="menu-card">
+                <div class="menu-icon">📚</div>
+                <div class="menu-title">Documentación</div>
+                <div class="menu-desc">Guías completas de instalación, setup y uso de Dashboard Genius</div>
+                <div class="menu-link">Ver Docs →</div>
+            </a>
+
+            <!-- Supabase -->
+            <a href="https://supabase.com" target="_blank" class="menu-card">
+                <div class="menu-icon">🗄️</div>
+                <div class="menu-title">Base de Datos</div>
+                <div class="menu-desc">Accede a Supabase PostgreSQL para administrar la BD</div>
+                <div class="menu-link">Ir a Supabase →</div>
+            </a>
+
+            <!-- GitHub -->
+            <a href="https://github.com/ramsja/dashboard-Genius" target="_blank" class="menu-card">
+                <div class="menu-icon">💻</div>
+                <div class="menu-title">GitHub</div>
+                <div class="menu-desc">Código fuente, issues y pull requests del proyecto</div>
+                <div class="menu-link">Ir a GitHub →</div>
+            </a>
+        </div>
+
+        <!-- Sección de APIs -->
+        <div id="apis-section" style="display: none;">
+            <div class="status-section">
+                <h3 class="status-title">⚙️ APIs REST Disponibles</h3>
+                <div style="color: var(--muted); font-size: 13px; line-height: 1.8;">
+                    <p><strong>GET /api/resumen</strong> - Resumen del día (usuarios, estados)</p>
+                    <p><strong>GET /api/campos</strong> - Breakdown por disciplina</p>
+                    <p><strong>GET /api/usuarios</strong> - Lista de usuarios (max 100)</p>
+                    <p><strong>GET /api/transacciones</strong> - Transacciones recientes (max 100)</p>
+                    <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--line);">
+                        <strong>Descargas:</strong>
+                    </p>
+                    <p><strong>GET /download/usuarios.csv</strong> - Usuarios en CSV</p>
+                    <p><strong>GET /download/transacciones.csv</strong> - Transacciones en CSV</p>
+                    <p><strong>GET /download/reporte-completo.json</strong> - Reporte completo</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🎯 Dashboard Genius • Powered by Node.js + Supabase + WebSocket</p>
+            <p>Rama: <code>claude/estructura-estudio-kozee8</code></p>
+            <p id="datetime"></p>
+        </div>
+    </div>
+
+    <script>
+        function mostrarAPIs(e) {
+            e.preventDefault();
+            const section = document.getElementById('apis-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('datetime').textContent = new Date().toLocaleString('es-SV');
+    </script>
+</body>
+</html>

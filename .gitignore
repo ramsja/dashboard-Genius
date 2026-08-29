@@ -1,14 +1,8 @@
+node_modules/
+*.log
+descargas/*.csv
+analisis-www/
 .env
 .env.local
-.env.*
-*.pyc
-__pycache__/
-.venv/
-venv/
+*.tmp
 .DS_Store
-reportes/*.csv
-reportes/*.json
-reportes/*.sql
-!reportes/.gitkeep
-# Optional: keep generated outputs if you want them in repo
-# reportes/
