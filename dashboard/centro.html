@@ -52,24 +52,20 @@
         <!-- KPIs -->
         <div class="kpis">
             <div class="kpi">
-                <div class="kpi-label">Total Usuarios</div>
-                <div class="kpi-value" id="total-usuarios">-</div>
+                <div class="kpi-label">Transacciones Novusbet</div>
+                <div class="kpi-value" id="total-transacciones">-</div>
             </div>
             <div class="kpi">
-                <div class="kpi-label">Activos</div>
-                <div class="kpi-value" id="total-activos">-</div>
+                <div class="kpi-label">Monto Total</div>
+                <div class="kpi-value" id="monto-total">$0</div>
             </div>
             <div class="kpi">
-                <div class="kpi-label">Inactivos</div>
-                <div class="kpi-value" id="total-inactivos">-</div>
+                <div class="kpi-label">Usuarios Únicos</div>
+                <div class="kpi-value" id="usuarios-unicos">-</div>
             </div>
             <div class="kpi">
-                <div class="kpi-label">Saldo Total</div>
-                <div class="kpi-value" id="saldo-total">$0</div>
-            </div>
-            <div class="kpi">
-                <div class="kpi-label">Ganancias</div>
-                <div class="kpi-value" id="ganancias-total">$0</div>
+                <div class="kpi-label">Disciplinas</div>
+                <div class="kpi-value" id="disciplinas-count">-</div>
             </div>
         </div>
 
@@ -93,46 +89,44 @@
             <button class="btn btn-primary" onclick="cargarDatos()">🔄 Actualizar</button>
         </div>
 
-        <!-- Tabla -->
+        <!-- Tabla de Transacciones Novusbet -->
         <div class="table-container">
             <div class="table-header">
-                <h2>📊 Listado de Usuarios</h2>
+                <h2>💰 Transacciones Novusbet en Tiempo Real</h2>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Usuario</th>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Estado</th>
-                        <th>Saldo</th>
-                        <th>Ganancias</th>
-                        <th>Pérdidas</th>
-                        <th>Última Actividad</th>
+                        <th>Tipo</th>
+                        <th>Monto</th>
+                        <th>Disciplina</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
                     </tr>
                 </thead>
-                <tbody id="usuarios-tabla">
-                    <tr><td colspan="9" class="loading">Cargando...</td></tr>
+                <tbody id="transacciones-tabla">
+                    <tr><td colspan="7" class="loading">Cargando transacciones...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        let datosGlobales = { usuarios: [], disciplinas: [] };
+        let datosGlobales = { transacciones: [], disciplinas: [] };
 
         async function cargarDatos() {
             try {
-                const usuarios = await fetch('/api/usuarios').then(r => r.json());
-                const disciplinas = await fetch('/api/disciplinas').then(r => r.json());
-                
-                datosGlobales = { usuarios: usuarios || [], disciplinas: disciplinas || [] };
-                
+                const transacciones = await fetch('/api/transacciones-novusbet').then(r => r.json()).catch(() => []);
+                const resumen = await fetch('/api/transacciones-resumen').then(r => r.json()).catch(() => ({}));
+
+                datosGlobales = { transacciones: transacciones || [], resumen: resumen || {} };
+
                 actualizarKPIs();
                 actualizarTabla();
                 actualizarGraficos();
-                
+
                 document.getElementById('actualizacion').textContent = new Date().toLocaleTimeString('es-ES');
             } catch (error) {
                 console.error('Error:', error);
@@ -140,86 +134,89 @@
         }
 
         function actualizarKPIs() {
-            const usuarios = datosGlobales.usuarios;
-            const total = usuarios.length;
-            const activos = usuarios.filter(u => u.estado === 'activo').length;
-            const inactivos = usuarios.filter(u => u.estado === 'inactivo').length;
-            const saldoTotal = usuarios.reduce((sum, u) => sum + (u.saldo_cuenta || 0), 0);
-            const gananciasTotal = usuarios.reduce((sum, u) => sum + (u.ganancias_totales || 0), 0);
+            const transacciones = datosGlobales.transacciones;
+            const total = transacciones.length;
+            const montoTotal = transacciones.reduce((sum, t) => sum + (t.monto || 0), 0);
+            const usuariosUnicos = new Set(transacciones.map(t => t.usuario)).size;
+            const disciplinasUnicas = new Set(transacciones.map(t => t.disciplina)).size;
 
-            document.getElementById('total-usuarios').textContent = total;
-            document.getElementById('total-activos').textContent = activos;
-            document.getElementById('total-inactivos').textContent = inactivos;
-            document.getElementById('saldo-total').textContent = '$' + saldoTotal.toFixed(2);
-            document.getElementById('ganancias-total').textContent = '$' + gananciasTotal.toFixed(2);
+            document.getElementById('total-transacciones').textContent = total;
+            document.getElementById('monto-total').textContent = '$' + montoTotal.toFixed(2);
+            document.getElementById('usuarios-unicos').textContent = usuariosUnicos;
+            document.getElementById('disciplinas-count').textContent = disciplinasUnicas;
         }
 
         function actualizarTabla() {
             const filtro = document.getElementById('searchInput').value.toLowerCase();
-            let usuarios = datosGlobales.usuarios;
+            let transacciones = datosGlobales.transacciones;
 
             if (filtro) {
-                usuarios = usuarios.filter(u =>
-                    (u.username && u.username.toLowerCase().includes(filtro)) ||
-                    (u.nombre_completo && u.nombre_completo.toLowerCase().includes(filtro))
+                transacciones = transacciones.filter(t =>
+                    (t.usuario && t.usuario.toLowerCase().includes(filtro)) ||
+                    (t.disciplina && t.disciplina.toLowerCase().includes(filtro))
                 );
             }
 
             let html = '';
-            usuarios.forEach(u => {
-                const estado = u.estado || 'desconocido';
-                const fecha = u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '-';
+            transacciones.slice(0, 100).forEach((t, idx) => {
+                const fecha = t.fecha ? new Date(t.fecha).toLocaleString('es-ES') : '-';
+                const disciplina = (t.disciplina || 'otros').toLowerCase();
                 html += `
                     <tr>
-                        <td>${u.id}</td>
-                        <td><strong>${u.username}</strong></td>
-                        <td>${u.nombre_completo || '-'}</td>
-                        <td>${u.email || '-'}</td>
-                        <td><span class="status ${estado}">${estado}</span></td>
-                        <td class="number">$${(u.saldo_cuenta || 0).toFixed(2)}</td>
-                        <td class="number">$${(u.ganancias_totales || 0).toFixed(2)}</td>
-                        <td class="number">$${(u.perdidas_totales || 0).toFixed(2)}</td>
+                        <td>${t.id || idx + 1}</td>
+                        <td><strong>${t.usuario || '-'}</strong></td>
+                        <td>${t.tipo_transaccion || '-'}</td>
+                        <td class="number">$${(t.monto || 0).toFixed(2)}</td>
+                        <td><span class="status ${disciplina}">${disciplina}</span></td>
+                        <td>${t.descripcion || '-'}</td>
                         <td>${fecha}</td>
                     </tr>
                 `;
             });
 
-            document.getElementById('usuarios-tabla').innerHTML = html || '<tr><td colspan="9" class="loading">No hay usuarios</td></tr>';
+            document.getElementById('transacciones-tabla').innerHTML = html || '<tr><td colspan="7" class="loading">No hay transacciones</td></tr>';
         }
 
         function actualizarGraficos() {
-            const usuarios = datosGlobales.usuarios;
+            const transacciones = datosGlobales.transacciones;
 
-            // Gráfico de estados
-            const estados = {};
-            usuarios.forEach(u => {
-                const estado = u.estado || 'desconocido';
-                estados[estado] = (estados[estado] || 0) + 1;
+            // Gráfico por disciplina
+            const disciplinas = {};
+            transacciones.forEach(t => {
+                const disc = t.disciplina || 'otros';
+                disciplinas[disc] = (disciplinas[disc] || 0) + 1;
             });
 
             const ctx1 = document.getElementById('chartEstados').getContext('2d');
             new Chart(ctx1, {
                 type: 'doughnut',
                 data: {
-                    labels: Object.keys(estados),
+                    labels: Object.keys(disciplinas),
                     datasets: [{
-                        data: Object.values(estados),
-                        backgroundColor: ['#28a745', '#ffc107', '#dc3545', '#6c757d']
+                        data: Object.values(disciplinas),
+                        backgroundColor: ['#28a745', '#3498db', '#e74c3c']
                     }]
                 },
                 options: { responsive: true }
             });
 
-            // Top 5 usuarios por saldo
-            const top5 = usuarios.sort((a, b) => (b.saldo_cuenta || 0) - (a.saldo_cuenta || 0)).slice(0, 5);
+            // Top usuarios por monto
+            const usuarioMontos = {};
+            transacciones.forEach(t => {
+                usuarioMontos[t.usuario] = (usuarioMontos[t.usuario] || 0) + (t.monto || 0);
+            });
+            const top5 = Object.entries(usuarioMontos)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
             const ctx2 = document.getElementById('chartTop5').getContext('2d');
             new Chart(ctx2, {
                 type: 'bar',
                 data: {
-                    labels: top5.map(u => u.username),
+                    labels: top5.map(u => u[0]),
                     datasets: [{
-                        label: 'Saldo',
-                        data: top5.map(u => u.saldo_cuenta || 0),
+                        label: 'Monto Total',
+                        data: top5.map(u => u[1]),
                         backgroundColor: '#1a5f7a'
                     }]
                 },
