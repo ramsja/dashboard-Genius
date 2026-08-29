@@ -1,0 +1,124 @@
+GENIUSBET — en que influye cada hallazgo y cada mejora
+======================================================
+Lenguaje sencillo. No es un manual tecnico.
+Fecha: 26 ago 2026
+
+
+LO QUE ESTA MAL HOY
+-------------------
+
+1. El sitio abre tambien sin candado (http)
+   Que pasa: http://www.geniusbet.sv/home carga igual que la version segura.
+   En que influye: en un Wi-Fi publico (cibercafe, hotel, barrio) alguien
+   puede ver o cambiar lo que ve el cliente: aviso falso, login trucho,
+   enlace a otro lado. La persona cree que esta en GeniusBet.
+
+2. No hay HSTS
+   Que pasa: el navegador no insiste en usar siempre el candado.
+   En que influye: un atacante puede "bajar" al usuario a la version
+   insegura. Es el seguro que falta despues de poner HTTPS.
+
+3. El certificado de geniusbet.sv (sin www) esta vencido
+   Que pasa: vencio el 18 ago 2026. El servidor sin www es 51.15.150.4.
+   En que influye: quien escribe geniusbet.sv y no www ve error de
+   "sitio no seguro". Pierdes confianza, visitas, y parece que la
+   casa esta caida o es trampa.
+
+4. Faltan protecciones de "no me incrustes / no me mientas el archivo"
+   Que pasa: no estan CSP, X-Frame-Options, nosniff, Referrer-Policy, etc.
+   En que influye: otro sitio puede meter tu pagina en un recuadro
+   (parece GeniusBet, es otro) y engañar clics. O el navegador abre
+   un archivo malo como si fuera inofensivo. Facilita estafas con tu marca.
+
+5. El sitio se presenta como Next.js
+   Que pasa: manda la cabecera X-Powered-By: Next.js
+   En que influye: no rompe el negocio, pero le dice al atacante con que
+   esta hecho. Es como dejar el plano de la casa en la puerta.
+
+6. www no es tu servidor, es la red de entrega (CDN en Miami)
+   Que pasa: www pasa por CDN77 (Miami). El origen es otra IP.
+   En que influye: lo que arregles solo en el origen a veces no llega
+   al cliente. Por eso hay que pegar redireccion y cabeceras en CDN77.
+
+7. En la home no hay formulario ni cookies
+   Que pasa: la portada es escaparate; el login va por JavaScript aparte.
+   En que influye: el riesgo gordo de robar sesion esta en el login/cuenta,
+   no en esa portada. Aun asi hay que cerrar HTTP y el certificado.
+
+8. No vimos "barajas calientes" ni prediccion de crash
+   Que pasa: este analisis no mostro zapatos de cartas ni filtracion de RNG.
+   En que influye: no hay prueba de juegos amañados ni de que se puedan
+   adivinar. El problema real aqui es sitio mal cerrado (candado y marca),
+   no un predictor de casino.
+
+9. Hydra en ESTA PC (no es GeniusBet)
+   Que pasa: un robot probo 10 claves malas y acerto labuser/labpass en ~6 s.
+   En que influye: si el login REAL no pone freno (esperas, bloqueo, captcha),
+   un robot prueba mil claves en segundos. Eso es cuentas robadas y retiros,
+   no el resultado de un partido.
+
+
+QUE GANAS CON CADA MEJORA
+-------------------------
+
+1. Redirigir todo a HTTPS (301 en CDN77)
+   Nadie se queda en la version insegura.
+   Primera barrera contra el Wi-Fi sucio.
+
+2. HSTS (primero 5 minutos, luego meses)
+   El navegador recuerda: GeniusBet solo con candado.
+   Aunque el enlace venga mal, te manda a lo seguro.
+   OJO: no lo apliques a TODO el dominio hasta renovar el certificado
+   SIN www. Si no, echas a quienes entren por geniusbet.sv.
+
+3. nosniff
+   El navegador no "adivina" archivos.
+   Menos chance de colar un virus disfrazado.
+
+4. X-Frame-Options (SAMEORIGIN)
+   Nadie pone tu web dentro de la suya para engañar clics
+   (apostar o "iniciar sesion" pensando que eres tu).
+
+5. Referrer-Policy
+   Cuando el usuario sale a Facebook u otro enlace, no se lleva
+   la URL completa de su cuenta. Menos filtracion de datos.
+
+6. Permissions-Policy
+   La pagina no pide camara, microfono ni ubicacion si no hace falta.
+   Menos sustos y menos abuso si cuelan un script.
+
+7. COOP
+   Aisla la ventana de GeniusBet de otras pestañas raras.
+   Cierra un tipo de robo de sesion mas avanzado.
+
+8. CSP (primero "solo aviso", despues en serio)
+   Es la reja: solo pueden correr scripts de GeniusBet y de tus
+   proveedores. Si inyectan un script de estafa, el navegador lo tapa.
+   Si lo pones duro de golpe, se puede romper el casino en vivo;
+   por eso primero se prueba en modo aviso.
+
+9. Renovar el certificado sin www y mandar a www
+   Se acaba el mensaje de "sitio no seguro".
+   Una sola direccion oficial: https://www.geniusbet.sv
+   Menos gente que se asusta y se va.
+
+10. Quitar X-Powered-By
+    No te hace invencible; solo dejas de regalar el manual.
+    Barato y vale la pena.
+
+11. Freno en el login (limites, captcha, 2FA, cookies bien puestas)
+    Aunque filtren una lista de claves, no vacian cuentas a maquina.
+    Ahi se juega el dinero de verdad.
+
+
+EN UNA FRASE
+------------
+Hoy el riesgo no es "adivinar el crash".
+Es que la casa se vea insegura o se preste a paginas falsas y cuentas robadas.
+Las mejoras del CDN y del certificado son para que el cliente entre solo
+al GeniusBet de verdad, con candado, y no a una copia.
+
+
+Donde esta lo tecnico (para pegar en CDN77):
+  C:\Users\Riesgos\kali-lab\reportes\cdn77-cabeceras.txt
+  C:\Users\Riesgos\kali-lab\reportes\resumen-hallazgos.txt

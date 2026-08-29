@@ -1,0 +1,22 @@
+OBJETIVO 193.163.125.2
+canon r1-2-2.census.internet-measurement.com
+A 193.163.125.2
+PTR r1-2-2.census.internet-measurement.com
+  inetnum:        193.163.125.0 - 193.163.125.255
+  netname:        UK-DRIFTNET-20210505
+  country:        GB
+  status:         ALLOCATED PA
+  org-name:       Driftnet Ltd
+  country:        GB
+  address:        1140 Avenue of the Americas, 19th Floor
+  address:        10036
+  address:        New York
+  address:        UNITED STATES
+  abuse-c:        AR77106-RIPE
+  role:           Driftnet Hostmaster
+  address:        1140 Avenue of the Americas, 19th Floor
+  address:        New York, NY 10036
+  address:        UNITED STATES
+  abuse-mailbox:  network-abuse@driftnet.io
+  origin:         AS211298
+193.163.125.2 | United Kingdom Leeds | Driftnet Ltd | AS211298 Driftnet Ltd

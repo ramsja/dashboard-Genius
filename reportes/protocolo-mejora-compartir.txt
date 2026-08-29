@@ -1,0 +1,109 @@
+PROTOCOLO DE MEJORA HTTPS — GeniusBet
+=====================================
+Para compartir. Fecha: 2026-08-26 UTC
+Nota actual del protocolo: 20 de 100   (CRITICO)
+
+Que certificamos
+  Miramos si la web usa candado de verdad, si el certificado
+  esta vigente, y si las 10 mejoras de puerta estan puestas.
+  No se ataco el sitio ni se entro a cuentas.
+
+
+LOS 10 PUNTOS (pasa / no pasa)
+------------------------------
+1. Candado en www (HTTPS abre)
+   Estado: CUMPLE
+   En que influye: La pagina con www carga con candado
+
+2. HTTP manda a HTTPS
+   Estado: NO CUMPLE
+   En que influye: Nadie se queda en la version insegura
+
+3. Aviso HSTS (el navegador recuerda el candado)
+   Estado: NO CUMPLE
+   En que influye: El celular no vuelve a http
+
+4. Certificado www vigente
+   Estado: CUMPLE
+   En que influye: No sale sitio no seguro en www
+
+5. Certificado sin www vigente
+   Estado: NO CUMPLE
+   En que influye: geniusbet.sv no asusta al cliente
+
+6. No decir la receta (X-Powered-By)
+   Estado: NO CUMPLE
+   En que influye: Menos pista para copiones
+
+7. No incrustar la web en otra (X-Frame)
+   Estado: NO CUMPLE
+   En que influye: Evita paginas falsas con tu marca
+
+8. No adivinar archivos (nosniff)
+   Estado: NO CUMPLE
+   En que influye: Menos virus disfrazados
+
+9. Politica de privacidad de enlaces
+   Estado: NO CUMPLE
+   En que influye: No se filtra la cuenta al salir
+
+10. Reja de scripts (CSP)
+   Estado: NO CUMPLE
+   En que influye: Bloquea scripts de estafa
+
+COMO SUBIR LA NOTA (quien tiene el panel CDN77)
+-----------------------------------------------
+Esto NO se puede pulsar desde el laboratorio. Hay que entrar
+al panel de CDN77 (la red que entrega la web) y:
+
+Paso A — Candado obligatorio (sube ~20 puntos)
+  Configuration → HTTPS redirect = Encendido, codigo 301
+  Guardar y "Purge all" (vaciar cache)
+
+Paso B — Pegar protecciones (sube ~40 puntos)
+  Response headers, una por una, como en el archivo
+  cdn77-cabeceras.txt
+  (HSTS corto, nosniff, SAMEORIGIN, Referrer, Permissions, COOP)
+
+Paso C — Certificado sin www (sube ~10 puntos)
+  Renovar el certificado de geniusbet.sv (el que vencio
+  el 18 de agosto) en el servidor origen, o poner en CDN77
+  un certificado que cubra geniusbet.sv y www.
+  Luego redirigir geniusbet.sv → https://www.geniusbet.sv
+
+Paso D — Quitar el letrero "Next.js" (sube ~6 puntos)
+  En el programa de la web: poweredByHeader: false
+
+Paso E — Volver a medir
+  Avisar al laboratorio. Se corre otra vez esta certificacion
+  y se entrega el antes/despues para mostrar a la gente.
+
+
+VERSIONES DEL CANDADO (protocolos)
+----------------------------------
+  www (la que usa el cliente):
+    versiones viejas (1.0 y 1.1): las rechaza  BIEN
+    versiones actuales (1.2 y 1.3): las acepta  BIEN
+
+  sin www (servidor viejo, certificado vencido):
+    todavia acepta versiones muy antiguas (1.0 y 1.1)  MAL
+    no acepta la mas nueva (1.3)                       MAL
+    Por eso hay que renovar y modernizar ese servidor,
+    o dejar de usarlo y mandar todo a www.
+
+
+LO QUE YA ESTA BIEN
+-------------------
+  www.geniusbet.sv SI tiene candado y certificado vigente
+  hasta octubre de 2026 (CDN77 / Let's Encrypt).
+  Ademas usa protocolos modernos y rechaza los viejos.
+
+
+MENSAJE CORTO
+-------------
+Certificamos el HTTPS de GeniusBet (revision publica).
+Nota del protocolo: 20/100 (CRITICO).
+Cumple el candado en www. No cumple: forzar candado en http,
+aviso HSTS, certificado sin www (vencido), y protecciones
+contra paginas falsas. Hay que aplicarlos en CDN77 y renovar
+el certificado de geniusbet.sv. Luego repetimos la medicion.

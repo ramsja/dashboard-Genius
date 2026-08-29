@@ -1,0 +1,15 @@
+INFORME FORENSE CASO-20260826-161509
+UTC 2026-08-26T16:15:10Z
+Alcance: evidencias propias. Sin ataques a terceros.
+
+1. Cadena de custodia: 00_CADENA_CUSTODIA.txt
+2. Hashes SHA-256:     03_HASHES.txt
+3. Copia de trabajo:   02_COPIA_TRABAJO/
+4. Fuerza bruta / IOCs: 04_ANALISIS/
+5. Linea de tiempo:    04_ANALISIS/timeline.csv
+6. YARA:               04_ANALISIS/yara.txt
+
+Siguiente (ciberseguridad defensiva):
+ - bloquear IPs ALTO del ranking (firewall), no atacarlas
+ - rate-limit en logins
+ - conservar originales + hashes

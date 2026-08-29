@@ -1,0 +1,109 @@
+INFORME SENCILLO — seguridad de la web GeniusBet
+================================================
+Para compartir con personas que no son de informática.
+Fecha de revisión: 26 de agosto de 2026
+Qué se hizo: se miró la página pública (cómo la ve un cliente).
+Qué NO se hizo: no se atacó el sitio ni se intentó entrar a cuentas.
+
+
+EN UNA FRASE
+------------
+La casa de apuestas se ve bien, pero el “candado” de la calle
+todavía está flojo. Un cliente puede entrar por la puerta
+sin seguro, y la dirección sin “www” muestra error.
+
+
+NOTA DEL 1 AL 100
+-----------------
+Seguridad de la entrada (borde de la web):  7 de 100
+Hace unas horas era la misma nota:          7 de 100
+Cambio:                                     ninguno
+Calificación:                               CRÍTICO
+
+Cómo leer la nota
+  0 a 24    Grave: fácil engañar al cliente o asustarlo
+  25 a 49   Regular: hay candado, pero con huecos
+  50 a 79   Aceptable: lo urgente está, falta pulir
+  80 a 100  Bien: la entrada está bien cerrada
+
+
+QUÉ SIGNIFICA PARA EL NEGOCIO
+-----------------------------
+
+1. La página abre TAMBIÉN sin candado
+   Un cliente en un Wi-Fi de hotel, ciber o barrio
+   puede ver una copia falsa que parece GeniusBet
+   (aviso, login o enlace trucho).
+   Eso es pérdida de confianza y riesgo de estafa
+   usando nuestra marca.
+
+2. El navegador no “recuerda” usar siempre el candado
+   Aunque exista la versión segura, no se obliga.
+   Alguien puede bajar al cliente a la insegura.
+
+3. Si escriben geniusbet.sv (sin www) sale “sitio no seguro”
+   El certificado de esa dirección venció el 18 de agosto.
+   Parece que la casa está caída o es trampa.
+   Se pierden visitas y reputación.
+
+4. Otra página puede meter la nuestra en un recuadro
+   El cliente cree que apuesta o inicia sesión en GeniusBet
+   y en realidad está en otro sitio.
+
+5. La web “dice” con qué está construida
+   No rompe el negocio, pero facilita el trabajo
+   a quien quiera copiarnos o atacarnos.
+
+Lo que SÍ está bien
+  - La dirección con www (www.geniusbet.sv) tiene
+    certificado vigente hasta octubre de 2026.
+  - La página carga rápido (red de entrega en Miami).
+
+
+QUÉ NO ENCONTRAMOS
+------------------
+No hay prueba de “juegos amañados”, “barajas calientes”
+ni de que se pueda adivinar el crash o el casino
+mirando la página de inicio.
+El problema de hoy es de PUERTA y de IMAGEN,
+no de predicción de resultados.
+
+
+QUÉ HAY QUE HACER (en orden, para no-técnicos)
+----------------------------------------------
+1. En el panel de CDN77 (la red que entrega la web):
+   activar “mandar todo a la versión con candado”.
+   Eso solo ya sube mucho la nota (de 7 hacia ~27).
+
+2. Pegar en ese mismo panel las protecciones que
+   ya tenemos listadas (un archivo aparte para
+   quien configura el CDN).
+   Sube la nota hacia el rango 70.
+
+3. Renovar el certificado de geniusbet.sv
+   (la dirección SIN www) y mandar a todo el mundo
+   a www.geniusbet.sv
+   Se acaba el mensaje de “sitio no seguro”.
+
+4. Quitar el letrero técnico “hecho con Next.js”
+   (un cambio pequeño en la programación).
+
+Cuando eso esté hecho, se vuelve a medir la nota
+y se puede mostrar el “antes / después”.
+
+
+MENSAJE CORTO PARA WHATSAPP O CORREO
+------------------------------------
+Revisamos GeniusBet (solo la página pública, sin atacar).
+Nota de seguridad de la entrada: 7/100. No mejoró respecto
+a la mañana. El sitio todavía abre sin candado y la dirección
+sin www muestra error de certificado (venció el 18 ago).
+No vimos indicios de juegos amañados. Lo urgente: forzar
+candado en CDN77, pegar protecciones y renovar el certificado
+sin www. Cuando lo apliquen, volvemos a medir.
+
+
+Archivo técnico (para quien configura CDN77):
+  C:\Users\Riesgos\kali-lab\reportes\cdn77-cabeceras.txt
+Tablero de notas:
+  C:\Users\Riesgos\kali-lab\reportes\kpi-tablero.txt

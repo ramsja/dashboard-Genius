@@ -1,0 +1,44 @@
+EXTRAER DATOS
+
+[ipv4] 8
+162.142.125.10
+198.108.66.20
+45.33.32.156
+192.168.1.50
+1.1.1.1
+127.0.0.1
+193.163.125.2
+8.8.8.8
+
+[email] 3
+soc@lab.local
+abuse@example.com
+noc.alerts+ssh@lab.example
+
+[url] 3
+https://www.example.com/login
+http://192.168.1.50/admin
+https://ip-api.com/json/1.1.1.1
+
+[jwt] 1
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJsYWI1dXNlciIsImlhdCI6MTcyNDU5MjAwMH0.signatureplaceholderxx
+
+[bcrypt] 1
+$2y$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZabcde
+
+[md5] 1
+5f4dcc3b5aa765d61d8327deb882cf99
+
+[sha1] 1
+5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8
+
+[sha256] 1
+5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+
+[ntlm] 1
+aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0
+
+[aws] 1
+AKIAIOSFODNN7EXAMPLE
+
+[privkey] 0

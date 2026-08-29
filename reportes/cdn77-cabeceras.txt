@@ -1,0 +1,103 @@
+CDN77 — cabeceras para www.geniusbet.sv
+=======================================
+Donde pegar (Client Panel):
+  CDN → tu Resource (www / 1244067574.rsc.cdn77.org)
+    1) Configuration → HTTPS redirect  = ON, codigo 301
+    2) Configuration → Response headers (custom headers al cliente)
+    3) Purge all al guardar
+
+NO actives CORS wildcard (*). Es un sitio de apuestas con login.
+
+ANTES de HSTS fuerte: renovar el cert de geniusbet.sv (apex, 51.15.150.4).
+Hoy ese cert esta VENCIDO. Si pones includeSubDomains, el navegador
+forzara HTTPS en el apex y los usuarios veran error de certificado.
+
+
+A) INTERRUPTOR CDN77 (no es cabecera, hazlo primero)
+-----------------------------------------------------
+HTTPS redirect: Enabled
+Redirect code:  301
+
+Eso arregla: http://www.geniusbet.sv/home  (hoy da 200 en claro)
+
+
+B) PEGAR EN "Response headers"  (nombre | valor)
+------------------------------------------------
+Copia cada par tal cual.
+
+1)
+Nombre: Strict-Transport-Security
+Valor:  max-age=300
+
+   (prueba 5 minutos. Si todo HTTPS va bien 24-48 h, cambia a:)
+Valor fuerte: max-age=15552000
+
+   NO pongas includeSubDomains ni preload hasta renovar el apex.
+
+
+2)
+Nombre: X-Content-Type-Options
+Valor:  nosniff
+
+3)
+Nombre: X-Frame-Options
+Valor:  SAMEORIGIN
+
+4)
+Nombre: Referrer-Policy
+Valor:  strict-origin-when-cross-origin
+
+5)
+Nombre: Permissions-Policy
+Valor:  geolocation=(), camera=(), microphone=(), usb=(), magnetometer=(), gyroscope=(), browsing-topics=()
+
+6)
+Nombre: Cross-Origin-Opener-Policy
+Valor:  same-origin-allow-popups
+
+7)
+Nombre: X-DNS-Prefetch-Control
+Valor:  off
+
+8)  CSP EN MODO REPORTE (no bloquea, solo registra)
+Nombre: Content-Security-Policy-Report-Only
+Valor:  default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.diststore.com https://static.novassets.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://cdn.diststore.com https://static.novassets.com https: wss:; frame-src 'self' https://www.youtube.com https://www.facebook.com https://www.google.com; media-src 'self' blob: https:
+
+   Cuando la consola del navegador no muestre violaciones 2-3 dias,
+   cambia el NOMBRE a:  Content-Security-Policy
+   (mismo valor). Si rompe casino en vivo / widgets, afloja solo
+   esa directiva, no borres todo.
+
+
+C) NO PEGAR / QUITAR EN ORIGEN (Next.js, no en CDN77)
+-----------------------------------------------------
+CDN77 ANIADE cabeceras; casi nunca BORRA las del origen.
+
+En next.config.js del origen:
+
+  poweredByHeader: false
+  async headers() { return [] }  // no hace falta duplicar si ya van en CDN77
+
+Eso quita: X-Powered-By: Next.js
+
+
+D) ORDEN DE ACTIVACION
+----------------------
+1. HTTPS redirect 301
+2. Pegar cabeceras 2-7 (nosniff, frame, referrer, permissions, COOP)
+3. HSTS max-age=300
+4. Purge All en CDN77
+5. Probar:
+     curl -sI http://www.geniusbet.sv/home     → debe ser 301 a https://
+     curl -sI https://www.geniusbet.sv/home    → HSTS + nosniff + SAMEORIGIN
+6. Renovar cert apex geniusbet.sv
+7. Subir HSTS a max-age=15552000
+8. CSP Report-Only → CSP enforce
+
+
+E) QUE NO TOCAR
+---------------
+Server: CDN77-Turbo          (lo pone el CDN)
+X-77-POP / X-77-Cache / Age  (diagnostico, no es riesgo de login)
+Access-Control-Allow-Origin *  NO
+HSTS includeSubDomains         NO hasta cert apex vigente

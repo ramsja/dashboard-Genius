@@ -1,0 +1,27 @@
+QUE DICE LA RED NEURONAL (lenguaje sencillo)
+=============================================
+Fecha: 2026-08-26
+
+Entrenamos una red chica (12 preguntas si/no, 10 neuronas)
+con miles de ejemplos de sitios bien y mal cerrados.
+Luego le mostramos como esta GeniusBet HOY.
+
+Resultado
+  Riesgo de puerta: 89 de 100
+  Eso es MUY ALTA (sitio facil de enganar / puerta abierta)
+
+Que significa
+  No adivina crash ni barajas.
+  Mide que tan facil es enganar a un cliente
+  (pagina sin candado, certificado vencido, web metida en otra).
+
+A que es mas sensible (por donde conviene empezar)
+  - La version sin candado manda a la segura  (baja unos 13 puntos de riesgo)
+  - El celular recuerda usar siempre candado  (baja unos 10 puntos de riesgo)
+  - Reja contra scripts de estafa  (baja unos 7 puntos de riesgo)
+  - No adivina archivos disfrazados  (baja unos 5 puntos de riesgo)
+
+Si se aplica todo el protocolo de mejora, la misma red
+estima un riesgo de unos 7 de 100.
+
+Archivo tecnico: /mnt/c/Users/Riesgos/kali-lab/reportes/red-neuronal-vulnerabilidad.txt

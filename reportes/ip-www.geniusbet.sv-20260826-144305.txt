@@ -1,0 +1,19 @@
+OBJETIVO www.geniusbet.sv
+canon 107101045.mia.cdn77.com
+A 89.222.120.3, 156.146.43.179, 89.222.120.5, 89.222.120.9
+  inetnum:        89.222.120.0 - 89.222.120.255
+  netname:        CDN77-MIA
+  country:        US
+  status:         ASSIGNED PA
+  role:           Datacamp Ltd. technical staff
+  address:        DataCamp Limited
+  address:        Coldbath Square 9
+  address:        London
+  address:        United Kingdom
+  abuse-mailbox:  abuse@datacamp.co.uk
+  descr:          CDN77 Miami
+  origin:         AS60068
+89.222.120.3 | United States Miami | Datacamp Limited | AS60068 Datacamp Limited
+156.146.43.179 | United States Miami | DataCamp Limited | AS60068 Datacamp Limited
+89.222.120.5 | United States Miami | Datacamp Limited | AS60068 Datacamp Limited
+89.222.120.9 | United States Miami | Datacamp Limited | AS60068 Datacamp Limited

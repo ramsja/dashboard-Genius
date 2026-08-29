@@ -1,0 +1,34 @@
+KALI LAB — ALCANCE (obligatorio)
+================================
+Este laboratorio es para:
+  - Analisis forense de evidencias que TU poseas o te hayan entregado con permiso
+  - Pentest y pruebas de vulnerabilidad SOLO en:
+      * esta PC / VMs locales de laboratorio
+      * sistemas de tu propiedad
+      * objetivos con autorizacion ESCRITA (contrato, bug bounty in-scope)
+
+FORENSE (P10+):
+  - No modificar originales. Copiar + SHA-256 + cadena de custodia
+  - Linea de tiempo, YARA, informe en casos\
+  - Auditoria Lynis SOLO de esta instancia WSL
+
+HERRAMIENTAS DE LOCALIZACION (P1-P4):
+  - Localizar IP: DNS/WHOIS/geo de una IP o dominio (solo lectura)
+  - Detectar fuerza bruta: parsea TUS logs y senala IPs atacantes
+  - Extraer datos: IOCs en evidencias que TU poseas
+  - Demo hydra: SOLO 127.0.0.1 (login de laboratorio)
+
+PROHIBIDO:
+  - Escanear o atacar geniusbet.sv, 51.15.150.4 u otros terceros sin autorizacion
+  - Hydra/brute force contra hosts que no sean localhost
+  - Exploits, malware, ransomware, DoS
+  - Usar el lab como "anonimato" para delito
+
+Gestor PERMANENTE: Grok (manager del lab, todas las sesiones).
+  Ver MANAGER.txt. Comandos: wsl -d kali-linux
+Conexion: C:\Users\Riesgos\kali-lab\conexion\ESTADO.txt
+Ordenes:  C:\Users\Riesgos\kali-lab\conexion\orden.txt
+  (una linea: P1 8.8.8.8  |  P2  |  P3  |  P4  |  P5  |  CICLO)
+
+Hardware host: Lenovo IdeaPad Slim 3 15AMN8, 8 GB RAM (Windows ve ~6 GB).
+Por eso el lab principal es Kali WSL2 (ligero). VirtualBox es opcional y pesado.

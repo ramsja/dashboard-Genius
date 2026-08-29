@@ -1,0 +1,54 @@
+TABLERO KPI GENIUSBET — re-analisis 26 ago 2026 16:28 UTC
+=========================================================
+Comparado con baseline 26 ago 14:43 UTC (mismo dia).
+Modo: solo lectura (curl + openssl). Sin nmap/hydra.
+
+RESULTADO
+  Indice de endurecimiento:  7 / 100
+  Antes:                     7 / 100
+  Delta:                     +0  (NO hubo mejora)
+  Nivel:                     CRITICO
+
+  Las modificaciones de CDN77 AUN NO ESTAN en el borde.
+  HTTP /home sigue en 200. Cabeceras de seguridad siguen ausentes.
+  Cert apex sigue vencido (18 ago, ya van 9 dias).
+
+
+KPI                         Puntos  Antes  Ahora  Estado
+--------------------------------------------------------
+01 HTTP → HTTPS (301)         /20     0      0    NO
+02 HSTS                       /15     0      0    NO
+03 nosniff                    /8      0      0    NO
+04 X-Frame-Options            /8      0      0    NO
+05 Referrer-Policy            /6      0      0    NO
+06 Permissions-Policy         /5      0      0    NO
+07 COOP                       /5      0      0    NO
+08 CSP (report 6 / enforce 12)/12     0      0    NO
+09 Sin X-Powered-By           /6      0      0    NO (sigue Next.js)
+10 Cert www vigente           /7      7      7    SI (50 dias, 16 oct)
+11 Cert apex vigente          /8      0      0    NO (vencido -9 dias)
+
+Como leer el indice
+  0-24  CRITICO  Wi-Fi sucio, paginas falsas, cert roto
+  25-49 BAJO     candado a medias
+  50-79 MEDIO    urgente hecho; falta CSP/apex
+  80-100 BUENO   borde listo
+
+
+Que influye ahora
+  El cliente sigue pudiendo entrar por http (sin candado).
+  geniusbet.sv sin www sigue mostrando sitio no seguro.
+  La marca se puede incrustar en otra pagina (no hay X-Frame).
+  Un script inyectado no tiene reja CSP.
+
+
+Para subir el KPI (orden)
+  1. CDN77: HTTPS redirect 301     → +20  (indice 27, sale de CRITICO)
+  2. Pegar cabeceras 02-07         → +47  (indice ~74 MEDIO)
+  3. CSP-Report-Only               → +6
+  4. Quitar X-Powered-By           → +6
+  5. Renovar cert apex             → +8   (indice ~94 BUENO)
+  6. HSTS max-age largo despues    (ya suma en KPI-02)
+
+Pegar: reportes\cdn77-cabeceras.txt
+Tras el purge, pide otro re-analisis KPI y el tablero se actualiza.

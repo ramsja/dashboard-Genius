@@ -1,0 +1,7 @@
+DETECTAR FUERZA BRUTA
+ALTO   162.142.125.10     evt=22 users=7 admin,mysql,oracle,postgres,root,test Aug 25 10:01:02->25/Aug/2026:10:10:07 +0000
+ALTO   193.163.125.2      evt=4 users=0  25/Aug/2026:10:14:01 +0000->25/Aug/2026:10:14:04 +0000
+ALTO   45.33.32.156       evt=13 users=1 labuser Aug 25 10:03:10->25/Aug/2026:10:12:05 +0000
+ALTO   198.108.66.20      evt=7 users=3 admin,root,user Aug 25 10:02:01->25/Aug/2026:10:11:02 +0000
+MEDIO  127.0.0.1          evt=8 users=0  26/Aug/2026:14:33:39 +0000->26/Aug/2026:14:33:40 +0000
+BAJO   1.1.1.1            evt=1 users=1 root Aug 25 10:05:00->Aug 25 10:05:00

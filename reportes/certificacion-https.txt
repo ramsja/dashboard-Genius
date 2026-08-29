@@ -1,0 +1,18 @@
+CERTIFICACION HTTPS  2026-08-26T16:45:24Z
+nota_protocolo=20
+nivel=CRITICO
+www_dias=50
+apex_dias=-9
+http=HTTP/1.1 200 OK
+https=HTTP/2 200
+
+PASA	Candado en www (HTTPS abre)	La pagina con www carga con candado
+FALTA	HTTP manda a HTTPS	Nadie se queda en la version insegura
+FALTA	Aviso HSTS (el navegador recuerda el candado)	El celular no vuelve a http
+PASA	Certificado www vigente	No sale sitio no seguro en www
+FALTA	Certificado sin www vigente	geniusbet.sv no asusta al cliente
+FALTA	No decir la receta (X-Powered-By)	Menos pista para copiones
+FALTA	No incrustar la web en otra (X-Frame)	Evita paginas falsas con tu marca
+FALTA	No adivinar archivos (nosniff)	Menos virus disfrazados
+FALTA	Politica de privacidad de enlaces	No se filtra la cuenta al salir
+FALTA	Reja de scripts (CSP)	Bloquea scripts de estafa

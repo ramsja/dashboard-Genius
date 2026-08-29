@@ -1,0 +1,6 @@
+CASO CASO-20260826-161509
+Abierto: 2026-08-26T16:15:09Z
+Custodio: laboratorio Kali WSL (esta PC)
+Fuente: /mnt/c/Users/Riesgos/kali-lab/evidencias
+Accion: intake — hash SHA-256 — copia de trabajo
+Siguiente: P2 fuerza bruta, P3 extraer, linea de tiempo, YARA

@@ -1,0 +1,101 @@
+RESUMEN — GeniusBet / laboratorio Kali
+Fecha del analisis de /home: 2026-08-26
+Modo: solo lectura en www.geniusbet.sv  |  hydra/nmap solo 127.0.0.1
+
+
+A) HALLAZGOS (produccion: https://www.geniusbet.sv/home)
+========================================================
+
+ALTA
+- HTTP sirve /home en claro: http://www.geniusbet.sv/home → 200, sin Location a HTTPS.
+- Sin HSTS (Strict-Transport-Security). El navegador no fuerza candado.
+- Certificado del APEX vencido: geniusbet.sv / *.geniusbet.sv
+  notAfter=18 ago 2026  |  origen 51.15.150.4
+  Quien entra sin "www" ve error TLS.
+
+MEDIA
+- Sin cabeceras de endurecimiento:
+    Content-Security-Policy
+    X-Frame-Options
+    X-Content-Type-Options (nosniff)
+    Referrer-Policy
+    Permissions-Policy
+    Cross-Origin-Opener-Policy
+- X-Powered-By: Next.js  (delata el stack)
+
+BAJA / INFORMATIVO
+- www no es el origen: CNAME cdn77 (Miami, AS60068 Datacamp).
+  IPs borde: 89.222.120.3/5/9 , 156.146.43.179
+- /home reescribe a /  (x-middleware-rewrite: /)  Next.js + cache HIT ~8 h
+- Cert www VIGENTE hasta 16 oct 2026 (Let's Encrypt en CDN77)
+- Home sin Set-Cookie y sin <form> (login va en JS)
+- Terceros: cdn.diststore.com, static.novassets.com, fonts.google,
+  Facebook/Instagram/TikTok/YouTube/X/Telegram, www.lnb.gob.sv
+
+NO ENCONTRADO (con este analisis)
+- No hay evidencia de "barajas calientes" ni filtracion de RNG.
+- Crash/casino no se pueden predecir desde la home.
+- No se lanzo nmap ni hydra contra GeniusBet (directivas del lab).
+
+
+B) HALLAZGOS (laboratorio local, no es GeniusBet)
+=================================================
+- nmap 127.0.0.1: 50 puertos comunes cerrados (WSL sin SSH/HTTP).
+- hydra vs http://127.0.0.1:18080/login :
+    10 claves RECHAZADAS, acierto labuser / labpass en ~6 s.
+  Leccion: un login sin rate-limit, captcha ni lockout cae en segundos.
+
+
+C) SUGERENCIAS DE MEJORA (prioridad)
+====================================
+
+1. CDN77 — Configuration
+   HTTPS redirect = ON , codigo 301
+   Purge all
+   (arregla el HTTP 200 en /home)
+
+2. CDN77 — Response headers (pegar)
+   Strict-Transport-Security     max-age=300
+     (luego 24-48 h: max-age=15552000)
+     NO includeSubDomains / preload hasta renovar el apex
+   X-Content-Type-Options        nosniff
+   X-Frame-Options               SAMEORIGIN
+   Referrer-Policy               strict-origin-when-cross-origin
+   Permissions-Policy            geolocation=(), camera=(), microphone=(), usb=(), magnetometer=(), gyroscope=(), browsing-topics=()
+   Cross-Origin-Opener-Policy    same-origin-allow-popups
+   X-DNS-Prefetch-Control        off
+   Content-Security-Policy-Report-Only
+     (valor largo en reportes/cdn77-cabeceras.txt; luego pasar a CSP)
+
+3. Origen 51.15.150.4
+   Renovar certificado geniusbet.sv / *.geniusbet.sv
+   Redirigir apex → https://www.geniusbet.sv
+   En Next.js:  poweredByHeader: false
+
+4. Login (cuando se endurezca el origen)
+   Rate-limit / lockout / captcha o 2FA
+   Cookies: Secure + HttpOnly + SameSite=Lax o Strict
+   No enumerar si el usuario existe
+
+5. No hacer
+   CORS *
+   HSTS includeSubDomains con el apex vencido
+   Hydra/nmap a produccion
+
+
+D) ORDEN RECOMENDADO
+====================
+1. 301 HTTP→HTTPS en CDN77
+2. Cabeceras 2-7 (nosniff, frame, referrer…)
+3. HSTS corto (300 s)
+4. Purge
+5. Renovar cert apex
+6. HSTS largo
+7. CSP Report-Only → CSP enforce
+8. Quitar X-Powered-By en Next.js
+
+Archivos:
+  analisis-www\headers-https-home.txt
+  analisis-www\home.html
+  reportes\cdn77-cabeceras.txt
+  reportes\ip-www.geniusbet.sv-*.txt

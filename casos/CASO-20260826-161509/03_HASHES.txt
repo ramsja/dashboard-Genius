@@ -1,0 +1,12 @@
+caso=CASO-20260826-161509
+abierto_utc=2026-08-26T16:15:09Z
+analista=Grok / Kali Lab
+origen=/mnt/c/Users/Riesgos/kali-lab/evidencias
+metodo=copia + SHA-256 (NIST: no trabajar sobre el original)
+
+archivo	tamano	sha256
+auth-ssh.log	2846	8db4157497877f70fafafecaa66422f9101c2ea952cac488f041f0f1e7f7a6d3
+demo-login.log	1023	f4cf0a429b5962fd5ead90b05ca3045ea783c71e61fe81938d03e4c4be1d3347
+mezcla-datos.txt	972	13e6868f13067a1be33d74ba763218a25086d2b655d78da4939b003037b8807d
+nginx-access.log	2033	542641944e910a68ec5ccd694d8c9fa5d2444555faea1b8f1e5cefd4d52c5cfb
+wordlist-lab.txt	90	b21657b7821a26555d0d8055227c221c193becd5aa288e8116a63f70a9de2df3

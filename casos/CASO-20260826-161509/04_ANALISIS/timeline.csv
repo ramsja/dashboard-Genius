@@ -1,0 +1,62 @@
+utc_aprox,fuente,evento,detalle
+Aug 25 10:01:02,auth-ssh.log,sshd[1201],Invalid user admin from 162.142.125.10 port 53301
+Aug 25 10:01:03,auth-ssh.log,sshd[1202],Failed password for invalid user admin from 162.142.125.10 port 53301 ssh2
+Aug 25 10:01:05,auth-ssh.log,sshd[1203],Invalid user ubuntu from 162.142.125.10 port 53302
+Aug 25 10:01:06,auth-ssh.log,sshd[1204],Failed password for invalid user ubuntu from 162.142.125.10 port 53302 ssh2
+Aug 25 10:01:08,auth-ssh.log,sshd[1205],Invalid user test from 162.142.125.10 port 53303
+Aug 25 10:01:09,auth-ssh.log,sshd[1206],Failed password for invalid user test from 162.142.125.10 port 53303 ssh2
+Aug 25 10:01:11,auth-ssh.log,sshd[1207],Invalid user oracle from 162.142.125.10 port 53304
+Aug 25 10:01:12,auth-ssh.log,sshd[1208],Failed password for invalid user oracle from 162.142.125.10 port 53304 ssh2
+Aug 25 10:01:14,auth-ssh.log,sshd[1209],Invalid user postgres from 162.142.125.10 port 53305
+Aug 25 10:01:15,auth-ssh.log,sshd[1210],Failed password for invalid user postgres from 162.142.125.10 port 53305 ssh2
+Aug 25 10:01:17,auth-ssh.log,sshd[1211],Invalid user mysql from 162.142.125.10 port 53306
+Aug 25 10:01:18,auth-ssh.log,sshd[1212],Failed password for invalid user mysql from 162.142.125.10 port 53306 ssh2
+Aug 25 10:01:20,auth-ssh.log,sshd[1213],Failed password for root from 162.142.125.10 port 53307 ssh2
+Aug 25 10:01:22,auth-ssh.log,sshd[1214],Failed password for root from 162.142.125.10 port 53308 ssh2
+Aug 25 10:01:24,auth-ssh.log,sshd[1215],Failed password for root from 162.142.125.10 port 53309 ssh2
+Aug 25 10:02:01,auth-ssh.log,sshd[1301],Failed password for root from 198.108.66.20 port 44101 ssh2
+Aug 25 10:02:03,auth-ssh.log,sshd[1302],Failed password for root from 198.108.66.20 port 44102 ssh2
+Aug 25 10:02:05,auth-ssh.log,sshd[1303],Failed password for admin from 198.108.66.20 port 44103 ssh2
+Aug 25 10:02:07,auth-ssh.log,sshd[1304],Failed password for admin from 198.108.66.20 port 44104 ssh2
+Aug 25 10:02:09,auth-ssh.log,sshd[1305],Failed password for user from 198.108.66.20 port 44105 ssh2
+Aug 25 10:03:10,auth-ssh.log,sshd[1401],Failed password for labuser from 45.33.32.156 port 22022 ssh2
+Aug 25 10:03:12,auth-ssh.log,sshd[1402],Failed password for labuser from 45.33.32.156 port 22023 ssh2
+Aug 25 10:03:14,auth-ssh.log,sshd[1403],Failed password for labuser from 45.33.32.156 port 22024 ssh2
+Aug 25 10:03:16,auth-ssh.log,sshd[1404],Failed password for labuser from 45.33.32.156 port 22025 ssh2
+Aug 25 10:03:18,auth-ssh.log,sshd[1405],Failed password for labuser from 45.33.32.156 port 22026 ssh2
+Aug 25 10:03:20,auth-ssh.log,sshd[1406],Failed password for labuser from 45.33.32.156 port 22027 ssh2
+Aug 25 10:03:22,auth-ssh.log,sshd[1407],Failed password for labuser from 45.33.32.156 port 22028 ssh2
+Aug 25 10:03:24,auth-ssh.log,sshd[1408],Failed password for labuser from 45.33.32.156 port 22029 ssh2
+Aug 25 10:04:01,auth-ssh.log,sshd[1501],Accepted password for labuser from 192.168.1.50 port 51001 ssh2
+Aug 25 10:05:00,auth-ssh.log,sshd[1601],Failed password for root from 1.1.1.1 port 3333 ssh2
+26/Aug/2026:15:16:40 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:40 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:41 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:42 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:42 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:43 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:43 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:44 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:44 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:45 +0000,demo-login.log,http-401,127.0.0.1 POST /login
+26/Aug/2026:15:16:46 +0000,demo-login.log,http-200,127.0.0.1 POST /login
+25/Aug/2026:10:10:01 +0000,nginx-access.log,http-401,162.142.125.10 POST /login
+25/Aug/2026:10:10:02 +0000,nginx-access.log,http-401,162.142.125.10 POST /login
+25/Aug/2026:10:10:03 +0000,nginx-access.log,http-401,162.142.125.10 POST /login
+25/Aug/2026:10:10:04 +0000,nginx-access.log,http-401,162.142.125.10 POST /login
+25/Aug/2026:10:10:05 +0000,nginx-access.log,http-401,162.142.125.10 POST /login
+25/Aug/2026:10:10:06 +0000,nginx-access.log,http-401,162.142.125.10 POST /wp-login.php
+25/Aug/2026:10:10:07 +0000,nginx-access.log,http-403,162.142.125.10 POST /xmlrpc.php
+25/Aug/2026:10:11:01 +0000,nginx-access.log,http-403,198.108.66.20 GET /admin
+25/Aug/2026:10:11:02 +0000,nginx-access.log,http-401,198.108.66.20 GET /admin/login
+25/Aug/2026:10:12:01 +0000,nginx-access.log,http-401,45.33.32.156 POST /api/auth
+25/Aug/2026:10:12:02 +0000,nginx-access.log,http-401,45.33.32.156 POST /api/auth
+25/Aug/2026:10:12:03 +0000,nginx-access.log,http-401,45.33.32.156 POST /api/auth
+25/Aug/2026:10:12:04 +0000,nginx-access.log,http-401,45.33.32.156 POST /api/auth
+25/Aug/2026:10:12:05 +0000,nginx-access.log,http-401,45.33.32.156 POST /api/auth
+25/Aug/2026:10:13:00 +0000,nginx-access.log,http-200,8.8.8.8 GET /home
+25/Aug/2026:10:13:10 +0000,nginx-access.log,http-200,192.168.1.50 GET /home
+25/Aug/2026:10:14:01 +0000,nginx-access.log,http-401,193.163.125.2 GET /wp-login.php
+25/Aug/2026:10:14:02 +0000,nginx-access.log,http-401,193.163.125.2 GET /wp-login.php
+25/Aug/2026:10:14:03 +0000,nginx-access.log,http-401,193.163.125.2 GET /wp-login.php
+25/Aug/2026:10:14:04 +0000,nginx-access.log,http-401,193.163.125.2 GET /wp-login.php

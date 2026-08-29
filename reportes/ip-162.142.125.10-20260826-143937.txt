@@ -1,0 +1,24 @@
+OBJETIVO 162.142.125.10
+canon 10.125.142.162.censys-scanner.com
+A 162.142.125.10
+PTR 10.125.142.162.censys-scanner.com
+  NetRange:       162.142.125.0 - 162.142.125.255
+  CIDR:           162.142.125.0/24
+  NetName:        CENSY
+  OriginAS:
+  Organization:   Censys, Inc. (CENSY)
+  Updated:        2024-03-29
+  OrgName:        Censys, Inc.
+  Address:        116 1/2 S Main Street
+  City:           Ann Arbor
+  StateProv:      MI
+  Country:        US
+  Updated:        2019-08-03
+  OrgNOCEmail:  ops@censys.io
+  OrgAbuseHandle: CAT20-ARIN
+  OrgAbuseName:   Censys Abuse Team
+  OrgAbusePhone:  +1-248-629-0125
+  OrgAbuseEmail:  scan-abuse@censys.com
+  OrgAbuseRef:    https://rdap.arin.net/registry/entity/CAT20-ARIN
+  OrgTechEmail:  ops@censys.io
+162.142.125.10 | United States Ann Arbor | Censys, Inc. | AS398324 Censys, Inc.

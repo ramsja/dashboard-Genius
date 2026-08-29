@@ -1,0 +1,12 @@
+CADENA DE CUSTODIA — como se trabaja en este lab
+================================================
+Fuente (NIST / DFIR 2025-2026): no toques el original, hashea, documenta.
+
+1. El original vive en evidencias\  — SOLO LECTURA
+2. Cada analisis crea un CASO en casos\CASO-fecha\
+3. Se copia a 02_COPIA_TRABAJO y se analiza ESA copia
+4. SHA-256 de cada archivo (antes y despues de copiar, deben coincidir)
+5. Todo con hora UTC
+6. Quien, que, cuando, con que herramienta
+
+Nunca: editar logs originales, borrar evidencias, ni atacar terceros.

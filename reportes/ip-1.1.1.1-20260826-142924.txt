@@ -1,0 +1,34 @@
+OBJETIVO 1.1.1.1
+canon one.one.one.one
+A 1.1.1.1
+PTR one.one.one.one
+  inetnum:        1.1.1.0 - 1.1.1.255
+  netname:        APNIC-LABS
+  descr:          APNIC and Cloudflare DNS Resolver project
+  descr:          Routed globally by AS13335/Cloudflare
+  descr:          Research prefix for APNIC Labs
+  country:        AU
+  abuse-c:        AA1412-AP
+  status:         ASSIGNED PORTABLE
+  remarks:        All Cloudflare abuse reporting can be done via
+  remarks:        resolver-abuse@cloudflare.com
+  address:        PO Box 3646
+  address:        South Brisbane, QLD 4101
+  address:        Australia
+  abuse-mailbox:  helpdesk@apnic.net
+  org-name:       APNIC Research and Development
+  country:        AU
+  address:        6 Cordelia St
+  role:           ABUSE APNICRANDNETAU
+  country:        ZZ
+  address:        PO Box 3646
+  address:        South Brisbane, QLD 4101
+  address:        Australia
+  abuse-mailbox:  helpdesk@apnic.net
+  mnt-by:         APNIC-ABUSE
+  role:           APNICRANDNET Infrastructure Contact
+  address:        6 Cordelia St
+  country:        AU
+  origin:         AS13335
+  descr:          APNIC Research and Development
+1.1.1.1 | Australia South Brisbane | Cloudflare, Inc | AS13335 Cloudflare, Inc.

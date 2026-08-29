@@ -1,0 +1,37 @@
+RED NEURONAL DE SENSIBILIDAD A VULNERABILIDADES
+fecha=2026-08-26T17:04:20Z
+riesgo_geniusbet=89.0
+nivel=MUY ALTA (sitio facil de enganar / puerta abierta)
+acierto_entrenamiento=97.2%
+riesgo_si_todo_ok=7.1
+
+entradas (1=ok 0=falta):
+  0  http_redirige  La version sin candado manda a la segura
+  0  hsts  El celular recuerda usar siempre candado
+  0  nosniff  No adivina archivos disfrazados
+  0  x_frame  No se puede incrustar la web en otra
+  0  referrer  No se lleva la cuenta al salir
+  0  permissions  No pide camara/microfono de mas
+  0  coop  Aisla la ventana de otras pestanas
+  0  csp  Reja contra scripts de estafa
+  0  sin_powered_by  No publica el plano de la casa
+  1  cert_www_ok  Candado de www vigente
+  0  cert_apex_ok  Candado sin www vigente
+  1  tls_moderno  Rechaza chapas viejas (TLS 1.0/1.1)
+
+sensibilidad (arreglar esto baja mas el riesgo):
+  13.1 pts   http_redirige   La version sin candado manda a la segura
+  10.0 pts   hsts   El celular recuerda usar siempre candado
+  7.3 pts   csp   Reja contra scripts de estafa
+  4.9 pts   nosniff   No adivina archivos disfrazados
+  4.7 pts   x_frame   No se puede incrustar la web en otra
+  4.5 pts   cert_apex_ok   Candado sin www vigente
+  3.9 pts   permissions   No pide camara/microfono de mas
+  3.5 pts   referrer   No se lleva la cuenta al salir
+  2.9 pts   sin_powered_by   No publica el plano de la casa
+  2.9 pts   coop   Aisla la ventana de otras pestanas
+
+En palabras:
+  La red ve a GeniusBet con 89 de 100 de riesgo de puerta.
+  No predice juegos. Mide si un cliente puede ser enganado
+  por falta de candado, certificado vencido o paginas falsas.

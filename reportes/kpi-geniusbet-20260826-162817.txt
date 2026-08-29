@@ -1,0 +1,34 @@
+KPIs GENIUSBET 20260826-162817
+indice_antes=7
+indice_ahora=7
+delta=+0
+nivel=CRITICO
+https=HTTP/2 200
+http=HTTP/1.1 200 OK
+hsts=NO
+www_dias=50
+apex_dias=-9
+
+IGUAL	KPI-01 HTTP redirige a HTTPS	0->0/20
+IGUAL	KPI-02 HSTS	0->0/15
+IGUAL	KPI-03 nosniff	0->0/8
+IGUAL	KPI-04 X-Frame-Options	0->0/8
+IGUAL	KPI-05 Referrer-Policy	0->0/6
+IGUAL	KPI-06 Permissions-Policy	0->0/5
+IGUAL	KPI-07 COOP	0->0/5
+IGUAL	KPI-08 CSP (0.5 report / 1 enforce)	0->0/12
+IGUAL	KPI-09 Sin X-Powered-By	0->0/6
+IGUAL	KPI-10 Cert www vigente (>=14d)	7->7/7
+IGUAL	KPI-11 Cert apex vigente	0->0/8
+
+pendiente:
+  - activar HTTPS redirect 301 en CDN77
+  - pegar Strict-Transport-Security max-age=300
+  - pegar X-Content-Type-Options: nosniff
+  - pegar X-Frame-Options: SAMEORIGIN
+  - pegar Referrer-Policy
+  - pegar Permissions-Policy
+  - pegar Cross-Origin-Opener-Policy
+  - pegar CSP-Report-Only
+  - poweredByHeader: false en Next.js
+  - renovar certificado geniusbet.sv (apex)

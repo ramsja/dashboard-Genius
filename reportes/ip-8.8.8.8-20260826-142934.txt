@@ -1,0 +1,25 @@
+OBJETIVO 8.8.8.8
+canon dns.google
+A 8.8.8.8
+PTR dns.google
+  NetRange:       8.8.8.0 - 8.8.8.255
+  CIDR:           8.8.8.0/24
+  NetName:        GOGL
+  OriginAS:
+  Organization:   Google LLC (GOGL)
+  Updated:        2023-12-28
+  OrgName:        Google LLC
+  Address:        1600 Amphitheatre Parkway
+  City:           Mountain View
+  StateProv:      CA
+  Country:        US
+  Updated:        2019-10-31
+  Comment:        Please note that the recommended way to file abuse complaints are located in the following links.
+  Comment:        To report abuse and illegal activity: https://www.google.com/contact/
+  OrgTechEmail:  arin-contact@google.com
+  OrgAbuseHandle: ABUSE5250-ARIN
+  OrgAbuseName:   Abuse
+  OrgAbusePhone:  +1-650-253-0000
+  OrgAbuseEmail:  network-abuse@google.com
+  OrgAbuseRef:    https://rdap.arin.net/registry/entity/ABUSE5250-ARIN
+8.8.8.8 | United States Ashburn | Google LLC | AS15169 Google LLC

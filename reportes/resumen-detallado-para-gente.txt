@@ -1,0 +1,206 @@
+RESUMEN DETALLADO — GeniusBet (para compartir, sin tecnicismos)
+================================================================
+Fecha de la revision: 26 de agosto de 2026
+Quien lo reviso: laboratorio Kali (Grok como manager)
+Como se reviso: se miro la pagina tal como la ve un cliente.
+               No se ataco el sitio, no se intento entrar a cuentas
+               ni se probo a romper contraseñas de usuarios reales.
+
+
+1. DE QUE VA ESTE INFORME
+-------------------------
+GeniusBet es la casa de apuestas (deportes y casino) que el cliente
+abre en el celular o la computadora.
+
+Este informe no habla de si “se gana” o si hay “barajas calientes”.
+Habla de la PUERTA de entrada: si el cliente llega al GeniusBet
+de verdad, con candado, o si puede caer en una copia o ver un
+mensaje de “sitio no seguro”.
+
+Piense en un local comercial:
+  - El local con www es la sucursal nueva, con alarma buena.
+  - El local sin www es la sucursal vieja, con el letrero vencido
+    y una chapa antigua.
+
+
+2. NOTA GENERAL (facil de decir en una reunion)
+-----------------------------------------------
+  Seguridad de la entrada:     7 de 100   (tablero KPI)
+  Protocolo de 10 mejoras:    20 de 100   (2 de 10 puntos cumplidos)
+  Calificacion:               CRITICO
+  Cambio respecto a la manana: ninguno (nadie aplico aun las mejoras)
+
+Como leerlo
+  0–24    Grave: facil asustar o enganar al cliente
+  25–49   Regular
+  50–79   Aceptable
+  80–100  Bien cerrado
+
+Hoy estamos en “grave” no porque el casino este amañado,
+sino porque la puerta sigue abierta por el lado inseguro
+y la direccion corta muestra error.
+
+
+3. LO QUE SI ESTA BIEN (para no alarmar de mas)
+-----------------------------------------------
+- La direccion que usa casi todo el mundo,
+  www.geniusbet.sv, SI abre con candado.
+- Ese candado (el certificado de www) esta vigente
+  hasta el 16 de octubre de 2026. Todavia hay tiempo.
+- Esa sucursal usa “chapas” modernas y rechaza las muy viejas.
+  Eso es bueno: un celular actual entra bien.
+- La pagina carga rapido. La entrega la hace una red
+  profesional (en Miami), no “un PC en la oficina”.
+- En la portada no vimos formularios de login ni datos
+  de tarjetas. El riesgo gordo de “robar la sesion”
+  esta mas en la cuenta, no en esa portada.
+- No encontramos senales de juegos amañados, “barajas calientes”
+  ni de que se pueda adivinar el crash mirando la pagina.
+
+
+4. LO QUE ESTA MAL (y en que le pega al negocio)
+------------------------------------------------
+
+A) Se puede entrar SIN candado
+   Si alguien escribe la direccion con http (sin la s)
+   la pagina igual abre, completa, como si nada.
+   En un Wi-Fi de hotel, ciber o barrio, un tercero
+   puede mostrar una pagina que PARECE GeniusBet:
+   un aviso, un login falso, un “deposite aqui”.
+   El cliente cree que es la casa. La marca queda manchada
+   y puede haber gente estafada en nuestro nombre.
+
+B) El celular no “recuerda” usar siempre el candado
+   Aunque exista la version segura, el aparato no insiste.
+   Un enlace malicioso puede bajar al cliente a la insegura.
+   Es como tener alarma y no dejarla armada al salir.
+
+C) Si escriben geniusbet.sv (sin www) sale error
+   El certificado de esa direccion vencio el 18 de agosto
+   (al dia de la revision ya iban 9 dias).
+   El navegador dice “sitio no seguro” o no deja entrar.
+   Eso se ve como pagina caida, trampa o abandono.
+   Se pierden visitas, registros y confianza.
+   Mucha gente no pone www. Esos son clientes reales.
+
+D) Otra web puede meter la nuestra en un recuadro
+   Un sitio ajeno puede mostrar GeniusBet “dentro” de el.
+   El cliente hace clic pensando que apuesta o inicia sesion
+   con nosotros, y el clic es para otro. Eso se usa en estafas
+   de marca.
+
+E) La web “cuenta” con que esta hecha
+   Sale un letrero tecnico (Next.js). Al usuario no le importa;
+   a quien quiera copiar o atacar le ahorra trabajo.
+   Es un detalle barato de quitar.
+
+F) La sucursal vieja (sin www) usa chapas antiguas
+   Acepta formas de candado que el mundo ya dejo de usar
+   y no usa la mas nueva.
+   www (la sucursal buena) esto lo hace BIEN.
+   Por eso la recomendacion es: que todo el mundo entre
+   solo por www, y la vieja se cierre o se renueve.
+
+
+5. LOS 10 PUNTOS DEL PROTOCOLO (pasa / no pasa)
+-----------------------------------------------
+1. La web con www abre con candado
+   CUMPLE. El cliente en www esta en la casa de verdad, cifrada.
+
+2. La version sin candado manda a la de candado
+   NO CUMPLE. Sigue abierta la puerta de atras.
+
+3. El aparato recuerda “esta casa solo con candado”
+   NO CUMPLE. Manana el cliente puede volver a la insegura.
+
+4. Certificado de www vigente
+   CUMPLE. Hasta octubre 2026.
+
+5. Certificado sin www vigente
+   NO CUMPLE. Vencio el 18 de agosto.
+
+6. No publicar el “plano de la casa”
+   NO CUMPLE. Sigue el letrero tecnico.
+
+7. Impedir que nos pongan en un recuadro ajeno
+   NO CUMPLE. Facilita paginas falsas con nuestra marca.
+
+8. Que el navegador no “adivine” archivos raros
+   NO CUMPLE. Menos defensa ante archivos disfrazados.
+
+9. No llevarse la direccion de la cuenta al salir a redes
+   NO CUMPLE. Se puede filtrar mas de la cuenta al ir a Facebook, etc.
+
+10. Reja para que no corran scripts de afuera
+    NO CUMPLE. Si alguien cuela un script de estafa,
+    el navegador no lo para.
+
+
+6. QUE HAY QUE HACER (en orden, para no-tecnicos)
+-------------------------------------------------
+Esto NO se hace desde el laboratorio. Lo hace quien tiene
+el panel de la red que entrega la web (CDN77) y el servidor
+de la direccion sin www.
+
+Paso 1 — Cerrar la puerta sin candado
+  En CDN77: “todo lo que entre sin candado, mandarlo
+  a la version con candado”.
+  Guardar y vaciar cache (“purge”).
+  Efecto: sube mucho la nota (deja de ser tan grave).
+  El cliente ya no se queda en la pagina insegura.
+
+Paso 2 — Pegar las protecciones de marca
+  En el mismo panel, una lista de avisos al navegador
+  (candado recordado, no incrustar, no adivinar archivos, etc.).
+  Ya estan escritas para quien configura.
+  Efecto: mas dificil una pagina falsa con nuestra cara.
+
+Paso 3 — Arreglar la direccion SIN www
+  Renovar el certificado de geniusbet.sv
+  y mandar a todo el mundo a www.geniusbet.sv.
+  Efecto: se acaba el mensaje de “sitio no seguro”
+  para quien no escribe www.
+
+Paso 4 — Quitar el letrero tecnico
+  Un cambio pequeno en el programa de la web.
+  Efecto: no regalamos el plano.
+
+Paso 5 — Volver a medir
+  Avisar al laboratorio. Se corre otra vez la revision
+  y se entrega un “antes 7/100 — despues XX/100”
+  para mostrar a gerencia, socios o regulacion.
+
+
+7. QUE NO PEDIMOS (para que no se malinterprete)
+------------------------------------------------
+- No estamos pidiendo atacar el sitio.
+- No estamos pidiendo software para adivinar crash, slots o cartas.
+- No encontramos prueba de que los juegos esten arreglados.
+- Un robot de prueba se lanzo SOLO contra una pagina falsa
+  en esta misma computadora, para ver como se ve un ataque
+  a un login sin freno. Eso no se hizo contra clientes de GeniusBet.
+
+
+8. MENSAJE PARA REUNION (1 minuto)
+----------------------------------
+Revisamos GeniusBet como la ve un cliente, sin atacar.
+La sucursal www tiene candado vigente hasta octubre.
+La sucursal sin www tiene el certificado vencido desde el 18 de agosto
+y todavia se puede entrar a www sin candado.
+La nota de la puerta es 7 de 100; el protocolo de 10 mejoras
+va 2 de 10. No vimos indicios de juegos amañados.
+Lo urgente es forzar el candado, pegar protecciones y renovar
+el certificado sin www. Cuando lo hagan, volvemos a medir
+y mostramos la subida de nota.
+
+
+9. ARCHIVOS (si alguien pide “el papel”)
+----------------------------------------
+Este resumen:
+  C:\Users\Riesgos\kali-lab\reportes\resumen-detallado-para-gente.txt
+Protocolo corto:
+  C:\Users\Riesgos\kali-lab\reportes\protocolo-mejora-compartir.txt
+En que influye cada cosa:
+  C:\Users\Riesgos\kali-lab\reportes\en-que-influye.txt
+Para quien configura el panel (eso si es tecnico):
+  C:\Users\Riesgos\kali-lab\reportes\cdn77-cabeceras.txt
