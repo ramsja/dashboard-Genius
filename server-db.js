@@ -46,6 +46,15 @@ const sesiones = new Map(); // sessionId -> { username, expires }
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 horas
 let adminTableLista = false; // se activa solo si admin_usuarios existe y responde bien
 
+// Métricas de la sincronización en vivo (para mostrar progreso real en el dashboard)
+const syncStatus = {
+  estado: 'nunca', // nunca | sincronizando | completado | error
+  inicio: null,
+  fin: null,
+  filas: 0,
+  mensaje: '',
+};
+
 function hashPassword(password, salt) {
   return crypto.scryptSync(password, salt, 64).toString('hex');
 }
@@ -165,28 +174,33 @@ async function cargarDatosAutomatico() {
   // prueba que hubiera quedado). sync-novusbet.js solo borra la tabla
   // justo antes de insertar los nuevos registros, así que si el login o
   // la descarga fallan, los datos existentes quedan intactos.
+  syncStatus.estado = 'sincronizando';
+  syncStatus.inicio = new Date().toISOString();
+  syncStatus.mensaje = 'Conectando a Novusbet...';
+
   try {
     console.log('📝 Sincronizando datos REALES desde Novusbet...');
     const { main: sincronizarNovusbet } = require('./sync-novusbet');
     const total = await sincronizarNovusbet();
     console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
+    syncStatus.estado = 'completado';
+    syncStatus.fin = new Date().toISOString();
+    syncStatus.filas = total || 0;
+    syncStatus.mensaje = `${total || 0} transacciones cargadas`;
   } catch (syncErr) {
     console.log('⚠️ No se pudo sincronizar con Novusbet ahora mismo:', syncErr.message);
+    syncStatus.estado = 'error';
+    syncStatus.fin = new Date().toISOString();
+    syncStatus.mensaje = syncErr.message;
   }
 }
 
 // Re-sincroniza cada 6 horas para mantener datos reales frescos
 function programarResincronizacion() {
   const SEIS_HORAS = 6 * 60 * 60 * 1000;
-  setInterval(async () => {
-    if (!process.env.BO_USERNAME || !process.env.BO_PASSWORD) return;
-    try {
-      console.log('🔄 Re-sincronizando transacciones reales desde Novusbet...');
-      const { main: sincronizarNovusbet } = require('./sync-novusbet');
-      await sincronizarNovusbet();
-    } catch (err) {
-      console.log('⚠️ Error en re-sincronización:', err.message);
-    }
+  setInterval(() => {
+    console.log('🔄 Re-sincronizando transacciones reales desde Novusbet...');
+    cargarDatosAutomatico();
   }, SEIS_HORAS);
 }
 
@@ -318,6 +332,13 @@ const server = http.createServer(async (req, res) => {
           return;
         }
       }
+    }
+
+    // API: ESTADO DE SINCRONIZACIÓN (métricas en vivo)
+    if (pathname === '/api/sync-status') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(syncStatus));
+      return;
     }
 
     // API: USUARIOS

@@ -68,6 +68,7 @@
             <div>
                 <h1>🎯 Dashboard Genius - Panel Principal</h1>
                 <p>Sistema Integral de Apuestas • Última actualización: <span id="actualizacion">--:--:--</span></p>
+                <p id="sync-status" style="font-size:12px; opacity:0.85; margin-top:4px;">Verificando sincronización...</p>
             </div>
             <button onclick="cerrarSesion()" style="padding:10px 18px; background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.4); border-radius:6px; cursor:pointer; font-weight:600;">Cerrar sesión</button>
         </div>
@@ -257,6 +258,30 @@
                 document.getElementById('actualizacion').textContent = new Date().toLocaleTimeString('es-ES');
             } catch (error) {
                 console.error('Error:', error);
+            }
+
+            cargarEstadoSync();
+        }
+
+        async function cargarEstadoSync() {
+            try {
+                const s = await fetch('/api/sync-status').then(r => r.json());
+                const el = document.getElementById('sync-status');
+                const iconos = { nunca: '⚪', sincronizando: '🔄', completado: '✅', error: '⚠️' };
+                const icono = iconos[s.estado] || '⚪';
+
+                if (s.estado === 'sincronizando') {
+                    el.textContent = `${icono} Sincronizando datos reales desde Novusbet...`;
+                } else if (s.estado === 'completado') {
+                    const hora = s.fin ? new Date(s.fin).toLocaleTimeString('es-ES') : '';
+                    el.textContent = `${icono} Última sincronización real: ${hora} • ${s.filas} transacciones`;
+                } else if (s.estado === 'error') {
+                    el.textContent = `${icono} Error de sincronización: ${s.mensaje}`;
+                } else {
+                    el.textContent = `${icono} Sin sincronizar todavía`;
+                }
+            } catch (e) {
+                // silencioso, no es crítico
             }
         }
 
