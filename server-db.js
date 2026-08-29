@@ -158,6 +158,50 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // API: TRANSACCIONES NOVUSBET (EN TIEMPO REAL)
+    if (pathname === '/api/transacciones-novusbet') {
+      let transacciones = [];
+      if (supabase) {
+        const { data } = await supabase
+          .from('transacciones_novusbet')
+          .select('*')
+          .order('fecha', { ascending: false })
+          .limit(1000);
+        transacciones = data || [];
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(transacciones));
+      return;
+    }
+
+    // API: RESUMEN POR DISCIPLINA NOVUSBET
+    if (pathname === '/api/transacciones-resumen') {
+      let resumen = {};
+      if (supabase) {
+        const { data } = await supabase
+          .from('transacciones_novusbet')
+          .select('disciplina, monto');
+
+        if (data) {
+          resumen = { deportes: 0, casino: 0, otros: 0, total: 0 };
+          data.forEach(t => {
+            const disc = (t.disciplina || 'otros').toLowerCase();
+            if (resumen[disc] !== undefined) {
+              resumen[disc] += (t.monto || 0);
+            } else {
+              resumen[disc] = (t.monto || 0);
+            }
+            resumen.total += (t.monto || 0);
+          });
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(resumen));
+      return;
+    }
+
     // DESCARGAR: CSV de Usuarios
     if (pathname === '/download/usuarios.csv') {
       let usuarios;
@@ -178,6 +222,29 @@ const server = http.createServer(async (req, res) => {
         'Content-Disposition': `attachment; filename="usuarios-${new Date().toISOString().split('T')[0]}.csv"`
       });
       res.end('﻿' + csv); // BOM para Excel
+      return;
+    }
+
+    // DESCARGAR: CSV de Transacciones Novusbet
+    if (pathname === '/download/transacciones-novusbet.csv') {
+      let transacciones;
+      if (supabase) {
+        const { data } = await supabase
+          .from('transacciones_novusbet')
+          .select('usuario, tipo_transaccion, monto, disciplina, descripcion, fecha')
+          .order('fecha', { ascending: false })
+          .limit(5000);
+        transacciones = data || [];
+      } else {
+        transacciones = [];
+      }
+
+      const csv = generarCSV(transacciones, ['usuario', 'tipo_transaccion', 'monto', 'disciplina', 'descripcion', 'fecha']);
+      res.writeHead(200, {
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': `attachment; filename="transacciones-novusbet-${new Date().toISOString().split('T')[0]}.csv"`
+      });
+      res.end('﻿' + csv);
       return;
     }
 
