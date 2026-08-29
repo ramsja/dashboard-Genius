@@ -194,6 +194,14 @@
             </div>
         </div>
 
+        <!-- Descargas -->
+        <div style="background: white; padding: 20px; border-radius: 12px; margin-top: 30px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); text-align: center;">
+            <h3 style="margin-bottom: 15px; color: #333;">📥 Descargar Datos</h3>
+            <button onclick="descargarCSV()" style="padding: 12px 25px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 0 10px;">📄 Descargar CSV</button>
+            <button onclick="descargarExcel()" style="padding: 12px 25px; background: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 0 10px;">📊 Descargar Excel</button>
+            <button onclick="descargarJSON()" style="padding: 12px 25px; background: #2980b9; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 0 10px;">📋 Descargar JSON</button>
+        </div>
+
         <div class="status">
             Dashboard Genius • Auto-actualiza cada 30 segundos • Conectado a Supabase
         </div>
@@ -370,6 +378,65 @@
                 },
                 options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
             });
+        }
+
+        function descargarCSV() {
+            const trans = datos.transacciones;
+            const headers = ['Usuario', 'Tipo', 'Monto', 'Disciplina', 'Descripción', 'Fecha'];
+            const csv = [headers.join(',')];
+
+            trans.forEach(t => {
+                csv.push([
+                    t.usuario || '',
+                    t.tipo_transaccion || '',
+                    t.monto || 0,
+                    t.disciplina || '',
+                    (t.descripcion || '').replace(/,/g, ';'),
+                    t.fecha || ''
+                ].join(','));
+            });
+
+            const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transacciones-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        function descargarExcel() {
+            const trans = datos.transacciones;
+            let html = '<table border="1"><tr>';
+            html += '<th>Usuario</th><th>Tipo</th><th>Monto</th><th>Disciplina</th><th>Descripción</th><th>Fecha</th></tr>';
+
+            trans.forEach(t => {
+                html += `<tr>
+                    <td>${t.usuario || ''}</td>
+                    <td>${t.tipo_transaccion || ''}</td>
+                    <td>${t.monto || 0}</td>
+                    <td>${t.disciplina || ''}</td>
+                    <td>${t.descripcion || ''}</td>
+                    <td>${t.fecha || ''}</td>
+                </tr>`;
+            });
+            html += '</table>';
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transacciones-${new Date().toISOString().split('T')[0]}.xls`;
+            a.click();
+        }
+
+        function descargarJSON() {
+            const json = JSON.stringify(datos, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `dashboard-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
         }
 
         cargarDatos();
