@@ -793,6 +793,7 @@ const server = http.createServer(async (req, res) => {
           });
 
           ranking = Object.values(porUsuario)
+            .filter((u) => u.meses_activo > 1) // solo jugadores con actividad en más de un mes
             .map((u) => ({ ...u, juegos: Array.from(u.juegos), beneficio: u.apostado - u.ganado }))
             .sort((a, b) => b.monto_total - a.monto_total);
         } catch (e) {
