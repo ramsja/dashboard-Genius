@@ -1,0 +1,10 @@
+node_modules
+.git
+.env
+.env.local
+*.log
+descargas/
+reportes/
+analisis-www/
+*.tmp
+.DS_Store

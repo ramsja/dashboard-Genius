@@ -2,10 +2,10 @@
   "name": "dashboard-genius",
   "version": "1.0.0",
   "description": "Dashboard en tiempo real para GeniusBet",
-  "main": "server.js",
+  "main": "server-db.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "node server-db.js",
+    "dev": "node server-db.js",
     "load-data": "node load-real-data.js",
     "watch-data": "node watch-real-data.js",
     "tunnel": "ngrok http 3000",
