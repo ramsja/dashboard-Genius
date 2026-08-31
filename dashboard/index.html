@@ -400,9 +400,10 @@
         }
 
         function actualizarTablas() {
-            // Transacciones (ya viene paginado desde la API, se muestran todas las de la página actual)
-            let html = datos.transacciones.map(t => `
-                <tr>
+            // Transacciones (ya viene paginado desde la API, se muestran todas las de la página actual).
+            // Cada fila es clickeable y abre el detalle completo del registro (módulo).
+            let html = datos.transacciones.map((t, idx) => `
+                <tr onclick="abrirDetalleTransaccion(${idx})" style="cursor:pointer;">
                     <td>${t.casa_apuestas || '-'}</td>
                     <td>${t.id_usuario_novusbet || '-'}</td>
                     <td><strong>${t.usuario}</strong></td>
@@ -634,8 +635,59 @@
             window.location.href = '/login.html';
         }
 
+        function abrirDetalleTransaccion(idx) {
+            const t = datos.transacciones[idx];
+            if (!t) return;
+
+            const campos = [
+                ['ID transacción Novusbet', t.id_transaccion_novusbet],
+                ['Casa de apuestas', t.casa_apuestas],
+                ['ID usuario Novusbet', t.id_usuario_novusbet],
+                ['Usuario', t.usuario],
+                ['Tipo de transacción', t.tipo_transaccion],
+                ['Monto', t.monto != null ? '$' + Number(t.monto).toFixed(2) : '-'],
+                ['Moneda', t.moneda],
+                ['Ingresos', t.ingresos != null ? '$' + Number(t.ingresos).toFixed(2) : '-'],
+                ['Comisión', t.comision != null ? '$' + Number(t.comision).toFixed(2) : '-'],
+                ['Saldo', t.saldo != null ? '$' + Number(t.saldo).toFixed(2) : '-'],
+                ['Saldo actual', t.saldo_actual != null ? '$' + Number(t.saldo_actual).toFixed(2) : '-'],
+                ['Disciplina', t.disciplina],
+                ['Estado cliente', t.estado_cliente],
+                ['Juego', t.juego],
+                ['Descripción', t.descripcion],
+                ['Billeteras', t.billeteras],
+                ['Grupo causal', t.grupo_causal],
+                ['Fecha', t.fecha ? new Date(t.fecha).toLocaleString('es-ES') : '-'],
+            ];
+
+            const filas = campos.map(([label, valor]) => `
+                <tr>
+                    <td style="font-weight:600; color:#667eea; padding:8px 12px; border-bottom:1px solid #f0f0f0;">${label}</td>
+                    <td style="padding:8px 12px; border-bottom:1px solid #f0f0f0;">${valor ?? '-'}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('modal-detalle-contenido').innerHTML = `<table style="width:100%; border-collapse:collapse;">${filas}</table>`;
+            document.getElementById('modal-detalle').style.display = 'flex';
+        }
+
+        function cerrarDetalleTransaccion() {
+            document.getElementById('modal-detalle').style.display = 'none';
+        }
+
         cargarDatos();
         setInterval(cargarDatos, 30000);
     </script>
+
+    <!-- Modal de detalle de transacción -->
+    <div id="modal-detalle" onclick="if(event.target===this) cerrarDetalleTransaccion()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
+        <div style="background:white; border-radius:12px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+            <div style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:white; padding:18px 22px; border-radius:12px 12px 0 0; display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0; font-size:16px;">📄 Detalle de transacción</h3>
+                <button onclick="cerrarDetalleTransaccion()" style="background:none; border:none; color:white; font-size:22px; cursor:pointer; line-height:1;">&times;</button>
+            </div>
+            <div id="modal-detalle-contenido" style="padding:10px 22px;"></div>
+        </div>
+    </div>
 </body>
 </html>
