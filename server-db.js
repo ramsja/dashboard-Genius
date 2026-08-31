@@ -55,6 +55,17 @@ const syncStatus = {
   mensaje: '',
 };
 
+// Métricas de la sincronización de usuarios reales (estado de cuenta:
+// Habilitado/Congelado/Cancelado/etc, viene de /backoffice/users, no del CSV
+// de transacciones). Se sincroniza sola, automáticamente — sin subir nada.
+const syncStatusUsuarios = {
+  estado: 'nunca',
+  inicio: null,
+  fin: null,
+  filas: 0,
+  mensaje: '',
+};
+
 function hashPassword(password, salt) {
   return crypto.scryptSync(password, salt, 64).toString('hex');
 }
@@ -220,6 +231,41 @@ async function cargarDatosAutomatico() {
   }
 }
 
+// Trae el estado REAL de cuenta (Habilitado/Congelado/Cancelado/solo lectura/
+// para validar) directo del backoffice — sin CSV, sin subir nada a mano.
+// Se llama sola al arrancar y en cada re-sincronización periódica.
+async function sincronizarUsuariosAutomatico() {
+  if (!supabase) return;
+
+  if (!process.env.BO_USERNAME || !process.env.BO_PASSWORD) {
+    console.log('⚠️ Faltan BO_USERNAME/BO_PASSWORD, no se puede sincronizar usuarios con Novusbet');
+    return;
+  }
+
+  if (syncStatusUsuarios.estado === 'sincronizando') return;
+
+  syncStatusUsuarios.estado = 'sincronizando';
+  syncStatusUsuarios.inicio = new Date().toISOString();
+  syncStatusUsuarios.mensaje = 'Conectando a Novusbet (Usuarios)...';
+
+  try {
+    const { sincronizarUsuarios } = require('./sync-novusbet');
+    const total = await sincronizarUsuarios((progreso) => {
+      syncStatusUsuarios.mensaje = `Página ${progreso.pagina}: ${progreso.totalGuardados}${progreso.totalEsperado ? ` / ${progreso.totalEsperado}` : ''} usuarios`;
+    });
+    console.log(`✅ Sincronización de usuarios completada: ${total} usuarios`);
+    syncStatusUsuarios.estado = 'completado';
+    syncStatusUsuarios.fin = new Date().toISOString();
+    syncStatusUsuarios.filas = total;
+    syncStatusUsuarios.mensaje = `${total} usuarios sincronizados`;
+  } catch (syncErr) {
+    console.log('⚠️ No se pudo sincronizar usuarios con Novusbet ahora mismo:', syncErr.message);
+    syncStatusUsuarios.estado = 'error';
+    syncStatusUsuarios.fin = new Date().toISOString();
+    syncStatusUsuarios.mensaje = syncErr.message;
+  }
+}
+
 // Re-sincroniza periódicamente para mantener datos reales frescos.
 // Cada sync completa toma ~1 minuto para ~22-35k transacciones del día,
 // así que cada 30 min por defecto es razonable para sentirse "en tiempo
@@ -231,6 +277,7 @@ function programarResincronizacion() {
   setInterval(() => {
     console.log(`🔄 Re-sincronizando transacciones reales desde Novusbet (cada ${minutos} min)...`);
     cargarDatosAutomatico();
+    sincronizarUsuariosAutomatico();
   }, intervaloMs);
 }
 
@@ -510,6 +557,39 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // API: SINCRONIZAR USUARIOS (estado real de cuenta: Habilitado, Congelado,
+    // solo lectura, etc.) directo desde el backoffice de Novusbet — automático,
+    // sin descargar ni subir nada a mano.
+    if (pathname === '/api/admin/sync-usuarios' && req.method === 'POST') {
+      if (syncStatusUsuarios.estado === 'sincronizando') {
+        res.writeHead(409, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Ya hay una sincronización de usuarios en curso' }));
+        return;
+      }
+      sincronizarUsuariosAutomatico();
+      res.writeHead(202, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, mensaje: 'Sincronización de usuarios iniciada en segundo plano' }));
+      return;
+    }
+
+    // API: ESTADO DE LA SINCRONIZACIÓN DE USUARIOS (para mostrar progreso real)
+    if (pathname === '/api/sync-status-usuarios') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(syncStatusUsuarios));
+      return;
+    }
+
+    // API: USUARIOS NOVUSBET (con estado real de cuenta)
+    if (pathname === '/api/usuarios-novusbet') {
+      let usuarios = [];
+      if (supabase) {
+        usuarios = await fetchTodasLasFilas('usuarios_novusbet', '*');
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(usuarios));
+      return;
+    }
+
     // API: RESUMEN POR DISCIPLINA NOVUSBET (agregados sobre TODAS las filas,
     // no solo las primeras 1000 que Supabase devuelve por defecto)
     if (pathname === '/api/transacciones-resumen') {
@@ -597,6 +677,26 @@ const server = http.createServer(async (req, res) => {
             // Estimado, no el estado real de cuenta de Novusbet
             u.estado_actividad_aprox = antiguedadMs <= UN_DIA ? 'activo_aprox' : antiguedadMs <= 3 * UN_DIA ? 'reciente_aprox' : 'inactivo_aprox';
           });
+
+          // Si ya sincronizamos usuarios_novusbet (automático, ver
+          // sincronizarUsuariosAutomatico), usa el estado REAL de cuenta
+          // (Habilitado/Congelado/etc.) en vez del estimado por actividad
+          try {
+            const usuariosReales = await fetchTodasLasFilas('usuarios_novusbet', 'id_usuario, estado, nombre, apellido, correo');
+            const porId = {};
+            usuariosReales.forEach((u) => { porId[u.id_usuario] = u; });
+
+            Object.values(usuarios).forEach((u) => {
+              const real = porId[u.id_usuario_novusbet];
+              if (real) {
+                u.estado_real = real.estado;
+                u.nombre_completo = [real.nombre, real.apellido].filter(Boolean).join(' ');
+                u.correo = real.correo;
+              }
+            });
+          } catch (e) {
+            // Tabla usuarios_novusbet puede no existir todavía, no es crítico
+          }
         }
       }
 
@@ -791,8 +891,9 @@ server.listen(PORT, async () => {
 
   // Cargar datos automáticamente (no bloquea el arranque, corre en paralelo)
   cargarDatosAutomatico();
+  sincronizarUsuariosAutomatico();
 
-  // Mantener datos reales frescos cada 6 horas
+  // Mantener datos reales frescos periódicamente (transacciones + usuarios)
   programarResincronizacion();
 });
 

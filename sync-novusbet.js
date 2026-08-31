@@ -529,8 +529,153 @@ async function syncHistorico(dias, onProgreso) {
   return { totalGeneral, resultadosPorDia };
 }
 
+// ============================================================
+// USUARIOS REALES (estado de cuenta: Habilitado/Congelado/etc.)
+//
+// A diferencia de Transacciones, esta pantalla NO tiene un export
+// asíncrono por HTTP que podamos reproducir fácilmente (dispara un job
+// que se notifica por WebSocket, y no logramos capturar esa notificación
+// de forma confiable). En cambio, la tabla de resultados viene renderizada
+// directo en el HTML de /backoffice/users cuando se le pasan los filtros
+// correctos — así que la leemos ahí, sin necesitar el export ni el socket.
+// ============================================================
+
+const USERS_URL = `${BASE_URL}/backoffice/users`;
+
+// Columnas en el orden real de la tabla (ver <thead> de /backoffice/users)
+const COLUMNAS_USUARIOS = [
+  'id_usuario', 'usuario', 'apellido', 'nombre', 'tipo', 'estado_conexion',
+  'padre', 'correo', 'moneda', 'saldo', 'saldo_retirable', 'bono', 'sitio',
+  'estado', 'first_deposit_at', 'ultimo_acceso', 'fecha_creacion', 'info',
+];
+
+function limpiarCeldaHTML(html) {
+  return html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&aacute;/g, 'á').replace(/&eacute;/g, 'é').replace(/&iacute;/g, 'í')
+    .replace(/&oacute;/g, 'ó').replace(/&uacute;/g, 'ú').replace(/&Uacute;/g, 'Ú')
+    .replace(/&ntilde;/g, 'ñ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function parseUsuariosHTML(html) {
+  const tbodyMatch = html.match(/<tbody id="response">([\s\S]*?)<\/tbody>/);
+  if (!tbodyMatch) return [];
+
+  const filas = tbodyMatch[1].split(/<tr[ >]/).slice(1);
+  const usuarios = [];
+
+  for (const filaHtml of filas) {
+    const celdas = [...filaHtml.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) => limpiarCeldaHTML(m[1]));
+    if (celdas.length < COLUMNAS_USUARIOS.length - 2) continue; // fila incompleta/basura
+
+    const registro = {};
+    COLUMNAS_USUARIOS.forEach((col, i) => { registro[col] = celdas[i] || ''; });
+
+    // El id de usuario viene primero en la celda, a veces con texto extra
+    registro.id_usuario = (registro.id_usuario.match(/\d+/) || [''])[0];
+
+    if (registro.id_usuario) usuarios.push(registro);
+  }
+
+  return usuarios;
+}
+
+function numeroMonto(v) {
+  return parseFloat((v || '').toString().replace(/[^0-9.-]/g, '')) || 0;
+}
+
+function fechaISO(v) {
+  if (!v) return null;
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? null : d.toISOString();
+}
+
+function construirParamsUsuarios(pagina) {
+  const params = new URLSearchParams();
+  [0, 1, 2, 3, 4, 5, 6].forEach((s) => params.append('status[]', s));
+  // Sin type[] el backoffice solo devuelve la cima de la jerarquía (agentes raíz).
+  // Hay que pedir los 4 tipos explícitamente para traer también Jugadores.
+  [1, 2, 3, 4].forEach((t) => params.append('type[]', t));
+  params.append('site_id[]', '1049'); // Geniusbet SV
+  params.append('is_test', 'all'); // incluye cuentas reales y de prueba, como el panel
+  params.append('per_page', '1000');
+  if (pagina > 1) params.append('page', String(pagina));
+  return params;
+}
+
+function extraerRegistrosTotales(html) {
+  const m = html.match(/Registros totales:?\s*([0-9.,]+)/i);
+  return m ? parseInt(m[1].replace(/[.,]/g, ''), 10) : null;
+}
+
+async function sincronizarUsuarios(onProgreso) {
+  asegurarSupabase();
+
+  const { cookie } = await login();
+
+  console.log('📥 Descargando usuarios reales (estado de cuenta)...');
+
+  let pagina = 1;
+  let totalGuardados = 0;
+  let totalEsperado = null;
+
+  while (true) {
+    const params = construirParamsUsuarios(pagina);
+    const res = await httpsRequest('GET', `${USERS_URL}?${params.toString()}`, {
+      headers: { Cookie: cookie },
+    });
+
+    if (res.status !== 200) {
+      throw new Error(`Error obteniendo usuarios (página ${pagina}): HTTP ${res.status}`);
+    }
+
+    if (totalEsperado === null) totalEsperado = extraerRegistrosTotales(res.body);
+
+    const filas = parseUsuariosHTML(res.body);
+    if (filas.length === 0) break;
+
+    const registros = filas.map((r) => ({
+      id_usuario: r.id_usuario,
+      usuario: r.usuario,
+      apellido: r.apellido,
+      nombre: r.nombre,
+      tipo: r.tipo,
+      padre: r.padre,
+      correo: r.correo,
+      moneda: r.moneda,
+      saldo: numeroMonto(r.saldo),
+      saldo_retirable: numeroMonto(r.saldo_retirable),
+      bono: numeroMonto(r.bono),
+      sitio: r.sitio,
+      estado: r.estado,
+      ultimo_acceso: fechaISO(r.ultimo_acceso),
+      fecha_creacion: fechaISO(r.fecha_creacion),
+      actualizado_at: new Date().toISOString(),
+    }));
+
+    if (supabase) {
+      const { error } = await supabase.from('usuarios_novusbet').upsert(registros, { onConflict: 'id_usuario' });
+      if (error) throw error;
+    }
+
+    totalGuardados += registros.length;
+    if (onProgreso) onProgreso({ pagina, totalGuardados, totalEsperado });
+    console.log(`📊 Página ${pagina}: ${registros.length} usuarios (acumulado ${totalGuardados}${totalEsperado ? ` / ${totalEsperado}` : ''})`);
+
+    if (filas.length < 1000) break; // última página
+    pagina += 1;
+    await new Promise((r) => setTimeout(r, 300));
+  }
+
+  console.log(`✅ ${totalGuardados} usuarios reales sincronizados (con estado de cuenta)`);
+  return totalGuardados;
+}
+
 if (require.main === module) {
   main().catch(() => process.exit(1));
 }
 
-module.exports = { main, syncHistorico };
+module.exports = { main, syncHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML };

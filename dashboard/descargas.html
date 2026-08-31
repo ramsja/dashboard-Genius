@@ -50,6 +50,12 @@
         .badge-activo_aprox { background: #d4edda; color: #155724; }
         .badge-reciente_aprox { background: #fff3cd; color: #856404; }
         .badge-inactivo_aprox { background: #e2e3e5; color: #383d41; }
+        .badge-habilitado { background: #d4edda; color: #155724; }
+        .badge-inhabilitado { background: #e2e3e5; color: #383d41; }
+        .badge-congelado-real { background: #cfe2ff; color: #084298; }
+        .badge-cancelado { background: #f8d7da; color: #721c24; }
+        .badge-solo-lectura { background: #fff3cd; color: #856404; }
+        .badge-para-validar { background: #e7d4f5; color: #6f42c1; }
 
         /* Charts */
         .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin: 30px 0; }
@@ -165,11 +171,14 @@
             <div class="section" style="grid-column: 1 / -1;">
                 <div class="section-header" style="display:flex; justify-content:space-between; align-items:center;">
                     <h2>🧩 Matriz de Usuarios</h2>
-                    <button onclick="descargarMatrizUsuariosExcel()" style="padding:6px 14px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:4px; cursor:pointer; font-size:12px;">📊 Descargar Excel</button>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <button id="btn-sync-usuarios" onclick="sincronizarUsuarios()" style="padding:6px 14px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:4px; cursor:pointer; font-size:12px;">🔄 Sincronizar estado real</button>
+                        <button onclick="descargarMatrizUsuariosExcel()" style="padding:6px 14px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:4px; cursor:pointer; font-size:12px;">📊 Descargar Excel</button>
+                    </div>
                 </div>
                 <div class="section-content">
-                    <p style="font-size:12px; color:#999; margin-bottom:12px;">
-                        "Actividad" es un estimado según la última transacción vista (no es el estado oficial de cuenta de Novusbet).
+                    <p id="sync-status-usuarios" style="font-size:12px; color:#999; margin-bottom:12px;">
+                        "Estado" es el estado real de cuenta (Habilitado/Congelado/Cancelado/etc.) traído automáticamente de Novusbet. Cuando aún no se ha sincronizado para un usuario, se muestra la "Actividad" estimada según su última transacción.
                     </p>
                     <table>
                         <thead>
@@ -181,7 +190,7 @@
                                 <th>Monto Total</th>
                                 <th>Disciplinas</th>
                                 <th>Última Actividad</th>
-                                <th>Actividad (aprox.)</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-matriz-usuarios">
@@ -347,21 +356,74 @@
             cargarEstadoSync();
         }
 
+        function claseBadgeEstadoReal(estado) {
+            const slug = (estado || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '-');
+            if (slug.includes('inhabilitado')) return 'inhabilitado';
+            if (slug.includes('habilitado')) return 'habilitado';
+            if (slug.includes('congelado')) return 'congelado-real';
+            if (slug.includes('cancelado')) return 'cancelado';
+            if (slug.includes('solo-lectura')) return 'solo-lectura';
+            if (slug.includes('validar')) return 'para-validar';
+            return 'sin_dato';
+        }
+
+        function celdaEstadoUsuario(u) {
+            if (u.estado_real) {
+                return `<span class="badge badge-${claseBadgeEstadoReal(u.estado_real)}">${u.estado_real}</span>`;
+            }
+            return `<span class="badge badge-${u.estado_actividad_aprox}">${(u.estado_actividad_aprox || '').replace('_aprox', ' (aprox.)')}</span>`;
+        }
+
         function actualizarMatrizUsuarios() {
             const filas = datos.matrizUsuarios || [];
             const html = filas.slice(0, 100).map((u) => `
                 <tr>
                     <td>${u.id_usuario_novusbet || '-'}</td>
-                    <td><strong>${u.usuario || '-'}</strong></td>
+                    <td><strong>${u.nombre_completo || u.usuario || '-'}</strong></td>
                     <td>${u.casa_apuestas || '-'}</td>
                     <td class="numero">${u.transacciones}</td>
                     <td class="numero">$${(u.monto_total || 0).toFixed(2)}</td>
                     <td>${(u.disciplinas || []).map(d => `<span class="badge badge-${d}">${d}</span>`).join(' ')}</td>
                     <td>${u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '-'}</td>
-                    <td><span class="badge badge-${u.estado_actividad_aprox}">${(u.estado_actividad_aprox || '').replace('_aprox', ' (aprox.)')}</span></td>
+                    <td>${celdaEstadoUsuario(u)}</td>
                 </tr>
             `).join('');
             document.getElementById('tabla-matriz-usuarios').innerHTML = html || '<tr><td colspan="8" class="loading">Sin datos</td></tr>';
+        }
+
+        async function sincronizarUsuarios() {
+            const btn = document.getElementById('btn-sync-usuarios');
+            const estadoEl = document.getElementById('sync-status-usuarios');
+            btn.disabled = true;
+            btn.textContent = '⏳ Sincronizando...';
+            try {
+                await fetchJSON('/api/admin/sync-usuarios', { method: 'POST' });
+            } catch (e) {
+                estadoEl.textContent = 'Error iniciando sincronización: ' + e.message;
+                btn.disabled = false;
+                btn.textContent = '🔄 Sincronizar estado real';
+                return;
+            }
+            const intervalo = setInterval(async () => {
+                try {
+                    const s = await fetch('/api/sync-status-usuarios').then(r => r.json());
+                    if (s.estado === 'sincronizando') {
+                        estadoEl.textContent = '🔄 ' + (s.mensaje || 'Sincronizando...');
+                    } else {
+                        clearInterval(intervalo);
+                        btn.disabled = false;
+                        btn.textContent = '🔄 Sincronizar estado real';
+                        estadoEl.textContent = s.estado === 'completado'
+                            ? `✅ ${s.mensaje} (${new Date(s.fin).toLocaleTimeString('es-ES')})`
+                            : `⚠️ ${s.mensaje || 'Error en la sincronización'}`;
+                        await cargarDatos();
+                    }
+                } catch (e) {
+                    clearInterval(intervalo);
+                    btn.disabled = false;
+                    btn.textContent = '🔄 Sincronizar estado real';
+                }
+            }, 3000);
         }
 
         function descargarMatrizUsuariosExcel() {
