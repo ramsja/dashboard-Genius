@@ -410,24 +410,49 @@ async function uploadToSupabase(records) {
     datos_raw: JSON.stringify(record),
   })).filter((r) => r.id_transaccion_novusbet); // sin id no se puede deduplicar, se descarta
 
-  const BATCH_SIZE = 1000;
+  // Lotes chicos para no chocar con el statement timeout de Supabase en
+  // días con mucho volumen (se vieron días de 80k-100k+ transacciones). Si
+  // un lote falla igual se reintenta una vez más chico antes de saltarlo,
+  // así un timeout puntual no tira todo el resto del día.
+  const BATCH_SIZE = 250;
   let inserted = 0;
-  for (let i = 0; i < formattedRecords.length; i += BATCH_SIZE) {
-    const batch = formattedRecords.slice(i, i + BATCH_SIZE);
+  let fallidos = 0;
+
+  const insertarLote = async (lote) => {
     const { error } = await supabase
       .from('transacciones_novusbet')
-      .upsert(batch, { onConflict: 'id_transaccion_novusbet', ignoreDuplicates: false });
+      .upsert(lote, { onConflict: 'id_transaccion_novusbet', ignoreDuplicates: false });
+    return error;
+  };
+
+  for (let i = 0; i < formattedRecords.length; i += BATCH_SIZE) {
+    const batch = formattedRecords.slice(i, i + BATCH_SIZE);
+    let error = await insertarLote(batch);
+
     if (error) {
-      console.error('❌ Error insertando lote:', error.message);
-      throw error;
+      console.error(`⚠️ Lote falló (${batch.length} filas), reintentando en mitades:`, error.message);
+      // Reintenta partiendo el lote en dos, para aislar el statement timeout
+      const mitad = Math.ceil(batch.length / 2);
+      const mitades = [batch.slice(0, mitad), batch.slice(mitad)].filter((m) => m.length > 0);
+      for (const sub of mitades) {
+        const subError = await insertarLote(sub);
+        if (subError) {
+          console.error(`❌ Sub-lote descartado (${sub.length} filas):`, subError.message);
+          fallidos += sub.length;
+        } else {
+          inserted += sub.length;
+        }
+      }
+    } else {
+      inserted += batch.length;
     }
-    inserted += batch.length;
-    if ((i / BATCH_SIZE) % 5 === 0) {
-      console.log(`  ...${inserted}/${formattedRecords.length} sincronizados`);
+
+    if ((i / BATCH_SIZE) % 10 === 0) {
+      console.log(`  ...${inserted}/${formattedRecords.length} sincronizados${fallidos ? ` (${fallidos} descartados)` : ''}`);
     }
   }
 
-  console.log(`✅ ${inserted} registros cargados en Supabase`);
+  console.log(`✅ ${inserted} registros cargados en Supabase${fallidos ? ` (⚠️ ${fallidos} descartados por errores repetidos)` : ''}`);
   return inserted;
 }
 
