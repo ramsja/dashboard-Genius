@@ -529,6 +529,65 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // API: MATRIZ DE USUARIOS derivada de las transacciones reales.
+    // No es el estado oficial de cuenta de Novusbet (eso vive en una
+    // pantalla separada por WebSocket que no pudimos capturar todavía) —
+    // es un estimado de actividad basado en la última transacción vista,
+    // por eso se marca explícitamente como "aprox." en vez de "real".
+    if (pathname === '/api/usuarios-matriz') {
+      const usuarios = {};
+
+      if (supabase) {
+        const { data } = await supabase
+          .from('transacciones_novusbet')
+          .select('id_usuario_novusbet, usuario, casa_apuestas, monto, disciplina, juego, fecha')
+          .range(0, 49999);
+
+        if (data) {
+          const ahora = Date.now();
+          const UN_DIA = 24 * 60 * 60 * 1000;
+
+          data.forEach((t) => {
+            const id = t.id_usuario_novusbet || t.usuario || 'desconocido';
+            if (!usuarios[id]) {
+              usuarios[id] = {
+                id_usuario_novusbet: id,
+                usuario: t.usuario,
+                casa_apuestas: t.casa_apuestas,
+                transacciones: 0,
+                monto_total: 0,
+                disciplinas: new Set(),
+                juegos: new Set(),
+                ultima_actividad: null,
+              };
+            }
+            const u = usuarios[id];
+            u.transacciones += 1;
+            u.monto_total += t.monto || 0;
+            if (t.disciplina) u.disciplinas.add(t.disciplina);
+            if (t.juego) u.juegos.add(t.juego);
+            if (t.fecha && (!u.ultima_actividad || new Date(t.fecha) > new Date(u.ultima_actividad))) {
+              u.ultima_actividad = t.fecha;
+            }
+          });
+
+          Object.values(usuarios).forEach((u) => {
+            u.disciplinas = Array.from(u.disciplinas);
+            u.juegos = Array.from(u.juegos);
+            const antiguedadMs = u.ultima_actividad ? ahora - new Date(u.ultima_actividad).getTime() : Infinity;
+            // Estimado, no el estado real de cuenta de Novusbet
+            u.estado_actividad_aprox = antiguedadMs <= UN_DIA ? 'activo_aprox' : antiguedadMs <= 3 * UN_DIA ? 'reciente_aprox' : 'inactivo_aprox';
+          });
+        }
+      }
+
+      const lista = Object.values(usuarios).sort((a, b) => new Date(b.ultima_actividad || 0) - new Date(a.ultima_actividad || 0));
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(lista));
+      return;
+    }
+
     // DESCARGAR: CSV de Usuarios
     if (pathname === '/download/usuarios.csv') {
       let usuarios;
