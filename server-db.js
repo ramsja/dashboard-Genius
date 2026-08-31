@@ -772,27 +772,88 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // API: RANKING DE JUGADORES (últimos N meses, default 6). Se arma con
-    // obtener_ranking_jugadores(), una función SQL que suma
-    // resumen_diario_usuarios (liviana, se llena día a día en cada
-    // sincronización) directo en la base — no hace falta traer millones
-    // de filas del historial crudo a la app para esto.
+    // API: RANKING DE JUGADORES. Combina ranking_historico_base (importado
+    // una sola vez desde un reporte que Novusbet ya trae agregado por
+    // jugador — liviano, ~4-5k filas) con lo que se va acumulando día a
+    // día en resumen_diario_usuarios desde que arrancó este seguimiento.
+    // Ninguna de las dos consulta el detalle crudo de transacciones.
     if (pathname === '/api/ranking-jugadores') {
-      const meses = Math.min(Math.max(parseInt(parsedUrl.query.meses, 10) || 6, 1), 24);
-      let ranking = [];
+      const limit = Math.min(Math.max(parseInt(parsedUrl.query.limit, 10) || 25, 1), 200);
+      const porUsuario = {};
 
       if (supabase) {
         try {
-          const { data, error } = await supabase.rpc('obtener_ranking_jugadores', { meses });
-          if (error) throw error;
-          ranking = data || [];
+          const base = await fetchTodasLasFilas(
+            'ranking_historico_base',
+            'id_usuario_novusbet, usuario, casa_apuestas, apuestas, apostado, ganado'
+          );
+          base.forEach((b) => {
+            porUsuario[b.id_usuario_novusbet] = {
+              id_usuario_novusbet: b.id_usuario_novusbet,
+              usuario: b.usuario,
+              casa_apuestas: b.casa_apuestas,
+              transacciones: 0,
+              apuestas: b.apuestas || 0,
+              monto_total: 0,
+              apostado: Number(b.apostado) || 0,
+              ganado: Number(b.ganado) || 0,
+              juegos: new Set(),
+              dias_activo: 0,
+              ultima_actividad: null,
+            };
+          });
         } catch (e) {
-          // resumen_diario_usuarios / obtener_ranking_jugadores puede no existir todavía
+          // ranking_historico_base puede no existir todavía (no se importó el CSV)
+        }
+
+        try {
+          const diario = await fetchTodasLasFilas(
+            'resumen_diario_usuarios',
+            'id_usuario_novusbet, usuario, casa_apuestas, dia, transacciones, apuestas, monto_total, apostado, ganado, juegos, ultima_actividad'
+          );
+          diario.forEach((d) => {
+            const id = d.id_usuario_novusbet;
+            if (!porUsuario[id]) {
+              porUsuario[id] = {
+                id_usuario_novusbet: id,
+                usuario: d.usuario,
+                casa_apuestas: d.casa_apuestas,
+                transacciones: 0,
+                apuestas: 0,
+                monto_total: 0,
+                apostado: 0,
+                ganado: 0,
+                juegos: new Set(),
+                dias_activo: 0,
+                ultima_actividad: null,
+              };
+            }
+            const u = porUsuario[id];
+            u.transacciones += d.transacciones || 0;
+            u.apuestas += d.apuestas || 0;
+            u.monto_total += Number(d.monto_total) || 0;
+            u.apostado += Number(d.apostado) || 0;
+            u.ganado += Number(d.ganado) || 0;
+            (d.juegos || []).forEach((j) => u.juegos.add(j));
+            u.dias_activo += 1;
+            if (!u.usuario) u.usuario = d.usuario;
+            if (!u.casa_apuestas) u.casa_apuestas = d.casa_apuestas;
+            if (d.ultima_actividad && (!u.ultima_actividad || new Date(d.ultima_actividad) > new Date(u.ultima_actividad))) {
+              u.ultima_actividad = d.ultima_actividad;
+            }
+          });
+        } catch (e) {
+          // resumen_diario_usuarios puede no existir todavía
         }
       }
 
+      const ranking = Object.values(porUsuario)
+        .map((u) => ({ ...u, juegos: Array.from(u.juegos), beneficio: u.apostado - u.ganado }))
+        .sort((a, b) => b.apostado - a.apostado)
+        .slice(0, limit);
+
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ meses, ranking }));
+      res.end(JSON.stringify({ ranking }));
       return;
     }
 

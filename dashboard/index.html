@@ -204,14 +204,14 @@
                 </div>
             </div>
 
-            <!-- Ranking de jugadores (acumulado mes a mes) -->
+            <!-- Ranking de jugadores (base histórica importada + acumulado día a día) -->
             <div class="section" style="grid-column: 1 / -1;">
                 <div class="section-header">
-                    <h2>🏆 Top Jugadores (últimos 6 meses)</h2>
+                    <h2>🏆 Top 25 Jugadores</h2>
                 </div>
                 <div class="section-content">
                     <p style="font-size:12px; color:#999; margin-bottom:12px;">
-                        Ranking acumulado mes a mes desde que se activó este seguimiento — no incluye historial anterior a esa fecha. Solo se muestran usuarios con actividad en más de un mes.
+                        Combina la base histórica importada desde el reporte de Novusbet con lo que se sigue acumulando automáticamente día a día desde que arrancó este seguimiento.
                         "Beneficio" es desde el lado de la casa: apostado menos ganado (positivo = ganancia para la casa, negativo = el jugador ganó más de lo que apostó).
                     </p>
                     <table>
@@ -226,7 +226,7 @@
                                 <th>Apostado</th>
                                 <th>Ganado</th>
                                 <th>Beneficio</th>
-                                <th>Meses Activo</th>
+                                <th>Días activo (seguimiento)</th>
                                 <th>Última Actividad</th>
                             </tr>
                         </thead>
@@ -425,7 +425,7 @@
                     fetchJSON('/api/disciplinas').catch(() => []),
                     fetchJSON('/api/transacciones-resumen').catch(() => null),
                     fetchJSON('/api/usuarios-matriz').catch(() => []),
-                    fetchJSON('/api/ranking-jugadores').catch(() => ({ ranking: [] })),
+                    fetchJSON('/api/ranking-jugadores?limit=25').catch(() => ({ ranking: [] })),
                     fetchJSON('/api/alertas-apuestas').catch(() => []),
                     fetchJSON('/api/alertas-ganancias').catch(() => [])
                 ]);
@@ -456,7 +456,7 @@
 
         function actualizarRankingJugadores() {
             const filas = datos.rankingJugadores || [];
-            const html = filas.slice(0, 50).map((u, i) => {
+            const html = filas.slice(0, 25).map((u, i) => {
                 const juegos = u.juegos || [];
                 const juegosTexto = juegos.length > 3
                     ? `${juegos.slice(0, 3).join(', ')} +${juegos.length - 3}`
@@ -473,12 +473,12 @@
                     <td class="numero">$${(u.apostado || 0).toFixed(2)}</td>
                     <td class="numero">$${(u.ganado || 0).toFixed(2)}</td>
                     <td class="numero" style="color:${beneficio >= 0 ? '#155724' : '#c0392b'}; font-weight:600;">$${beneficio.toFixed(2)}</td>
-                    <td class="numero">${u.meses_activo}</td>
+                    <td class="numero">${u.dias_activo || 0}</td>
                     <td>${u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '-'}</td>
                 </tr>
             `;
             }).join('');
-            document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="11" class="loading">Todavía sin datos — se va acumulando mes a mes</td></tr>';
+            document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="11" class="loading">Todavía sin datos</td></tr>';
         }
 
         function textoMotivoAlerta(motivo) {
