@@ -487,6 +487,18 @@
             document.getElementById('tabla-juegos').innerHTML = html || '<tr><td colspan="3" class="loading">Sin datos</td></tr>';
         }
 
+        // Registro de instancias de Chart.js para poder destruirlas antes de
+        // volver a dibujar (evita el error "Canvas is already in use" y
+        // gráficos que quedan en blanco después del primer auto-refresh)
+        const chartInstances = {};
+        function dibujarChart(canvasId, config) {
+            if (chartInstances[canvasId]) {
+                chartInstances[canvasId].destroy();
+            }
+            const ctx = document.getElementById(canvasId);
+            chartInstances[canvasId] = new Chart(ctx, config);
+        }
+
         function actualizarGraficos() {
             // Disciplinas (usa el resumen agregado sobre TODAS las filas si existe)
             let discData = {};
@@ -499,17 +511,7 @@
                 });
             }
 
-            try {
-                document.getElementById('chartDisciplinas').parentElement.replaceChild(
-                    document.createElement('canvas'),
-                    document.getElementById('chartDisciplinas')
-                );
-                const nc1 = document.createElement('canvas');
-                nc1.id = 'chartDisciplinas';
-                document.getElementById('chartDisciplinas').parentElement.appendChild(nc1);
-            } catch (e) {}
-
-            new Chart(document.getElementById('chartDisciplinas'), {
+            dibujarChart('chartDisciplinas', {
                 type: 'doughnut',
                 data: {
                     labels: Object.keys(discData),
@@ -525,7 +527,7 @@
             });
             const top5 = Object.entries(usrMonto).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
-            new Chart(document.getElementById('chartTopUsuarios'), {
+            dibujarChart('chartTopUsuarios', {
                 type: 'bar',
                 data: {
                     labels: top5.map(u => u[0].substring(0, 12)),
@@ -542,7 +544,7 @@
             });
             const top8 = Object.entries(juegos).sort((a, b) => b[1] - a[1]).slice(0, 8);
 
-            new Chart(document.getElementById('chartJuegos'), {
+            dibujarChart('chartJuegos', {
                 type: 'bar',
                 data: {
                     labels: top8.map(j => j[0].substring(0, 12)),
@@ -558,7 +560,7 @@
                 tipo[t] = (tipo[t] || 0) + 1;
             });
 
-            new Chart(document.getElementById('chartTipologia'), {
+            dibujarChart('chartTipologia', {
                 type: 'pie',
                 data: {
                     labels: Object.keys(tipo),
