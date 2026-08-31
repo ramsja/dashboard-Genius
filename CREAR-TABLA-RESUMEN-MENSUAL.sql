@@ -36,9 +36,11 @@ ALTER TABLE resumen_mensual_usuarios ADD COLUMN IF NOT EXISTS ganado NUMERIC(15,
 CREATE INDEX IF NOT EXISTS idx_resumen_mensual_mes ON resumen_mensual_usuarios(mes);
 CREATE INDEX IF NOT EXISTS idx_resumen_mensual_monto ON resumen_mensual_usuarios(monto_total DESC);
 
--- Función que recalcula el resumen de los últimos ~35 días agrupado
--- por usuario y mes. Se llama sola después de cada sincronización.
-CREATE OR REPLACE FUNCTION actualizar_resumen_mensual_usuarios()
+-- Función que recalcula el resumen de los últimos N días agrupado por
+-- usuario y mes (parametrizable: en cada sync la app pide solo unos
+-- pocos días hacia atrás, para no escanear millones de filas cada vez;
+-- la primera carga histórica se hace aparte con más días, ver abajo).
+CREATE OR REPLACE FUNCTION actualizar_resumen_mensual_usuarios(dias_atras INT DEFAULT 7)
 RETURNS void AS $$
 BEGIN
   INSERT INTO resumen_mensual_usuarios (
@@ -60,7 +62,7 @@ BEGIN
     MAX(fecha) AS ultima_actividad,
     NOW() AS actualizado_at
   FROM transacciones_novusbet
-  WHERE fecha >= (NOW() - INTERVAL '35 days')
+  WHERE fecha >= (NOW() - (dias_atras || ' days')::interval)
     AND id_usuario_novusbet IS NOT NULL
     AND id_usuario_novusbet <> ''
   GROUP BY id_usuario_novusbet, to_char(fecha, 'YYYY-MM')
@@ -78,9 +80,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Primera corrida manual (opcional, para no esperar al próximo sync)
-SELECT actualizar_resumen_mensual_usuarios();
+-- No corre la primera carga acá — con el volumen actual (80k-100k+
+-- transacciones/día) recalcular varios días de una sola vez puede
+-- superar el timeout del editor de Supabase. Corré
+-- CARGAR-RESUMEN-MENSUAL-INICIAL.sql aparte, un día a la vez.
 
--- Verificación
+-- Verificación (esto sí es rápido, solo cuenta filas)
 SELECT count(*) AS filas, min(mes) AS mes_mas_viejo, max(mes) AS mes_mas_nuevo
 FROM resumen_mensual_usuarios;

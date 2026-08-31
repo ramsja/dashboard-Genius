@@ -511,7 +511,7 @@ async function guardarAlertasApuestas(formattedRecords) {
 async function actualizarResumenMensual() {
   if (!supabase) return;
   try {
-    const { error } = await supabase.rpc('actualizar_resumen_mensual_usuarios');
+    const { error } = await supabase.rpc('actualizar_resumen_mensual_usuarios', { dias_atras: 5 });
     if (error) throw error;
     console.log('📊 Resumen mensual de usuarios actualizado');
   } catch (e) {
