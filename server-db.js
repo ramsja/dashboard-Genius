@@ -216,9 +216,10 @@ async function cargarDatosAutomatico() {
 
   try {
     console.log('📝 Sincronizando datos REALES desde Novusbet...');
-    const { main: sincronizarNovusbet, actualizarResumenMensual } = require('./sync-novusbet');
+    const { main: sincronizarNovusbet, actualizarResumenDiario, podarTransaccionesDelDia, END_DATE } = require('./sync-novusbet');
     const total = await sincronizarNovusbet();
-    await actualizarResumenMensual();
+    await actualizarResumenDiario(END_DATE);
+    await podarTransaccionesDelDia(END_DATE);
     console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
     syncStatus.estado = 'completado';
     syncStatus.fin = new Date().toISOString();
@@ -546,7 +547,9 @@ const server = http.createServer(async (req, res) => {
         let dias = 7;
         try {
           const parsed = JSON.parse(body || '{}');
-          dias = Math.min(Math.max(parseInt(parsed.dias, 10) || 7, 1), 90);
+          // Hasta ~200 días (~6.5 meses) para poder traer el histórico
+          // completo de 6 meses pedido para el ranking de jugadores.
+          dias = Math.min(Math.max(parseInt(parsed.dias, 10) || 7, 1), 200);
         } catch (e) {}
 
         if (syncStatus.estado === 'sincronizando') {
@@ -559,11 +562,13 @@ const server = http.createServer(async (req, res) => {
         syncStatus.inicio = new Date().toISOString();
         syncStatus.mensaje = `Sincronizando histórico de ${dias} días...`;
 
-        const { syncHistorico, actualizarResumenMensual } = require('./sync-novusbet');
+        const { syncHistorico } = require('./sync-novusbet');
+        // El resumen diario (para el ranking) y la poda del detalle viejo
+        // ya se hacen adentro de syncHistorico, día por día, a medida que
+        // avanza — no hace falta un paso aparte al final.
         syncHistorico(dias, (progreso) => {
           syncStatus.mensaje = `Histórico: día ${progreso.diasProcesados}/${progreso.diasTotal} (${progreso.totalGeneral} transacciones)`;
         }).then(async (resultado) => {
-          await actualizarResumenMensual();
           syncStatus.estado = 'completado';
           syncStatus.fin = new Date().toISOString();
           syncStatus.filas = resultado.totalGeneral;
@@ -742,62 +747,22 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // API: RANKING DE JUGADORES (últimos N meses, default 6). Se arma sobre
-    // resumen_mensual_usuarios, una tabla liviana que se recalcula sola en
-    // cada sincronización — no hace falta escanear el historial crudo
-    // completo de transacciones_novusbet para esto.
+    // API: RANKING DE JUGADORES (últimos N meses, default 6). Se arma con
+    // obtener_ranking_jugadores(), una función SQL que suma
+    // resumen_diario_usuarios (liviana, se llena día a día en cada
+    // sincronización) directo en la base — no hace falta traer millones
+    // de filas del historial crudo a la app para esto.
     if (pathname === '/api/ranking-jugadores') {
       const meses = Math.min(Math.max(parseInt(parsedUrl.query.meses, 10) || 6, 1), 24);
       let ranking = [];
 
       if (supabase) {
         try {
-          const desde = new Date();
-          desde.setMonth(desde.getMonth() - meses);
-          const desdeMes = desde.toISOString().slice(0, 7); // 'YYYY-MM'
-
-          const filas = await fetchTodasLasFilas(
-            'resumen_mensual_usuarios',
-            'id_usuario_novusbet, usuario, casa_apuestas, mes, transacciones, apuestas, monto_total, juegos, apostado, ganado, ultima_actividad'
-          );
-
-          const porUsuario = {};
-          filas.filter((f) => f.mes >= desdeMes).forEach((f) => {
-            const id = f.id_usuario_novusbet;
-            if (!porUsuario[id]) {
-              porUsuario[id] = {
-                id_usuario_novusbet: id,
-                usuario: f.usuario,
-                casa_apuestas: f.casa_apuestas,
-                transacciones: 0,
-                apuestas: 0,
-                monto_total: 0,
-                juegos: new Set(),
-                apostado: 0,
-                ganado: 0,
-                meses_activo: 0,
-                ultima_actividad: null,
-              };
-            }
-            const u = porUsuario[id];
-            u.transacciones += f.transacciones || 0;
-            u.apuestas += f.apuestas || 0;
-            u.monto_total += Number(f.monto_total) || 0;
-            u.apostado += Number(f.apostado) || 0;
-            u.ganado += Number(f.ganado) || 0;
-            (f.juegos || []).forEach((j) => u.juegos.add(j));
-            u.meses_activo += 1;
-            if (f.ultima_actividad && (!u.ultima_actividad || new Date(f.ultima_actividad) > new Date(u.ultima_actividad))) {
-              u.ultima_actividad = f.ultima_actividad;
-            }
-          });
-
-          ranking = Object.values(porUsuario)
-            .filter((u) => u.meses_activo > 1) // solo jugadores con actividad en más de un mes
-            .map((u) => ({ ...u, juegos: Array.from(u.juegos), beneficio: u.apostado - u.ganado }))
-            .sort((a, b) => b.monto_total - a.monto_total);
+          const { data, error } = await supabase.rpc('obtener_ranking_jugadores', { meses });
+          if (error) throw error;
+          ranking = data || [];
         } catch (e) {
-          // resumen_mensual_usuarios puede no existir todavía
+          // resumen_diario_usuarios / obtener_ranking_jugadores puede no existir todavía
         }
       }
 

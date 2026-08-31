@@ -506,16 +506,46 @@ async function guardarAlertasApuestas(formattedRecords) {
   }
 }
 
-// Recalcula el ranking mensual de usuarios (tabla resumen_mensual_usuarios,
-// ver CREAR-TABLA-RESUMEN-MENSUAL.sql). No crítico, no debe tirar el sync.
-async function actualizarResumenMensual() {
+// Recalcula el resumen DIARIO de un solo día (tabla
+// resumen_diario_usuarios, ver CREAR-RESUMEN-DIARIO-Y-RANKING.sql).
+// Rápido porque escanea un solo día, y seguro de repetir (sobreescribe,
+// no suma). No crítico, no debe tirar el sync si falla.
+async function actualizarResumenDiario(fechaStr) {
   if (!supabase) return;
   try {
-    const { error } = await supabase.rpc('actualizar_resumen_mensual_usuarios', { dias_atras: 5 });
+    const { error } = await supabase.rpc('actualizar_resumen_diario_usuarios', {
+      fecha_desde: fechaStr,
+      fecha_hasta: fechaStr,
+    });
     if (error) throw error;
-    console.log('📊 Resumen mensual de usuarios actualizado');
   } catch (e) {
-    console.log('⚠️ No se pudo actualizar el resumen mensual:', e.message);
+    console.log(`⚠️ No se pudo actualizar el resumen diario de ${fechaStr}:`, e.message);
+  }
+}
+
+// Retención del detalle crudo de transacciones_novusbet: más allá de
+// este límite, ya sirvió para alimentar el resumen diario/ranking, así
+// que se borra para no acumular millones de filas en un plan gratuito
+// de Supabase. Ajustable: fly secrets set RETENCION_TRANSACCIONES_DIAS=90
+const RETENCION_TRANSACCIONES_DIAS = parseInt(process.env.RETENCION_TRANSACCIONES_DIAS || '60', 10);
+
+// Borra el detalle crudo de un día si ya quedó fuera de la ventana de
+// retención. Se llama DESPUÉS de actualizarResumenDiario(), nunca antes.
+async function podarTransaccionesDelDia(fechaStr) {
+  if (!supabase) return;
+  const antiguedadDias = Math.floor((Date.now() - new Date(fechaStr).getTime()) / (24 * 60 * 60 * 1000));
+  if (antiguedadDias <= RETENCION_TRANSACCIONES_DIAS) return;
+
+  try {
+    const { error } = await supabase
+      .from('transacciones_novusbet')
+      .delete()
+      .gte('fecha', `${fechaStr}T00:00:00`)
+      .lte('fecha', `${fechaStr}T23:59:59`);
+    if (error) throw error;
+    console.log(`🧹 Detalle crudo de ${fechaStr} podado (ya resumido, fuera de los ${RETENCION_TRANSACCIONES_DIAS} días de retención)`);
+  } catch (e) {
+    console.log(`⚠️ No se pudo podar ${fechaStr}:`, e.message);
   }
 }
 
@@ -603,6 +633,8 @@ async function syncHistorico(dias, onProgreso) {
       const total = await sincronizarRango(fechaStr, fechaStr);
       totalGeneral += total;
       resultadosPorDia.push({ fecha: fechaStr, transacciones: total, ok: true });
+      await actualizarResumenDiario(fechaStr);
+      await podarTransaccionesDelDia(fechaStr);
     } catch (err) {
       console.error(`❌ Error sincronizando ${fechaStr}:`, err.message);
       resultadosPorDia.push({ fecha: fechaStr, error: err.message, ok: false });
@@ -766,4 +798,7 @@ if (require.main === module) {
   main().catch(() => process.exit(1));
 }
 
-module.exports = { main, syncHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML, actualizarResumenMensual };
+module.exports = {
+  main, syncHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML,
+  actualizarResumenDiario, podarTransaccionesDelDia, END_DATE,
+};
