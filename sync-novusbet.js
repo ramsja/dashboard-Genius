@@ -615,21 +615,30 @@ async function main() {
 // días de una sola pasada nunca termina de exportar en Novusbet (~30-35k
 // transacciones/día hacen que la exportación se cuelgue). Cada día usa
 // upsert por id_transaccion_novusbet, así que reintentar no duplica nada.
-async function syncHistorico(dias, onProgreso) {
+// Recorre un rango de fechas EXACTO, día por día (ambos extremos
+// incluidos), sincronizando cada uno por separado — igual razón que
+// arriba: un rango de varios días de una sola pasada nunca termina de
+// exportar en Novusbet. Es la base tanto de "traer N días" como de
+// "traer desde tal fecha hasta tal otra".
+async function syncRangoHistorico(fechaDesdeStr, fechaHastaStr, onProgreso) {
   if (!BO_USERNAME || !BO_PASSWORD) {
     throw new Error('Faltan BO_USERNAME o BO_PASSWORD');
   }
 
-  const hoy = new Date();
+  const fechaDesde = new Date(`${fechaDesdeStr}T00:00:00Z`);
+  const fechaHasta = new Date(`${fechaHastaStr}T00:00:00Z`);
+  const diasTotal = Math.round((fechaHasta - fechaDesde) / (24 * 60 * 60 * 1000)) + 1;
+
   let totalGeneral = 0;
+  let diasProcesados = 0;
   const resultadosPorDia = [];
 
-  for (let i = dias - 1; i >= 0; i--) {
-    const fecha = new Date(hoy.getTime() - i * 24 * 60 * 60 * 1000);
-    const fechaStr = fecha.toISOString().split('T')[0];
+  for (let t = fechaDesde.getTime(); t <= fechaHasta.getTime(); t += 24 * 60 * 60 * 1000) {
+    const fechaStr = new Date(t).toISOString().split('T')[0];
+    diasProcesados += 1;
 
     try {
-      console.log(`\n📅 Sincronizando día ${fechaStr} (${dias - i}/${dias})...`);
+      console.log(`\n📅 Sincronizando día ${fechaStr} (${diasProcesados}/${diasTotal})...`);
       const total = await sincronizarRango(fechaStr, fechaStr);
       totalGeneral += total;
       resultadosPorDia.push({ fecha: fechaStr, transacciones: total, ok: true });
@@ -640,13 +649,20 @@ async function syncHistorico(dias, onProgreso) {
       resultadosPorDia.push({ fecha: fechaStr, error: err.message, ok: false });
     }
 
-    if (onProgreso) onProgreso({ diasProcesados: dias - i, diasTotal: dias, totalGeneral, resultadosPorDia });
+    if (onProgreso) onProgreso({ diasProcesados, diasTotal, totalGeneral, resultadosPorDia });
 
     // Pequeña pausa entre días para no saturar el backoffice de Novusbet
-    if (i > 0) await new Promise((r) => setTimeout(r, 2000));
+    if (t < fechaHasta.getTime()) await new Promise((r) => setTimeout(r, 2000));
   }
 
   return { totalGeneral, resultadosPorDia };
+}
+
+// Atajo: trae los últimos `dias` días hasta hoy.
+async function syncHistorico(dias, onProgreso) {
+  const hoy = new Date().toISOString().split('T')[0];
+  const desde = new Date(Date.now() - (dias - 1) * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  return syncRangoHistorico(desde, hoy, onProgreso);
 }
 
 // ============================================================
@@ -799,6 +815,6 @@ if (require.main === module) {
 }
 
 module.exports = {
-  main, syncHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML,
+  main, syncHistorico, syncRangoHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML,
   actualizarResumenDiario, podarTransaccionesDelDia, END_DATE,
 };

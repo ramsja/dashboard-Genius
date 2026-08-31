@@ -539,18 +539,39 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // API: DISPARAR SINCRONIZACIÓN HISTÓRICA (día por día, hasta N días atrás)
+    // API: DISPARAR SINCRONIZACIÓN HISTÓRICA (día por día). Acepta {dias} o,
+    // para pedir un rango exacto de calendario (ej. marzo a agosto),
+    // {desde, hasta} en formato YYYY-MM-DD.
     if (pathname === '/api/admin/sync-historico' && req.method === 'POST') {
       let body = '';
       req.on('data', (chunk) => (body += chunk));
       req.on('end', () => {
-        let dias = 7;
+        const FECHA_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+        let desde, hasta, etiqueta;
         try {
           const parsed = JSON.parse(body || '{}');
-          // Hasta ~200 días (~6.5 meses) para poder traer el histórico
-          // completo de 6 meses pedido para el ranking de jugadores.
-          dias = Math.min(Math.max(parseInt(parsed.dias, 10) || 7, 1), 200);
-        } catch (e) {}
+          if (FECHA_REGEX.test(parsed.desde) && FECHA_REGEX.test(parsed.hasta) && parsed.desde <= parsed.hasta) {
+            desde = parsed.desde;
+            hasta = parsed.hasta;
+          } else {
+            // Hasta ~200 días (~6.5 meses) para poder traer el histórico
+            // completo de 6 meses pedido para el ranking de jugadores.
+            const dias = Math.min(Math.max(parseInt(parsed.dias, 10) || 7, 1), 200);
+            hasta = new Date().toISOString().split('T')[0];
+            desde = new Date(Date.now() - (dias - 1) * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+          }
+          // Tope de seguridad: no más de ~210 días en una sola corrida,
+          // aunque hayan pedido un rango de fechas explícito muy amplio.
+          const totalDias = Math.round((new Date(hasta) - new Date(desde)) / 86400000) + 1;
+          if (totalDias > 210) {
+            desde = new Date(new Date(hasta).getTime() - 209 * 86400000).toISOString().split('T')[0];
+          }
+          etiqueta = `${desde} a ${hasta}`;
+        } catch (e) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Solicitud inválida' }));
+          return;
+        }
 
         if (syncStatus.estado === 'sincronizando') {
           res.writeHead(409, { 'Content-Type': 'application/json' });
@@ -560,19 +581,19 @@ const server = http.createServer(async (req, res) => {
 
         syncStatus.estado = 'sincronizando';
         syncStatus.inicio = new Date().toISOString();
-        syncStatus.mensaje = `Sincronizando histórico de ${dias} días...`;
+        syncStatus.mensaje = `Sincronizando histórico ${etiqueta}...`;
 
-        const { syncHistorico } = require('./sync-novusbet');
+        const { syncRangoHistorico } = require('./sync-novusbet');
         // El resumen diario (para el ranking) y la poda del detalle viejo
-        // ya se hacen adentro de syncHistorico, día por día, a medida que
-        // avanza — no hace falta un paso aparte al final.
-        syncHistorico(dias, (progreso) => {
-          syncStatus.mensaje = `Histórico: día ${progreso.diasProcesados}/${progreso.diasTotal} (${progreso.totalGeneral} transacciones)`;
+        // ya se hacen adentro, día por día, a medida que avanza — no hace
+        // falta un paso aparte al final.
+        syncRangoHistorico(desde, hasta, (progreso) => {
+          syncStatus.mensaje = `Histórico ${etiqueta}: día ${progreso.diasProcesados}/${progreso.diasTotal} (${progreso.totalGeneral} transacciones)`;
         }).then(async (resultado) => {
           syncStatus.estado = 'completado';
           syncStatus.fin = new Date().toISOString();
           syncStatus.filas = resultado.totalGeneral;
-          syncStatus.mensaje = `Histórico completado: ${dias} días, ${resultado.totalGeneral} transacciones`;
+          syncStatus.mensaje = `Histórico completado (${etiqueta}): ${resultado.totalGeneral} transacciones`;
         }).catch((err) => {
           syncStatus.estado = 'error';
           syncStatus.fin = new Date().toISOString();
@@ -580,7 +601,7 @@ const server = http.createServer(async (req, res) => {
         });
 
         res.writeHead(202, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ ok: true, mensaje: `Sincronización histórica de ${dias} días iniciada en segundo plano` }));
+        res.end(JSON.stringify({ ok: true, mensaje: `Sincronización histórica (${etiqueta}) iniciada en segundo plano` }));
       });
       return;
     }

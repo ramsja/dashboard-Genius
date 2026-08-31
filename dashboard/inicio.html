@@ -139,7 +139,11 @@
                         <button onclick="aplicarFiltroFechas()" style="padding:7px 14px; background:#667eea; color:white; border:none; border-radius:4px; cursor:pointer;">Filtrar</button>
                         <span style="flex:1"></span>
                         <label>Días a traer de Novusbet <input type="number" id="dias-historico" value="7" min="1" max="200" style="width:60px; padding:6px; border:1px solid #ddd; border-radius:4px;"></label>
-                        <button id="btn-sync-historico" onclick="sincronizarHistorico()" style="padding:7px 14px; background:#27ae60; color:white; border:none; border-radius:4px; cursor:pointer;">📅 Sincronizar histórico</button>
+                        <button id="btn-sync-historico" onclick="sincronizarHistorico()" style="padding:7px 14px; background:#27ae60; color:white; border:none; border-radius:4px; cursor:pointer;">📅 Sincronizar histórico (días)</button>
+                        <span style="flex:1"></span>
+                        <label>O rango exacto: Desde <input type="date" id="sync-rango-desde" style="padding:6px; border:1px solid #ddd; border-radius:4px;"></label>
+                        <label>Hasta <input type="date" id="sync-rango-hasta" style="padding:6px; border:1px solid #ddd; border-radius:4px;"></label>
+                        <button id="btn-sync-rango" onclick="sincronizarRangoExacto()" style="padding:7px 14px; background:#27ae60; color:white; border:none; border-radius:4px; cursor:pointer;">📅 Sincronizar rango</button>
                     </div>
                     <table>
                         <thead>
@@ -613,7 +617,33 @@
                 alert('Error iniciando sincronización histórica');
             } finally {
                 btn.disabled = false;
-                btn.textContent = '📅 Sincronizar histórico';
+                btn.textContent = '📅 Sincronizar histórico (días)';
+            }
+        }
+
+        async function sincronizarRangoExacto() {
+            const desde = document.getElementById('sync-rango-desde').value;
+            const hasta = document.getElementById('sync-rango-hasta').value;
+            if (!desde || !hasta) {
+                alert('Elegí las dos fechas (Desde y Hasta)');
+                return;
+            }
+            const btn = document.getElementById('btn-sync-rango');
+            btn.disabled = true;
+            btn.textContent = 'Iniciando...';
+            try {
+                const res = await fetch('/api/admin/sync-historico', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ desde, hasta })
+                });
+                const data = await res.json();
+                alert(data.mensaje || data.error || 'Sincronización iniciada');
+            } catch (e) {
+                alert('Error iniciando sincronización del rango');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '📅 Sincronizar rango';
             }
         }
 
