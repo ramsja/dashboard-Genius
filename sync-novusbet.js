@@ -697,8 +697,10 @@ async function actualizarResumenDiario(fechaStr) {
 // Retención del detalle crudo de transacciones_novusbet: más allá de
 // este límite, ya sirvió para alimentar el resumen diario/ranking, así
 // que se borra para no acumular millones de filas en un plan gratuito
-// de Supabase. Ajustable: fly secrets set RETENCION_TRANSACCIONES_DIAS=90
-const RETENCION_TRANSACCIONES_DIAS = parseInt(process.env.RETENCION_TRANSACCIONES_DIAS || '60', 10);
+// de Supabase (el proyecto ya llegó a "exhausting multiple resources"
+// con retención de 60 días). Bajado a 21 días por defecto para achicar
+// la tabla y aliviar la carga. Ajustable: fly secrets set RETENCION_TRANSACCIONES_DIAS=30
+const RETENCION_TRANSACCIONES_DIAS = parseInt(process.env.RETENCION_TRANSACCIONES_DIAS || '21', 10);
 
 // Borra el detalle crudo de un día si ya quedó fuera de la ventana de
 // retención. Se llama DESPUÉS de actualizarResumenDiario(), nunca antes.

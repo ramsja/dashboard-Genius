@@ -271,12 +271,12 @@ async function sincronizarUsuariosAutomatico() {
 }
 
 // Re-sincroniza periódicamente para mantener datos reales frescos.
-// Cada sync completa toma ~1 minuto para ~22-35k transacciones del día,
-// así que cada 30 min por defecto es razonable para sentirse "en tiempo
-// real" sin saturar el backoffice de Novusbet. Ajustable con
-// SYNC_INTERVAL_MINUTES en las variables de entorno.
+// Con el plan gratuito de Supabase ya viendo el proyecto "exhausting
+// multiple resources" a este volumen (80k-100k+ transacciones/día),
+// 60 min por defecto (antes 30) le da más margen a la base entre
+// sincronizaciones. Ajustable con SYNC_INTERVAL_MINUTES.
 function programarResincronizacion() {
-  const minutos = parseInt(process.env.SYNC_INTERVAL_MINUTES || '30', 10);
+  const minutos = parseInt(process.env.SYNC_INTERVAL_MINUTES || '60', 10);
   const intervaloMs = minutos * 60 * 1000;
   setInterval(() => {
     console.log(`🔄 Re-sincronizando transacciones reales desde Novusbet (cada ${minutos} min)...`);
@@ -556,17 +556,19 @@ const server = http.createServer(async (req, res) => {
             desde = parsed.desde;
             hasta = parsed.hasta;
           } else {
-            // Hasta ~200 días (~6.5 meses) para poder traer el histórico
-            // completo de 6 meses pedido para el ranking de jugadores.
-            const dias = Math.min(Math.max(parseInt(parsed.dias, 10) || 7, 1), 200);
+            // Tope bajado a 30 días: con el plan gratuito de Supabase ya
+            // saturado ("exhausting multiple resources") a este volumen,
+            // un backfill largo puede volver a tumbarlo. Para historial
+            // más largo hace falta subir de plan primero.
+            const dias = Math.min(Math.max(parseInt(parsed.dias, 10) || 7, 1), 30);
             hasta = new Date().toISOString().split('T')[0];
             desde = new Date(Date.now() - (dias - 1) * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
           }
-          // Tope de seguridad: no más de ~210 días en una sola corrida,
-          // aunque hayan pedido un rango de fechas explícito muy amplio.
+          // Tope de seguridad: no más de 30 días en una sola corrida, aunque
+          // hayan pedido un rango de fechas explícito más amplio.
           const totalDias = Math.round((new Date(hasta) - new Date(desde)) / 86400000) + 1;
-          if (totalDias > 210) {
-            desde = new Date(new Date(hasta).getTime() - 209 * 86400000).toISOString().split('T')[0];
+          if (totalDias > 30) {
+            desde = new Date(new Date(hasta).getTime() - 29 * 86400000).toISOString().split('T')[0];
           }
           etiqueta = `${desde} a ${hasta}`;
         } catch (e) {
