@@ -59,6 +59,31 @@ function hashPassword(password, salt) {
   return crypto.scryptSync(password, salt, 64).toString('hex');
 }
 
+// Supabase/PostgREST tiene un tope de filas por respuesta (típicamente
+// 1000) sin importar qué .range() se pida explícitamente. Para agregados
+// que necesitan ver TODAS las filas (no solo una muestra), hay que paginar
+// en lotes hasta que una página vuelva vacía o incompleta.
+async function fetchTodasLasFilas(tabla, columnas, limiteMax = 100000) {
+  const LOTE = 1000;
+  let todas = [];
+  let offset = 0;
+
+  while (todas.length < limiteMax) {
+    const { data, error } = await supabase
+      .from(tabla)
+      .select(columnas)
+      .range(offset, offset + LOTE - 1);
+
+    if (error || !data || data.length === 0) break;
+
+    todas = todas.concat(data);
+    if (data.length < LOTE) break; // última página
+    offset += LOTE;
+  }
+
+  return todas;
+}
+
 function generarSessionId() {
   return crypto.randomBytes(24).toString('hex');
 }
@@ -497,10 +522,7 @@ const server = http.createServer(async (req, res) => {
       };
 
       if (supabase) {
-        const { data } = await supabase
-          .from('transacciones_novusbet')
-          .select('disciplina, estado_cliente, monto, usuario')
-          .range(0, 49999);
+        const data = await fetchTodasLasFilas('transacciones_novusbet', 'disciplina, estado_cliente, monto, usuario');
 
         if (data) {
           const usuariosSet = new Set();
@@ -538,10 +560,7 @@ const server = http.createServer(async (req, res) => {
       const usuarios = {};
 
       if (supabase) {
-        const { data } = await supabase
-          .from('transacciones_novusbet')
-          .select('id_usuario_novusbet, usuario, casa_apuestas, monto, disciplina, juego, fecha')
-          .range(0, 49999);
+        const data = await fetchTodasLasFilas('transacciones_novusbet', 'id_usuario_novusbet, usuario, casa_apuestas, monto, disciplina, juego, fecha');
 
         if (data) {
           const ahora = Date.now();
