@@ -33,6 +33,11 @@ const TIMEOUT = 120000;
 const MAX_EXPORT_ATTEMPTS = 200;
 const EXPORT_WAIT_SECONDS = 3;
 
+// Alerta de apuesta grande: cualquier apuesta (no depósito/retiro) cuyo
+// monto absoluto supere este umbral se guarda en alertas_apuestas.
+// Ajustable sin redeploy: fly secrets set UMBRAL_ALERTA_APUESTA=1000
+const UMBRAL_ALERTA_APUESTA = parseFloat(process.env.UMBRAL_ALERTA_APUESTA || '500');
+
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -335,6 +340,14 @@ const SUFIJOS_MOVIMIENTO = [
 ];
 const SUFIJOS_REGEX = new RegExp(`\\s+(${SUFIJOS_MOVIMIENTO.join('|')})\\s*$`, 'i');
 
+// Igual al esApuesta() del dashboard: distingue una apuesta real
+// (descripción/juego dice "Bet"/"Apuesta") de un depósito, retiro o
+// ganancia, que no deberían disparar alerta por monto alto.
+const APUESTA_REGEX = /\b(bet|apuesta)\b/i;
+function esApuesta(descripcion, juego) {
+  return APUESTA_REGEX.test(descripcion || juego || '');
+}
+
 function extraerJuego(record) {
   const descripcion = getField(record, 'descripción', 'descripcion', 'description');
   if (!descripcion) return '';
@@ -453,7 +466,57 @@ async function uploadToSupabase(records) {
   }
 
   console.log(`✅ ${inserted} registros cargados en Supabase${fallidos ? ` (⚠️ ${fallidos} descartados por errores repetidos)` : ''}`);
+
+  await guardarAlertasApuestas(formattedRecords);
+
   return inserted;
+}
+
+// Cualquier apuesta (no depósito/retiro/ganancia) con monto absoluto por
+// encima de UMBRAL_ALERTA_APUESTA queda registrada en alertas_apuestas.
+// No es crítico si falla, no debe tirar el resto de la sincronización.
+async function guardarAlertasApuestas(formattedRecords) {
+  if (!supabase) return;
+
+  const alertas = formattedRecords
+    .filter((r) => esApuesta(r.descripcion, r.juego) && Math.abs(r.monto) >= UMBRAL_ALERTA_APUESTA)
+    .map((r) => ({
+      id_transaccion_novusbet: r.id_transaccion_novusbet,
+      id_usuario_novusbet: r.id_usuario_novusbet,
+      usuario: r.usuario,
+      casa_apuestas: r.casa_apuestas,
+      monto: r.monto,
+      disciplina: r.disciplina,
+      juego: r.juego,
+      descripcion: r.descripcion,
+      fecha: r.fecha,
+      umbral_usado: UMBRAL_ALERTA_APUESTA,
+    }));
+
+  if (alertas.length === 0) return;
+
+  try {
+    const { error } = await supabase
+      .from('alertas_apuestas')
+      .upsert(alertas, { onConflict: 'id_transaccion_novusbet', ignoreDuplicates: true });
+    if (error) throw error;
+    console.log(`🚨 ${alertas.length} alertas de apuesta grande (>= $${UMBRAL_ALERTA_APUESTA})`);
+  } catch (e) {
+    console.log('⚠️ No se pudieron guardar las alertas de apuesta:', e.message);
+  }
+}
+
+// Recalcula el ranking mensual de usuarios (tabla resumen_mensual_usuarios,
+// ver CREAR-TABLA-RESUMEN-MENSUAL.sql). No crítico, no debe tirar el sync.
+async function actualizarResumenMensual() {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase.rpc('actualizar_resumen_mensual_usuarios');
+    if (error) throw error;
+    console.log('📊 Resumen mensual de usuarios actualizado');
+  } catch (e) {
+    console.log('⚠️ No se pudo actualizar el resumen mensual:', e.message);
+  }
 }
 
 // ============================================================
@@ -703,4 +766,4 @@ if (require.main === module) {
   main().catch(() => process.exit(1));
 }
 
-module.exports = { main, syncHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML };
+module.exports = { main, syncHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML, actualizarResumenMensual };

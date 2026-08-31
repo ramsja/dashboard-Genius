@@ -216,8 +216,9 @@ async function cargarDatosAutomatico() {
 
   try {
     console.log('📝 Sincronizando datos REALES desde Novusbet...');
-    const { main: sincronizarNovusbet } = require('./sync-novusbet');
+    const { main: sincronizarNovusbet, actualizarResumenMensual } = require('./sync-novusbet');
     const total = await sincronizarNovusbet();
+    await actualizarResumenMensual();
     console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
     syncStatus.estado = 'completado';
     syncStatus.fin = new Date().toISOString();
@@ -558,10 +559,11 @@ const server = http.createServer(async (req, res) => {
         syncStatus.inicio = new Date().toISOString();
         syncStatus.mensaje = `Sincronizando histórico de ${dias} días...`;
 
-        const { syncHistorico } = require('./sync-novusbet');
+        const { syncHistorico, actualizarResumenMensual } = require('./sync-novusbet');
         syncHistorico(dias, (progreso) => {
           syncStatus.mensaje = `Histórico: día ${progreso.diasProcesados}/${progreso.diasTotal} (${progreso.totalGeneral} transacciones)`;
-        }).then((resultado) => {
+        }).then(async (resultado) => {
+          await actualizarResumenMensual();
           syncStatus.estado = 'completado';
           syncStatus.fin = new Date().toISOString();
           syncStatus.filas = resultado.totalGeneral;
@@ -737,6 +739,83 @@ const server = http.createServer(async (req, res) => {
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(lista));
+      return;
+    }
+
+    // API: RANKING DE JUGADORES (últimos N meses, default 6). Se arma sobre
+    // resumen_mensual_usuarios, una tabla liviana que se recalcula sola en
+    // cada sincronización — no hace falta escanear el historial crudo
+    // completo de transacciones_novusbet para esto.
+    if (pathname === '/api/ranking-jugadores') {
+      const meses = Math.min(Math.max(parseInt(parsedUrl.query.meses, 10) || 6, 1), 24);
+      let ranking = [];
+
+      if (supabase) {
+        try {
+          const desde = new Date();
+          desde.setMonth(desde.getMonth() - meses);
+          const desdeMes = desde.toISOString().slice(0, 7); // 'YYYY-MM'
+
+          const filas = await fetchTodasLasFilas(
+            'resumen_mensual_usuarios',
+            'id_usuario_novusbet, usuario, casa_apuestas, mes, transacciones, monto_total, ultima_actividad'
+          );
+
+          const porUsuario = {};
+          filas.filter((f) => f.mes >= desdeMes).forEach((f) => {
+            const id = f.id_usuario_novusbet;
+            if (!porUsuario[id]) {
+              porUsuario[id] = {
+                id_usuario_novusbet: id,
+                usuario: f.usuario,
+                casa_apuestas: f.casa_apuestas,
+                transacciones: 0,
+                monto_total: 0,
+                meses_activo: 0,
+                ultima_actividad: null,
+              };
+            }
+            const u = porUsuario[id];
+            u.transacciones += f.transacciones || 0;
+            u.monto_total += Number(f.monto_total) || 0;
+            u.meses_activo += 1;
+            if (f.ultima_actividad && (!u.ultima_actividad || new Date(f.ultima_actividad) > new Date(u.ultima_actividad))) {
+              u.ultima_actividad = f.ultima_actividad;
+            }
+          });
+
+          ranking = Object.values(porUsuario).sort((a, b) => b.monto_total - a.monto_total);
+        } catch (e) {
+          // resumen_mensual_usuarios puede no existir todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ meses, ranking }));
+      return;
+    }
+
+    // API: ALERTAS DE APUESTAS GRANDES (monto por encima del umbral
+    // configurado, ver UMBRAL_ALERTA_APUESTA en sync-novusbet.js)
+    if (pathname === '/api/alertas-apuestas') {
+      const limit = Math.min(parseInt(parsedUrl.query.limit, 10) || 100, 1000);
+      let alertas = [];
+
+      if (supabase) {
+        try {
+          const { data } = await supabase
+            .from('alertas_apuestas')
+            .select('*')
+            .order('fecha', { ascending: false })
+            .limit(limit);
+          alertas = data || [];
+        } catch (e) {
+          // alertas_apuestas puede no existir todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(alertas));
       return;
     }
 

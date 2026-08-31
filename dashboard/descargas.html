@@ -200,6 +200,60 @@
                 </div>
             </div>
 
+            <!-- Ranking de jugadores (acumulado mes a mes) -->
+            <div class="section" style="grid-column: 1 / -1;">
+                <div class="section-header">
+                    <h2>🏆 Top Jugadores (últimos 6 meses)</h2>
+                </div>
+                <div class="section-content">
+                    <p style="font-size:12px; color:#999; margin-bottom:12px;">
+                        Ranking acumulado mes a mes desde que se activó este seguimiento — no incluye historial anterior a esa fecha.
+                    </p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>ID Usuario</th>
+                                <th>Usuario</th>
+                                <th>Casa</th>
+                                <th>Transacciones</th>
+                                <th>Monto Total</th>
+                                <th>Meses Activo</th>
+                                <th>Última Actividad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-ranking-jugadores">
+                            <tr><td colspan="8" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Alertas de apuestas grandes -->
+            <div class="section" style="grid-column: 1 / -1;">
+                <div class="section-header">
+                    <h2>🚨 Alertas de Apuestas Grandes</h2>
+                </div>
+                <div class="section-content">
+                    <p id="alertas-umbral-info" style="font-size:12px; color:#999; margin-bottom:12px;">Cargando umbral configurado...</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>ID Usuario</th>
+                                <th>Usuario</th>
+                                <th>Casa</th>
+                                <th>Juego</th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-alertas-apuestas">
+                            <tr><td colspan="6" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Disciplinas -->
             <div class="section">
                 <div class="section-header">
@@ -331,22 +385,29 @@
 
         async function cargarDatos() {
             try {
-                const [transRes, usuarios, disc, resumen, matrizUsuarios] = await Promise.all([
+                const [transRes, usuarios, disc, resumen, matrizUsuarios, rankingRes, alertas] = await Promise.all([
                     fetchJSON(buildTransQuery()).catch(() => ({ datos: [], total: 0 })),
                     fetchJSON('/api/usuarios').catch(() => []),
                     fetchJSON('/api/disciplinas').catch(() => []),
                     fetchJSON('/api/transacciones-resumen').catch(() => null),
-                    fetchJSON('/api/usuarios-matriz').catch(() => [])
+                    fetchJSON('/api/usuarios-matriz').catch(() => []),
+                    fetchJSON('/api/ranking-jugadores').catch(() => ({ ranking: [] })),
+                    fetchJSON('/api/alertas-apuestas').catch(() => [])
                 ]);
 
                 const trans = transRes.datos || [];
                 paginacion.total = transRes.total || 0;
 
-                datos = { transacciones: trans, usuarios: usuarios || [], disciplinas: disc || [], resumen, matrizUsuarios: matrizUsuarios || [] };
+                datos = {
+                    transacciones: trans, usuarios: usuarios || [], disciplinas: disc || [], resumen,
+                    matrizUsuarios: matrizUsuarios || [], rankingJugadores: rankingRes.ranking || [], alertasApuestas: alertas || []
+                };
 
                 actualizarUI();
                 actualizarPaginacion();
                 actualizarMatrizUsuarios();
+                actualizarRankingJugadores();
+                actualizarAlertasApuestas();
                 document.getElementById('actualizacion').textContent = new Date().toLocaleTimeString('es-ES');
             } catch (error) {
                 console.error('Error:', error);
@@ -354,6 +415,42 @@
             }
 
             cargarEstadoSync();
+        }
+
+        function actualizarRankingJugadores() {
+            const filas = datos.rankingJugadores || [];
+            const html = filas.slice(0, 50).map((u, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${u.id_usuario_novusbet || '-'}</td>
+                    <td><strong>${u.usuario || '-'}</strong></td>
+                    <td>${u.casa_apuestas || '-'}</td>
+                    <td class="numero">${u.transacciones}</td>
+                    <td class="numero">$${(u.monto_total || 0).toFixed(2)}</td>
+                    <td class="numero">${u.meses_activo}</td>
+                    <td>${u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '-'}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="8" class="loading">Todavía sin datos — se va acumulando mes a mes</td></tr>';
+        }
+
+        function actualizarAlertasApuestas() {
+            const filas = datos.alertasApuestas || [];
+            const umbral = filas[0] ? filas[0].umbral_usado : null;
+            document.getElementById('alertas-umbral-info').textContent = umbral
+                ? `Se alerta toda apuesta con monto igual o mayor a $${Number(umbral).toFixed(2)}.`
+                : 'Sin alertas todavía. Se alerta toda apuesta que supere el umbral configurado.';
+            const html = filas.slice(0, 100).map((a) => `
+                <tr style="background:#fff5f5;">
+                    <td>${a.fecha ? new Date(a.fecha).toLocaleString('es-ES') : '-'}</td>
+                    <td>${a.id_usuario_novusbet || '-'}</td>
+                    <td><strong>${a.usuario || '-'}</strong></td>
+                    <td>${a.casa_apuestas || '-'}</td>
+                    <td>${a.juego || '-'}</td>
+                    <td class="numero" style="color:#c0392b; font-weight:600;">$${Math.abs(a.monto || 0).toFixed(2)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tabla-alertas-apuestas').innerHTML = html || '<tr><td colspan="6" class="loading">Sin alertas</td></tr>';
         }
 
         function claseBadgeEstadoReal(estado) {
