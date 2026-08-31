@@ -114,7 +114,7 @@
                 <canvas id="chartJuegos"></canvas>
             </div>
             <div class="chart-card">
-                <div class="chart-title">👥 Usuarios por Tipología</div>
+                <div class="chart-title">🟢 Estados de Cliente</div>
                 <canvas id="chartTipologia"></canvas>
             </div>
         </div>
@@ -233,19 +233,19 @@
                 </div>
             </div>
 
-            <!-- Usuarios -->
+            <!-- Usuarios (top por actividad reciente, dato real) -->
             <div class="section">
                 <div class="section-header">
-                    <h2>👤 Usuarios del Sistema</h2>
+                    <h2>👤 Usuarios Más Activos</h2>
                 </div>
                 <div class="section-content">
                     <table>
                         <thead>
                             <tr>
-                                <th>Usuario</th>
-                                <th>Tipo</th>
-                                <th>Saldo</th>
-                                <th>Estado</th>
+                                <th>ID Usuario</th>
+                                <th>Transacciones</th>
+                                <th>Monto</th>
+                                <th>Última actividad</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-usuarios">
@@ -292,6 +292,12 @@
 
     <script>
         let datos = { transacciones: [], usuarios: [], disciplinas: [] };
+
+        // "Juegos Más Jugados" debe contar apuestas reales (Bet/Apuesta),
+        // no mezclar con Ganancia/Win/Depósito/Retiro del mismo juego
+        function esApuesta(t) {
+            return /\b(bet|apuesta)\b/i.test(t.tipo_transaccion || '');
+        }
 
         async function fetchJSON(url) {
             const r = await fetch(url);
@@ -533,26 +539,25 @@
             `).join('');
             document.getElementById('tabla-estados').innerHTML = html || '<tr><td colspan="3" class="loading">Sin datos</td></tr>';
 
-            // Usuarios
-            html = datos.usuarios.slice(0, 8).map(u => {
-                const tipo = u.tipo_usuario_id === 1 ? 'Admin' : u.tipo_usuario_id === 2 ? 'Editor' : 'Jugador';
-                return `<tr>
-                    <td><strong>${u.username}</strong></td>
-                    <td><span class="badge badge-${tipo.toLowerCase()}">${tipo}</span></td>
-                    <td class="numero">$${(u.saldo_cuenta || 0).toFixed(2)}</td>
-                    <td>${u.estado}</td>
-                </tr>`;
-            }).join('');
+            // Usuarios más activos (dato real, derivado de transacciones)
+            html = (datos.matrizUsuarios || []).slice(0, 8).map(u => `
+                <tr>
+                    <td><strong>${u.id_usuario_novusbet || u.usuario}</strong></td>
+                    <td class="numero">${u.transacciones}</td>
+                    <td class="numero">$${(u.monto_total || 0).toFixed(2)}</td>
+                    <td>${u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '-'}</td>
+                </tr>
+            `).join('');
             document.getElementById('tabla-usuarios').innerHTML = html || '<tr><td colspan="4" class="loading">Sin datos</td></tr>';
 
-            // Juegos (usa el campo "juego" ya normalizado en Supabase, sin
-            // duplicar por tipo de movimiento como Apuesta/Ganancia)
+            // Juegos (usa el campo "juego" ya normalizado en Supabase, y
+            // solo cuenta apuestas reales, no Ganancia/Depósito/Retiro)
             const juegos = {};
-            datos.transacciones.forEach(t => {
+            datos.transacciones.filter(esApuesta).forEach(t => {
                 const j = t.juego || t.descripcion || 'Otros';
                 juegos[j] = (juegos[j] || 0) + 1;
             });
-            const total = datos.transacciones.length || 1;
+            const total = datos.transacciones.filter(esApuesta).length || 1;
             html = Object.entries(juegos)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 8)
@@ -615,9 +620,9 @@
                 options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
             });
 
-            // Juegos
+            // Juegos (solo apuestas reales)
             const juegos = {};
-            datos.transacciones.forEach(t => {
+            datos.transacciones.filter(esApuesta).forEach(t => {
                 const j = t.juego || t.descripcion || 'Otros';
                 juegos[j] = (juegos[j] || 0) + 1;
             });
@@ -632,12 +637,16 @@
                 options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
             });
 
-            // Tipología
+            // Estados de cliente (dato real, agregado)
             const tipo = {};
-            datos.usuarios.forEach(u => {
-                const t = u.tipo_usuario_id === 1 ? 'Admin' : u.tipo_usuario_id === 2 ? 'Editor' : 'Jugador';
-                tipo[t] = (tipo[t] || 0) + 1;
-            });
+            if (datos.resumen && datos.resumen.por_estado_cliente) {
+                Object.entries(datos.resumen.por_estado_cliente).forEach(([e, v]) => tipo[e] = v.count);
+            } else {
+                datos.transacciones.forEach(t => {
+                    const e = t.estado_cliente || 'sin_dato';
+                    tipo[e] = (tipo[e] || 0) + 1;
+                });
+            }
 
             dibujarChart('chartTipologia', {
                 type: 'pie',
