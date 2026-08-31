@@ -818,6 +818,30 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // API: ALERTAS DE GANANCIAS GRANDES (módulo separado de apuestas,
+    // umbral fijo, ver UMBRAL_ALERTA_GANANCIA en sync-novusbet.js)
+    if (pathname === '/api/alertas-ganancias') {
+      const limit = Math.min(parseInt(parsedUrl.query.limit, 10) || 100, 1000);
+      let alertas = [];
+
+      if (supabase) {
+        try {
+          const { data } = await supabase
+            .from('alertas_ganancias')
+            .select('*')
+            .order('fecha', { ascending: false })
+            .limit(limit);
+          alertas = data || [];
+        } catch (e) {
+          // alertas_ganancias puede no existir todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(alertas));
+      return;
+    }
+
     // DESCARGAR: CSV de Usuarios
     if (pathname === '/download/usuarios.csv') {
       let usuarios;

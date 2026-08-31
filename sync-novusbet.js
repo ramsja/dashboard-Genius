@@ -43,6 +43,11 @@ const UMBRAL_ALERTA_APUESTA = parseFloat(process.env.UMBRAL_ALERTA_APUESTA || '5
 // usuario para que se considere anómalo para ÉL en particular.
 const FACTOR_RELATIVO_APUESTA = parseFloat(process.env.FACTOR_RELATIVO_APUESTA || '5');
 
+// Alerta de GANANCIA grande: módulo separado de la de apuestas. Umbral
+// fijo (no adaptativo), pedido explícitamente en $15,000.
+// Ajustable sin redeploy: fly secrets set UMBRAL_ALERTA_GANANCIA=20000
+const UMBRAL_ALERTA_GANANCIA = parseFloat(process.env.UMBRAL_ALERTA_GANANCIA || '15000');
+
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -484,6 +489,7 @@ async function uploadToSupabase(records) {
   console.log(`✅ ${inserted} registros cargados en Supabase${fallidos ? ` (⚠️ ${fallidos} descartados por errores repetidos)` : ''}`);
 
   await guardarAlertasApuestas(formattedRecords);
+  await guardarAlertasGanancias(formattedRecords);
   const resumenOk = await calcularYGuardarResumenDiario(formattedRecords);
 
   return { inserted, resumenOk };
@@ -619,6 +625,41 @@ async function guardarAlertasApuestas(formattedRecords) {
     console.log(`🚨 ${alertas.length} alertas de apuesta grande (umbral global $${umbralGlobal.toFixed(2)})`);
   } catch (e) {
     console.log('⚠️ No se pudieron guardar las alertas de apuesta:', e.message);
+  }
+}
+
+// Módulo separado de alertas: cualquier GANANCIA (pago/win, es_ganancia)
+// con monto absoluto >= UMBRAL_ALERTA_GANANCIA queda en alertas_ganancias.
+// Umbral fijo (no adaptativo, a diferencia de las de apuesta). No es
+// crítico si falla, no debe tirar el resto de la sincronización.
+async function guardarAlertasGanancias(formattedRecords) {
+  if (!supabase) return;
+
+  const alertas = formattedRecords
+    .filter((r) => r.es_ganancia && Math.abs(r.monto) >= UMBRAL_ALERTA_GANANCIA)
+    .map((r) => ({
+      id_transaccion_novusbet: r.id_transaccion_novusbet,
+      id_usuario_novusbet: r.id_usuario_novusbet,
+      usuario: r.usuario,
+      casa_apuestas: r.casa_apuestas,
+      monto: r.monto,
+      disciplina: r.disciplina,
+      juego: r.juego,
+      descripcion: r.descripcion,
+      fecha: r.fecha,
+      umbral_usado: UMBRAL_ALERTA_GANANCIA,
+    }));
+
+  if (alertas.length === 0) return;
+
+  try {
+    const { error } = await supabase
+      .from('alertas_ganancias')
+      .upsert(alertas, { onConflict: 'id_transaccion_novusbet', ignoreDuplicates: true });
+    if (error) throw error;
+    console.log(`💰 ${alertas.length} alertas de ganancia grande (>= $${UMBRAL_ALERTA_GANANCIA})`);
+  } catch (e) {
+    console.log('⚠️ No se pudieron guardar las alertas de ganancia:', e.message);
   }
 }
 
