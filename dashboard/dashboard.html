@@ -293,10 +293,12 @@
     <script>
         let datos = { transacciones: [], usuarios: [], disciplinas: [] };
 
-        // "Juegos Más Jugados" debe contar apuestas reales (Bet/Apuesta),
-        // no mezclar con Ganancia/Win/Depósito/Retiro del mismo juego
+        // "Juegos Más Jugados" debe contar apuestas reales (Bet/Apuesta).
+        // OJO: t.tipo_transaccion siempre es Withdraw/Deposit (a nivel de
+        // billetera) — la acción real (Bet/Win/Apuesta/Ganancia) está en la
+        // descripción, no ahí.
         function esApuesta(t) {
-            return /\b(bet|apuesta)\b/i.test(t.tipo_transaccion || '');
+            return /\b(bet|apuesta)\b/i.test(t.descripcion || t.juego || '');
         }
 
         async function fetchJSON(url) {
