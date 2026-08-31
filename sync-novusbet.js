@@ -484,8 +484,70 @@ async function uploadToSupabase(records) {
   console.log(`✅ ${inserted} registros cargados en Supabase${fallidos ? ` (⚠️ ${fallidos} descartados por errores repetidos)` : ''}`);
 
   await guardarAlertasApuestas(formattedRecords);
+  const resumenOk = await calcularYGuardarResumenDiario(formattedRecords);
 
-  return inserted;
+  return { inserted, resumenOk };
+}
+
+// Arma el resumen diario por usuario EN MEMORIA, a partir de los mismos
+// registros que se acaban de subir (no vuelve a consultar
+// transacciones_novusbet). Evita el GROUP BY pesado en la base — eso fue
+// lo que causaba "canceling statement due to statement timeout" incluso
+// para un solo día. Devuelve true/false según si se pudo guardar, para
+// que quien pode el detalle crudo sepa si es seguro hacerlo.
+async function calcularYGuardarResumenDiario(formattedRecords) {
+  if (!supabase) return false;
+
+  const porUsuarioDia = {};
+  formattedRecords.forEach((r) => {
+    if (!r.id_usuario_novusbet) return;
+    const dia = (r.fecha || '').slice(0, 10);
+    if (!dia) return;
+    const key = `${r.id_usuario_novusbet}|${dia}`;
+    if (!porUsuarioDia[key]) {
+      porUsuarioDia[key] = {
+        id_usuario_novusbet: r.id_usuario_novusbet,
+        usuario: r.usuario,
+        casa_apuestas: r.casa_apuestas,
+        dia,
+        transacciones: 0,
+        apuestas: 0,
+        monto_total: 0,
+        apostado: 0,
+        ganado: 0,
+        juegos: new Set(),
+        ultima_actividad: null,
+      };
+    }
+    const u = porUsuarioDia[key];
+    u.transacciones += 1;
+    u.monto_total += r.monto || 0;
+    if (r.es_apuesta) {
+      u.apuestas += 1;
+      u.apostado += Math.abs(r.monto || 0);
+    }
+    if (r.es_ganancia) u.ganado += Math.abs(r.monto || 0);
+    if (r.juego) u.juegos.add(r.juego);
+    if (!u.ultima_actividad || r.fecha > u.ultima_actividad) u.ultima_actividad = r.fecha;
+  });
+
+  const filas = Object.values(porUsuarioDia).map((u) => ({ ...u, juegos: Array.from(u.juegos) }));
+  if (filas.length === 0) return true; // nada que resumir, no es un fallo
+
+  const BATCH_SIZE = 500;
+  try {
+    for (let i = 0; i < filas.length; i += BATCH_SIZE) {
+      const lote = filas.slice(i, i + BATCH_SIZE);
+      const { error } = await supabase
+        .from('resumen_diario_usuarios')
+        .upsert(lote, { onConflict: 'id_usuario_novusbet,dia' });
+      if (error) throw error;
+    }
+    return true;
+  } catch (e) {
+    console.log('⚠️ No se pudo guardar el resumen diario:', e.message);
+    return false;
+  }
 }
 
 // Cualquier apuesta que supere el umbral GLOBAL (percentil 99 real,
@@ -653,13 +715,15 @@ async function sincronizarRango(fechaDesde, fechaHasta) {
   console.log('   Por disciplina:', disciplinas);
   console.log('   Por estado cliente:', estados);
 
+  let resumenOk = true;
   if (records.length > 0) {
-    await uploadToSupabase(records);
+    const resultado = await uploadToSupabase(records);
+    resumenOk = resultado.resumenOk;
   } else {
     console.log('⚠️ No se encontraron transacciones en el rango de fechas indicado');
   }
 
-  return records.length;
+  return { total: records.length, resumenOk };
 }
 
 async function main() {
@@ -669,7 +733,7 @@ async function main() {
       process.exit(1);
     }
 
-    const total = await sincronizarRango(START_DATE, END_DATE);
+    const { total } = await sincronizarRango(START_DATE, END_DATE);
     console.log('\n✅ Sincronización completada');
     return total;
   } catch (err) {
@@ -707,11 +771,17 @@ async function syncRangoHistorico(fechaDesdeStr, fechaHastaStr, onProgreso) {
 
     try {
       console.log(`\n📅 Sincronizando día ${fechaStr} (${diasProcesados}/${diasTotal})...`);
-      const total = await sincronizarRango(fechaStr, fechaStr);
+      const { total, resumenOk } = await sincronizarRango(fechaStr, fechaStr);
       totalGeneral += total;
-      resultadosPorDia.push({ fecha: fechaStr, transacciones: total, ok: true });
-      await actualizarResumenDiario(fechaStr);
-      await podarTransaccionesDelDia(fechaStr);
+      resultadosPorDia.push({ fecha: fechaStr, transacciones: total, ok: true, resumenOk });
+      // Solo se poda el detalle crudo si el resumen se guardó bien — si no,
+      // se conserva para poder reintentar el resumen más adelante sin
+      // perder el día por completo.
+      if (resumenOk) {
+        await podarTransaccionesDelDia(fechaStr);
+      } else {
+        console.log(`⚠️ Resumen de ${fechaStr} no se pudo guardar — se conserva el detalle crudo sin podar`);
+      }
     } catch (err) {
       console.error(`❌ Error sincronizando ${fechaStr}:`, err.message);
       resultadosPorDia.push({ fecha: fechaStr, error: err.message, ok: false });
