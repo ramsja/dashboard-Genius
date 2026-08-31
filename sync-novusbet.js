@@ -326,17 +326,46 @@ function classifyDiscipline(record) {
   return 'otros';
 }
 
-function classifyClientStatus(record) {
-  // El campo "estado" del CSV (si existe) manda sobre el resto del texto
-  const estadoCampo = getField(record, 'estado', 'status', 'estado del jugador', 'estado del cliente').toLowerCase();
-  const text = (estadoCampo + ' ' + Object.values(record).join(' ')).toLowerCase();
+// Extrae el nombre limpio del juego desde la descripción real de Novusbet,
+// ej. "Silly Sweets Cascade Rush Apuesta" y "Silly Sweets Cascade Rush
+// Ganancia" deben contarse como EL MISMO juego, no como dos distintos.
+const SUFIJOS_MOVIMIENTO = [
+  'apuesta', 'ganancia', 'perdida', 'pérdida', 'bet', 'win', 'lose',
+  'deposito', 'depósito', 'deposit', 'retiro', 'withdraw', 'bono', 'bonus',
+];
+const SUFIJOS_REGEX = new RegExp(`\\s+(${SUFIJOS_MOVIMIENTO.join('|')})\\s*$`, 'i');
 
-  if (/congelad|frozen/.test(text)) return 'congelado';
-  if (/\bactivo\b|\bactive\b|\bonline\b|conectado/.test(text)) return 'activo';
-  if (/\binactivo\b|\binactive\b|\boffline\b|sin actividad/.test(text)) return 'inactivo';
-  if (/desconectado|disconnected|\blogout\b|cerrado/.test(text)) return 'desconectado';
-  if (/bloqueado|blocked|suspendido|suspended|pendiente/.test(text)) return 'suspendido';
-  return 'otros';
+function extraerJuego(record) {
+  const descripcion = getField(record, 'descripción', 'descripcion', 'description');
+  if (!descripcion) return '';
+  return descripcion.replace(SUFIJOS_REGEX, '').trim() || descripcion;
+}
+
+function classifyClientStatus(record) {
+  // IMPORTANTE: en el export real de transacciones de Novusbet, la columna
+  // "estado" es un valor NUMÉRICO (ej. "-0.2", "-5", "0.00" — parece ser un
+  // monto/código interno), NO el estado de cuenta del jugador (activo,
+  // congelado, etc.). Ese dato simplemente no viene en este CSV.
+  //
+  // Antes buscábamos esas palabras en TODO el texto de la fila, lo que
+  // producía falsos positivos (ej. "Actividad de apuestas" activaba
+  // "activo" sin que tuviera relación real con el estado del cliente).
+  // Ahora solo confiamos en un campo explícito de estado si es texto real
+  // (no numérico); si no existe, se marca honestamente como "sin_dato" en
+  // vez de inventar un estado.
+  const estadoCampo = getField(record, 'estado', 'status', 'estado del jugador', 'estado del cliente').trim();
+  const esNumerico = estadoCampo !== '' && !isNaN(estadoCampo.replace(',', '.'));
+
+  if (estadoCampo && !esNumerico) {
+    const texto = estadoCampo.toLowerCase();
+    if (/congelad|frozen/.test(texto)) return 'congelado';
+    if (/\bactivo\b|\bactive\b|\bonline\b|conectado/.test(texto)) return 'activo';
+    if (/\binactivo\b|\binactive\b|\boffline\b|sin actividad/.test(texto)) return 'inactivo';
+    if (/desconectado|disconnected|\blogout\b|cerrado/.test(texto)) return 'desconectado';
+    if (/bloqueado|blocked|suspendido|suspended|pendiente/.test(texto)) return 'suspendido';
+  }
+
+  return 'sin_dato';
 }
 
 function getField(record, ...names) {
@@ -373,6 +402,7 @@ async function uploadToSupabase(records) {
     saldo_actual: numero(getField(record, 'saldo actual', 'current_balance')),
     billeteras: getField(record, 'billeteras', 'wallet', 'wallets'),
     grupo_causal: getField(record, 'grupo causal', 'causal', 'causal_group'),
+    juego: extraerJuego(record),
     datos_raw: JSON.stringify(record),
   }));
 

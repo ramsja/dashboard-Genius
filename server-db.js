@@ -195,13 +195,18 @@ async function cargarDatosAutomatico() {
   }
 }
 
-// Re-sincroniza cada 6 horas para mantener datos reales frescos
+// Re-sincroniza periódicamente para mantener datos reales frescos.
+// Cada sync completa toma ~1 minuto para ~22-35k transacciones del día,
+// así que cada 30 min por defecto es razonable para sentirse "en tiempo
+// real" sin saturar el backoffice de Novusbet. Ajustable con
+// SYNC_INTERVAL_MINUTES en las variables de entorno.
 function programarResincronizacion() {
-  const SEIS_HORAS = 6 * 60 * 60 * 1000;
+  const minutos = parseInt(process.env.SYNC_INTERVAL_MINUTES || '30', 10);
+  const intervaloMs = minutos * 60 * 1000;
   setInterval(() => {
-    console.log('🔄 Re-sincronizando transacciones reales desde Novusbet...');
+    console.log(`🔄 Re-sincronizando transacciones reales desde Novusbet (cada ${minutos} min)...`);
     cargarDatosAutomatico();
-  }, SEIS_HORAS);
+  }, intervaloMs);
 }
 
 // Tipos MIME

@@ -46,6 +46,7 @@
         .badge-desconectado { background: #fff3cd; color: #856404; }
         .badge-suspendido { background: #f8d7da; color: #721c24; }
         .badge-otros { background: #e2e3e5; color: #383d41; }
+        .badge-sin_dato { background: #f4f4f4; color: #999; font-style: italic; }
 
         /* Charts */
         .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin: 30px 0; }
@@ -388,10 +389,11 @@
             }).join('');
             document.getElementById('tabla-usuarios').innerHTML = html || '<tr><td colspan="4" class="loading">Sin datos</td></tr>';
 
-            // Juegos
+            // Juegos (usa el campo "juego" ya normalizado en Supabase, sin
+            // duplicar por tipo de movimiento como Apuesta/Ganancia)
             const juegos = {};
             datos.transacciones.forEach(t => {
-                const j = (t.descripcion || 'Otros').split('-')[0].trim();
+                const j = t.juego || t.descripcion || 'Otros';
                 juegos[j] = (juegos[j] || 0) + 1;
             });
             const total = datos.transacciones.length || 1;
@@ -458,7 +460,7 @@
             // Juegos
             const juegos = {};
             datos.transacciones.forEach(t => {
-                const j = (t.descripcion || 'Otros').split('-')[0].trim();
+                const j = t.juego || t.descripcion || 'Otros';
                 juegos[j] = (juegos[j] || 0) + 1;
             });
             const top8 = Object.entries(juegos).sort((a, b) => b[1] - a[1]).slice(0, 8);
