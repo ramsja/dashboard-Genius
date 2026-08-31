@@ -758,7 +758,7 @@ const server = http.createServer(async (req, res) => {
 
           const filas = await fetchTodasLasFilas(
             'resumen_mensual_usuarios',
-            'id_usuario_novusbet, usuario, casa_apuestas, mes, transacciones, monto_total, ultima_actividad'
+            'id_usuario_novusbet, usuario, casa_apuestas, mes, transacciones, apuestas, monto_total, juegos, apostado, ganado, ultima_actividad'
           );
 
           const porUsuario = {};
@@ -770,21 +770,31 @@ const server = http.createServer(async (req, res) => {
                 usuario: f.usuario,
                 casa_apuestas: f.casa_apuestas,
                 transacciones: 0,
+                apuestas: 0,
                 monto_total: 0,
+                juegos: new Set(),
+                apostado: 0,
+                ganado: 0,
                 meses_activo: 0,
                 ultima_actividad: null,
               };
             }
             const u = porUsuario[id];
             u.transacciones += f.transacciones || 0;
+            u.apuestas += f.apuestas || 0;
             u.monto_total += Number(f.monto_total) || 0;
+            u.apostado += Number(f.apostado) || 0;
+            u.ganado += Number(f.ganado) || 0;
+            (f.juegos || []).forEach((j) => u.juegos.add(j));
             u.meses_activo += 1;
             if (f.ultima_actividad && (!u.ultima_actividad || new Date(f.ultima_actividad) > new Date(u.ultima_actividad))) {
               u.ultima_actividad = f.ultima_actividad;
             }
           });
 
-          ranking = Object.values(porUsuario).sort((a, b) => b.monto_total - a.monto_total);
+          ranking = Object.values(porUsuario)
+            .map((u) => ({ ...u, juegos: Array.from(u.juegos), beneficio: u.apostado - u.ganado }))
+            .sort((a, b) => b.monto_total - a.monto_total);
         } catch (e) {
           // resumen_mensual_usuarios puede no existir todavía
         }

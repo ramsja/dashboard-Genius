@@ -4,6 +4,9 @@
 -- falta bajar el historial crudo viejo, cada sync solo refresca
 -- los últimos ~35 días para no escanear todo transacciones_novusbet
 -- cada vez.
+--
+-- Seguro de correr de nuevo si ya habías corrido una versión
+-- anterior de este archivo (agrega las columnas nuevas que falten).
 -- ============================================================
 
 CREATE TABLE IF NOT EXISTS resumen_mensual_usuarios (
@@ -19,6 +22,17 @@ CREATE TABLE IF NOT EXISTS resumen_mensual_usuarios (
   UNIQUE (id_usuario_novusbet, mes)
 );
 
+-- Apuestas realizadas (solo las transacciones tipo Bet/Apuesta, sin
+-- contar depósitos, retiros ni ganancias) y los juegos jugados.
+ALTER TABLE resumen_mensual_usuarios ADD COLUMN IF NOT EXISTS apuestas INT DEFAULT 0;
+ALTER TABLE resumen_mensual_usuarios ADD COLUMN IF NOT EXISTS juegos TEXT[];
+
+-- Cuánto apostó (dinero que jugó) y cuánto ganó (dinero que le pagaron).
+-- El beneficio para la casa es apostado - ganado (se calcula al leer,
+-- no hace falta guardarlo aparte).
+ALTER TABLE resumen_mensual_usuarios ADD COLUMN IF NOT EXISTS apostado NUMERIC(15,2) DEFAULT 0;
+ALTER TABLE resumen_mensual_usuarios ADD COLUMN IF NOT EXISTS ganado NUMERIC(15,2) DEFAULT 0;
+
 CREATE INDEX IF NOT EXISTS idx_resumen_mensual_mes ON resumen_mensual_usuarios(mes);
 CREATE INDEX IF NOT EXISTS idx_resumen_mensual_monto ON resumen_mensual_usuarios(monto_total DESC);
 
@@ -29,7 +43,8 @@ RETURNS void AS $$
 BEGIN
   INSERT INTO resumen_mensual_usuarios (
     id_usuario_novusbet, usuario, casa_apuestas, mes,
-    transacciones, monto_total, ultima_actividad, actualizado_at
+    transacciones, apuestas, monto_total, juegos, apostado, ganado,
+    ultima_actividad, actualizado_at
   )
   SELECT
     id_usuario_novusbet,
@@ -37,7 +52,11 @@ BEGIN
     MAX(casa_apuestas) AS casa_apuestas,
     to_char(fecha, 'YYYY-MM') AS mes,
     COUNT(*) AS transacciones,
+    COUNT(*) FILTER (WHERE descripcion ~* '\yapuesta\y|\ybet\y') AS apuestas,
     SUM(monto) AS monto_total,
+    ARRAY_AGG(DISTINCT juego) FILTER (WHERE juego IS NOT NULL AND juego <> '') AS juegos,
+    COALESCE(SUM(ABS(monto)) FILTER (WHERE descripcion ~* '\yapuesta\y|\ybet\y'), 0) AS apostado,
+    COALESCE(SUM(ABS(monto)) FILTER (WHERE descripcion ~* '\yganancia\y|\ywin\y'), 0) AS ganado,
     MAX(fecha) AS ultima_actividad,
     NOW() AS actualizado_at
   FROM transacciones_novusbet
@@ -49,7 +68,11 @@ BEGIN
     usuario = EXCLUDED.usuario,
     casa_apuestas = EXCLUDED.casa_apuestas,
     transacciones = EXCLUDED.transacciones,
+    apuestas = EXCLUDED.apuestas,
     monto_total = EXCLUDED.monto_total,
+    juegos = EXCLUDED.juegos,
+    apostado = EXCLUDED.apostado,
+    ganado = EXCLUDED.ganado,
     ultima_actividad = EXCLUDED.ultima_actividad,
     actualizado_at = EXCLUDED.actualizado_at;
 END;

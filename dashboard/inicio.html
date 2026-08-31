@@ -208,6 +208,7 @@
                 <div class="section-content">
                     <p style="font-size:12px; color:#999; margin-bottom:12px;">
                         Ranking acumulado mes a mes desde que se activó este seguimiento — no incluye historial anterior a esa fecha.
+                        "Beneficio" es desde el lado de la casa: apostado menos ganado (positivo = ganancia para la casa, negativo = el jugador ganó más de lo que apostó).
                     </p>
                     <table>
                         <thead>
@@ -216,14 +217,17 @@
                                 <th>ID Usuario</th>
                                 <th>Usuario</th>
                                 <th>Casa</th>
-                                <th>Transacciones</th>
-                                <th>Monto Total</th>
+                                <th>Juegos</th>
+                                <th>Apuestas</th>
+                                <th>Apostado</th>
+                                <th>Ganado</th>
+                                <th>Beneficio</th>
                                 <th>Meses Activo</th>
                                 <th>Última Actividad</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-ranking-jugadores">
-                            <tr><td colspan="8" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="11" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -419,19 +423,29 @@
 
         function actualizarRankingJugadores() {
             const filas = datos.rankingJugadores || [];
-            const html = filas.slice(0, 50).map((u, i) => `
+            const html = filas.slice(0, 50).map((u, i) => {
+                const juegos = u.juegos || [];
+                const juegosTexto = juegos.length > 3
+                    ? `${juegos.slice(0, 3).join(', ')} +${juegos.length - 3}`
+                    : (juegos.join(', ') || '-');
+                const beneficio = u.beneficio || 0;
+                return `
                 <tr>
                     <td>${i + 1}</td>
                     <td>${u.id_usuario_novusbet || '-'}</td>
                     <td><strong>${u.usuario || '-'}</strong></td>
                     <td>${u.casa_apuestas || '-'}</td>
-                    <td class="numero">${u.transacciones}</td>
-                    <td class="numero">$${(u.monto_total || 0).toFixed(2)}</td>
+                    <td title="${juegos.join(', ')}">${juegosTexto}</td>
+                    <td class="numero">${u.apuestas || 0}</td>
+                    <td class="numero">$${(u.apostado || 0).toFixed(2)}</td>
+                    <td class="numero">$${(u.ganado || 0).toFixed(2)}</td>
+                    <td class="numero" style="color:${beneficio >= 0 ? '#155724' : '#c0392b'}; font-weight:600;">$${beneficio.toFixed(2)}</td>
                     <td class="numero">${u.meses_activo}</td>
                     <td>${u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '-'}</td>
                 </tr>
-            `).join('');
-            document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="8" class="loading">Todavía sin datos — se va acumulando mes a mes</td></tr>';
+            `;
+            }).join('');
+            document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="11" class="loading">Todavía sin datos — se va acumulando mes a mes</td></tr>';
         }
 
         function actualizarAlertasApuestas() {
