@@ -745,7 +745,32 @@
                 </tr>
             `).join('');
 
-            document.getElementById('modal-detalle-contenido').innerHTML = `<table style="width:100%; border-collapse:collapse;">${filas}</table>`;
+            // Registro CRUDO tal cual vino del CSV de Novusbet (antes de
+            // cualquier normalización nuestra) - para verificar exactamente
+            // qué se guardó
+            let rawHtml = '<p style="color:#999; font-size:12px;">Sin datos crudos guardados</p>';
+            if (t.datos_raw) {
+                try {
+                    const raw = typeof t.datos_raw === 'string' ? JSON.parse(t.datos_raw) : t.datos_raw;
+                    rawHtml = '<table style="width:100%; border-collapse:collapse; font-size:12px;">' +
+                        Object.entries(raw).map(([k, v]) => `
+                            <tr>
+                                <td style="padding:5px 10px; border-bottom:1px solid #f5f5f5; color:#999; text-transform:capitalize;">${k}</td>
+                                <td style="padding:5px 10px; border-bottom:1px solid #f5f5f5;">${v || '-'}</td>
+                            </tr>
+                        `).join('') + '</table>';
+                } catch (e) {
+                    rawHtml = '<p style="color:#999; font-size:12px;">No se pudo leer el registro crudo</p>';
+                }
+            }
+
+            document.getElementById('modal-detalle-contenido').innerHTML = `
+                <table style="width:100%; border-collapse:collapse;">${filas}</table>
+                <details style="margin-top:15px;">
+                    <summary style="cursor:pointer; font-weight:600; color:#667eea; padding:8px 0;">📄 Ver registro original del CSV</summary>
+                    <div style="background:#fafafa; border-radius:8px; padding:5px; margin-top:8px;">${rawHtml}</div>
+                </details>
+            `;
             document.getElementById('modal-detalle').style.display = 'flex';
         }
 
