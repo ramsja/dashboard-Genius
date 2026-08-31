@@ -6,3 +6,4 @@ analisis-www/
 .env.local
 *.tmp
 .DS_Store
+backfill-6-meses.js
