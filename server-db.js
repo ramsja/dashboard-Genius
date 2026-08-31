@@ -509,6 +509,27 @@ const server = http.createServer(async (req, res) => {
         const { data, count } = await query.range(offset, offset + limit - 1);
         transacciones = data || [];
         total = count || 0;
+
+        // Cruza con usuarios_novusbet para mostrar el estado REAL de cuenta
+        // (Habilitado/Congelado/etc.) en vez de "sin_dato" — el CSV de
+        // transacciones nunca trajo el estado de cuenta, solo el de usuarios.
+        try {
+          const ids = [...new Set(transacciones.map((t) => t.id_usuario_novusbet).filter(Boolean))];
+          if (ids.length > 0) {
+            const { data: usuariosReales } = await supabase
+              .from('usuarios_novusbet')
+              .select('id_usuario, estado')
+              .in('id_usuario', ids);
+            const porId = {};
+            (usuariosReales || []).forEach((u) => { porId[u.id_usuario] = u.estado; });
+            transacciones.forEach((t) => {
+              const real = porId[t.id_usuario_novusbet];
+              if (real) t.estado_real = real;
+            });
+          }
+        } catch (e) {
+          // usuarios_novusbet puede no existir todavía, no es crítico
+        }
       }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -602,13 +623,25 @@ const server = http.createServer(async (req, res) => {
       };
 
       if (supabase) {
-        const data = await fetchTodasLasFilas('transacciones_novusbet', 'disciplina, estado_cliente, monto, usuario');
+        const data = await fetchTodasLasFilas('transacciones_novusbet', 'disciplina, estado_cliente, id_usuario_novusbet, monto, usuario');
 
         if (data) {
+          // Cruza con usuarios_novusbet para usar el estado REAL de cuenta
+          // cuando ya está sincronizado, en vez de "sin_dato" del CSV de
+          // transacciones (que nunca trajo ese campo).
+          let estadoRealPorId = {};
+          try {
+            const usuariosReales = await fetchTodasLasFilas('usuarios_novusbet', 'id_usuario, estado');
+            usuariosReales.forEach((u) => { estadoRealPorId[u.id_usuario] = u.estado; });
+          } catch (e) {
+            // usuarios_novusbet puede no existir todavía, no es crítico
+          }
+
           const usuariosSet = new Set();
           data.forEach((t) => {
             const disc = (t.disciplina || 'otros').toLowerCase();
-            const estado = (t.estado_cliente || 'otros').toLowerCase();
+            const real = estadoRealPorId[t.id_usuario_novusbet];
+            const estado = (real || t.estado_cliente || 'otros').toLowerCase();
 
             if (!resumen.por_disciplina[disc]) resumen.por_disciplina[disc] = { count: 0, monto: 0 };
             resumen.por_disciplina[disc].count += 1;

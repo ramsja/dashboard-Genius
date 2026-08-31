@@ -558,7 +558,9 @@
                     <td>${t.tipo_transaccion}</td>
                     <td class="numero">$${(t.monto || 0).toFixed(2)}</td>
                     <td><span class="badge badge-${t.disciplina}">${t.disciplina}</span></td>
-                    <td><span class="badge badge-${t.estado_cliente || 'otros'}">${t.estado_cliente || 'otros'}</span></td>
+                    <td>${t.estado_real
+                        ? `<span class="badge badge-${claseBadgeEstadoReal(t.estado_real)}">${t.estado_real}</span>`
+                        : `<span class="badge badge-${t.estado_cliente || 'otros'}">${t.estado_cliente || 'otros'}</span>`}</td>
                 </tr>
             `).join('');
             document.getElementById('tabla-transacciones').innerHTML = html || '<tr><td colspan="7" class="loading">Sin datos</td></tr>';
@@ -596,7 +598,7 @@
             })();
             html = Object.entries(estadoData).map(([e, v]) => `
                 <tr>
-                    <td><span class="badge badge-${e}">${e}</span></td>
+                    <td><span class="badge badge-${claseBadgeEstadoReal(e)}">${e}</span></td>
                     <td class="numero">${v.count}</td>
                     <td class="numero">$${v.monto.toFixed(2)}</td>
                 </tr>
