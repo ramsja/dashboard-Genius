@@ -253,10 +253,11 @@
                                 <th>Casa</th>
                                 <th>Juego</th>
                                 <th>Monto</th>
+                                <th>Motivo</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-alertas-apuestas">
-                            <tr><td colspan="6" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -452,12 +453,18 @@
             document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="11" class="loading">Todavía sin datos — se va acumulando mes a mes</td></tr>';
         }
 
+        function textoMotivoAlerta(motivo) {
+            if (motivo === 'global+relativo') return 'Global + patrón propio';
+            if (motivo === 'relativo') return 'Patrón propio del usuario';
+            return 'Umbral global';
+        }
+
         function actualizarAlertasApuestas() {
             const filas = datos.alertasApuestas || [];
             const umbral = filas[0] ? filas[0].umbral_usado : null;
             document.getElementById('alertas-umbral-info').textContent = umbral
-                ? `Se alerta toda apuesta con monto igual o mayor a $${Number(umbral).toFixed(2)}.`
-                : 'Sin alertas todavía. Se alerta toda apuesta que supere el umbral configurado.';
+                ? `Umbral adaptativo actual: $${Number(umbral).toFixed(2)} (percentil 99 real) — o 5x el promedio propio del usuario.`
+                : 'Sin alertas todavía. El umbral se calcula solo a partir de los datos reales.';
             const html = filas.slice(0, 100).map((a) => `
                 <tr style="background:#fff5f5;">
                     <td>${a.fecha ? new Date(a.fecha).toLocaleString('es-ES') : '-'}</td>
@@ -466,9 +473,10 @@
                     <td>${a.casa_apuestas || '-'}</td>
                     <td>${a.juego || '-'}</td>
                     <td class="numero" style="color:#c0392b; font-weight:600;">$${Math.abs(a.monto || 0).toFixed(2)}</td>
+                    <td>${textoMotivoAlerta(a.motivo_alerta)}</td>
                 </tr>
             `).join('');
-            document.getElementById('tabla-alertas-apuestas').innerHTML = html || '<tr><td colspan="6" class="loading">Sin alertas</td></tr>';
+            document.getElementById('tabla-alertas-apuestas').innerHTML = html || '<tr><td colspan="7" class="loading">Sin alertas</td></tr>';
         }
 
         function claseBadgeEstadoReal(estado) {

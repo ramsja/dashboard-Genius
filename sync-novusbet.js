@@ -33,10 +33,15 @@ const TIMEOUT = 120000;
 const MAX_EXPORT_ATTEMPTS = 200;
 const EXPORT_WAIT_SECONDS = 3;
 
-// Alerta de apuesta grande: cualquier apuesta (no depósito/retiro) cuyo
-// monto absoluto supere este umbral se guarda en alertas_apuestas.
+// Alerta de apuesta grande: umbral FIJO usado solo como respaldo mientras
+// todavía no hay suficiente historial para calcular el umbral adaptativo
+// (percentil 99 real + patrón por usuario, ver actualizarParametrosAlerta).
 // Ajustable sin redeploy: fly secrets set UMBRAL_ALERTA_APUESTA=1000
 const UMBRAL_ALERTA_APUESTA = parseFloat(process.env.UMBRAL_ALERTA_APUESTA || '500');
+
+// Cuántas veces por encima de su propio promedio tiene que apostar un
+// usuario para que se considere anómalo para ÉL en particular.
+const FACTOR_RELATIVO_APUESTA = parseFloat(process.env.FACTOR_RELATIVO_APUESTA || '5');
 
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -348,6 +353,11 @@ function esApuesta(descripcion, juego) {
   return APUESTA_REGEX.test(descripcion || juego || '');
 }
 
+const GANANCIA_REGEX = /\b(win|ganancia)\b/i;
+function esGanancia(descripcion) {
+  return GANANCIA_REGEX.test(descripcion || '');
+}
+
 function extraerJuego(record) {
   const descripcion = getField(record, 'descripción', 'descripcion', 'description');
   if (!descripcion) return '';
@@ -421,6 +431,12 @@ async function uploadToSupabase(records) {
     grupo_causal: getField(record, 'grupo causal', 'causal', 'causal_group'),
     juego: extraerJuego(record),
     datos_raw: JSON.stringify(record),
+  })).map((r) => ({
+    ...r,
+    // Precalculado en la app (no con regex en la base) para que el
+    // resumen diario sea barato: solo filtra por columna booleana.
+    es_apuesta: esApuesta(r.descripcion, r.juego),
+    es_ganancia: esGanancia(r.descripcion),
   })).filter((r) => r.id_transaccion_novusbet); // sin id no se puede deduplicar, se descarta
 
   // Lotes chicos para no chocar con el statement timeout de Supabase en
@@ -472,26 +488,64 @@ async function uploadToSupabase(records) {
   return inserted;
 }
 
-// Cualquier apuesta (no depósito/retiro/ganancia) con monto absoluto por
-// encima de UMBRAL_ALERTA_APUESTA queda registrada en alertas_apuestas.
-// No es crítico si falla, no debe tirar el resto de la sincronización.
+// Cualquier apuesta que supere el umbral GLOBAL (percentil 99 real,
+// calculado en actualizarParametrosAlerta) O que sea anómala para ESE
+// usuario en particular (más de FACTOR_RELATIVO_APUESTA veces su propio
+// promedio) queda registrada en alertas_apuestas. Mientras no haya
+// suficiente historial para el umbral global, usa UMBRAL_ALERTA_APUESTA
+// fijo como respaldo. No es crítico si falla, no debe tirar el sync.
 async function guardarAlertasApuestas(formattedRecords) {
   if (!supabase) return;
 
-  const alertas = formattedRecords
-    .filter((r) => esApuesta(r.descripcion, r.juego) && Math.abs(r.monto) >= UMBRAL_ALERTA_APUESTA)
-    .map((r) => ({
-      id_transaccion_novusbet: r.id_transaccion_novusbet,
-      id_usuario_novusbet: r.id_usuario_novusbet,
-      usuario: r.usuario,
-      casa_apuestas: r.casa_apuestas,
-      monto: r.monto,
-      disciplina: r.disciplina,
-      juego: r.juego,
-      descripcion: r.descripcion,
-      fecha: r.fecha,
-      umbral_usado: UMBRAL_ALERTA_APUESTA,
-    }));
+  const candidatas = formattedRecords.filter((r) => r.es_apuesta);
+  if (candidatas.length === 0) return;
+
+  let umbralGlobal = UMBRAL_ALERTA_APUESTA;
+  const perfiles = {};
+
+  try {
+    const { data: parametros } = await supabase
+      .from('parametros_alerta_apuestas')
+      .select('umbral_global')
+      .eq('id', 1)
+      .maybeSingle();
+    if (parametros && parametros.umbral_global) umbralGlobal = Number(parametros.umbral_global);
+
+    const ids = [...new Set(candidatas.map((r) => r.id_usuario_novusbet).filter(Boolean))];
+    if (ids.length > 0) {
+      const { data: perfilesData } = await supabase
+        .from('perfil_apuestas_usuarios')
+        .select('id_usuario_novusbet, promedio_apuesta')
+        .in('id_usuario_novusbet', ids);
+      (perfilesData || []).forEach((p) => { perfiles[p.id_usuario_novusbet] = Number(p.promedio_apuesta) || 0; });
+    }
+  } catch (e) {
+    // parametros_alerta_apuestas/perfil_apuestas_usuarios pueden no existir todavía
+  }
+
+  const alertas = candidatas
+    .map((r) => {
+      const monto = Math.abs(r.monto);
+      const promedioUsuario = perfiles[r.id_usuario_novusbet];
+      const umbralRelativo = promedioUsuario ? promedioUsuario * FACTOR_RELATIVO_APUESTA : null;
+      const superaGlobal = monto >= umbralGlobal;
+      const superaRelativo = umbralRelativo !== null && monto >= umbralRelativo;
+      if (!superaGlobal && !superaRelativo) return null;
+      return {
+        id_transaccion_novusbet: r.id_transaccion_novusbet,
+        id_usuario_novusbet: r.id_usuario_novusbet,
+        usuario: r.usuario,
+        casa_apuestas: r.casa_apuestas,
+        monto: r.monto,
+        disciplina: r.disciplina,
+        juego: r.juego,
+        descripcion: r.descripcion,
+        fecha: r.fecha,
+        umbral_usado: umbralGlobal,
+        motivo_alerta: superaGlobal && superaRelativo ? 'global+relativo' : superaGlobal ? 'global' : 'relativo',
+      };
+    })
+    .filter(Boolean);
 
   if (alertas.length === 0) return;
 
@@ -500,9 +554,23 @@ async function guardarAlertasApuestas(formattedRecords) {
       .from('alertas_apuestas')
       .upsert(alertas, { onConflict: 'id_transaccion_novusbet', ignoreDuplicates: true });
     if (error) throw error;
-    console.log(`🚨 ${alertas.length} alertas de apuesta grande (>= $${UMBRAL_ALERTA_APUESTA})`);
+    console.log(`🚨 ${alertas.length} alertas de apuesta grande (umbral global $${umbralGlobal.toFixed(2)})`);
   } catch (e) {
     console.log('⚠️ No se pudieron guardar las alertas de apuesta:', e.message);
+  }
+}
+
+// Recalcula el umbral global (percentil 99) y el promedio de apuesta por
+// usuario. No es barato (percentile_cont + agregación), así que se llama
+// una vez por sincronización, no por cada lote. No crítico, no debe tirar
+// el sync si falla.
+async function actualizarParametrosAlerta() {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase.rpc('actualizar_parametros_alerta');
+    if (error) throw error;
+  } catch (e) {
+    console.log('⚠️ No se pudieron actualizar los parámetros de alerta:', e.message);
   }
 }
 
@@ -654,6 +722,11 @@ async function syncRangoHistorico(fechaDesdeStr, fechaHastaStr, onProgreso) {
     // Pequeña pausa entre días para no saturar el backoffice de Novusbet
     if (t < fechaHasta.getTime()) await new Promise((r) => setTimeout(r, 2000));
   }
+
+  // Una sola vez al final (no por día, es una consulta más pesada) para
+  // que el umbral de alertas y el perfil por usuario reflejen todo lo
+  // que se acaba de traer.
+  await actualizarParametrosAlerta();
 
   return { totalGeneral, resultadosPorDia };
 }
@@ -816,5 +889,5 @@ if (require.main === module) {
 
 module.exports = {
   main, syncHistorico, syncRangoHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML,
-  actualizarResumenDiario, podarTransaccionesDelDia, END_DATE,
+  actualizarResumenDiario, podarTransaccionesDelDia, actualizarParametrosAlerta, END_DATE,
 };

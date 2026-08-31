@@ -216,10 +216,11 @@ async function cargarDatosAutomatico() {
 
   try {
     console.log('📝 Sincronizando datos REALES desde Novusbet...');
-    const { main: sincronizarNovusbet, actualizarResumenDiario, podarTransaccionesDelDia, END_DATE } = require('./sync-novusbet');
+    const { main: sincronizarNovusbet, actualizarResumenDiario, podarTransaccionesDelDia, actualizarParametrosAlerta, END_DATE } = require('./sync-novusbet');
     const total = await sincronizarNovusbet();
     await actualizarResumenDiario(END_DATE);
     await podarTransaccionesDelDia(END_DATE);
+    await actualizarParametrosAlerta();
     console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
     syncStatus.estado = 'completado';
     syncStatus.fin = new Date().toISOString();
