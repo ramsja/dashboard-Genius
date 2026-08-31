@@ -397,7 +397,13 @@
             btn.disabled = true;
             btn.textContent = '⏳ Sincronizando...';
             try {
-                await fetchJSON('/api/admin/sync-usuarios', { method: 'POST' });
+                const res = await fetch('/api/admin/sync-usuarios', { method: 'POST' });
+                if (res.status === 401) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Error iniciando sincronización');
             } catch (e) {
                 estadoEl.textContent = 'Error iniciando sincronización: ' + e.message;
                 btn.disabled = false;
