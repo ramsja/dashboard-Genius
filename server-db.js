@@ -414,20 +414,74 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // API: TRANSACCIONES NOVUSBET (EN TIEMPO REAL)
+    // API: TRANSACCIONES NOVUSBET (paginable + filtrable por fecha, para
+    // poder navegar historial más allá de la primera página)
     if (pathname === '/api/transacciones-novusbet') {
       let transacciones = [];
+      let total = 0;
+
+      const limit = Math.min(parseInt(parsedUrl.query.limit, 10) || 1000, 5000);
+      const offset = Math.max(parseInt(parsedUrl.query.offset, 10) || 0, 0);
+      const desde = parsedUrl.query.desde; // YYYY-MM-DD
+      const hasta = parsedUrl.query.hasta; // YYYY-MM-DD
+
       if (supabase) {
-        const { data } = await supabase
+        let query = supabase
           .from('transacciones_novusbet')
-          .select('*')
-          .order('fecha', { ascending: false })
-          .limit(1000);
+          .select('*', { count: 'exact' })
+          .order('fecha', { ascending: false });
+
+        if (desde) query = query.gte('fecha', `${desde}T00:00:00`);
+        if (hasta) query = query.lte('fecha', `${hasta}T23:59:59`);
+
+        const { data, count } = await query.range(offset, offset + limit - 1);
         transacciones = data || [];
+        total = count || 0;
       }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(transacciones));
+      res.end(JSON.stringify({ datos: transacciones, total, offset, limit }));
+      return;
+    }
+
+    // API: DISPARAR SINCRONIZACIÓN HISTÓRICA (día por día, hasta N días atrás)
+    if (pathname === '/api/admin/sync-historico' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => (body += chunk));
+      req.on('end', () => {
+        let dias = 7;
+        try {
+          const parsed = JSON.parse(body || '{}');
+          dias = Math.min(Math.max(parseInt(parsed.dias, 10) || 7, 1), 90);
+        } catch (e) {}
+
+        if (syncStatus.estado === 'sincronizando') {
+          res.writeHead(409, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Ya hay una sincronización en curso' }));
+          return;
+        }
+
+        syncStatus.estado = 'sincronizando';
+        syncStatus.inicio = new Date().toISOString();
+        syncStatus.mensaje = `Sincronizando histórico de ${dias} días...`;
+
+        const { syncHistorico } = require('./sync-novusbet');
+        syncHistorico(dias, (progreso) => {
+          syncStatus.mensaje = `Histórico: día ${progreso.diasProcesados}/${progreso.diasTotal} (${progreso.totalGeneral} transacciones)`;
+        }).then((resultado) => {
+          syncStatus.estado = 'completado';
+          syncStatus.fin = new Date().toISOString();
+          syncStatus.filas = resultado.totalGeneral;
+          syncStatus.mensaje = `Histórico completado: ${dias} días, ${resultado.totalGeneral} transacciones`;
+        }).catch((err) => {
+          syncStatus.estado = 'error';
+          syncStatus.fin = new Date().toISOString();
+          syncStatus.mensaje = err.message;
+        });
+
+        res.writeHead(202, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true, mensaje: `Sincronización histórica de ${dias} días iniciada en segundo plano` }));
+      });
       return;
     }
 

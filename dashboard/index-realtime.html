@@ -119,11 +119,19 @@
         <!-- Secciones -->
         <div class="sections-grid">
             <!-- Transacciones -->
-            <div class="section">
+            <div class="section" style="grid-column: 1 / -1;">
                 <div class="section-header">
-                    <h2>💳 Últimas Transacciones</h2>
+                    <h2>💳 Transacciones (rango histórico)</h2>
                 </div>
                 <div class="section-content">
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:15px; font-size:13px;">
+                        <label>Desde <input type="date" id="filtro-desde" style="padding:6px; border:1px solid #ddd; border-radius:4px;"></label>
+                        <label>Hasta <input type="date" id="filtro-hasta" style="padding:6px; border:1px solid #ddd; border-radius:4px;"></label>
+                        <button onclick="aplicarFiltroFechas()" style="padding:7px 14px; background:#667eea; color:white; border:none; border-radius:4px; cursor:pointer;">Filtrar</button>
+                        <span style="flex:1"></span>
+                        <label>Días a traer de Novusbet <input type="number" id="dias-historico" value="7" min="1" max="90" style="width:60px; padding:6px; border:1px solid #ddd; border-radius:4px;"></label>
+                        <button id="btn-sync-historico" onclick="sincronizarHistorico()" style="padding:7px 14px; background:#27ae60; color:white; border:none; border-radius:4px; cursor:pointer;">📅 Sincronizar histórico</button>
+                    </div>
                     <table>
                         <thead>
                             <tr>
@@ -140,6 +148,13 @@
                             <tr><td colspan="7" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; font-size:13px; color:#666;">
+                        <span id="paginacion-info">Cargando...</span>
+                        <div style="display:flex; gap:8px;">
+                            <button id="btn-pag-prev" onclick="paginaAnterior()" style="padding:6px 14px; border:1px solid #ddd; background:white; border-radius:4px; cursor:pointer;">← Anterior</button>
+                            <button id="btn-pag-next" onclick="paginaSiguiente()" style="padding:6px 14px; border:1px solid #ddd; background:white; border-radius:4px; cursor:pointer;">Siguiente →</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -254,18 +269,32 @@
             return r.json();
         }
 
+        let paginacion = { offset: 0, limit: 50, total: 0 };
+        let filtroFechas = { desde: '', hasta: '' };
+
+        function buildTransQuery() {
+            const p = new URLSearchParams({ offset: paginacion.offset, limit: paginacion.limit });
+            if (filtroFechas.desde) p.set('desde', filtroFechas.desde);
+            if (filtroFechas.hasta) p.set('hasta', filtroFechas.hasta);
+            return '/api/transacciones-novusbet?' + p.toString();
+        }
+
         async function cargarDatos() {
             try {
-                const [trans, usuarios, disc, resumen] = await Promise.all([
-                    fetchJSON('/api/transacciones-novusbet').catch(() => []),
+                const [transRes, usuarios, disc, resumen] = await Promise.all([
+                    fetchJSON(buildTransQuery()).catch(() => ({ datos: [], total: 0 })),
                     fetchJSON('/api/usuarios').catch(() => []),
                     fetchJSON('/api/disciplinas').catch(() => []),
                     fetchJSON('/api/transacciones-resumen').catch(() => null)
                 ]);
 
-                datos = { transacciones: trans || [], usuarios: usuarios || [], disciplinas: disc || [], resumen };
+                const trans = transRes.datos || [];
+                paginacion.total = transRes.total || 0;
+
+                datos = { transacciones: trans, usuarios: usuarios || [], disciplinas: disc || [], resumen };
 
                 actualizarUI();
+                actualizarPaginacion();
                 document.getElementById('actualizacion').textContent = new Date().toLocaleTimeString('es-ES');
             } catch (error) {
                 console.error('Error:', error);
@@ -273,6 +302,54 @@
             }
 
             cargarEstadoSync();
+        }
+
+        function actualizarPaginacion() {
+            const el = document.getElementById('paginacion-info');
+            if (!el) return;
+            const desde = paginacion.total === 0 ? 0 : paginacion.offset + 1;
+            const hasta = Math.min(paginacion.offset + paginacion.limit, paginacion.total);
+            el.textContent = `Mostrando ${desde}-${hasta} de ${paginacion.total.toLocaleString('es-ES')}`;
+            document.getElementById('btn-pag-prev').disabled = paginacion.offset === 0;
+            document.getElementById('btn-pag-next').disabled = hasta >= paginacion.total;
+        }
+
+        function paginaSiguiente() {
+            paginacion.offset += paginacion.limit;
+            cargarDatos();
+        }
+
+        function paginaAnterior() {
+            paginacion.offset = Math.max(0, paginacion.offset - paginacion.limit);
+            cargarDatos();
+        }
+
+        function aplicarFiltroFechas() {
+            filtroFechas.desde = document.getElementById('filtro-desde').value;
+            filtroFechas.hasta = document.getElementById('filtro-hasta').value;
+            paginacion.offset = 0;
+            cargarDatos();
+        }
+
+        async function sincronizarHistorico() {
+            const dias = parseInt(document.getElementById('dias-historico').value, 10) || 7;
+            const btn = document.getElementById('btn-sync-historico');
+            btn.disabled = true;
+            btn.textContent = 'Iniciando...';
+            try {
+                const res = await fetch('/api/admin/sync-historico', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dias })
+                });
+                const data = await res.json();
+                alert(data.mensaje || data.error || 'Sincronización iniciada');
+            } catch (e) {
+                alert('Error iniciando sincronización histórica');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '📅 Sincronizar histórico';
+            }
         }
 
         async function cargarEstadoSync() {
@@ -323,8 +400,8 @@
         }
 
         function actualizarTablas() {
-            // Transacciones
-            let html = datos.transacciones.slice(0, 8).map(t => `
+            // Transacciones (ya viene paginado desde la API, se muestran todas las de la página actual)
+            let html = datos.transacciones.map(t => `
                 <tr>
                     <td>${t.casa_apuestas || '-'}</td>
                     <td>${t.id_usuario_novusbet || '-'}</td>

@@ -145,23 +145,23 @@ async function login() {
 // DESCARGAR CSV
 // ============================================================
 
-function buildPayload(token) {
+function buildPayload(token, fechaDesde, fechaHasta) {
   const payload = new URLSearchParams();
   payload.append('site_id[]', '1049');
   payload.append('user_type', '2');
   payload.append('subusers', '0');
   payload.append('causal_product_id[]', process.env.CAUSAL_PRODUCT_ID || '');
   payload.append('per_page', '50');
-  payload.append('from-date', `${START_DATE} 00:00`);
-  payload.append('to-date', `${END_DATE} 23:59`);
+  payload.append('from-date', `${fechaDesde} 00:00`);
+  payload.append('to-date', `${fechaHasta} 23:59`);
   payload.append('_token', token);
   return payload;
 }
 
-async function downloadCSV(token, cookie) {
-  console.log(`📥 Descargando transacciones (${START_DATE} → ${END_DATE})...`);
+async function downloadCSV(token, cookie, fechaDesde = START_DATE, fechaHasta = END_DATE) {
+  console.log(`📥 Descargando transacciones (${fechaDesde} → ${fechaHasta})...`);
 
-  const payload = buildPayload(token);
+  const payload = buildPayload(token, fechaDesde, fechaHasta);
 
   const initRes = await httpsRequest('POST', EXPORT_URL, {
     headers: {
@@ -386,6 +386,10 @@ async function uploadToSupabase(records) {
   const numero = (valor) => parseFloat((valor || '').toString().replace(/[^0-9.-]/g, '')) || 0;
 
   const formattedRecords = records.map((record) => ({
+    // "id de transacción" es el ID único que asigna Novusbet a cada
+    // movimiento — lo usamos como llave para upsert, así el historial se
+    // ACUMULA en vez de borrarse en cada sincronización.
+    id_transaccion_novusbet: getField(record, 'id de transacción', 'id_transaccion', 'transaction_id'),
     usuario: getField(record, 'usuario', 'user', 'username', 'cliente', 'nombre') || 'N/A',
     tipo_transaccion: getField(record, 'tipo de transacción', 'tipo', 'type', 'transaction_type') || 'N/A',
     monto: numero(getField(record, 'monto', 'amount', 'total')),
@@ -404,23 +408,22 @@ async function uploadToSupabase(records) {
     grupo_causal: getField(record, 'grupo causal', 'causal', 'causal_group'),
     juego: extraerJuego(record),
     datos_raw: JSON.stringify(record),
-  }));
-
-  // Limpiar datos anteriores del mismo rango para evitar duplicados en cada sync
-  await supabase.from('transacciones_novusbet').delete().neq('id', 0);
+  })).filter((r) => r.id_transaccion_novusbet); // sin id no se puede deduplicar, se descarta
 
   const BATCH_SIZE = 1000;
   let inserted = 0;
   for (let i = 0; i < formattedRecords.length; i += BATCH_SIZE) {
     const batch = formattedRecords.slice(i, i + BATCH_SIZE);
-    const { error } = await supabase.from('transacciones_novusbet').insert(batch);
+    const { error } = await supabase
+      .from('transacciones_novusbet')
+      .upsert(batch, { onConflict: 'id_transaccion_novusbet', ignoreDuplicates: false });
     if (error) {
       console.error('❌ Error insertando lote:', error.message);
       throw error;
     }
     inserted += batch.length;
     if ((i / BATCH_SIZE) % 5 === 0) {
-      console.log(`  ...${inserted}/${formattedRecords.length} insertados`);
+      console.log(`  ...${inserted}/${formattedRecords.length} sincronizados`);
     }
   }
 
@@ -432,6 +435,47 @@ async function uploadToSupabase(records) {
 // MAIN
 // ============================================================
 
+function asegurarSupabase() {
+  if (!supabase && SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+    supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+  }
+}
+
+// Sincroniza un rango de fechas (usado tanto por main() como por el
+// backfill histórico). No hace process.exit — segura para llamar desde el
+// servidor sin tumbarlo si algo falla.
+async function sincronizarRango(fechaDesde, fechaHasta) {
+  asegurarSupabase();
+  if (!supabase) {
+    console.log('⚠️ Faltan credenciales de Supabase, solo se descargará y clasificará el CSV');
+  }
+
+  const { token, cookie } = await login();
+  const csvContent = await downloadCSV(token, cookie, fechaDesde, fechaHasta);
+  const records = parseCSV(csvContent);
+
+  console.log(`\n📊 ${records.length} transacciones procesadas (${fechaDesde} → ${fechaHasta})`);
+
+  const disciplinas = {};
+  const estados = {};
+  records.forEach((r) => {
+    const d = classifyDiscipline(r);
+    const e = classifyClientStatus(r);
+    disciplinas[d] = (disciplinas[d] || 0) + 1;
+    estados[e] = (estados[e] || 0) + 1;
+  });
+  console.log('   Por disciplina:', disciplinas);
+  console.log('   Por estado cliente:', estados);
+
+  if (records.length > 0) {
+    await uploadToSupabase(records);
+  } else {
+    console.log('⚠️ No se encontraron transacciones en el rango de fechas indicado');
+  }
+
+  return records.length;
+}
+
 async function main() {
   try {
     if (!BO_USERNAME || !BO_PASSWORD) {
@@ -439,45 +483,54 @@ async function main() {
       process.exit(1);
     }
 
-    if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
-      supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-    } else {
-      console.log('⚠️ Faltan credenciales de Supabase, solo se descargará y clasificará el CSV');
-    }
-
-    const { token, cookie } = await login();
-    const csvContent = await downloadCSV(token, cookie);
-    const records = parseCSV(csvContent);
-
-    console.log(`\n📊 ${records.length} transacciones procesadas`);
-
-    const disciplinas = {};
-    const estados = {};
-    records.forEach((r) => {
-      const d = classifyDiscipline(r);
-      const e = classifyClientStatus(r);
-      disciplinas[d] = (disciplinas[d] || 0) + 1;
-      estados[e] = (estados[e] || 0) + 1;
-    });
-    console.log('   Por disciplina:', disciplinas);
-    console.log('   Por estado cliente:', estados);
-
-    if (records.length > 0) {
-      await uploadToSupabase(records);
-    } else {
-      console.log('⚠️ No se encontraron transacciones en el rango de fechas indicado');
-    }
-
+    const total = await sincronizarRango(START_DATE, END_DATE);
     console.log('\n✅ Sincronización completada');
-    return records.length;
+    return total;
   } catch (err) {
     console.error('\n❌ Error fatal:', err.message);
     throw err;
   }
 }
 
+// Backfill histórico: sincroniza día por día desde hace `dias` días hasta
+// hoy. Se hace UN día a la vez (no un rango grande) porque un rango de 30
+// días de una sola pasada nunca termina de exportar en Novusbet (~30-35k
+// transacciones/día hacen que la exportación se cuelgue). Cada día usa
+// upsert por id_transaccion_novusbet, así que reintentar no duplica nada.
+async function syncHistorico(dias, onProgreso) {
+  if (!BO_USERNAME || !BO_PASSWORD) {
+    throw new Error('Faltan BO_USERNAME o BO_PASSWORD');
+  }
+
+  const hoy = new Date();
+  let totalGeneral = 0;
+  const resultadosPorDia = [];
+
+  for (let i = dias - 1; i >= 0; i--) {
+    const fecha = new Date(hoy.getTime() - i * 24 * 60 * 60 * 1000);
+    const fechaStr = fecha.toISOString().split('T')[0];
+
+    try {
+      console.log(`\n📅 Sincronizando día ${fechaStr} (${dias - i}/${dias})...`);
+      const total = await sincronizarRango(fechaStr, fechaStr);
+      totalGeneral += total;
+      resultadosPorDia.push({ fecha: fechaStr, transacciones: total, ok: true });
+    } catch (err) {
+      console.error(`❌ Error sincronizando ${fechaStr}:`, err.message);
+      resultadosPorDia.push({ fecha: fechaStr, error: err.message, ok: false });
+    }
+
+    if (onProgreso) onProgreso({ diasProcesados: dias - i, diasTotal: dias, totalGeneral, resultadosPorDia });
+
+    // Pequeña pausa entre días para no saturar el backoffice de Novusbet
+    if (i > 0) await new Promise((r) => setTimeout(r, 2000));
+  }
+
+  return { totalGeneral, resultadosPorDia };
+}
+
 if (require.main === module) {
   main().catch(() => process.exit(1));
 }
 
-module.exports = { main };
+module.exports = { main, syncHistorico };
