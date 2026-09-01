@@ -8,3 +8,4 @@ analisis-www/
 .DS_Store
 backfill-6-meses.js
 resync-hoy.js
+recalcular-resumen-hoy.js
