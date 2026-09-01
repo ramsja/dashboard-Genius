@@ -1,0 +1,50 @@
+{
+  "actualizado": "2026-08-27",
+  "nota": "Capa de datos en vivo del dashboard. El automatismo semanal (o cualquier edición manual) actualiza estos valores y el dashboard los recoge al abrir o cada 15 minutos vía HTTP. No inventar cifras: solo actualizar con fuente verificable.",
+  "mercado": { "y2025": 88.0, "y2026": 97.7, "y2033": 202.8, "cagr": 11.0 },
+  "serieMercado": {
+    "anios": ["2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030","2031","2032","2033"],
+    "obs": [64.0, 72.0, 73.4, 76.8, 79.2, 88.0, null, null, null, null, null, null, null, null],
+    "pro": [null, null, null, null, null, 88.0, 97.7, 108.4, 120.4, 133.6, 148.3, 164.6, 182.7, 202.8]
+  },
+  "operadores": {
+    "Betsson": 1.2,
+    "evoke (888)": 1.7,
+    "Evolution (B2B)": 2.0,
+    "Bet365": 5.45,
+    "DraftKings": 6.3,
+    "Entain": 6.4,
+    "Flutter": 16.3
+  },
+  "umbrales": { "top5GlobalM": 1700, "top5LatAmM": 250, "crecimientoUmbralPct": 8 },
+  "kpis": [
+    { "n": "iGaming EE.UU.", "v": 27.6, "ref": "AGA 2025 · 7 estados" },
+    { "n": "Casino en vivo", "v": 24.0, "ref": "CAGR Evolution 2019–23" },
+    { "n": "Sportsbook global", "v": 14.0, "ref": "Track360 2026" },
+    { "n": "Mercado global online", "v": 11.0, "ref": "GVR 2026–2033 (CAGR)" },
+    { "n": "Asia-Pacífico (región líder)", "v": 9.2, "ref": "IMARC · región más rápida" },
+    { "n": "Casino físico (referencia)", "v": 4.5, "ref": "crecimiento tradicional" }
+  ],
+  "riesgos": [
+    { "r": "Regulatorio: impuestos y licencias (BR · EE.UU. · SV)", "p": "Alta", "i": "Alto", "m": "Diversificar jurisdicciones · reserva de compliance" },
+    { "r": "CAC creciente (+60% en gaming en 2 años)", "p": "Alta", "i": "Alto", "m": "SEO/contenido propio, referidos, priorizar retención" },
+    { "r": "Abuso de bonos y fraude (64% del fraude iGaming)", "p": "Alta", "i": "Medio", "m": "KYC reforzado, límites de bono, detección con IA" },
+    { "r": "Concentración: Flutter/DraftKings dominan el marketing", "p": "Media", "i": "Alto", "m": "Nichos regionales, apuestas locales, comunidad" },
+    { "r": "Dependencia de proveedores (Evolution, plataforma)", "p": "Media", "i": "Medio", "m": "Estrategia multi-proveedor con cláusulas de salida" },
+    { "r": "Ciberseguridad y lavado de dinero (AML)", "p": "Media", "i": "Alto", "m": "Certificaciones, pentests, monitoreo transaccional" },
+    { "r": "Tipo de cambio y macro en mercados emergentes (SV/BR/KE)", "p": "Media", "i": "Medio", "m": "Cobertura cambiaria, precios en moneda local" },
+    { "r": "Juego responsable y reputación", "p": "Media", "i": "Alto", "m": "Autoexclusión, límites de depósito, transparencia" }
+  ],
+  "geniusbet": {
+    "ingresoAnualM": 10,
+    "crecimientoPct": 70,
+    "mercados": ["El Salvador (geniusbet.sv)", "Brasil (brasil.geniusbet.com, Ley 14.790)", "Kenia (licencia BCLB)"],
+    "nota": "Cifras de partida editables por el usuario en el dashboard; GeniusBet no publica resultados financieros."
+  },
+  "fuentes": [
+    "Grand View Research - Online Gambling Market 2026-2033 (ago 2026)",
+    "American Gaming Association - State of the States 2026",
+    "Resultados FY2025: Flutter, DraftKings, Bet365, Entain, Evolution, Betsson",
+    "GeniusBet: geniusbet.sv y brasil.geniusbet.com (presencia de mercado); Brasil Ley 14.790 / licencias SPA"
+  ]
+}

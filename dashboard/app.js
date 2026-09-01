@@ -255,9 +255,8 @@
         const pct = top > 0 ? Math.round((i.value / top) * 100) : 0;
         return (
           '<div class="row"><div class="lbl">' + esc(i.label) + '</div>' +
-          '<div class="track"><div class="fill" style="width:' + pct + '%;background:' + color + ';" title="' + fmt(i.value) + '">' +
-          (pct >= 14 ? fmt(i.value) : '') +
-          '</div></div></div>'
+          '<div class="track"><div class="fill" style="width:' + pct + '%;background:' + color + ';" title="' + fmt(i.value) + '"></div></div>' +
+          '<div class="bar-num">' + fmt(i.value) + '</div></div>'
         );
       })
       .join('');

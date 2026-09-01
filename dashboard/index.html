@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Panel de control de transacciones por disciplina y conexión" />
-    <title>Dashboard · Panel de control</title>
+    <meta name="description" content="Panel de operaciones y página de cálculos y predicciones de mercado" />
+    <title>Dashboard · Genius</title>
     <style>
       :root {
         --bg: #0b1020;
@@ -113,7 +113,8 @@
       }
       .bars .row .lbl { width: 84px; font-size: 13px; color: var(--muted); flex-shrink: 0; }
       .bars .track { flex: 1; background: var(--panel-soft); border-radius: 8px; height: 22px; overflow: hidden; }
-      .bars .fill { height: 100%; border-radius: 8px; min-width: 2px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 12px; font-weight: 600; color: #06121f; }
+      .bars .fill { height: 100%; border-radius: 8px; min-width: 2px; }
+      .bars .bar-num { width: 72px; text-align: right; font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; flex-shrink: 0; }
       .table-wrap {
         background: var(--panel);
         border: 1px solid var(--line);
@@ -158,6 +159,29 @@
         font-size: 14px;
       }
       .loading { color: var(--muted); padding: 40px 0; text-align: center; }
+      .tabs { display: flex; gap: 8px; margin: 16px 0 8px; }
+      .chart-box { position: relative; height: 320px; }
+      .sub { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+      .gold { color: var(--amber); }
+      .ck-v { margin-top: 6px; font-size: 20px; font-weight: 700; }
+      .ck-v.green { color: var(--green); }
+      .ck-v.gold { color: var(--amber); }
+      .ck-v.red { color: var(--red); }
+      .ctrl { margin-bottom: 14px; }
+      .ctrl label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+      .ctrl label b { color: var(--amber); font-variant-numeric: tabular-nums; }
+      input[type=range] { width: 100%; accent-color: var(--amber); }
+      .calc { display: grid; grid-template-columns: 340px 1fr; gap: 24px; }
+      .calc-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+      .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+      .sens th, .sens td { text-align: center; font-variant-numeric: tabular-nums; }
+      .sens td.hl { background: rgba(245,185,66,.18); color: var(--amber); font-weight: 700; }
+      .tag.warn { background: rgba(248,113,113,.18); color: #ffb5b5; }
+      .tag.gold { background: rgba(245,185,66,.18); color: #ffd88a; }
+      .note { font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+      .chip-ok { display: inline-block; background: rgba(48,196,141,.15); color: var(--green); border-radius: 8px; padding: 4px 10px; font-size: 12px; margin-top: 6px; }
+      footer.calc-foot { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top: 8px; }
+      @media (max-width: 980px) { .calc { grid-template-columns: 1fr; } }
       @media (max-width: 560px) {
         .bars .row .lbl { width: 60px; }
         .controls { width: 100%; }
@@ -177,11 +201,14 @@
             <span class="dot" id="connDot" style="background: var(--muted);"></span>
             <span class="source" id="connMode">fuente</span>
           </span>
+          <button class="btn" id="tabOps">Operaciones</button>
+          <button class="btn" id="tabCalc">Cálculos y predicciones</button>
           <button class="btn" id="btnFilter" data-filter="all">Todas las conexiones</button>
           <button class="btn" id="btnRefresh">Actualizar</button>
         </div>
       </header>
 
+      <div id="viewOps">
       <div id="loading" class="loading">Cargando datos…</div>
       <div id="errorBox" style="display:none;"></div>
 
@@ -251,9 +278,133 @@
           </div>
         </div>
       </section>
+      </div>
+
+      <div id="viewCalc" style="display:none;">
+        <div class="panel" style="margin-bottom:18px;">
+          <h2>Casinos online · inteligencia de mercado</h2>
+          <p class="sub">Mismos números y predicciones que la página original de cálculos (GVR 2025–2033). Línea sólida = observado; punteada = proyección.</p>
+          <span class="chip-ok" id="chipDatos">Datos al: —</span>
+          <button class="btn" id="btnActualizarMercado" style="margin-left:8px;">Buscar actualizaciones</button>
+        </div>
+
+        <div class="kpis">
+          <div class="card"><div class="label">Mercado global 2025</div><div class="value gold" id="v2025">$88.0 B</div><div class="sub">USD · juego online (GGR)</div></div>
+          <div class="card"><div class="label">Proyección 2026</div><div class="value gold" id="v2026">$97.7 B</div><div class="sub" id="d2026">+11.0% interanual</div></div>
+          <div class="card"><div class="label">CAGR 2026–2033</div><div class="value" style="color:var(--green)" id="vCAGR">11.0%</div><div class="sub">vs. casino físico ~3–5%</div></div>
+          <div class="card"><div class="label">Mercado 2033</div><div class="value gold" id="v2033">$202.8 B</div><div class="sub">más del doble de 2025</div></div>
+          <div class="card"><div class="label">Canal móvil</div><div class="value" style="color:var(--blue)">57%</div><div class="sub">del ingreso online</div></div>
+          <div class="card"><div class="label">iGaming EE.UU.</div><div class="value" style="color:var(--green)">+27.6%</div><div class="sub">crecimiento 2025 (7 estados)</div></div>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px;">
+          <h2>Crecimiento del mercado</h2>
+          <p class="sub">Miles de millones USD. Observado vs proyección Grand View Research (CAGR 11.0%).</p>
+          <div class="chart-box" style="height:360px"><canvas id="chCrecimiento"></canvas></div>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px;">
+          <h2>Proporciones del mercado (2025)</h2>
+          <div class="grid3">
+            <div><h2>Por producto</h2><div class="chart-box"><canvas id="chSegmento"></canvas></div></div>
+            <div><h2>Por región</h2><div class="chart-box"><canvas id="chRegion"></canvas></div></div>
+            <div><h2>Por dispositivo</h2><div class="chart-box"><canvas id="chDevice"></canvas></div></div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px;">
+          <h2>Comparativa de operadores (ingresos 2025)</h2>
+          <div class="grid2">
+            <div class="chart-box" style="height:340px"><canvas id="chOperadores"></canvas></div>
+            <div class="table-wrap" style="border:0;margin:0;">
+              <table>
+                <tr><th>Operador</th><th class="num">Ingresos</th><th class="num">Crecimiento</th><th>Nota</th></tr>
+                <tr><td>Flutter</td><td class="num">~$16.3 B</td><td class="num"><span class="tag">+~28% EE.UU.</span></td><td>Líder global</td></tr>
+                <tr><td>Entain</td><td class="num">~$6.4 B</td><td class="num"><span class="tag gold">estable</span></td><td>BetMGM, bwin</td></tr>
+                <tr><td>DraftKings</td><td class="num">~$6.3 B</td><td class="num"><span class="tag warn">guía recortada</span></td><td>#2 EE.UU.</td></tr>
+                <tr><td>Bet365</td><td class="num">~$5.45 B</td><td class="num"><span class="tag">+9%</span></td><td>~18% share online</td></tr>
+                <tr><td>Evolution (B2B)</td><td class="num">~$2.0 B</td><td class="num"><span class="tag">+24% live</span></td><td>Casino en vivo</td></tr>
+                <tr><td>evoke (888)</td><td class="num">~$1.7 B</td><td class="num"><span class="tag warn">bajo presión</span></td><td>888, William Hill</td></tr>
+                <tr><td>Betsson</td><td class="num">~$1.2 B</td><td class="num"><span class="tag">+LatAm</span></td><td>Fuerte en Latinoamérica</td></tr>
+                <tr><td>GeniusBet</td><td class="num" id="gTablaIng">—</td><td class="num"><span class="tag gold" id="gTablaCrec">—</span></td><td id="gTablaNota">Ajusta cifras abajo</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px;">
+          <h2>GeniusBet · ruta al Top 5</h2>
+          <p class="sub">Mismas fórmulas que la página original: años al umbral = ln(umbral/base) / ln((1+g)/(1+8%)).</p>
+          <div class="grid2">
+            <div class="chart-box" style="height:300px"><canvas id="chGeniusbet"></canvas></div>
+            <div>
+              <div class="ctrl"><label>Ingresos anuales actuales (AAR) <b id="vgIng">$10 M</b></label><input type="range" id="gIngreso" min="1" max="500" step="1" value="10"></div>
+              <div class="ctrl"><label>Crecimiento anual esperado <b id="vgCrec">70%</b></label><input type="range" id="gCrecimiento" min="20" max="150" step="5" value="70"></div>
+            </div>
+          </div>
+          <div class="calc-kpis">
+            <div class="card"><div class="label">Años al Top 5 LatAm (~$250 M)</div><div class="ck-v gold" id="gkLatAm">—</div></div>
+            <div class="card"><div class="label">Años al Top 5 global (~$1,700 M)</div><div class="ck-v" id="gkGlobal">—</div></div>
+            <div class="card"><div class="label">Jugadores activos equivalentes</div><div class="ck-v" id="gkJug">—</div></div>
+            <div class="card"><div class="label">Inversión anual en adquisición</div><div class="ck-v" id="gkMkt">—</div></div>
+            <div class="card"><div class="label">Ingreso proyectado a 5 años</div><div class="ck-v green" id="gk5y">—</div></div>
+          </div>
+          <div class="chart-box" style="height:340px;margin-top:16px"><canvas id="chRuta"></canvas></div>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px;">
+          <h2>KPIs de crecimiento · GeniusBet vs mercado</h2>
+          <div class="grid2">
+            <div class="chart-box"><canvas id="chKpis"></canvas></div>
+            <div class="table-wrap" style="border:0;margin:0;"><table id="tbKpis"></table></div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px;">
+          <h2>Matriz de riesgos</h2>
+          <div class="table-wrap" style="border:0;margin:0;"><table id="tbRiesgos"></table></div>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px;">
+          <h2>Inversiones y adquisiciones</h2>
+          <div class="chart-box"><canvas id="chMA"></canvas></div>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px;">
+          <h2>Punto de equilibrio (calculadora)</h2>
+          <p class="sub">BEP = costos fijos / (ARPU × (1 − variables − impuestos)). LTV = margen unitario × vida. Payback = CAC / margen unitario.</p>
+          <div class="calc">
+            <div>
+              <div class="ctrl"><label>Costos fijos mensuales <b id="vCF">$350,000</b></label><input type="range" id="inCF" min="50000" max="1500000" step="25000" value="350000"></div>
+              <div class="ctrl"><label>ARPU mensual por jugador <b id="vARPU">$300</b></label><input type="range" id="inARPU" min="100" max="600" step="10" value="300"></div>
+              <div class="ctrl"><label>Costos variables (% ingreso) <b id="vCV">35%</b></label><input type="range" id="inCV" min="20" max="50" step="1" value="35"></div>
+              <div class="ctrl"><label>Impuestos y licencias (% GGR) <b id="vIMP">20%</b></label><input type="range" id="inIMP" min="0" max="50" step="1" value="20"></div>
+              <div class="ctrl"><label>CAC (costo por jugador) <b id="vCAC">$350</b></label><input type="range" id="inCAC" min="100" max="1400" step="10" value="350"></div>
+              <div class="ctrl"><label>Vida media del jugador (meses) <b id="vVIDA">14</b></label><input type="range" id="inVIDA" min="6" max="36" step="1" value="14"></div>
+            </div>
+            <div>
+              <div class="chart-box" style="height:300px"><canvas id="chBEP"></canvas></div>
+              <div class="calc-kpis">
+                <div class="card"><div class="label">Punto de equilibrio</div><div class="ck-v gold" id="kBEP">—</div></div>
+                <div class="card"><div class="label">Ingreso en equilibrio</div><div class="ck-v" id="kIngBEP">—</div></div>
+                <div class="card"><div class="label">Margen de contribución</div><div class="ck-v" id="kMC">—</div></div>
+                <div class="card"><div class="label">LTV por jugador</div><div class="ck-v" id="kLTV">—</div></div>
+                <div class="card"><div class="label">Ratio LTV : CAC</div><div class="ck-v" id="kRatio">—</div></div>
+                <div class="card"><div class="label">Payback del CAC</div><div class="ck-v" id="kPay">—</div></div>
+              </div>
+            </div>
+          </div>
+          <h2 style="margin-top:22px">Sensibilidad del punto de equilibrio</h2>
+          <div class="table-wrap" style="border:0;margin:0;"><table class="sens" id="tbSens"></table></div>
+        </div>
+
+        <footer class="calc-foot">Fuentes: Grand View Research · AGA · resultados FY2025 de operadores. Material informativo; no es asesoría de inversión.</footer>
+      </div>
     </div>
 
     <script src="./config.js"></script>
     <script src="./app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="./mercado.js"></script>
   </body>
 </html>
