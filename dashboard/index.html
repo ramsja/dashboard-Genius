@@ -466,7 +466,7 @@
                 <tr>
                     <td>${i + 1}</td>
                     <td>${u.id_usuario_novusbet || '-'}</td>
-                    <td><strong>${u.usuario || '-'}</strong></td>
+                    <td><strong>${u.nombre_completo || u.usuario || '-'}</strong></td>
                     <td>${u.casa_apuestas || '-'}</td>
                     <td title="${juegos.join(', ')}">${juegosTexto}</td>
                     <td class="numero">${u.apuestas || 0}</td>
@@ -497,7 +497,7 @@
                 <tr style="background:#fff5f5;">
                     <td>${a.fecha ? new Date(a.fecha).toLocaleString('es-ES') : '-'}</td>
                     <td>${a.id_usuario_novusbet || '-'}</td>
-                    <td><strong>${a.usuario || '-'}</strong></td>
+                    <td><strong>${a.nombre_completo || a.usuario || '-'}</strong></td>
                     <td>${a.casa_apuestas || '-'}</td>
                     <td>${a.juego || '-'}</td>
                     <td class="numero" style="color:#c0392b; font-weight:600;">$${Math.abs(a.monto || 0).toFixed(2)}</td>
@@ -517,7 +517,7 @@
                 <tr style="background:#f0fff4;">
                     <td>${a.fecha ? new Date(a.fecha).toLocaleString('es-ES') : '-'}</td>
                     <td>${a.id_usuario_novusbet || '-'}</td>
-                    <td><strong>${a.usuario || '-'}</strong></td>
+                    <td><strong>${a.nombre_completo || a.usuario || '-'}</strong></td>
                     <td>${a.casa_apuestas || '-'}</td>
                     <td>${a.juego || '-'}</td>
                     <td class="numero" style="color:#155724; font-weight:600;">$${Math.abs(a.monto || 0).toFixed(2)}</td>
@@ -756,7 +756,7 @@
                 <tr onclick="abrirDetalleTransaccion(${idx})" style="cursor:pointer;">
                     <td>${t.casa_apuestas || '-'}</td>
                     <td>${t.id_usuario_novusbet || '-'}</td>
-                    <td><strong>${t.usuario}</strong></td>
+                    <td><strong>${t.nombre_completo || t.usuario}</strong></td>
                     <td>${t.tipo_transaccion}</td>
                     <td class="numero">$${(t.monto || 0).toFixed(2)}</td>
                     <td><span class="badge badge-${t.disciplina}">${t.disciplina}</span></td>

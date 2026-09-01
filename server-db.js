@@ -95,6 +95,35 @@ async function fetchTodasLasFilas(tabla, columnas, limiteMax = 100000) {
   return todas;
 }
 
+// Le agrega nombre_completo a cada fila (nombre + apellido reales de
+// usuarios_novusbet) buscando solo los IDs que aparecen en `filas`, para
+// mostrar el nombre real en vez del código numérico donde ya lo tenemos
+// sincronizado. Si el usuario no está sincronizado todavía, queda sin
+// nombre_completo y el dashboard sigue mostrando el código.
+async function agregarNombresReales(filas, idField = 'id_usuario_novusbet') {
+  if (!supabase || filas.length === 0) return filas;
+  try {
+    const ids = [...new Set(filas.map((f) => f[idField]).filter(Boolean))];
+    if (ids.length === 0) return filas;
+    const { data } = await supabase
+      .from('usuarios_novusbet')
+      .select('id_usuario, nombre, apellido')
+      .in('id_usuario', ids);
+    const porId = {};
+    (data || []).forEach((u) => {
+      const nombre = [u.nombre, u.apellido].filter(Boolean).join(' ').trim();
+      if (nombre) porId[u.id_usuario] = nombre;
+    });
+    filas.forEach((f) => {
+      const nombre = porId[f[idField]];
+      if (nombre) f.nombre_completo = nombre;
+    });
+  } catch (e) {
+    // usuarios_novusbet puede no existir todavía, no es crítico
+  }
+  return filas;
+}
+
 function generarSessionId() {
   return crypto.randomBytes(24).toString('hex');
 }
@@ -531,6 +560,7 @@ const server = http.createServer(async (req, res) => {
               if (real) t.estado_real = real;
             });
           }
+          transacciones = await agregarNombresReales(transacciones);
         } catch (e) {
           // usuarios_novusbet puede no existir todavía, no es crítico
         }
@@ -847,10 +877,12 @@ const server = http.createServer(async (req, res) => {
         }
       }
 
-      const ranking = Object.values(porUsuario)
-        .map((u) => ({ ...u, juegos: Array.from(u.juegos), beneficio: u.apostado - u.ganado }))
-        .sort((a, b) => b.apostado - a.apostado)
-        .slice(0, limit);
+      const ranking = await agregarNombresReales(
+        Object.values(porUsuario)
+          .map((u) => ({ ...u, juegos: Array.from(u.juegos), beneficio: u.apostado - u.ganado }))
+          .sort((a, b) => b.apostado - a.apostado)
+          .slice(0, limit)
+      );
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ ranking }));
@@ -870,7 +902,7 @@ const server = http.createServer(async (req, res) => {
             .select('*')
             .order('fecha', { ascending: false })
             .limit(limit);
-          alertas = data || [];
+          alertas = await agregarNombresReales(data || []);
         } catch (e) {
           // alertas_apuestas puede no existir todavía
         }
@@ -894,7 +926,7 @@ const server = http.createServer(async (req, res) => {
             .select('*')
             .order('fecha', { ascending: false })
             .limit(limit);
-          alertas = data || [];
+          alertas = await agregarNombresReales(data || []);
         } catch (e) {
           // alertas_ganancias puede no existir todavía
         }
