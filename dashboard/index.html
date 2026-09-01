@@ -482,9 +482,9 @@
         }
 
         function textoMotivoAlerta(motivo) {
-            if (motivo === 'global+relativo') return 'Global + patrón propio';
-            if (motivo === 'relativo') return 'Patrón propio del usuario';
-            return 'Umbral global';
+            const partes = (motivo || 'global').split('+');
+            const nombres = { fijo: 'Piso fijo ($15,000)', global: 'Umbral global', relativo: 'Patrón propio del usuario' };
+            return partes.map((p) => nombres[p] || p).join(' + ');
         }
 
         function actualizarAlertasApuestas() {

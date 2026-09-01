@@ -39,6 +39,11 @@ const EXPORT_WAIT_SECONDS = 3;
 // Ajustable sin redeploy: fly secrets set UMBRAL_ALERTA_APUESTA=1000
 const UMBRAL_ALERTA_APUESTA = parseFloat(process.env.UMBRAL_ALERTA_APUESTA || '500');
 
+// Piso fijo adicional: SIEMPRE alerta una apuesta >= este monto, aunque
+// el umbral adaptativo (percentil 99) haya dado un número más alto.
+// Ajustable: fly secrets set UMBRAL_FIJO_APUESTA=20000
+const UMBRAL_FIJO_APUESTA = parseFloat(process.env.UMBRAL_FIJO_APUESTA || '15000');
+
 // Cuántas veces por encima de su propio promedio tiene que apostar un
 // usuario para que se considere anómalo para ÉL en particular.
 const FACTOR_RELATIVO_APUESTA = parseFloat(process.env.FACTOR_RELATIVO_APUESTA || '5');
@@ -598,7 +603,12 @@ async function guardarAlertasApuestas(formattedRecords) {
       const umbralRelativo = promedioUsuario ? promedioUsuario * FACTOR_RELATIVO_APUESTA : null;
       const superaGlobal = monto >= umbralGlobal;
       const superaRelativo = umbralRelativo !== null && monto >= umbralRelativo;
-      if (!superaGlobal && !superaRelativo) return null;
+      const superaFijo = monto >= UMBRAL_FIJO_APUESTA;
+      if (!superaGlobal && !superaRelativo && !superaFijo) return null;
+      const motivos = [];
+      if (superaFijo) motivos.push('fijo');
+      if (superaGlobal) motivos.push('global');
+      if (superaRelativo) motivos.push('relativo');
       return {
         id_transaccion_novusbet: r.id_transaccion_novusbet,
         id_usuario_novusbet: r.id_usuario_novusbet,
@@ -609,8 +619,8 @@ async function guardarAlertasApuestas(formattedRecords) {
         juego: r.juego,
         descripcion: r.descripcion,
         fecha: r.fecha,
-        umbral_usado: umbralGlobal,
-        motivo_alerta: superaGlobal && superaRelativo ? 'global+relativo' : superaGlobal ? 'global' : 'relativo',
+        umbral_usado: Math.min(umbralGlobal, UMBRAL_FIJO_APUESTA),
+        motivo_alerta: motivos.join('+'),
       };
     })
     .filter(Boolean);
