@@ -21,6 +21,12 @@ CREATE TABLE IF NOT EXISTS alertas_ganancias (
   creado_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Tendencia del usuario (alza/baja/estable/sin_dato), calculada con
+-- estadística simple sobre su historial reciente en resumen_diario_usuarios
+-- (ver clasificarTendencia en sync-novusbet.js) — seguro de correr de
+-- nuevo si ya habías creado la tabla sin esta columna.
+ALTER TABLE alertas_ganancias ADD COLUMN IF NOT EXISTS patron TEXT;
+
 CREATE INDEX IF NOT EXISTS idx_alertas_ganancias_fecha ON alertas_ganancias(fecha DESC);
 
 -- Verificación

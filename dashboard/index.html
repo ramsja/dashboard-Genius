@@ -253,12 +253,11 @@
                                 <th>Casa</th>
                                 <th>Apuestas Grandes</th>
                                 <th>Monto Total</th>
-                                <th>Motivos</th>
                                 <th>Última Vez</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-alertas-apuestas">
-                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="6" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -280,10 +279,11 @@
                                 <th>Casa</th>
                                 <th>Juego</th>
                                 <th>Monto</th>
+                                <th>Patrón</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-alertas-ganancias">
-                            <tr><td colspan="6" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -482,18 +482,12 @@
             document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="11" class="loading">Todavía sin datos</td></tr>';
         }
 
-        function textoMotivoAlerta(motivo) {
-            const partes = (motivo || 'global').split('+');
-            const nombres = { fijo: 'Piso fijo ($15,000)', global: 'Umbral global', relativo: 'Patrón propio del usuario' };
-            return partes.map((p) => nombres[p] || p).join(' + ');
-        }
-
         function actualizarAlertasApuestas() {
             const filas = datos.alertasApuestas || [];
             const umbral = filas[0] ? filas[0].umbral_usado : null;
             document.getElementById('alertas-umbral-info').textContent = umbral
-                ? `Umbral adaptativo actual: $${Number(umbral).toFixed(2)} (percentil 99 real) — o 5x el promedio propio del usuario, o $15,000 fijo.`
-                : 'Sin alertas todavía. El umbral se calcula solo a partir de los datos reales.';
+                ? `Se alerta toda apuesta con monto igual o mayor a $${Number(umbral).toFixed(2)}.`
+                : 'Sin alertas todavía.';
 
             // Agrupa por usuario: varias alertas del mismo jugador quedan en
             // una sola fila con el total, en vez de una fila por operación.
@@ -507,14 +501,12 @@
                         casa_apuestas: a.casa_apuestas,
                         cantidad: 0,
                         montoTotal: 0,
-                        motivos: new Set(),
                         ultimaFecha: null,
                     };
                 }
                 const u = porUsuario[key];
                 u.cantidad += 1;
                 u.montoTotal += Math.abs(a.monto || 0);
-                (a.motivo_alerta || 'global').split('+').forEach((m) => u.motivos.add(m));
                 if (a.fecha && (!u.ultimaFecha || new Date(a.fecha) > new Date(u.ultimaFecha))) u.ultimaFecha = a.fecha;
             });
 
@@ -527,18 +519,24 @@
                     <td>${u.casa_apuestas || '-'}</td>
                     <td class="numero">${u.cantidad}</td>
                     <td class="numero" style="color:#c0392b; font-weight:600;">$${u.montoTotal.toFixed(2)}</td>
-                    <td>${textoMotivoAlerta(Array.from(u.motivos).join('+'))}</td>
                     <td>${u.ultimaFecha ? new Date(u.ultimaFecha).toLocaleString('es-ES') : '-'}</td>
                 </tr>
             `).join('');
-            document.getElementById('tabla-alertas-apuestas').innerHTML = html || '<tr><td colspan="7" class="loading">Sin alertas</td></tr>';
+            document.getElementById('tabla-alertas-apuestas').innerHTML = html || '<tr><td colspan="6" class="loading">Sin alertas</td></tr>';
+        }
+
+        function textoPatron(patron) {
+            if (patron === 'alza') return '📈 En alza';
+            if (patron === 'baja') return '📉 En baja';
+            if (patron === 'estable') return '➡️ Estable';
+            return 'Sin datos suficientes';
         }
 
         function actualizarAlertasGanancias() {
             const filas = datos.alertasGanancias || [];
             const umbral = filas[0] ? filas[0].umbral_usado : null;
             document.getElementById('alertas-ganancias-umbral-info').textContent = umbral
-                ? `Se alerta toda ganancia con monto igual o mayor a $${Number(umbral).toFixed(2)}.`
+                ? `Se alerta toda ganancia con monto igual o mayor a $${Number(umbral).toFixed(2)}. "Patrón" compara el promedio reciente del usuario contra su historial anterior.`
                 : 'Sin alertas todavía.';
             const html = filas.slice(0, 100).map((a) => `
                 <tr style="background:#f0fff4;">
@@ -548,9 +546,10 @@
                     <td>${a.casa_apuestas || '-'}</td>
                     <td>${a.juego || '-'}</td>
                     <td class="numero" style="color:#155724; font-weight:600;">$${Math.abs(a.monto || 0).toFixed(2)}</td>
+                    <td>${textoPatron(a.patron)}</td>
                 </tr>
             `).join('');
-            document.getElementById('tabla-alertas-ganancias').innerHTML = html || '<tr><td colspan="6" class="loading">Sin alertas</td></tr>';
+            document.getElementById('tabla-alertas-ganancias').innerHTML = html || '<tr><td colspan="7" class="loading">Sin alertas</td></tr>';
         }
 
         function claseBadgeEstadoReal(estado) {

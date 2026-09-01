@@ -245,12 +245,10 @@ async function cargarDatosAutomatico() {
 
   try {
     console.log('📝 Sincronizando datos REALES desde Novusbet...');
-    // El resumen diario ya se calcula solo (en memoria, sin volver a
-    // consultar la base) dentro de la sincronización — no hace falta
-    // pedirlo aparte. Solo falta refrescar el umbral de alertas.
-    const { main: sincronizarNovusbet, actualizarParametrosAlerta } = require('./sync-novusbet');
+    // El resumen diario y las alertas ya se calculan solos (en memoria,
+    // sin volver a consultar la base) dentro de la sincronización.
+    const { main: sincronizarNovusbet } = require('./sync-novusbet');
     const total = await sincronizarNovusbet();
-    await actualizarParametrosAlerta();
     console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
     syncStatus.estado = 'completado';
     syncStatus.fin = new Date().toISOString();
