@@ -368,10 +368,13 @@ function esGanancia(descripcion) {
 }
 
 // Descripciones que no son nombres de juego reales: placeholders sin
-// rellenar que vienen así del propio Novusbet ({{gamename}}), o texto
-// administrativo (solicitudes, premios, ajustes) que no corresponde a
-// ninguna tragamonedas/juego en particular.
-const JUEGO_JUNK_REGEX = /\{\{|\}\}|^premio$|^solicitud\b|^ajuste$|^bono$|^cashback$|^credito$|^crédito$|^comisión$|^comision$|^n\/?a$|^-$/i;
+// rellenar que vienen así del propio Novusbet ({{gamename}}), texto
+// administrativo (solicitudes, premios, ajustes, depósitos, retiros) que
+// no corresponde a ninguna tragamonedas/juego en particular, o apuestas
+// financiadas con bono que Novusbet reporta con un código de cupón en
+// vez de un juego ("Apuesta de bono: GSV-XXXXX-XXXXX") — sí son apuestas
+// reales (por eso pasan esApuesta), pero no tienen un juego asociado.
+const JUEGO_JUNK_REGEX = /\{\{|\}\}|^premio$|^solicitud\b|^ajuste$|^bono$|^cashback$|^credito$|^crédito$|^comisión$|^comision$|^n\/?a$|^-$|^apuesta de bono\b|^dep[oó]sito\b|^ganancia de cup[oó]n\b|^retiro\b/i;
 
 function extraerJuego(record) {
   const descripcion = getField(record, 'descripción', 'descripcion', 'description');
