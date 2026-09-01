@@ -27,6 +27,10 @@ CREATE TABLE IF NOT EXISTS alertas_ganancias (
 -- nuevo si ya habías creado la tabla sin esta columna.
 ALTER TABLE alertas_ganancias ADD COLUMN IF NOT EXISTS patron TEXT;
 
+-- 'critica' si el monto es >= UMBRAL_SEVERIDAD_CRITICA (ver sync-novusbet.js,
+-- default $20,000), 'normal' si no. Mismo umbral que en alertas_apuestas.
+ALTER TABLE alertas_ganancias ADD COLUMN IF NOT EXISTS severidad TEXT DEFAULT 'normal';
+
 CREATE INDEX IF NOT EXISTS idx_alertas_ganancias_fecha ON alertas_ganancias(fecha DESC);
 
 -- Verificación

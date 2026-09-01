@@ -253,11 +253,12 @@
                                 <th>Casa</th>
                                 <th>Apuestas Grandes</th>
                                 <th>Monto Total</th>
+                                <th>Severidad</th>
                                 <th>Última Vez</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-alertas-apuestas">
-                            <tr><td colspan="6" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -280,10 +281,11 @@
                                 <th>Juego</th>
                                 <th>Monto</th>
                                 <th>Patrón</th>
+                                <th>Severidad</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-alertas-ganancias">
-                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="8" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -482,12 +484,16 @@
             document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="11" class="loading">Todavía sin datos</td></tr>';
         }
 
+        function badgeSeveridad(esCritica) {
+            return esCritica
+                ? `<span class="badge" style="background:#f8d7da; color:#721c24; font-weight:700;">🔴 Crítica</span>`
+                : `<span class="badge" style="background:#e2e3e5; color:#383d41;">Normal</span>`;
+        }
+
         function actualizarAlertasApuestas() {
             const filas = datos.alertasApuestas || [];
-            const umbral = filas[0] ? filas[0].umbral_usado : null;
-            document.getElementById('alertas-umbral-info').textContent = umbral
-                ? `Se alerta toda apuesta con monto igual o mayor a $${Number(umbral).toFixed(2)}.`
-                : 'Sin alertas todavía.';
+            document.getElementById('alertas-umbral-info').textContent =
+                'Casino/otros: alerta desde $15,000. Deportes: alerta desde $2,500 (mucho más sensible). Cualquiera de las dos >= $20,000 se marca como crítica.';
 
             // Agrupa por usuario: varias alertas del mismo jugador quedan en
             // una sola fila con el total, en vez de una fila por operación.
@@ -501,12 +507,14 @@
                         casa_apuestas: a.casa_apuestas,
                         cantidad: 0,
                         montoTotal: 0,
+                        tieneCritica: false,
                         ultimaFecha: null,
                     };
                 }
                 const u = porUsuario[key];
                 u.cantidad += 1;
                 u.montoTotal += Math.abs(a.monto || 0);
+                if (a.severidad === 'critica') u.tieneCritica = true;
                 if (a.fecha && (!u.ultimaFecha || new Date(a.fecha) > new Date(u.ultimaFecha))) u.ultimaFecha = a.fecha;
             });
 
@@ -519,10 +527,11 @@
                     <td>${u.casa_apuestas || '-'}</td>
                     <td class="numero">${u.cantidad}</td>
                     <td class="numero" style="color:#c0392b; font-weight:600;">$${u.montoTotal.toFixed(2)}</td>
+                    <td>${badgeSeveridad(u.tieneCritica)}</td>
                     <td>${u.ultimaFecha ? new Date(u.ultimaFecha).toLocaleString('es-ES') : '-'}</td>
                 </tr>
             `).join('');
-            document.getElementById('tabla-alertas-apuestas').innerHTML = html || '<tr><td colspan="6" class="loading">Sin alertas</td></tr>';
+            document.getElementById('tabla-alertas-apuestas').innerHTML = html || '<tr><td colspan="7" class="loading">Sin alertas</td></tr>';
         }
 
         function textoPatron(patron) {
@@ -536,7 +545,7 @@
             const filas = datos.alertasGanancias || [];
             const umbral = filas[0] ? filas[0].umbral_usado : null;
             document.getElementById('alertas-ganancias-umbral-info').textContent = umbral
-                ? `Se alerta toda ganancia con monto igual o mayor a $${Number(umbral).toFixed(2)}. "Patrón" compara el promedio reciente del usuario contra su historial anterior.`
+                ? `Se alerta toda ganancia con monto igual o mayor a $${Number(umbral).toFixed(2)}, y se marca crítica desde $20,000. "Patrón" compara el promedio reciente del usuario contra su historial anterior.`
                 : 'Sin alertas todavía.';
             const html = filas.slice(0, 100).map((a) => `
                 <tr style="background:#f0fff4;">
@@ -547,9 +556,10 @@
                     <td>${a.juego || '-'}</td>
                     <td class="numero" style="color:#155724; font-weight:600;">$${Math.abs(a.monto || 0).toFixed(2)}</td>
                     <td>${textoPatron(a.patron)}</td>
+                    <td>${badgeSeveridad(a.severidad === 'critica')}</td>
                 </tr>
             `).join('');
-            document.getElementById('tabla-alertas-ganancias').innerHTML = html || '<tr><td colspan="7" class="loading">Sin alertas</td></tr>';
+            document.getElementById('tabla-alertas-ganancias').innerHTML = html || '<tr><td colspan="8" class="loading">Sin alertas</td></tr>';
         }
 
         function claseBadgeEstadoReal(estado) {

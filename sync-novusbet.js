@@ -34,14 +34,23 @@ const MAX_EXPORT_ATTEMPTS = 200;
 const EXPORT_WAIT_SECONDS = 3;
 
 // Alerta de apuesta grande: monto fijo, sin cálculo adaptativo (a pedido,
-// para mantenerlo simple y liviano en consultas a Supabase).
-// Ajustable sin redeploy: fly secrets set UMBRAL_FIJO_APUESTA=20000
+// para mantenerlo simple y liviano en consultas a Supabase). Deportes
+// tiene su propio umbral, mucho más sensible que casino/otros.
+// Ajustable sin redeploy:
+//   fly secrets set UMBRAL_FIJO_APUESTA=20000
+//   fly secrets set UMBRAL_FIJO_APUESTA_DEPORTES=3000
 const UMBRAL_FIJO_APUESTA = parseFloat(process.env.UMBRAL_FIJO_APUESTA || '15000');
+const UMBRAL_FIJO_APUESTA_DEPORTES = parseFloat(process.env.UMBRAL_FIJO_APUESTA_DEPORTES || '2500');
 
 // Alerta de GANANCIA grande: módulo separado de la de apuestas. Umbral
 // fijo (no adaptativo), pedido explícitamente en $15,000.
 // Ajustable sin redeploy: fly secrets set UMBRAL_ALERTA_GANANCIA=20000
 const UMBRAL_ALERTA_GANANCIA = parseFloat(process.env.UMBRAL_ALERTA_GANANCIA || '15000');
+
+// A partir de este monto (apuesta o ganancia), la alerta se marca como
+// "crítica" en vez de "normal" — mismo umbral fijo para ambos módulos.
+// Ajustable: fly secrets set UMBRAL_SEVERIDAD_CRITICA=25000
+const UMBRAL_SEVERIDAD_CRITICA = parseFloat(process.env.UMBRAL_SEVERIDAD_CRITICA || '20000');
 
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -559,22 +568,31 @@ async function guardarAlertasApuestas(formattedRecords) {
 
   // Simplificado a pedido: solo monto fijo, sin el cálculo adaptativo
   // (percentil 99 / promedio por usuario) — menos consultas a Supabase
-  // en cada sync, importante con el plan gratuito ya ajustado.
+  // en cada sync, importante con el plan gratuito ya ajustado. Deportes
+  // usa un umbral aparte, mucho más bajo que casino/otros.
   const alertas = formattedRecords
-    .filter((r) => r.es_apuesta && Math.abs(r.monto) >= UMBRAL_FIJO_APUESTA)
-    .map((r) => ({
-      id_transaccion_novusbet: r.id_transaccion_novusbet,
-      id_usuario_novusbet: r.id_usuario_novusbet,
-      usuario: r.usuario,
-      casa_apuestas: r.casa_apuestas,
-      monto: r.monto,
-      disciplina: r.disciplina,
-      juego: r.juego,
-      descripcion: r.descripcion,
-      fecha: r.fecha,
-      umbral_usado: UMBRAL_FIJO_APUESTA,
-      motivo_alerta: 'fijo',
-    }));
+    .filter((r) => {
+      if (!r.es_apuesta) return false;
+      const umbral = r.disciplina === 'deportes' ? UMBRAL_FIJO_APUESTA_DEPORTES : UMBRAL_FIJO_APUESTA;
+      return Math.abs(r.monto) >= umbral;
+    })
+    .map((r) => {
+      const umbral = r.disciplina === 'deportes' ? UMBRAL_FIJO_APUESTA_DEPORTES : UMBRAL_FIJO_APUESTA;
+      return {
+        id_transaccion_novusbet: r.id_transaccion_novusbet,
+        id_usuario_novusbet: r.id_usuario_novusbet,
+        usuario: r.usuario,
+        casa_apuestas: r.casa_apuestas,
+        monto: r.monto,
+        disciplina: r.disciplina,
+        juego: r.juego,
+        descripcion: r.descripcion,
+        fecha: r.fecha,
+        umbral_usado: umbral,
+        motivo_alerta: 'fijo',
+        severidad: Math.abs(r.monto) >= UMBRAL_SEVERIDAD_CRITICA ? 'critica' : 'normal',
+      };
+    });
 
   if (alertas.length === 0) return;
 
@@ -654,6 +672,7 @@ async function guardarAlertasGanancias(formattedRecords) {
     fecha: r.fecha,
     umbral_usado: UMBRAL_ALERTA_GANANCIA,
     patron: patrones[r.id_usuario_novusbet] || 'sin_dato',
+    severidad: Math.abs(r.monto) >= UMBRAL_SEVERIDAD_CRITICA ? 'critica' : 'normal',
   }));
 
   try {
