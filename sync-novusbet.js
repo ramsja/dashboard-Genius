@@ -367,10 +367,18 @@ function esGanancia(descripcion) {
   return GANANCIA_REGEX.test(descripcion || '');
 }
 
+// Descripciones que no son nombres de juego reales: placeholders sin
+// rellenar que vienen así del propio Novusbet ({{gamename}}), o texto
+// administrativo (solicitudes, premios, ajustes) que no corresponde a
+// ninguna tragamonedas/juego en particular.
+const JUEGO_JUNK_REGEX = /\{\{|\}\}|^premio$|^solicitud\b|^ajuste$|^bono$|^n\/?a$|^-$/i;
+
 function extraerJuego(record) {
   const descripcion = getField(record, 'descripción', 'descripcion', 'description');
   if (!descripcion) return '';
-  return descripcion.replace(SUFIJOS_REGEX, '').trim() || descripcion;
+  const limpio = (descripcion.replace(SUFIJOS_REGEX, '').trim() || descripcion).trim();
+  if (!limpio || limpio.length < 3 || JUEGO_JUNK_REGEX.test(limpio)) return '';
+  return limpio;
 }
 
 function classifyClientStatus(record) {

@@ -206,11 +206,15 @@
 
             <!-- Ranking de jugadores (base histórica importada + acumulado día a día) -->
             <div class="section" style="grid-column: 1 / -1;">
-                <div class="section-header">
+                <div class="section-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                     <h2>🏆 Top 25 Jugadores</h2>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="file" id="input-csv-ranking" accept=".csv" style="display:none;" onchange="subirCSVRanking(this.files[0])">
+                        <button onclick="document.getElementById('input-csv-ranking').click()" style="padding:6px 14px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:4px; cursor:pointer; font-size:12px;">📤 Subir CSV de Novusbet</button>
+                    </div>
                 </div>
                 <div class="section-content">
-                    <p style="font-size:12px; color:#999; margin-bottom:12px;">
+                    <p id="ranking-csv-info" style="font-size:12px; color:#999; margin-bottom:12px;">
                         Combina la base histórica importada desde el reporte de Novusbet con lo que se sigue acumulando automáticamente día a día desde que arrancó este seguimiento.
                         "Beneficio" es desde el lado de la casa: apostado menos ganado (positivo = ganancia para la casa, negativo = el jugador ganó más de lo que apostó).
                     </p>
@@ -736,6 +740,30 @@
                 btn.disabled = false;
                 btn.textContent = '📅 Sincronizar rango';
             }
+        }
+
+        function subirCSVRanking(file) {
+            if (!file) return;
+            const info = document.getElementById('ranking-csv-info');
+            info.textContent = `Subiendo ${file.name}...`;
+            const lector = new FileReader();
+            lector.onload = async () => {
+                try {
+                    const res = await fetch('/api/admin/importar-ranking-csv', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/csv' },
+                        body: lector.result
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'Error subiendo el CSV');
+                    info.textContent = `✅ ${data.subidos} jugadores importados desde ${file.name}.`;
+                    await cargarDatos();
+                } catch (e) {
+                    info.textContent = `❌ ${e.message}`;
+                }
+            };
+            lector.onerror = () => { info.textContent = '❌ No se pudo leer el archivo'; };
+            lector.readAsText(file);
         }
 
         async function cargarEstadoSync() {

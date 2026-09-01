@@ -887,6 +887,82 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // API: SUBIR CSV DEL REPORTE DE NOVUSBET para (re)llenar
+    // ranking_historico_base. Mismo formato que customreport.csv:
+    // línea 1 = encabezado del resumen, línea 2 = valores del resumen,
+    // línea 3 = encabezado real (Id,Usuario,Propietario,Total,PROMEDIO,
+    // Importe,Ganancias,Beneficio,Moneda), línea 4+ = un jugador por fila.
+    if (pathname === '/api/admin/importar-ranking-csv' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => (body += chunk));
+      req.on('end', async () => {
+        try {
+          if (!supabase) throw new Error('Supabase no configurado');
+
+          const parseLineaCSV = (linea) => {
+            const campos = [];
+            let actual = '';
+            let entreComillas = false;
+            for (let i = 0; i < linea.length; i++) {
+              const c = linea[i];
+              if (c === '"') entreComillas = !entreComillas;
+              else if (c === ',' && !entreComillas) { campos.push(actual); actual = ''; }
+              else actual += c;
+            }
+            campos.push(actual);
+            return campos;
+          };
+          const numero = (v) => parseFloat((v || '').toString().replace(/[^0-9.-]/g, '')) || 0;
+
+          const lineas = body.split(/\r?\n/).filter((l) => l.trim());
+          if (lineas.length < 4) throw new Error('El CSV no tiene el formato esperado (muy pocas líneas)');
+
+          const encabezados = parseLineaCSV(lineas[2]).map((h) => h.trim().toLowerCase());
+          const filas = lineas.slice(3).map((linea) => {
+            const campos = parseLineaCSV(linea);
+            const registro = {};
+            encabezados.forEach((h, i) => { registro[h] = (campos[i] || '').trim(); });
+            return registro;
+          }).filter((r) => r.id);
+
+          const paraGuardar = filas.map((r) => ({
+            id_usuario_novusbet: r.id,
+            usuario: r.usuario,
+            casa_apuestas: r.propietario,
+            apuestas: parseInt(r.total, 10) || 0,
+            apostado: numero(r.importe),
+            ganado: numero(r.ganancias),
+            beneficio: numero(r.beneficio),
+            moneda: r.moneda,
+          })).filter((r) => r.id_usuario_novusbet);
+
+          if (paraGuardar.length === 0) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'No se encontraron jugadores válidos en el CSV' }));
+            return;
+          }
+
+          const BATCH_SIZE = 500;
+          let subidos = 0;
+          for (let i = 0; i < paraGuardar.length; i += BATCH_SIZE) {
+            const lote = paraGuardar.slice(i, i + BATCH_SIZE);
+            const { error } = await supabase
+              .from('ranking_historico_base')
+              .upsert(lote, { onConflict: 'id_usuario_novusbet' });
+            if (error) throw error;
+            subidos += lote.length;
+          }
+
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ ok: true, subidos, total: paraGuardar.length }));
+        } catch (err) {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: err.message }));
+        }
+      });
+      return;
+    }
+
     // API: ALERTAS DE APUESTAS GRANDES (monto por encima del umbral
     // configurado, ver UMBRAL_ALERTA_APUESTA en sync-novusbet.js)
     if (pathname === '/api/alertas-apuestas') {
