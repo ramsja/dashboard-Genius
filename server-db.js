@@ -1112,136 +1112,188 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // API: ESTUDIO DE JUEGOS. Analiza, sobre los datos reales acumulados
-    // día a día (resumen_diario_usuarios), qué juegos concentran los
-    // montos más altos — no cuenta apariciones sueltas, reparte el
-    // apostado de cada usuario entre los juegos que jugó ese día
-    // (aproximado, porque el resumen diario no guarda el monto por
-    // juego individual, solo la lista de juegos jugados esa jornada).
+    // API: ESTUDIO DE JUEGOS. Apostado/ganado EXACTOS por juego desde
+    // resumen_diario_juegos (calculado transacción por transacción, no
+    // repartido) — con reserva estimada desde resumen_diario_usuarios si
+    // esa tabla todavía no tiene datos. Mismo criterio que
+    // /api/juegos-dashboard, versión resumida (top 20) para el panel
+    // principal.
     if (pathname === '/api/estudio-juegos') {
-      // Mismo filtro defensivo que /api/juegos-dashboard: descarta nombres
-      // que quedaron sucios de antes del fix, ver JUEGO_JUNK_REGEX.
       const { JUEGO_JUNK_REGEX } = require('./sync-novusbet');
       let juegos = [];
+      let exacto = false;
 
       if (supabase) {
         try {
-          const dias = await fetchTodasLasFilas(
-            'resumen_diario_usuarios',
-            'apostado, juegos'
-          );
-          const porJuego = {};
-          dias.forEach((d) => {
-            const lista = (d.juegos || []).filter((j) => j && !JUEGO_JUNK_REGEX.test(j));
-            if (lista.length === 0) return;
-            const apostadoPorJuego = (Number(d.apostado) || 0) / lista.length;
-            const yaContados = new Set();
-            lista.forEach((j) => {
-              if (!porJuego[j]) porJuego[j] = { juego: j, apariciones: 0, apostadoEstimado: 0 };
-              porJuego[j].apariciones += 1;
-              // Reparte el monto una sola vez por juego distinto en ese día,
-              // para no inflarlo si el mismo juego aparece repetido.
-              if (!yaContados.has(j)) {
-                porJuego[j].apostadoEstimado += apostadoPorJuego;
-                yaContados.add(j);
-              }
-            });
-          });
-
-          juegos = Object.values(porJuego)
-            .map((j) => ({ ...j, promedioEstimado: j.apostadoEstimado / j.apariciones }))
-            .sort((a, b) => b.apostadoEstimado - a.apostadoEstimado)
-            .slice(0, 20);
-        } catch (e) {
-          // resumen_diario_usuarios puede no existir todavía
-        }
-      }
-
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ real: true, fuente: 'resumen_diario_usuarios (sincronización automática real)', juegos }));
-      return;
-    }
-
-    // API: DASHBOARD DE JUEGOS. Versión más completa de /api/estudio-juegos
-    // para la página dedicada /juegos.html: agrega, por juego, cuántos
-    // usuarios DISTINTOS lo jugaron (exacto, cuenta de IDs únicos) y la
-    // frecuencia promedio (apariciones / jugadores distintos — pocos
-    // jugadores repitiendo mucho vs. muchos jugadores ocasionales), además
-    // de lo que ya daba estudio-juegos (apostado estimado, participación %).
-    // El apostado sigue siendo estimado (repartido entre los juegos del
-    // día, el resumen no guarda el monto por juego individual) — se marca
-    // explícito en cada campo para no mezclar exacto con aproximado.
-    if (pathname === '/api/juegos-dashboard') {
-      // Filtro defensivo: aunque resumen_diario_usuarios todavía tenga
-      // nombres viejos sin limpiar (ej. "{{gamename}}" de antes del fix,
-      // ver JUEGO_JUNK_REGEX en sync-novusbet.js), esta página nunca
-      // debería mostrarlos como "juego". No reemplaza limpiar el dato de
-      // origen, pero evita que un dato sucio arruine "más popular".
-      const { JUEGO_JUNK_REGEX } = require('./sync-novusbet');
-      let juegos = [];
-      let resumenGeneral = { totalJuegos: 0, totalApostadoEstimado: 0, jugadoresActivos: 0 };
-
-      if (supabase) {
-        try {
-          const dias = await fetchTodasLasFilas(
-            'resumen_diario_usuarios',
-            'id_usuario_novusbet, apostado, juegos'
+          const filas = await fetchTodasLasFilas(
+            'resumen_diario_juegos',
+            'juego, apostado, ganado, apuestas'
           );
 
-          const porJuego = {};
-          const jugadoresActivos = new Set();
-          dias.forEach((d) => {
-            const lista = (d.juegos || []).filter((j) => j && !JUEGO_JUNK_REGEX.test(j));
-            if (d.id_usuario_novusbet) jugadoresActivos.add(d.id_usuario_novusbet);
-            if (lista.length === 0) return;
-            const apostadoPorJuego = (Number(d.apostado) || 0) / lista.length;
-            const yaContados = new Set();
-            lista.forEach((j) => {
-              if (!porJuego[j]) {
-                porJuego[j] = { juego: j, apariciones: 0, apostadoEstimado: 0, jugadores: new Set() };
-              }
-              porJuego[j].apariciones += 1;
-              if (d.id_usuario_novusbet) porJuego[j].jugadores.add(d.id_usuario_novusbet);
-              // Reparte el monto una sola vez por juego distinto en ese día,
-              // para no inflarlo si el mismo juego aparece repetido.
-              if (!yaContados.has(j)) {
-                porJuego[j].apostadoEstimado += apostadoPorJuego;
-                yaContados.add(j);
-              }
+          if (filas.length > 0) {
+            exacto = true;
+            const porJuego = {};
+            filas.forEach((f) => {
+              if (!f.juego || JUEGO_JUNK_REGEX.test(f.juego)) return;
+              if (!porJuego[f.juego]) porJuego[f.juego] = { juego: f.juego, apuestas: 0, apostado: 0, ganado: 0 };
+              porJuego[f.juego].apuestas += f.apuestas || 0;
+              porJuego[f.juego].apostado += Number(f.apostado) || 0;
+              porJuego[f.juego].ganado += Number(f.ganado) || 0;
             });
-          });
-
-          const totalApostadoEstimado = Object.values(porJuego).reduce((s, j) => s + j.apostadoEstimado, 0);
-
-          juegos = Object.values(porJuego)
-            .map((j) => ({
-              juego: j.juego,
-              apariciones: j.apariciones,
-              jugadoresDistintos: j.jugadores.size,
-              // Exacto (conteos), no una estimación: cuántas veces en
-              // promedio vuelve cada jugador distinto a este juego.
-              frecuenciaPromedio: j.jugadores.size > 0 ? j.apariciones / j.jugadores.size : 0,
-              apostadoEstimado: j.apostadoEstimado,
-              promedioEstimado: j.apostadoEstimado / j.apariciones,
-              participacionPct: totalApostadoEstimado > 0 ? (j.apostadoEstimado / totalApostadoEstimado) * 100 : 0,
-            }))
-            .sort((a, b) => b.apostadoEstimado - a.apostadoEstimado);
-
-          resumenGeneral = {
-            totalJuegos: juegos.length,
-            totalApostadoEstimado,
-            jugadoresActivos: jugadoresActivos.size,
-          };
+            juegos = Object.values(porJuego)
+              .map((j) => ({
+                juego: j.juego,
+                apariciones: j.apuestas,
+                apostado: j.apostado,
+                ganado: j.ganado,
+                retorno: j.apostado > 0 ? j.ganado / j.apostado : 0,
+                promedio: j.apuestas > 0 ? j.apostado / j.apuestas : 0,
+              }))
+              .sort((a, b) => b.apostado - a.apostado)
+              .slice(0, 20);
+          } else {
+            const dias = await fetchTodasLasFilas('resumen_diario_usuarios', 'apostado, juegos');
+            const porJuego = {};
+            dias.forEach((d) => {
+              const lista = (d.juegos || []).filter((j) => j && !JUEGO_JUNK_REGEX.test(j));
+              if (lista.length === 0) return;
+              const apostadoPorJuego = (Number(d.apostado) || 0) / lista.length;
+              const yaContados = new Set();
+              lista.forEach((j) => {
+                if (!porJuego[j]) porJuego[j] = { juego: j, apariciones: 0, apostado: 0 };
+                porJuego[j].apariciones += 1;
+                if (!yaContados.has(j)) { porJuego[j].apostado += apostadoPorJuego; yaContados.add(j); }
+              });
+            });
+            juegos = Object.values(porJuego)
+              .map((j) => ({ juego: j.juego, apariciones: j.apariciones, apostado: j.apostado, ganado: 0, retorno: 0, promedio: j.apostado / j.apariciones }))
+              .sort((a, b) => b.apostado - a.apostado)
+              .slice(0, 20);
+          }
         } catch (e) {
-          // resumen_diario_usuarios puede no existir todavía
+          // resumen_diario_juegos/resumen_diario_usuarios pueden no existir todavía
         }
       }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
         real: true,
-        fuente: 'resumen_diario_usuarios (sincronización automática real)',
-        nota: 'apariciones, jugadoresDistintos y frecuenciaPromedio son conteos exactos. apostadoEstimado, promedioEstimado y participacionPct son estimados: el resumen diario no guarda el monto apostado por juego individual, se reparte el total del día entre los juegos jugados esa jornada.',
+        exacto,
+        fuente: exacto ? 'resumen_diario_juegos (apostado/ganado exactos)' : 'resumen_diario_usuarios (RESERVA: estimado, resumen_diario_juegos todavía sin datos)',
+        juegos,
+      }));
+      return;
+    }
+
+    // API: DASHBOARD DE JUEGOS. Apostado y ganado EXACTOS por juego,
+    // separando apuesta (bet) de ganancia (win) — de resumen_diario_juegos,
+    // calculado transacción por transacción en cada sync (no un reparto
+    // estimado). Si esa tabla todavía no tiene datos (recién desplegada,
+    // sin ninguna sincronización nueva todavía), cae al método viejo
+    // estimado desde resumen_diario_usuarios para no dejar la página
+    // vacía, y lo marca bien claro en la respuesta.
+    if (pathname === '/api/juegos-dashboard') {
+      const { JUEGO_JUNK_REGEX } = require('./sync-novusbet');
+      let juegos = [];
+      let resumenGeneral = { totalJuegos: 0, totalApostado: 0, totalGanado: 0, jugadoresActivos: 0 };
+      let exacto = false;
+
+      if (supabase) {
+        try {
+          const filas = await fetchTodasLasFilas(
+            'resumen_diario_juegos',
+            'juego, apostado, ganado, apuestas, ganancias, jugadores_distintos'
+          );
+
+          if (filas.length > 0) {
+            exacto = true;
+            const porJuego = {};
+            filas.forEach((f) => {
+              if (!f.juego || JUEGO_JUNK_REGEX.test(f.juego)) return;
+              if (!porJuego[f.juego]) {
+                porJuego[f.juego] = { juego: f.juego, apostado: 0, ganado: 0, apuestas: 0, ganancias: 0, jugadoresDistintosMax: 0 };
+              }
+              const j = porJuego[f.juego];
+              j.apostado += Number(f.apostado) || 0;
+              j.ganado += Number(f.ganado) || 0;
+              j.apuestas += f.apuestas || 0;
+              j.ganancias += f.ganancias || 0;
+              // jugadores_distintos es por día — no se puede sumar entre
+              // días sin contar de nuevo al mismo jugador varias veces, así
+              // que usamos el máximo de un solo día como piso conservador
+              // (nunca jugaron MENOS que eso en su mejor día).
+              if ((f.jugadores_distintos || 0) > j.jugadoresDistintosMax) j.jugadoresDistintosMax = f.jugadores_distintos || 0;
+            });
+
+            const totalApostado = Object.values(porJuego).reduce((s, j) => s + j.apostado, 0);
+            const totalGanado = Object.values(porJuego).reduce((s, j) => s + j.ganado, 0);
+
+            juegos = Object.values(porJuego)
+              .map((j) => ({
+                juego: j.juego,
+                apostado: j.apostado,
+                ganado: j.ganado,
+                retorno: j.apostado > 0 ? j.ganado / j.apostado : 0,
+                apuestas: j.apuestas,
+                ganancias: j.ganancias,
+                promedioApuesta: j.apuestas > 0 ? j.apostado / j.apuestas : 0,
+                jugadoresDistintos: j.jugadoresDistintosMax,
+                participacionPct: totalApostado > 0 ? (j.apostado / totalApostado) * 100 : 0,
+              }))
+              .sort((a, b) => b.apostado - a.apostado);
+
+            const jugadoresActivos = await fetchTodasLasFilas('resumen_diario_usuarios', 'id_usuario_novusbet');
+            resumenGeneral = {
+              totalJuegos: juegos.length,
+              totalApostado,
+              totalGanado,
+              jugadoresActivos: new Set(jugadoresActivos.map((u) => u.id_usuario_novusbet)).size,
+            };
+          } else {
+            // Reserva: todavía no hay ninguna fila en resumen_diario_juegos
+            // (falta desplegar y que corra al menos una sincronización).
+            const dias = await fetchTodasLasFilas('resumen_diario_usuarios', 'id_usuario_novusbet, apostado, juegos');
+            const porJuego = {};
+            const jugadoresActivos = new Set();
+            dias.forEach((d) => {
+              const lista = (d.juegos || []).filter((j) => j && !JUEGO_JUNK_REGEX.test(j));
+              if (d.id_usuario_novusbet) jugadoresActivos.add(d.id_usuario_novusbet);
+              if (lista.length === 0) return;
+              const apostadoPorJuego = (Number(d.apostado) || 0) / lista.length;
+              const yaContados = new Set();
+              lista.forEach((j) => {
+                if (!porJuego[j]) porJuego[j] = { juego: j, apariciones: 0, apostado: 0, jugadores: new Set() };
+                porJuego[j].apariciones += 1;
+                if (d.id_usuario_novusbet) porJuego[j].jugadores.add(d.id_usuario_novusbet);
+                if (!yaContados.has(j)) { porJuego[j].apostado += apostadoPorJuego; yaContados.add(j); }
+              });
+            });
+            const totalApostado = Object.values(porJuego).reduce((s, j) => s + j.apostado, 0);
+            juegos = Object.values(porJuego)
+              .map((j) => ({
+                juego: j.juego, apostado: j.apostado, ganado: 0, retorno: 0,
+                apuestas: j.apariciones, ganancias: 0, promedioApuesta: j.apostado / j.apariciones,
+                jugadoresDistintos: j.jugadores.size,
+                participacionPct: totalApostado > 0 ? (j.apostado / totalApostado) * 100 : 0,
+              }))
+              .sort((a, b) => b.apostado - a.apostado);
+            resumenGeneral = { totalJuegos: juegos.length, totalApostado, totalGanado: 0, jugadoresActivos: jugadoresActivos.size };
+          }
+        } catch (e) {
+          // resumen_diario_juegos/resumen_diario_usuarios pueden no existir todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        real: true,
+        exacto,
+        fuente: exacto
+          ? 'resumen_diario_juegos (apostado/ganado exactos, por transacción real, separando apuesta y ganancia)'
+          : 'resumen_diario_usuarios (RESERVA temporal: apostado estimado, repartido — resumen_diario_juegos todavía no tiene datos)',
+        nota: exacto
+          ? 'apostado, ganado, apuestas, ganancias y retorno son datos exactos (no estimados): se calculan sumando cada transacción real de apuesta o de ganancia de ese juego. jugadoresDistintos usa el máximo de un solo día como piso (no se puede sumar entre días sin contar dos veces al mismo jugador).'
+          : 'MODO RESERVA: todavía no hay datos en resumen_diario_juegos (falta desplegar el cálculo exacto y que corra al menos una sincronización). Estos valores son estimados, repartiendo el apostado del día entre los juegos jugados esa jornada.',
         resumenGeneral,
         juegos,
       }));

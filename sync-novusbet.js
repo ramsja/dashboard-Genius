@@ -511,6 +511,7 @@ async function uploadToSupabase(records) {
   await guardarAlertasApuestas(formattedRecords);
   await guardarAlertasGanancias(formattedRecords);
   const resumenOk = await calcularYGuardarResumenDiario(formattedRecords);
+  await calcularYGuardarResumenJuegos(formattedRecords);
 
   return { inserted, resumenOk };
 }
@@ -582,6 +583,75 @@ async function calcularYGuardarResumenDiario(formattedRecords) {
     return true;
   } catch (e) {
     console.log('⚠️ No se pudo guardar el resumen diario:', e.message);
+    return false;
+  }
+}
+
+// Arma el resumen diario por JUEGO (no por usuario) EN MEMORIA, igual que
+// calcularYGuardarResumenDiario. Reemplaza el "estimado" de antes (que
+// repartía el apostado del día entre los juegos jugados esa jornada,
+// porque no había otra forma de saberlo): acá cada transacción real de
+// apuesta o de ganancia se suma al juego exacto al que corresponde —
+// apostado y ganado por separado (bet vs. win), sin repartir nada. Solo
+// cuenta transacciones que SON una apuesta o una ganancia real
+// (es_apuesta/es_ganancia) — un depósito o retiro con un "juego" pegado
+// por error de extracción nunca entra acá.
+async function calcularYGuardarResumenJuegos(formattedRecords) {
+  if (!supabase) return false;
+
+  const porJuegoDia = {};
+  formattedRecords.forEach((r) => {
+    if (!r.juego) return;
+    if (!r.es_apuesta && !r.es_ganancia) return;
+    const dia = (r.fecha || '').slice(0, 10);
+    if (!dia) return;
+    const key = `${r.juego}|${dia}`;
+    if (!porJuegoDia[key]) {
+      porJuegoDia[key] = {
+        juego: r.juego,
+        dia,
+        apostado: 0,
+        ganado: 0,
+        apuestas: 0,
+        ganancias: 0,
+        jugadores: new Set(),
+      };
+    }
+    const j = porJuegoDia[key];
+    if (r.id_usuario_novusbet) j.jugadores.add(r.id_usuario_novusbet);
+    if (r.es_apuesta) {
+      j.apostado += Math.abs(r.monto || 0);
+      j.apuestas += 1;
+    }
+    if (r.es_ganancia) {
+      j.ganado += Math.abs(r.monto || 0);
+      j.ganancias += 1;
+    }
+  });
+
+  const filas = Object.values(porJuegoDia).map((j) => ({
+    juego: j.juego,
+    dia: j.dia,
+    apostado: j.apostado,
+    ganado: j.ganado,
+    apuestas: j.apuestas,
+    ganancias: j.ganancias,
+    jugadores_distintos: j.jugadores.size,
+  }));
+  if (filas.length === 0) return true; // nada que resumir, no es un fallo
+
+  const BATCH_SIZE = 500;
+  try {
+    for (let i = 0; i < filas.length; i += BATCH_SIZE) {
+      const lote = filas.slice(i, i + BATCH_SIZE);
+      const { error } = await supabase
+        .from('resumen_diario_juegos')
+        .upsert(lote, { onConflict: 'juego,dia' });
+      if (error) throw error;
+    }
+    return true;
+  } catch (e) {
+    console.log('⚠️ No se pudo guardar el resumen diario de juegos:', e.message);
     return false;
   }
 }

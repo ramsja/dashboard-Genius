@@ -446,20 +446,22 @@
                     <h2>🎮 Estudio de Juegos</h2>
                 </div>
                 <div class="section-content">
-                    <p style="font-size:12px; color:#999; margin-bottom:12px;">
-                        Qué juegos concentran los montos más altos, según los días reales sincronizados. El apostado se estima repartiendo el total del día entre los juegos jugados esa jornada (el resumen diario no guarda el monto por juego individual).
+                    <p style="font-size:12px; color:#999; margin-bottom:12px;" id="estudio-juegos-info">
+                        Qué juegos concentran los montos más altos, según los días reales sincronizados.
                     </p>
                     <table>
                         <thead>
                             <tr>
                                 <th>Juego</th>
-                                <th>Apariciones</th>
-                                <th>Apostado Estimado</th>
-                                <th>Promedio por Aparición</th>
+                                <th>Apuestas</th>
+                                <th>Apostado</th>
+                                <th>Ganado</th>
+                                <th>Retorno</th>
+                                <th>Promedio por Apuesta</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-estudio-juegos">
-                            <tr><td colspan="4" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="6" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -621,6 +623,7 @@
                     matrizUsuarios: matrizUsuarios || [], rankingJugadores: rankingRes.ranking || [], alertasApuestas: alertas || [],
                     alertasGanancias: alertasGanancias || [], proyeccionGanancias: proyeccionRes.proyeccion || [],
                     proyeccionApuestas: proyeccionApuestasRes.proyeccion || [], estudioJuegos: estudioJuegosRes.juegos || [],
+                    estudioJuegosExacto: !!estudioJuegosRes.exacto,
                     fuenteDatos: fuenteDatosRes.fuentes || {}, matrizPatron: matrizPatronRes || { dias: [], usuarios: [], maximo: 0 },
                     analisisRiesgo: analisisRiesgoRes.jugadores || []
                 };
@@ -975,15 +978,23 @@
 
         function actualizarEstudioJuegos() {
             const filas = datos.estudioJuegos || [];
+            const infoEl = document.getElementById('estudio-juegos-info');
+            if (infoEl) {
+                infoEl.textContent = datos.estudioJuegosExacto
+                    ? 'Qué juegos concentran los montos más altos. Apostado, ganado y retorno son datos exactos: se suman las transacciones reales de apuesta y de ganancia de cada juego, sin repartir ni estimar nada.'
+                    : 'MODO RESERVA (todavía sin datos exactos, falta el primer sync con el cálculo nuevo): apostado estimado repartiendo el total del día entre los juegos jugados esa jornada.';
+            }
             const html = filas.map((j) => `
                 <tr>
                     <td><strong>${j.juego}</strong></td>
                     <td class="numero">${j.apariciones}</td>
-                    <td class="numero">$${(j.apostadoEstimado || 0).toFixed(2)}</td>
-                    <td class="numero">$${(j.promedioEstimado || 0).toFixed(2)}</td>
+                    <td class="numero">$${(j.apostado || 0).toFixed(2)}</td>
+                    <td class="numero">$${(j.ganado || 0).toFixed(2)}</td>
+                    <td class="numero">${((j.retorno || 0) * 100).toFixed(1)}%</td>
+                    <td class="numero">$${(j.promedio || 0).toFixed(2)}</td>
                 </tr>
             `).join('');
-            document.getElementById('tabla-estudio-juegos').innerHTML = html || '<tr><td colspan="4" class="loading">Sin datos todavía</td></tr>';
+            document.getElementById('tabla-estudio-juegos').innerHTML = html || '<tr><td colspan="6" class="loading">Sin datos todavía</td></tr>';
         }
 
         function claseBadgeEstadoReal(estado) {
