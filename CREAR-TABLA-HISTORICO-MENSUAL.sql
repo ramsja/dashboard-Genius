@@ -1,17 +1,22 @@
 -- ============================================================
--- Tabla para el nuevo "Dashboard de Históricos": a diferencia de
--- ranking_historico_base (que guarda UN solo snapshot, se borra y
--- reimporta cada vez), esta tabla guarda MÚLTIPLES períodos —
--- cada CSV que subís queda etiquetado con su propio "periodo"
--- (ej. "2026-08"), sin pisar los anteriores. Así se puede comparar
--- mes a mes. Completamente separada de ranking_historico_base y de
--- los datos en vivo: no se mezcla con el Top 25 ni con el resto del
--- dashboard.
+-- Tabla para el "Dashboard de Históricos" — corrección de diseño:
+-- Novusbet solo deja exportar día por día, así que un "mes" real se
+-- arma subiendo varios CSVs de días sueltos. Por eso esta tabla guarda
+-- una fila por USUARIO + DÍA (el día sale de la propia transacción,
+-- no hay que tipearlo), no por un "período" elegido a mano — así,
+-- subir el CSV de otro día del mismo mes SUMA, nunca pisa lo ya
+-- guardado. El dashboard arma los "meses" agrupando los días él solo.
+--
+-- Si ya habías corrido una versión anterior de este script (con
+-- columna "periodo"), esto la reemplaza limpio — no hay datos reales
+-- todavía cargados con ese diseño.
 -- ============================================================
 
-CREATE TABLE IF NOT EXISTS historico_csv_mensual (
+DROP TABLE IF EXISTS historico_csv_mensual;
+
+CREATE TABLE historico_csv_mensual (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  periodo TEXT NOT NULL,
+  dia DATE NOT NULL,
   id_usuario_novusbet TEXT NOT NULL,
   usuario TEXT,
   casa_apuestas TEXT,
@@ -21,10 +26,10 @@ CREATE TABLE IF NOT EXISTS historico_csv_mensual (
   beneficio NUMERIC(15,2) DEFAULT 0,
   moneda TEXT,
   importado_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE (periodo, id_usuario_novusbet)
+  UNIQUE (dia, id_usuario_novusbet)
 );
 
-CREATE INDEX IF NOT EXISTS idx_historico_csv_mensual_periodo ON historico_csv_mensual(periodo);
+CREATE INDEX IF NOT EXISTS idx_historico_csv_mensual_dia ON historico_csv_mensual(dia);
 
 -- Verificación
 SELECT count(*) AS total FROM historico_csv_mensual;

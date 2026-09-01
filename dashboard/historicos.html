@@ -69,15 +69,11 @@
     <div class="container">
         <div class="section">
             <div class="section-header">
-                <h2>📤 Subir Reporte Mensual (CSV)</h2>
+                <h2>📤 Subir Transacciones (CSV)</h2>
             </div>
             <div class="section-content">
-                <p class="nota">Mismo formato que el reporte agregado de Novusbet (customreport.csv). Cada subida queda guardada bajo su propio período — no pisa los meses anteriores, así se puede comparar mes a mes. Si volvés a subir el mismo período, lo actualiza.</p>
+                <p class="nota">Mismo export crudo por transacción que se descarga de Novusbet (ej. "transacciones_producto_5_20260901_20260901.csv"). El día sale de cada transacción, no hace falta indicarlo — se agrupa solo en meses. Como Novusbet solo exporta día por día, subí un CSV por cada día que quieras cubrir del mes: cada subida SUMA, nunca pisa los días ya cargados (si volvés a subir el mismo día, lo actualiza a ese día nada más).</p>
                 <div class="upload-box">
-                    <div>
-                        <label>Período (mes)</label><br>
-                        <input type="text" id="input-periodo" placeholder="2026-08" style="width:110px;">
-                    </div>
                     <input type="file" id="input-csv-historico" accept=".csv" style="display:none;" onchange="subirCSVHistorico(this.files[0])">
                     <button class="btn" onclick="document.getElementById('input-csv-historico').click()">📤 Elegir CSV y subir</button>
                     <span id="upload-status" style="font-size:12px; color:#666;"></span>
@@ -108,6 +104,10 @@
             <div class="kpi">
                 <div class="kpi-label">Jugadores</div>
                 <div class="kpi-value" id="kpi-jugadores">0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Días con Datos (de este mes)</div>
+                <div class="kpi-value" id="kpi-dias">0</div>
             </div>
         </div>
 
@@ -180,35 +180,25 @@
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId), config);
         }
 
-        function mesActualDefault() {
-            const d = new Date();
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        }
-        document.getElementById('input-periodo').value = mesActualDefault();
-
         async function subirCSVHistorico(file) {
             if (!file) return;
-            const periodo = (document.getElementById('input-periodo').value || '').trim();
             const estadoEl = document.getElementById('upload-status');
-            if (!periodo) {
-                estadoEl.textContent = '⚠️ Poné un período primero (ej. 2026-08)';
-                estadoEl.style.color = '#c0392b';
-                return;
-            }
             estadoEl.textContent = 'Subiendo...';
             estadoEl.style.color = '#666';
             try {
                 const texto = await file.text();
-                const res = await fetchJSON(`/api/admin/importar-historico?periodo=${encodeURIComponent(periodo)}`, {
+                const res = await fetchJSON('/api/admin/importar-historico', {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/csv' },
                     body: texto,
                 });
                 if (res.error) throw new Error(res.error);
-                estadoEl.textContent = `✅ ${res.subidos} jugadores cargados en el período ${res.periodo}`;
+                const diasTexto = (res.dias || []).join(', ');
+                estadoEl.textContent = `✅ ${res.subidos} jugadores cargados (día${(res.dias || []).length > 1 ? 's' : ''}: ${diasTexto}) de ${res.transaccionesProcesadas} transacciones`;
                 estadoEl.style.color = '#155724';
                 document.getElementById('input-csv-historico').value = '';
-                await cargarDatos(periodo);
+                const mesSubido = (res.dias && res.dias[0]) ? res.dias[0].slice(0, 7) : null;
+                await cargarDatos(mesSubido);
             } catch (e) {
                 estadoEl.textContent = `❌ Error: ${e.message}`;
                 estadoEl.style.color = '#c0392b';
@@ -300,6 +290,7 @@
                 document.getElementById('kpi-ganado').textContent = `$${(resumen.ganado || 0).toFixed(2)}`;
                 document.getElementById('kpi-beneficio').textContent = `$${(resumen.beneficio || 0).toFixed(2)}`;
                 document.getElementById('kpi-jugadores').textContent = resumen.jugadores || 0;
+                document.getElementById('kpi-dias').textContent = resumen.diasConDatos || 0;
 
                 const top10 = [...jugadores].sort((a, b) => b.apostado - a.apostado).slice(0, 10);
                 dibujarChart('chartTop', {

@@ -437,21 +437,27 @@ async function uploadToSupabase(records) {
     // "id de transacción" es el ID único que asigna Novusbet a cada
     // movimiento — lo usamos como llave para upsert, así el historial se
     // ACUMULA en vez de borrarse en cada sincronización.
-    id_transaccion_novusbet: getField(record, 'id de transacción', 'id_transaccion', 'transaction_id'),
+    // Los nombres extra (transaction id, user id, created at, bookmaker,
+    // current balance...) son del export CSV que se descarga a mano desde
+    // Novusbet ("transacciones_producto_N..."), con headers en inglés y
+    // separados por espacio en vez de guión bajo — distinto del que trae
+    // la sincronización automática. Se agregan como variantes adicionales,
+    // nunca se sacan las que ya funcionaban.
+    id_transaccion_novusbet: getField(record, 'id de transacción', 'id_transaccion', 'transaction_id', 'transaction id'),
     usuario: getField(record, 'usuario', 'user', 'username', 'cliente', 'nombre') || 'N/A',
-    tipo_transaccion: getField(record, 'tipo de transacción', 'tipo', 'type', 'transaction_type') || 'N/A',
+    tipo_transaccion: getField(record, 'tipo de transacción', 'tipo', 'type', 'transaction_type', 'transaction type') || 'N/A',
     monto: numero(getField(record, 'monto', 'amount', 'total')),
     disciplina: classifyDiscipline(record),
     estado_cliente: classifyClientStatus(record),
     descripcion: getField(record, 'descripcion', 'description', 'descripción', 'grupo causal'),
-    fecha: getField(record, 'crear hora', 'fecha', 'created_at', 'date') || new Date().toISOString(),
-    casa_apuestas: getField(record, 'casa de apuestas', 'casa', 'site'),
-    id_usuario_novusbet: getField(record, 'id de usuario', 'id_usuario', 'user_id'),
+    fecha: getField(record, 'crear hora', 'fecha', 'created_at', 'created at', 'date') || new Date().toISOString(),
+    casa_apuestas: getField(record, 'casa de apuestas', 'casa', 'site', 'bookmaker'),
+    id_usuario_novusbet: getField(record, 'id de usuario', 'id_usuario', 'user_id', 'user id'),
     moneda: getField(record, 'moneda', 'currency'),
     ingresos: numero(getField(record, 'ingresos', 'income')),
     comision: numero(getField(record, 'comisión', 'comision', 'commission')),
     saldo: numero(getField(record, 'saldo', 'balance')),
-    saldo_actual: numero(getField(record, 'saldo actual', 'current_balance')),
+    saldo_actual: numero(getField(record, 'saldo actual', 'current_balance', 'current balance')),
     billeteras: getField(record, 'billeteras', 'wallet', 'wallets'),
     grupo_causal: getField(record, 'grupo causal', 'causal', 'causal_group'),
     juego: extraerJuego(record),
@@ -1103,5 +1109,5 @@ if (require.main === module) {
 module.exports = {
   main, syncHistorico, syncRangoHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML,
   actualizarResumenDiario, podarTransaccionesDelDia, END_DATE, RETENCION_TRANSACCIONES_DIAS,
-  JUEGO_JUNK_REGEX,
+  JUEGO_JUNK_REGEX, getField, classifyDiscipline, esApuesta, esGanancia, extraerJuego,
 };

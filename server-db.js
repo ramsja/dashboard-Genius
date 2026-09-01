@@ -1709,61 +1709,72 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // API: SUBIR CSV AL DASHBOARD DE HISTÓRICOS. Mismo formato de CSV que
-    // el de arriba, pero a una tabla separada (historico_csv_mensual) que
-    // NO se borra al reimportar: cada subida queda guardada bajo su propio
-    // "periodo" (ej. "2026-08"), para poder ver y comparar mes a mes. No
-    // toca ranking_historico_base ni ningún dato en vivo.
+    // API: SUBIR CSV AL DASHBOARD DE HISTÓRICOS. Recibe el export CRUDO
+    // por transacción que se descarga a mano desde Novusbet (mismo formato
+    // que ya procesa la sincronización en vivo — "transacciones_producto_
+    // N_YYYYMMDD_YYYYMMDD.csv" — headers en inglés separados por espacio),
+    // no un reporte ya agregado. Se agrupa por usuario y por DÍA (el día
+    // sale de cada transacción, no se tipea a mano), sumando apostado real
+    // (bet) y ganado real (win) por separado — igual que
+    // calcularYGuardarResumenJuegos, pero acá viene de un CSV subido, no
+    // del sync automático. Como Novusbet solo exporta día por día, subir
+    // el CSV de otro día del mismo mes ACUMULA (upsert por día+usuario),
+    // nunca pisa lo ya guardado.
     if (pathname === '/api/admin/importar-historico' && req.method === 'POST') {
-      const periodo = (parsedUrl.query.periodo || '').trim();
       let body = '';
       req.on('data', (chunk) => (body += chunk));
       req.on('end', async () => {
         try {
           if (!supabase) throw new Error('Supabase no configurado');
-          if (!periodo) throw new Error('Falta el período (ej. "2026-08")');
 
-          const parseLineaCSV = (linea) => {
-            const campos = [];
-            let actual = '';
-            let entreComillas = false;
-            for (let i = 0; i < linea.length; i++) {
-              const c = linea[i];
-              if (c === '"') entreComillas = !entreComillas;
-              else if (c === ',' && !entreComillas) { campos.push(actual); actual = ''; }
-              else actual += c;
-            }
-            campos.push(actual);
-            return campos;
-          };
+          const { parseCSV, getField, esApuesta, esGanancia, extraerJuego } = require('./sync-novusbet');
           const numero = (v) => parseFloat((v || '').toString().replace(/[^0-9.-]/g, '')) || 0;
 
-          const lineas = body.split(/\r?\n/).filter((l) => l.trim());
-          if (lineas.length < 4) throw new Error('El CSV no tiene el formato esperado (muy pocas líneas)');
+          const registros = parseCSV(body);
+          if (registros.length === 0) throw new Error('El CSV no tiene filas de transacciones reconocibles');
 
-          const encabezados = parseLineaCSV(lineas[2]).map((h) => h.trim().toLowerCase());
-          const filas = lineas.slice(3).map((linea) => {
-            const campos = parseLineaCSV(linea);
-            const registro = {};
-            encabezados.forEach((h, i) => { registro[h] = (campos[i] || '').trim(); });
-            return registro;
-          }).filter((r) => r.id);
+          const porUsuarioDia = {};
+          registros.forEach((r) => {
+            const idUsuario = getField(r, 'id de usuario', 'id_usuario', 'user_id', 'user id');
+            if (!idUsuario) return;
 
-          const paraGuardar = filas.map((r) => ({
-            periodo,
-            id_usuario_novusbet: r.id,
-            usuario: r.usuario,
-            casa_apuestas: r.propietario,
-            apuestas: parseInt(r.total, 10) || 0,
-            apostado: numero(r.importe),
-            ganado: numero(r.ganancias),
-            beneficio: numero(r.beneficio),
-            moneda: r.moneda,
-          })).filter((r) => r.id_usuario_novusbet);
+            const fechaRaw = getField(r, 'crear hora', 'fecha', 'created_at', 'created at', 'date');
+            const dia = (fechaRaw || '').slice(0, 10);
+            if (!dia) return;
+
+            const monto = numero(getField(r, 'monto', 'amount', 'total'));
+            const descripcion = getField(r, 'descripcion', 'description', 'descripción');
+            const juego = extraerJuego(r);
+            const apuesta = esApuesta(descripcion, juego);
+            const ganancia = esGanancia(descripcion);
+            if (!apuesta && !ganancia) return; // depósitos/retiros no cuentan acá
+
+            const key = `${idUsuario}|${dia}`;
+            if (!porUsuarioDia[key]) {
+              porUsuarioDia[key] = {
+                dia,
+                id_usuario_novusbet: idUsuario,
+                usuario: getField(r, 'usuario', 'user', 'username') || null,
+                casa_apuestas: getField(r, 'casa de apuestas', 'casa', 'site', 'bookmaker') || null,
+                moneda: getField(r, 'moneda', 'currency') || null,
+                apuestas: 0,
+                apostado: 0,
+                ganado: 0,
+              };
+            }
+            const u = porUsuarioDia[key];
+            if (apuesta) { u.apuestas += 1; u.apostado += Math.abs(monto); }
+            if (ganancia) u.ganado += Math.abs(monto);
+          });
+
+          const paraGuardar = Object.values(porUsuarioDia).map((u) => ({
+            ...u,
+            beneficio: u.apostado - u.ganado,
+          }));
 
           if (paraGuardar.length === 0) {
             res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'No se encontraron jugadores válidos en el CSV' }));
+            res.end(JSON.stringify({ error: 'No se encontraron apuestas o ganancias válidas en el CSV' }));
             return;
           }
 
@@ -1773,13 +1784,14 @@ const server = http.createServer(async (req, res) => {
             const lote = paraGuardar.slice(i, i + BATCH_SIZE);
             const { error } = await supabase
               .from('historico_csv_mensual')
-              .upsert(lote, { onConflict: 'periodo,id_usuario_novusbet' });
+              .upsert(lote, { onConflict: 'dia,id_usuario_novusbet' });
             if (error) throw error;
             subidos += lote.length;
           }
 
+          const dias = [...new Set(paraGuardar.map((u) => u.dia))].sort();
           res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ ok: true, periodo, subidos, total: paraGuardar.length }));
+          res.end(JSON.stringify({ ok: true, dias, subidos, transaccionesProcesadas: registros.length }));
         } catch (err) {
           res.writeHead(500, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: err.message }));
@@ -1788,41 +1800,54 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // API: DASHBOARD DE HISTÓRICOS. Devuelve el período pedido (o el más
-    // reciente si no se especifica), la lista de períodos disponibles para
-    // el selector, y la evolución período a período (para el gráfico de
-    // tendencia) — todo desde historico_csv_mensual, alimentado solo por
-    // CSV subidos a mano, sin relación con la sincronización en vivo.
+    // API: DASHBOARD DE HISTÓRICOS. La tabla guarda un día real por fila
+    // (usuario + día, sale de cada transacción del CSV subido) — acá se
+    // agrupan esos días en MESES ("periodo" = YYYY-MM) para el margen de
+    // tiempo que se pidió. Devuelve el mes pedido (o el más reciente con
+    // datos), la lista de meses disponibles para el selector, cuántos días
+    // distintos se subieron dentro de ese mes (para que quede claro si es
+    // el mes completo o solo algunos días sueltos), y la evolución mes a
+    // mes. Todo desde historico_csv_mensual, alimentado solo por CSV
+    // subidos a mano, sin relación con la sincronización en vivo.
     if (pathname === '/api/historico-dashboard') {
       let periodos = [];
       let periodoActual = (parsedUrl.query.periodo || '').trim() || null;
       let jugadores = [];
-      let resumenGeneral = { apostado: 0, ganado: 0, beneficio: 0, jugadores: 0, apuestas: 0 };
+      let resumenGeneral = { apostado: 0, ganado: 0, beneficio: 0, jugadores: 0, apuestas: 0, diasConDatos: 0 };
       let evolucion = [];
 
       if (supabase) {
         try {
           const todas = await fetchTodasLasFilas(
             'historico_csv_mensual',
-            'periodo, id_usuario_novusbet, usuario, casa_apuestas, apuestas, apostado, ganado, beneficio'
+            'dia, id_usuario_novusbet, usuario, casa_apuestas, apuestas, apostado, ganado, beneficio'
           );
 
-          periodos = [...new Set(todas.map((f) => f.periodo))].sort();
+          const mesDe = (dia) => (dia || '').slice(0, 7); // YYYY-MM
+          periodos = [...new Set(todas.map((f) => mesDe(f.dia)))].filter(Boolean).sort();
           if (!periodoActual || !periodos.includes(periodoActual)) {
             periodoActual = periodos.length > 0 ? periodos[periodos.length - 1] : null;
           }
 
           if (periodoActual) {
-            const filasPeriodo = todas.filter((f) => f.periodo === periodoActual);
-            jugadores = await agregarNombresReales(filasPeriodo.map((f) => ({
-              id_usuario_novusbet: f.id_usuario_novusbet,
-              usuario: f.usuario,
-              casa_apuestas: f.casa_apuestas,
-              apuestas: f.apuestas || 0,
-              apostado: Number(f.apostado) || 0,
-              ganado: Number(f.ganado) || 0,
-              beneficio: Number(f.beneficio) || 0,
-            })));
+            const filasMes = todas.filter((f) => mesDe(f.dia) === periodoActual);
+            const porUsuario = {};
+            filasMes.forEach((f) => {
+              const id = f.id_usuario_novusbet;
+              if (!porUsuario[id]) {
+                porUsuario[id] = {
+                  id_usuario_novusbet: id, usuario: f.usuario, casa_apuestas: f.casa_apuestas,
+                  apuestas: 0, apostado: 0, ganado: 0, beneficio: 0,
+                };
+              }
+              const u = porUsuario[id];
+              u.apuestas += f.apuestas || 0;
+              u.apostado += Number(f.apostado) || 0;
+              u.ganado += Number(f.ganado) || 0;
+              u.beneficio += Number(f.beneficio) || 0;
+            });
+
+            jugadores = await agregarNombresReales(Object.values(porUsuario));
             jugadores.sort((a, b) => b.apostado - a.apostado);
 
             resumenGeneral = jugadores.reduce((acc, j) => ({
@@ -1831,17 +1856,20 @@ const server = http.createServer(async (req, res) => {
               beneficio: acc.beneficio + j.beneficio,
               apuestas: acc.apuestas + j.apuestas,
               jugadores: acc.jugadores + 1,
-            }), { apostado: 0, ganado: 0, beneficio: 0, apuestas: 0, jugadores: 0 });
+              diasConDatos: acc.diasConDatos,
+            }), { apostado: 0, ganado: 0, beneficio: 0, apuestas: 0, jugadores: 0, diasConDatos: 0 });
+            resumenGeneral.diasConDatos = new Set(filasMes.map((f) => f.dia)).size;
           }
 
           evolucion = periodos.map((p) => {
-            const filas = todas.filter((f) => f.periodo === p);
+            const filas = todas.filter((f) => mesDe(f.dia) === p);
             return {
               periodo: p,
               apostado: filas.reduce((s, f) => s + (Number(f.apostado) || 0), 0),
               ganado: filas.reduce((s, f) => s + (Number(f.ganado) || 0), 0),
               beneficio: filas.reduce((s, f) => s + (Number(f.beneficio) || 0), 0),
-              jugadores: filas.length,
+              jugadores: new Set(filas.map((f) => f.id_usuario_novusbet)).size,
+              diasConDatos: new Set(filas.map((f) => f.dia)).size,
             };
           });
         } catch (e) {
