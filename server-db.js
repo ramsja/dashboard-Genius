@@ -529,9 +529,20 @@ const server = http.createServer(async (req, res) => {
       const hasta = parsedUrl.query.hasta; // YYYY-MM-DD
 
       if (supabase) {
+        // OJO: nunca select('*') acá. Esta lista se pide en cada carga del
+        // dashboard (y en cada auto-refresh) — select('*') arrastra
+        // datos_raw (el JSON crudo completo por fila) de cientos de filas
+        // sin necesitarlo, y count:'exact' fuerza un COUNT sobre toda la
+        // tabla (300k+ filas) en cada pedido. Las dos cosas juntas fueron
+        // la causa real de los "statement timeout" repetidos. datos_raw
+        // se trae aparte, por fila, solo cuando se abre el detalle
+        // (ver /api/transacciones-novusbet/detalle).
         let query = supabase
           .from('transacciones_novusbet')
-          .select('*', { count: 'exact' })
+          .select(
+            'id, id_transaccion_novusbet, usuario, tipo_transaccion, monto, disciplina, descripcion, fecha, estado_cliente, casa_apuestas, id_usuario_novusbet, moneda, ingresos, comision, saldo, saldo_actual, billeteras, grupo_causal, juego',
+            { count: 'estimated' }
+          )
           .order('fecha', { ascending: false });
 
         if (desde) query = query.gte('fecha', `${desde}T00:00:00`);
@@ -566,6 +577,26 @@ const server = http.createServer(async (req, res) => {
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ datos: transacciones, total, offset, limit }));
+      return;
+    }
+
+    // API: DETALLE CRUDO de una transacción puntual (datos_raw). Separado
+    // de la lista a propósito — ver el comentario en
+    // /api/transacciones-novusbet sobre por qué esa columna no va en la
+    // lista. Se pide solo cuando el usuario abre el modal de detalle.
+    if (pathname === '/api/transacciones-novusbet/detalle') {
+      const id = parsedUrl.query.id;
+      let datosRaw = null;
+      if (supabase && id) {
+        const { data } = await supabase
+          .from('transacciones_novusbet')
+          .select('datos_raw')
+          .eq('id', id)
+          .maybeSingle();
+        datosRaw = data ? data.datos_raw : null;
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ datos_raw: datosRaw }));
       return;
     }
 
@@ -733,19 +764,28 @@ const server = http.createServer(async (req, res) => {
       const usuarios = {};
 
       if (supabase) {
-        const data = await fetchTodasLasFilas('transacciones_novusbet', 'id_usuario_novusbet, usuario, casa_apuestas, monto, disciplina, juego, fecha');
+        // Antes esto traía TODA transacciones_novusbet (hasta 100,000 filas
+        // crudas) en cada refresh de 30 segundos, para cada pestaña abierta
+        // del dashboard — el mismo tipo de sobrecarga que ya venía tumbando
+        // el plan gratuito. resumen_diario_usuarios ya trae esto agregado
+        // por usuario/día (unas pocas cientos de filas), igual que hace
+        // /api/ranking-jugadores.
+        const data = await fetchTodasLasFilas(
+          'resumen_diario_usuarios',
+          'id_usuario_novusbet, usuario, casa_apuestas, transacciones, monto_total, disciplinas, juegos, ultima_actividad'
+        );
 
         if (data) {
           const ahora = Date.now();
           const UN_DIA = 24 * 60 * 60 * 1000;
 
-          data.forEach((t) => {
-            const id = t.id_usuario_novusbet || t.usuario || 'desconocido';
+          data.forEach((d) => {
+            const id = d.id_usuario_novusbet || d.usuario || 'desconocido';
             if (!usuarios[id]) {
               usuarios[id] = {
                 id_usuario_novusbet: id,
-                usuario: t.usuario,
-                casa_apuestas: t.casa_apuestas,
+                usuario: d.usuario,
+                casa_apuestas: d.casa_apuestas,
                 transacciones: 0,
                 monto_total: 0,
                 disciplinas: new Set(),
@@ -754,12 +794,12 @@ const server = http.createServer(async (req, res) => {
               };
             }
             const u = usuarios[id];
-            u.transacciones += 1;
-            u.monto_total += t.monto || 0;
-            if (t.disciplina) u.disciplinas.add(t.disciplina);
-            if (t.juego) u.juegos.add(t.juego);
-            if (t.fecha && (!u.ultima_actividad || new Date(t.fecha) > new Date(u.ultima_actividad))) {
-              u.ultima_actividad = t.fecha;
+            u.transacciones += d.transacciones || 0;
+            u.monto_total += Number(d.monto_total) || 0;
+            (d.disciplinas || []).forEach((disc) => u.disciplinas.add(disc));
+            (d.juegos || []).forEach((j) => u.juegos.add(j));
+            if (d.ultima_actividad && (!u.ultima_actividad || new Date(d.ultima_actividad) > new Date(u.ultima_actividad))) {
+              u.ultima_actividad = d.ultima_actividad;
             }
           });
 
@@ -773,11 +813,17 @@ const server = http.createServer(async (req, res) => {
 
           // Si ya sincronizamos usuarios_novusbet (automático, ver
           // sincronizarUsuariosAutomatico), usa el estado REAL de cuenta
-          // (Habilitado/Congelado/etc.) en vez del estimado por actividad
+          // (Habilitado/Congelado/etc.) en vez del estimado por actividad.
+          // Acotado a los IDs que aparecen acá (igual que
+          // agregarNombresReales) en vez de traer las ~39,000 filas enteras.
           try {
-            const usuariosReales = await fetchTodasLasFilas('usuarios_novusbet', 'id_usuario, estado, nombre, apellido, correo');
+            const ids = [...new Set(Object.keys(usuarios))];
+            const { data: usuariosReales } = await supabase
+              .from('usuarios_novusbet')
+              .select('id_usuario, estado, nombre, apellido, correo')
+              .in('id_usuario', ids);
             const porId = {};
-            usuariosReales.forEach((u) => { porId[u.id_usuario] = u; });
+            (usuariosReales || []).forEach((u) => { porId[u.id_usuario] = u; });
 
             Object.values(usuarios).forEach((u) => {
               const real = porId[u.id_usuario_novusbet];

@@ -1398,7 +1398,7 @@
             window.location.href = '/login.html';
         }
 
-        function abrirDetalleTransaccion(idx) {
+        async function abrirDetalleTransaccion(idx) {
             const t = datos.transacciones[idx];
             if (!t) return;
 
@@ -1430,33 +1430,41 @@
                 </tr>
             `).join('');
 
-            // Registro CRUDO tal cual vino del CSV de Novusbet (antes de
-            // cualquier normalización nuestra) - para verificar exactamente
-            // qué se guardó
-            let rawHtml = '<p style="color:#999; font-size:12px;">Sin datos crudos guardados</p>';
-            if (t.datos_raw) {
-                try {
-                    const raw = typeof t.datos_raw === 'string' ? JSON.parse(t.datos_raw) : t.datos_raw;
-                    rawHtml = '<table style="width:100%; border-collapse:collapse; font-size:12px;">' +
-                        Object.entries(raw).map(([k, v]) => `
-                            <tr>
-                                <td style="padding:5px 10px; border-bottom:1px solid #f5f5f5; color:#999; text-transform:capitalize;">${k}</td>
-                                <td style="padding:5px 10px; border-bottom:1px solid #f5f5f5;">${v || '-'}</td>
-                            </tr>
-                        `).join('') + '</table>';
-                } catch (e) {
-                    rawHtml = '<p style="color:#999; font-size:12px;">No se pudo leer el registro crudo</p>';
-                }
-            }
-
             document.getElementById('modal-detalle-contenido').innerHTML = `
                 <table style="width:100%; border-collapse:collapse;">${filas}</table>
                 <details style="margin-top:15px;">
                     <summary style="cursor:pointer; font-weight:600; color:#667eea; padding:8px 0;">📄 Ver registro original del CSV</summary>
-                    <div style="background:#fafafa; border-radius:8px; padding:5px; margin-top:8px;">${rawHtml}</div>
+                    <div id="modal-detalle-raw" style="background:#fafafa; border-radius:8px; padding:5px; margin-top:8px;">
+                        <p style="color:#999; font-size:12px;">Cargando...</p>
+                    </div>
                 </details>
             `;
             document.getElementById('modal-detalle').style.display = 'flex';
+
+            // Registro CRUDO tal cual vino del CSV de Novusbet — se pide
+            // aparte (no viene en la lista) para no arrastrar ese JSON
+            // completo en cada fila de cada página, solo cuando de verdad
+            // se abre este detalle.
+            try {
+                const resp = await fetchJSON(`/api/transacciones-novusbet/detalle?id=${encodeURIComponent(t.id)}`);
+                const rawEl = document.getElementById('modal-detalle-raw');
+                if (!rawEl) return; // el modal se cerró antes de que llegara la respuesta
+                if (!resp.datos_raw) {
+                    rawEl.innerHTML = '<p style="color:#999; font-size:12px;">Sin datos crudos guardados</p>';
+                    return;
+                }
+                const raw = typeof resp.datos_raw === 'string' ? JSON.parse(resp.datos_raw) : resp.datos_raw;
+                rawEl.innerHTML = '<table style="width:100%; border-collapse:collapse; font-size:12px;">' +
+                    Object.entries(raw).map(([k, v]) => `
+                        <tr>
+                            <td style="padding:5px 10px; border-bottom:1px solid #f5f5f5; color:#999; text-transform:capitalize;">${k}</td>
+                            <td style="padding:5px 10px; border-bottom:1px solid #f5f5f5;">${v || '-'}</td>
+                        </tr>
+                    `).join('') + '</table>';
+            } catch (e) {
+                const rawEl = document.getElementById('modal-detalle-raw');
+                if (rawEl) rawEl.innerHTML = '<p style="color:#999; font-size:12px;">No se pudo leer el registro crudo</p>';
+            }
         }
 
         function cerrarDetalleTransaccion() {

@@ -542,12 +542,14 @@ async function calcularYGuardarResumenDiario(formattedRecords) {
         apostado: 0,
         ganado: 0,
         juegos: new Set(),
+        disciplinas: new Set(),
         ultima_actividad: null,
       };
     }
     const u = porUsuarioDia[key];
     u.transacciones += 1;
     u.monto_total += r.monto || 0;
+    if (r.disciplina) u.disciplinas.add(r.disciplina);
     if (r.es_apuesta) {
       u.apuestas += 1;
       u.apostado += Math.abs(r.monto || 0);
@@ -561,7 +563,11 @@ async function calcularYGuardarResumenDiario(formattedRecords) {
     if (!u.ultima_actividad || r.fecha > u.ultima_actividad) u.ultima_actividad = r.fecha;
   });
 
-  const filas = Object.values(porUsuarioDia).map((u) => ({ ...u, juegos: Array.from(u.juegos) }));
+  const filas = Object.values(porUsuarioDia).map((u) => ({
+    ...u,
+    juegos: Array.from(u.juegos),
+    disciplinas: Array.from(u.disciplinas),
+  }));
   if (filas.length === 0) return true; // nada que resumir, no es un fallo
 
   const BATCH_SIZE = 500;
