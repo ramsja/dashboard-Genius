@@ -384,16 +384,17 @@
                 </div>
             </div>
 
-            <!-- Matriz de patrón: mapa de calor usuario x día, mismo dato real -->
-            <!-- que alimenta el ranking y las proyecciones, solo reordenado -->
-            <!-- en grilla para que el patrón de cada jugador salte a la vista. -->
+            <!-- Radar de actividad por jugador: mapa de calor usuario x día, -->
+            <!-- mismo dato real que alimenta el ranking y las proyecciones, -->
+            <!-- reordenado en grilla y complementado con estado de cuenta -->
+            <!-- + alertas históricas para leer el patrón con contexto. -->
             <div class="section" style="grid-column: 1 / -1;">
                 <div class="section-header">
-                    <h2>🔥 Matriz de Patrón</h2>
+                    <h2>🔥 Radar de Actividad por Jugador</h2>
                 </div>
                 <div class="section-content">
                     <p style="font-size:12px; color:#999; margin-bottom:4px;">
-                        Apostado real por día de los jugadores con más movimiento (últimos días con datos sincronizados). Más oscuro = más apostado ese día. "Tendencia" compara la primera mitad de su historial contra la segunda.
+                        Apostado real por día de los jugadores con más movimiento (últimos días con datos sincronizados). Más oscuro = más apostado ese día. "Tendencia" compara la primera mitad de su historial contra la segunda. Debajo de cada nombre también se ve su estado real de cuenta y cuántas alertas de apuesta acumula en todo su historial (no solo estos días), para leer el patrón junto con el contexto de riesgo.
                     </p>
                     <p id="matriz-patron-nota" style="font-size:12px; color:#a3671a; margin-bottom:12px;"></p>
                     <div id="matriz-patron-wrap" style="overflow-x:auto;">
@@ -896,11 +897,17 @@
                     const textColor = (v / (m.maximo || 1)) > 0.55 ? '#fff' : '#4c2a7a';
                     return `<td style="background:${color}; color:${textColor}; text-align:center; font-size:10px; padding:6px 4px; min-width:38px;" title="${m.dias[i]}: $${v.toFixed(2)}">${texto}</td>`;
                 }).join('');
+                const estado = u.estado_real
+                    ? `<span style="font-size:10px; color:#667eea;">${u.estado_real}</span>`
+                    : '<span style="font-size:10px; color:#bbb;">sin sync</span>';
+                const alertas = u.alertas_apuestas
+                    ? `<span style="font-size:10px; color:#c0392b;" title="Alertas de apuesta acumuladas en todo su historial">🚨 ${u.alertas_apuestas}</span>`
+                    : '';
                 return `
                     <tr>
                         <td style="position:sticky; left:0; background:white; white-space:nowrap; padding-right:12px;">
                             <strong>${u.nombre_completo || u.usuario || '-'}</strong><br>
-                            <span style="font-size:10px; color:#999;">${textoPatron(u.tendencia)}</span>
+                            <span style="font-size:10px; color:#999;">${textoPatron(u.tendencia)}</span> · ${estado}${alertas ? ' · ' + alertas : ''}
                         </td>
                         ${celdas}
                     </tr>

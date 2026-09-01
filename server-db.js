@@ -1316,14 +1316,37 @@ const server = http.createServer(async (req, res) => {
             };
           });
 
-          matriz = { dias, usuarios: await agregarNombresReales(usuarios), maximo };
+          const conNombres = await agregarNombresReales(usuarios);
+
+          // Complementa cada fila con estado real de cuenta y alertas
+          // históricas acumuladas (mismo cruce que /api/analisis-riesgo),
+          // para que el mapa de calor no sea solo montos: también se vea
+          // de un vistazo si ese jugador ya viene con historial de alertas
+          // o si su cuenta sigue habilitada.
+          const ids = conNombres.map((u) => u.id_usuario_novusbet).filter(Boolean);
+          if (ids.length > 0) {
+            const [{ data: reales }, { data: alertasApuestas }] = await Promise.all([
+              supabase.from('usuarios_novusbet').select('id_usuario, estado').in('id_usuario', ids),
+              supabase.from('alertas_apuestas').select('id_usuario_novusbet').in('id_usuario_novusbet', ids),
+            ]);
+            const estadoPorId = {};
+            (reales || []).forEach((u) => { estadoPorId[u.id_usuario] = u.estado; });
+            const alertasPorId = {};
+            (alertasApuestas || []).forEach((a) => { alertasPorId[a.id_usuario_novusbet] = (alertasPorId[a.id_usuario_novusbet] || 0) + 1; });
+            conNombres.forEach((u) => {
+              u.estado_real = estadoPorId[u.id_usuario_novusbet] || null;
+              u.alertas_apuestas = alertasPorId[u.id_usuario_novusbet] || 0;
+            });
+          }
+
+          matriz = { dias, usuarios: conNombres, maximo };
         } catch (e) {
           // resumen_diario_usuarios puede no existir/no tener datos todavía
         }
       }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ real: true, fuente: 'resumen_diario_usuarios (sincronización automática real)', ...matriz }));
+      res.end(JSON.stringify({ real: true, fuente: 'resumen_diario_usuarios (sincronización automática real) + historial de alertas', ...matriz }));
       return;
     }
 
