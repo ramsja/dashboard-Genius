@@ -230,7 +230,7 @@
                                 <th>Apostado</th>
                                 <th>Ganado</th>
                                 <th>Beneficio</th>
-                                <th>Días activo (seguimiento)</th>
+                                <th>Meses Activo (seguimiento)</th>
                                 <th>Última Actividad</th>
                             </tr>
                         </thead>
@@ -480,7 +480,7 @@
                     <td class="numero">$${(u.apostado || 0).toFixed(2)}</td>
                     <td class="numero">$${(u.ganado || 0).toFixed(2)}</td>
                     <td class="numero" style="color:${beneficio >= 0 ? '#155724' : '#c0392b'}; font-weight:600;">$${beneficio.toFixed(2)}</td>
-                    <td class="numero">${u.dias_activo || 0}</td>
+                    <td class="numero">${u.meses_activo || 0}</td>
                     <td>${u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '-'}</td>
                 </tr>
             `;

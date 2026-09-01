@@ -826,7 +826,7 @@ const server = http.createServer(async (req, res) => {
               apostado: Number(b.apostado) || 0,
               ganado: Number(b.ganado) || 0,
               juegos: new Set(),
-              dias_activo: 0,
+              meses: new Set(),
               ultima_actividad: null,
             };
           });
@@ -852,7 +852,7 @@ const server = http.createServer(async (req, res) => {
                 apostado: 0,
                 ganado: 0,
                 juegos: new Set(),
-                dias_activo: 0,
+                meses: new Set(),
                 ultima_actividad: null,
               };
             }
@@ -863,7 +863,7 @@ const server = http.createServer(async (req, res) => {
             u.apostado += Number(d.apostado) || 0;
             u.ganado += Number(d.ganado) || 0;
             (d.juegos || []).forEach((j) => u.juegos.add(j));
-            u.dias_activo += 1;
+            if (d.dia) u.meses.add(String(d.dia).slice(0, 7));
             if (!u.usuario) u.usuario = d.usuario;
             if (!u.casa_apuestas) u.casa_apuestas = d.casa_apuestas;
             if (d.ultima_actividad && (!u.ultima_actividad || new Date(d.ultima_actividad) > new Date(u.ultima_actividad))) {
@@ -877,7 +877,13 @@ const server = http.createServer(async (req, res) => {
 
       const ranking = await agregarNombresReales(
         Object.values(porUsuario)
-          .map((u) => ({ ...u, juegos: Array.from(u.juegos), beneficio: u.apostado - u.ganado }))
+          .map((u) => ({
+            ...u,
+            juegos: Array.from(u.juegos),
+            meses_activo: u.meses.size,
+            meses: undefined,
+            beneficio: u.apostado - u.ganado,
+          }))
           .sort((a, b) => b.apostado - a.apostado)
           .slice(0, limit)
       );
