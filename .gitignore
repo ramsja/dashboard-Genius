@@ -10,7 +10,9 @@ venv/
 reportes/*.csv
 reportes/*.json
 reportes/*.sql
+reportes/*.txt
 !reportes/.gitkeep
+!reportes/README.txt
 # Configuración local del dashboard (contiene credenciales)
 dashboard/config.js
 # Optional: keep generated outputs if you want them in repo
