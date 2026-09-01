@@ -244,16 +244,17 @@
                 </div>
                 <div class="section-content">
                     <p id="alertas-umbral-info" style="font-size:12px; color:#999; margin-bottom:12px;">Cargando umbral configurado...</p>
+                    <p style="font-size:12px; color:#999; margin-bottom:12px;">Agrupado por jugador: si un mismo usuario dispara varias alertas, aparece en una sola fila con el total.</p>
                     <table>
                         <thead>
                             <tr>
-                                <th>Fecha</th>
                                 <th>ID Usuario</th>
                                 <th>Usuario</th>
                                 <th>Casa</th>
-                                <th>Juego</th>
-                                <th>Monto</th>
-                                <th>Motivo</th>
+                                <th>Apuestas Grandes</th>
+                                <th>Monto Total</th>
+                                <th>Motivos</th>
+                                <th>Última Vez</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-alertas-apuestas">
@@ -491,17 +492,43 @@
             const filas = datos.alertasApuestas || [];
             const umbral = filas[0] ? filas[0].umbral_usado : null;
             document.getElementById('alertas-umbral-info').textContent = umbral
-                ? `Umbral adaptativo actual: $${Number(umbral).toFixed(2)} (percentil 99 real) — o 5x el promedio propio del usuario.`
+                ? `Umbral adaptativo actual: $${Number(umbral).toFixed(2)} (percentil 99 real) — o 5x el promedio propio del usuario, o $15,000 fijo.`
                 : 'Sin alertas todavía. El umbral se calcula solo a partir de los datos reales.';
-            const html = filas.slice(0, 100).map((a) => `
+
+            // Agrupa por usuario: varias alertas del mismo jugador quedan en
+            // una sola fila con el total, en vez de una fila por operación.
+            const porUsuario = {};
+            filas.forEach((a) => {
+                const key = a.id_usuario_novusbet || a.usuario || 'desconocido';
+                if (!porUsuario[key]) {
+                    porUsuario[key] = {
+                        id_usuario_novusbet: a.id_usuario_novusbet,
+                        nombre: a.nombre_completo || a.usuario || '-',
+                        casa_apuestas: a.casa_apuestas,
+                        cantidad: 0,
+                        montoTotal: 0,
+                        motivos: new Set(),
+                        ultimaFecha: null,
+                    };
+                }
+                const u = porUsuario[key];
+                u.cantidad += 1;
+                u.montoTotal += Math.abs(a.monto || 0);
+                (a.motivo_alerta || 'global').split('+').forEach((m) => u.motivos.add(m));
+                if (a.fecha && (!u.ultimaFecha || new Date(a.fecha) > new Date(u.ultimaFecha))) u.ultimaFecha = a.fecha;
+            });
+
+            const agrupadas = Object.values(porUsuario).sort((a, b) => b.montoTotal - a.montoTotal);
+
+            const html = agrupadas.slice(0, 100).map((u) => `
                 <tr style="background:#fff5f5;">
-                    <td>${a.fecha ? new Date(a.fecha).toLocaleString('es-ES') : '-'}</td>
-                    <td>${a.id_usuario_novusbet || '-'}</td>
-                    <td><strong>${a.nombre_completo || a.usuario || '-'}</strong></td>
-                    <td>${a.casa_apuestas || '-'}</td>
-                    <td>${a.juego || '-'}</td>
-                    <td class="numero" style="color:#c0392b; font-weight:600;">$${Math.abs(a.monto || 0).toFixed(2)}</td>
-                    <td>${textoMotivoAlerta(a.motivo_alerta)}</td>
+                    <td>${u.id_usuario_novusbet || '-'}</td>
+                    <td><strong>${u.nombre}</strong></td>
+                    <td>${u.casa_apuestas || '-'}</td>
+                    <td class="numero">${u.cantidad}</td>
+                    <td class="numero" style="color:#c0392b; font-weight:600;">$${u.montoTotal.toFixed(2)}</td>
+                    <td>${textoMotivoAlerta(Array.from(u.motivos).join('+'))}</td>
+                    <td>${u.ultimaFecha ? new Date(u.ultimaFecha).toLocaleString('es-ES') : '-'}</td>
                 </tr>
             `).join('');
             document.getElementById('tabla-alertas-apuestas').innerHTML = html || '<tr><td colspan="7" class="loading">Sin alertas</td></tr>';
@@ -819,13 +846,19 @@
             document.getElementById('tabla-usuarios').innerHTML = html || '<tr><td colspan="4" class="loading">Sin datos</td></tr>';
 
             // Juegos (usa el campo "juego" ya normalizado en Supabase, y
-            // solo cuenta apuestas reales, no Ganancia/Depósito/Retiro)
+            // solo cuenta apuestas reales, no Ganancia/Depósito/Retiro).
+            // Si la página visible vino vacía, cae al ranking agregado.
             const juegos = {};
             datos.transacciones.filter(esApuesta).forEach(t => {
                 const j = t.juego || t.descripcion || 'Otros';
                 juegos[j] = (juegos[j] || 0) + 1;
             });
-            const total = datos.transacciones.filter(esApuesta).length || 1;
+            if (Object.keys(juegos).length === 0) {
+                (datos.rankingJugadores || []).forEach(u => {
+                    (u.juegos || []).forEach(j => { juegos[j] = (juegos[j] || 0) + 1; });
+                });
+            }
+            const total = Object.values(juegos).reduce((s, c) => s + c, 0) || 1;
             html = Object.entries(juegos)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 8)
