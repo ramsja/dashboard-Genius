@@ -46,15 +46,10 @@ ALTER TABLE resumen_diario_usuarios SET (
   autovacuum_analyze_scale_factor = 0.02
 );
 
--- 3) Limpieza y estadísticas frescas ya mismo (no espera al autovacuum
---    automático). VACUUM ANALYZE no bloquea la tabla para lectura/
---    escritura, es seguro correrlo con la app en producción.
-VACUUM ANALYZE transacciones_novusbet;
-VACUUM ANALYZE resumen_diario_usuarios;
-VACUUM ANALYZE alertas_apuestas;
-VACUUM ANALYZE alertas_ganancias;
-VACUUM ANALYZE ranking_historico_base;
-VACUUM ANALYZE usuarios_novusbet;
-
 -- Verificación: índices que quedan en transacciones_novusbet.
 SELECT indexname FROM pg_indexes WHERE tablename = 'transacciones_novusbet';
+
+-- El VACUUM ANALYZE queda en OPTIMIZAR-ESTRUCTURA-SUPABASE-VACUUM.sql,
+-- aparte: VACUUM no puede correr dentro de una transacción, y el editor
+-- SQL de Supabase agrupa todo lo que pegás en una sola transacción — por
+-- eso el error. Corré ese segundo archivo una línea a la vez.
