@@ -371,7 +371,7 @@ function esGanancia(descripcion) {
 // rellenar que vienen así del propio Novusbet ({{gamename}}), o texto
 // administrativo (solicitudes, premios, ajustes) que no corresponde a
 // ninguna tragamonedas/juego en particular.
-const JUEGO_JUNK_REGEX = /\{\{|\}\}|^premio$|^solicitud\b|^ajuste$|^bono$|^n\/?a$|^-$/i;
+const JUEGO_JUNK_REGEX = /\{\{|\}\}|^premio$|^solicitud\b|^ajuste$|^bono$|^cashback$|^credito$|^crédito$|^comisión$|^comision$|^n\/?a$|^-$/i;
 
 function extraerJuego(record) {
   const descripcion = getField(record, 'descripción', 'descripcion', 'description');
@@ -545,7 +545,11 @@ async function calcularYGuardarResumenDiario(formattedRecords) {
       u.apostado += Math.abs(r.monto || 0);
     }
     if (r.es_ganancia) u.ganado += Math.abs(r.monto || 0);
-    if (r.juego) u.juegos.add(r.juego);
+    // Solo contamos como "juego jugado" si la transacción es una apuesta
+    // real. Si no filtramos por esto, cualquier descripción con un nombre
+    // (depósito, retiro, bono, cashback, premio) termina apareciendo como
+    // si fuera un juego, aunque nunca se apostó en él.
+    if (r.es_apuesta && r.juego) u.juegos.add(r.juego);
     if (!u.ultima_actividad || r.fecha > u.ultima_actividad) u.ultima_actividad = r.fecha;
   });
 
