@@ -105,6 +105,21 @@
             </div>
         </div>
 
+        <!-- Origen de los datos: de dónde sale cada número, para que quede -->
+        <!-- claro que nada acá es de prueba/inventado. -->
+        <div class="sections-grid" style="margin-bottom:24px;">
+            <div class="section" style="grid-column: 1 / -1;">
+                <div class="section-header">
+                    <h2>📡 Origen de los Datos</h2>
+                </div>
+                <div class="section-content">
+                    <div id="fuente-datos-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+                        <div class="loading">Cargando...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Gráficos -->
         <div class="charts-grid">
             <div class="chart-card">
@@ -232,10 +247,11 @@
                                 <th>Beneficio</th>
                                 <th>Meses Activo (seguimiento)</th>
                                 <th>Última Actividad</th>
+                                <th>Fuente</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-ranking-jugadores">
-                            <tr><td colspan="11" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="12" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -295,6 +311,22 @@
                 </div>
             </div>
 
+            <!-- Agente predictivo: envoltorio explicativo para las proyecciones -->
+            <!-- de ganancias y apuestas de abajo. Mismo método en las dos: -->
+            <!-- promedio reciente + tendencia (alza/baja/estable) sobre el -->
+            <!-- historial REAL de resumen_diario_usuarios. No es una red -->
+            <!-- neuronal entrenada — es una heurística estadística explicada -->
+            <!-- con todas las letras, para que quede claro qué hace y de -->
+            <!-- dónde saca los datos. -->
+            <div class="section" style="grid-column: 1 / -1; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="section-content" style="color:white; padding:18px 24px;">
+                    <h2 style="margin:0 0 6px;">🤖 Agente Predictivo</h2>
+                    <p style="font-size:13px; opacity:0.9; margin:0;">
+                        Analiza el historial diario REAL de cada jugador (resumen_diario_usuarios, alimentado por la sincronización automática con Novusbet) y estima, con el promedio de los últimos 7 días y la dirección de la tendencia, qué tan cerca está de disparar una alerta. "Confianza" indica cuántos días de historial real respaldan esa estimación — con poco historial, es solo una señal preliminar, no una certeza.
+                    </p>
+                </div>
+            </div>
+
             <!-- Proyección de ganancias (todavía no dispararon alerta) -->
             <div class="section" style="grid-column: 1 / -1;">
                 <div class="section-header">
@@ -313,10 +345,11 @@
                                 <th>Promedio Reciente</th>
                                 <th>Tendencia</th>
                                 <th>Probabilidad</th>
+                                <th>Confianza</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-proyeccion-ganancias">
-                            <tr><td colspan="6" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -341,12 +374,30 @@
                                 <th>Tendencia</th>
                                 <th>Probabilidad</th>
                                 <th>Rango</th>
+                                <th>Confianza</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-proyeccion-apuestas">
-                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="8" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- Matriz de patrón: mapa de calor usuario x día, mismo dato real -->
+            <!-- que alimenta el ranking y las proyecciones, solo reordenado -->
+            <!-- en grilla para que el patrón de cada jugador salte a la vista. -->
+            <div class="section" style="grid-column: 1 / -1;">
+                <div class="section-header">
+                    <h2>🔥 Matriz de Patrón</h2>
+                </div>
+                <div class="section-content">
+                    <p style="font-size:12px; color:#999; margin-bottom:12px;">
+                        Apostado real por día de los jugadores con más movimiento (últimos días con datos sincronizados). Más oscuro = más apostado ese día. "Tendencia" compara la primera mitad de su historial contra la segunda.
+                    </p>
+                    <div id="matriz-patron-wrap" style="overflow-x:auto;">
+                        <div class="loading">Cargando...</div>
+                    </div>
                 </div>
             </div>
 
@@ -506,7 +557,7 @@
 
         async function cargarDatos() {
             try {
-                const [transRes, usuarios, disc, resumen, matrizUsuarios, rankingRes, alertas, alertasGanancias, proyeccionRes, proyeccionApuestasRes, estudioJuegosRes] = await Promise.all([
+                const [transRes, usuarios, disc, resumen, matrizUsuarios, rankingRes, alertas, alertasGanancias, proyeccionRes, proyeccionApuestasRes, estudioJuegosRes, fuenteDatosRes, matrizPatronRes] = await Promise.all([
                     fetchJSON(buildTransQuery()).catch(() => ({ datos: [], total: 0 })),
                     fetchJSON('/api/usuarios').catch(() => []),
                     fetchJSON('/api/disciplinas').catch(() => []),
@@ -517,7 +568,9 @@
                     fetchJSON('/api/alertas-ganancias').catch(() => []),
                     fetchJSON('/api/proyeccion-ganancias').catch(() => ({ proyeccion: [] })),
                     fetchJSON('/api/proyeccion-apuestas').catch(() => ({ proyeccion: [] })),
-                    fetchJSON('/api/estudio-juegos').catch(() => ({ juegos: [] }))
+                    fetchJSON('/api/estudio-juegos').catch(() => ({ juegos: [] })),
+                    fetchJSON('/api/fuente-datos').catch(() => ({ fuentes: {} })),
+                    fetchJSON('/api/matriz-patron').catch(() => ({ dias: [], usuarios: [], maximo: 0 }))
                 ]);
 
                 const trans = transRes.datos || [];
@@ -527,7 +580,8 @@
                     transacciones: trans, usuarios: usuarios || [], disciplinas: disc || [], resumen,
                     matrizUsuarios: matrizUsuarios || [], rankingJugadores: rankingRes.ranking || [], alertasApuestas: alertas || [],
                     alertasGanancias: alertasGanancias || [], proyeccionGanancias: proyeccionRes.proyeccion || [],
-                    proyeccionApuestas: proyeccionApuestasRes.proyeccion || [], estudioJuegos: estudioJuegosRes.juegos || []
+                    proyeccionApuestas: proyeccionApuestasRes.proyeccion || [], estudioJuegos: estudioJuegosRes.juegos || [],
+                    fuenteDatos: fuenteDatosRes.fuentes || {}, matrizPatron: matrizPatronRes || { dias: [], usuarios: [], maximo: 0 }
                 };
 
                 actualizarUI();
@@ -539,6 +593,8 @@
                 actualizarProyeccionGanancias();
                 actualizarProyeccionApuestas();
                 actualizarEstudioJuegos();
+                actualizarFuenteDatos();
+                actualizarMatrizPatron();
                 document.getElementById('actualizacion').textContent = new Date().toLocaleTimeString('es-ES');
             } catch (error) {
                 console.error('Error:', error);
@@ -546,6 +602,20 @@
             }
 
             cargarEstadoSync();
+        }
+
+        // Insignia de procedencia: de dónde sale ese renglón exacto del
+        // ranking. "csv_historico" = importado a mano del reporte real de
+        // Novusbet; "sync_diario" = acumulado real de la sincronización
+        // automática; ambos = las dos cosas sumadas.
+        function badgeFuente(fuentes) {
+            const lista = fuentes || [];
+            const tieneCsv = lista.includes('csv_historico');
+            const tieneSync = lista.includes('sync_diario');
+            if (tieneCsv && tieneSync) return `<span class="badge" style="background:#e2e0fb; color:#4c2a7a;" title="CSV importado + sincronización diaria">CSV + Diario</span>`;
+            if (tieneCsv) return `<span class="badge" style="background:#e2e3e5; color:#383d41;" title="Solo del CSV importado">CSV</span>`;
+            if (tieneSync) return `<span class="badge" style="background:#d4edda; color:#155724;" title="Solo de la sincronización automática">Diario</span>`;
+            return '-';
         }
 
         function actualizarRankingJugadores() {
@@ -569,10 +639,11 @@
                     <td class="numero" style="color:${beneficio >= 0 ? '#155724' : '#c0392b'}; font-weight:600;">$${beneficio.toFixed(2)}</td>
                     <td class="numero">${u.meses_activo || 0}</td>
                     <td>${u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '-'}</td>
+                    <td>${badgeFuente(u.fuentes)}</td>
                 </tr>
             `;
             }).join('');
-            document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="11" class="loading">Todavía sin datos</td></tr>';
+            document.getElementById('tabla-ranking-jugadores').innerHTML = html || '<tr><td colspan="12" class="loading">Todavía sin datos</td></tr>';
         }
 
         function badgeSeveridad(esCritica) {
@@ -665,6 +736,16 @@
             `;
         }
 
+        function badgeConfianza(nivel) {
+            const estilos = {
+                alta: 'background:#d4edda; color:#155724;',
+                media: 'background:#fff3cd; color:#856404;',
+                baja: 'background:#f8d7da; color:#721c24;',
+            };
+            const texto = { alta: 'Alta', media: 'Media', baja: 'Baja' };
+            return `<span class="badge" style="${estilos[nivel] || estilos.baja}" title="Días de historial real que respaldan esta proyección">${texto[nivel] || '-'}</span>`;
+        }
+
         function actualizarProyeccionGanancias() {
             const filas = datos.proyeccionGanancias || [];
             const html = filas.map((p) => `
@@ -675,9 +756,10 @@
                     <td class="numero">$${(p.promedio_reciente || 0).toFixed(2)}</td>
                     <td>${textoPatron(p.tendencia)}</td>
                     <td style="min-width:140px;">${barraProbabilidad(p.probabilidad || 0)}</td>
+                    <td>${badgeConfianza(p.confianza)}</td>
                 </tr>
             `).join('');
-            document.getElementById('tabla-proyeccion-ganancias').innerHTML = html || '<tr><td colspan="6" class="loading">Sin candidatos por ahora — nadie se acerca al umbral todavía</td></tr>';
+            document.getElementById('tabla-proyeccion-ganancias').innerHTML = html || '<tr><td colspan="7" class="loading">Sin candidatos por ahora — nadie se acerca al umbral todavía</td></tr>';
         }
 
         function actualizarProyeccionApuestas() {
@@ -691,9 +773,101 @@
                     <td>${textoPatron(p.tendencia)}</td>
                     <td style="min-width:140px;">${barraProbabilidad(p.probabilidad || 0)}</td>
                     <td>${p.enRangoCritico ? badgeSeveridad(true) : '<span class="badge" style="background:#e2e3e5; color:#383d41;">Bajo umbral</span>'}</td>
+                    <td>${badgeConfianza(p.confianza)}</td>
                 </tr>
             `).join('');
-            document.getElementById('tabla-proyeccion-apuestas').innerHTML = html || '<tr><td colspan="7" class="loading">Sin candidatos por ahora — nadie se acerca al umbral todavía</td></tr>';
+            document.getElementById('tabla-proyeccion-apuestas').innerHTML = html || '<tr><td colspan="8" class="loading">Sin candidatos por ahora — nadie se acerca al umbral todavía</td></tr>';
+        }
+
+        // Panel "Origen de los Datos": 4 tarjetas, una por fuente real.
+        function actualizarFuenteDatos() {
+            const f = datos.fuenteDatos || {};
+            const fechaCorta = (iso) => iso ? new Date(iso).toLocaleString('es-ES') : 'Todavía sin datos';
+            const tarjetas = [
+                {
+                    titulo: '📄 CSV Histórico',
+                    registros: f.csvHistorico?.registros || 0,
+                    linea: `Importado: ${fechaCorta(f.csvHistorico?.importadoAt)}`,
+                    detalle: f.csvHistorico?.origen,
+                },
+                {
+                    titulo: '🔄 Sync Diario',
+                    registros: f.syncDiario?.registros || 0,
+                    linea: f.syncDiario?.primerDia ? `Del ${f.syncDiario.primerDia} al ${f.syncDiario.ultimoDia}` : 'Todavía sin datos',
+                    detalle: f.syncDiario?.origen,
+                },
+                {
+                    titulo: '🧾 Transacciones Crudas',
+                    registros: f.transaccionesCrudo?.registros || 0,
+                    linea: `Última: ${fechaCorta(f.transaccionesCrudo?.ultimaTransaccion)} · retención ${f.transaccionesCrudo?.retencionDias || '-'} días`,
+                    detalle: f.transaccionesCrudo?.origen,
+                },
+                {
+                    titulo: '👤 Usuarios Reales',
+                    registros: f.usuariosReales?.registros || 0,
+                    linea: `Última sync: ${fechaCorta(f.usuariosReales?.ultimaSync)}`,
+                    detalle: f.usuariosReales?.origen,
+                },
+            ];
+            const html = tarjetas.map((t) => `
+                <div style="background:#f8f9fc; border:1px solid #eee; border-radius:10px; padding:14px 16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <strong style="font-size:13px;">${t.titulo}</strong>
+                        <span class="badge" style="background:#d4edda; color:#155724; font-size:10px;">✅ Real</span>
+                    </div>
+                    <div style="font-size:22px; font-weight:700; color:#4c2a7a;">${t.registros.toLocaleString('es-ES')}</div>
+                    <div style="font-size:11px; color:#888; margin-top:2px;">${t.linea}</div>
+                    <div style="font-size:11px; color:#aaa; margin-top:6px;" title="${t.detalle || ''}">${(t.detalle || '').slice(0, 70)}${(t.detalle || '').length > 70 ? '…' : ''}</div>
+                </div>
+            `).join('');
+            document.getElementById('fuente-datos-grid').innerHTML = html;
+        }
+
+        // Matriz de patrón: mapa de calor en tabla (sin librería nueva) —
+        // un solo tono violeta, claro->oscuro según el monto apostado ese
+        // día, consistente con el resto de la paleta de la página.
+        function colorCelda(valor, maximo) {
+            if (!valor || !maximo) return '#f7f6fc';
+            const t = Math.min(1, valor / maximo);
+            // Interpola entre un lavanda casi blanco y el violeta oscuro de marca.
+            const desde = [241, 238, 251];
+            const hasta = [76, 29, 149];
+            const rgb = desde.map((c, i) => Math.round(c + (hasta[i] - c) * t));
+            return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+        }
+
+        function actualizarMatrizPatron() {
+            const m = datos.matrizPatron || { dias: [], usuarios: [], maximo: 0 };
+            const wrap = document.getElementById('matriz-patron-wrap');
+            if (!m.usuarios.length || !m.dias.length) {
+                wrap.innerHTML = '<p class="loading">Todavía no hay suficiente historial diario para armar la matriz.</p>';
+                return;
+            }
+            const diasCortos = m.dias.map((d) => d.slice(5)); // MM-DD
+            const filas = m.usuarios.map((u) => {
+                const celdas = u.valores.map((v, i) => {
+                    const color = colorCelda(v, m.maximo);
+                    const texto = v >= 1000 ? `$${(v / 1000).toFixed(1)}k` : v > 0 ? `$${v.toFixed(0)}` : '';
+                    const textColor = (v / (m.maximo || 1)) > 0.55 ? '#fff' : '#4c2a7a';
+                    return `<td style="background:${color}; color:${textColor}; text-align:center; font-size:10px; padding:6px 4px; min-width:38px;" title="${m.dias[i]}: $${v.toFixed(2)}">${texto}</td>`;
+                }).join('');
+                return `
+                    <tr>
+                        <td style="position:sticky; left:0; background:white; white-space:nowrap; padding-right:12px;">
+                            <strong>${u.nombre_completo || u.usuario || '-'}</strong><br>
+                            <span style="font-size:10px; color:#999;">${textoPatron(u.tendencia)}</span>
+                        </td>
+                        ${celdas}
+                    </tr>
+                `;
+            }).join('');
+            const header = diasCortos.map((d) => `<th style="font-size:10px; text-align:center; padding:4px;">${d}</th>`).join('');
+            wrap.innerHTML = `
+                <table>
+                    <thead><tr><th style="position:sticky; left:0; background:white;">Jugador</th>${header}</tr></thead>
+                    <tbody>${filas}</tbody>
+                </table>
+            `;
         }
 
         function actualizarEstudioJuegos() {

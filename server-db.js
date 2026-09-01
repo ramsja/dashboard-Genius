@@ -828,6 +828,10 @@ const server = http.createServer(async (req, res) => {
               juegos: new Set(),
               meses: new Set(),
               ultima_actividad: null,
+              // De dónde sale el número: CSV real importado del reporte de
+              // Novusbet, acumulado diario real de la sincronización automática,
+              // o ambos combinados (el caso más común con el tiempo).
+              fuentes: new Set(['csv_historico']),
             };
           });
         } catch (e) {
@@ -854,9 +858,11 @@ const server = http.createServer(async (req, res) => {
                 juegos: new Set(),
                 meses: new Set(),
                 ultima_actividad: null,
+                fuentes: new Set(),
               };
             }
             const u = porUsuario[id];
+            u.fuentes.add('sync_diario');
             u.transacciones += d.transacciones || 0;
             u.apuestas += d.apuestas || 0;
             u.monto_total += Number(d.monto_total) || 0;
@@ -883,13 +889,14 @@ const server = http.createServer(async (req, res) => {
             meses_activo: u.meses.size,
             meses: undefined,
             beneficio: u.apostado - u.ganado,
+            fuentes: Array.from(u.fuentes),
           }))
           .sort((a, b) => b.apostado - a.apostado)
           .slice(0, limit)
       );
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ ranking }));
+      res.end(JSON.stringify({ real: true, ranking }));
       return;
     }
 
@@ -952,6 +959,9 @@ const server = http.createServer(async (req, res) => {
                 tendencia,
                 probabilidad,
                 dias_con_historial: ordenados.length,
+                // Cuánto historial real respalda la proyección: con pocos
+                // días la tendencia es más ruido que patrón.
+                confianza: ordenados.length >= 14 ? 'alta' : ordenados.length >= 7 ? 'media' : 'baja',
               };
             })
             .filter(Boolean)
@@ -965,7 +975,12 @@ const server = http.createServer(async (req, res) => {
       }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ umbral: UMBRAL_GANANCIA_REF, proyeccion }));
+      res.end(JSON.stringify({
+        umbral: UMBRAL_GANANCIA_REF,
+        real: true,
+        fuente: 'resumen_diario_usuarios (sincronización automática real)',
+        proyeccion,
+      }));
       return;
     }
 
@@ -1027,6 +1042,7 @@ const server = http.createServer(async (req, res) => {
                 tendencia,
                 probabilidad,
                 enRangoCritico: promedioReciente >= UMBRAL_APUESTA_CRITICO,
+                confianza: ordenados.length >= 14 ? 'alta' : ordenados.length >= 7 ? 'media' : 'baja',
               };
             })
             .filter(Boolean)
@@ -1040,7 +1056,13 @@ const server = http.createServer(async (req, res) => {
       }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ umbralRef: UMBRAL_APUESTA_REF, umbralCritico: UMBRAL_APUESTA_CRITICO, proyeccion }));
+      res.end(JSON.stringify({
+        umbralRef: UMBRAL_APUESTA_REF,
+        umbralCritico: UMBRAL_APUESTA_CRITICO,
+        real: true,
+        fuente: 'resumen_diario_usuarios (sincronización automática real)',
+        proyeccion,
+      }));
       return;
     }
 
@@ -1087,7 +1109,175 @@ const server = http.createServer(async (req, res) => {
       }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ juegos }));
+      res.end(JSON.stringify({ real: true, fuente: 'resumen_diario_usuarios (sincronización automática real)', juegos }));
+      return;
+    }
+
+    // API: ORIGEN DE LOS DATOS. Para que quede explícito en el dashboard de
+    // dónde sale cada número (nada es de prueba/inventado): el CSV real que
+    // se sube a mano, la sincronización automática día a día, el detalle
+    // crudo de transacciones y el estado de cuenta real de usuarios. Usa
+    // count 'estimated' (no 'exact') porque un COUNT exacto sobre las
+    // tablas grandes ya nos generó "statement timeout" en el plan gratuito.
+    if (pathname === '/api/fuente-datos') {
+      const { RETENCION_TRANSACCIONES_DIAS } = require('./sync-novusbet');
+      const fuente = {
+        real: true,
+        fuentes: {
+          csvHistorico: {
+            registros: 0,
+            importadoAt: null,
+            origen: 'CSV real exportado a mano del backoffice de Novusbet (reporte agregado por jugador)',
+          },
+          syncDiario: {
+            registros: 0,
+            primerDia: null,
+            ultimoDia: null,
+            origen: 'Sincronización automática con Novusbet (cada 60 min), resumida por usuario y día',
+          },
+          transaccionesCrudo: {
+            registros: 0,
+            ultimaTransaccion: null,
+            retencionDias: RETENCION_TRANSACCIONES_DIAS,
+            origen: `Detalle crudo de transacciones tal como lo entrega Novusbet (se conserva ${RETENCION_TRANSACCIONES_DIAS} días, después se poda porque ya quedó resumido)`,
+          },
+          usuariosReales: {
+            registros: 0,
+            ultimaSync: syncStatusUsuarios.fin,
+            origen: 'Estado de cuenta real de cada jugador (backoffice de Novusbet, /backoffice/users)',
+          },
+        },
+      };
+
+      if (supabase) {
+        try {
+          const { count } = await supabase
+            .from('ranking_historico_base')
+            .select('id_usuario_novusbet', { count: 'estimated', head: true });
+          fuente.fuentes.csvHistorico.registros = count || 0;
+          const { data: ultimoImport } = await supabase
+            .from('ranking_historico_base')
+            .select('importado_at')
+            .order('importado_at', { ascending: false })
+            .limit(1);
+          if (ultimoImport && ultimoImport[0]) fuente.fuentes.csvHistorico.importadoAt = ultimoImport[0].importado_at;
+        } catch (e) { /* todavía no se importó ningún CSV */ }
+
+        try {
+          const { count } = await supabase
+            .from('resumen_diario_usuarios')
+            .select('id_usuario_novusbet', { count: 'estimated', head: true });
+          fuente.fuentes.syncDiario.registros = count || 0;
+          const { data: primero } = await supabase
+            .from('resumen_diario_usuarios').select('dia').order('dia', { ascending: true }).limit(1);
+          const { data: ultimo } = await supabase
+            .from('resumen_diario_usuarios').select('dia').order('dia', { ascending: false }).limit(1);
+          if (primero && primero[0]) fuente.fuentes.syncDiario.primerDia = primero[0].dia;
+          if (ultimo && ultimo[0]) fuente.fuentes.syncDiario.ultimoDia = ultimo[0].dia;
+        } catch (e) { /* resumen_diario_usuarios puede no existir todavía */ }
+
+        try {
+          const { count } = await supabase
+            .from('transacciones_novusbet')
+            .select('id', { count: 'estimated', head: true });
+          fuente.fuentes.transaccionesCrudo.registros = count || 0;
+          const { data: ultima } = await supabase
+            .from('transacciones_novusbet').select('fecha').order('fecha', { ascending: false }).limit(1);
+          if (ultima && ultima[0]) fuente.fuentes.transaccionesCrudo.ultimaTransaccion = ultima[0].fecha;
+        } catch (e) { /* no debería pasar, pero por las dudas */ }
+
+        try {
+          const { count } = await supabase
+            .from('usuarios_novusbet')
+            .select('id_usuario', { count: 'estimated', head: true });
+          fuente.fuentes.usuariosReales.registros = count || 0;
+        } catch (e) { /* usuarios_novusbet puede no existir todavía */ }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(fuente));
+      return;
+    }
+
+    // API: MATRIZ DE PATRÓN. Heatmap real: los usuarios con más apostado
+    // acumulado (filas) contra sus últimos días de actividad (columnas),
+    // con el monto apostado ese día en cada celda. Mismos datos que
+    // alimentan el ranking y las proyecciones (resumen_diario_usuarios),
+    // solo reordenados en grilla para que el patrón de cada usuario salte
+    // a la vista. Incluye la misma clasificación de tendencia (alza/baja/
+    // estable) que ya usamos en alertas de ganancias y en las proyecciones.
+    if (pathname === '/api/matriz-patron') {
+      const DIAS_VENTANA = Math.min(Math.max(parseInt(parsedUrl.query.dias, 10) || 14, 5), 30);
+      const TOP_USUARIOS = Math.min(Math.max(parseInt(parsedUrl.query.top, 10) || 15, 5), 30);
+      let matriz = { dias: [], usuarios: [], maximo: 0 };
+
+      if (supabase) {
+        try {
+          const filas = await fetchTodasLasFilas(
+            'resumen_diario_usuarios',
+            'id_usuario_novusbet, usuario, casa_apuestas, dia, apostado'
+          );
+
+          const porUsuario = {};
+          filas.forEach((f) => {
+            const id = f.id_usuario_novusbet;
+            if (!porUsuario[id]) porUsuario[id] = { id_usuario_novusbet: id, usuario: f.usuario, casa_apuestas: f.casa_apuestas, porDia: {}, total: 0 };
+            const monto = Number(f.apostado) || 0;
+            porUsuario[id].porDia[f.dia] = (porUsuario[id].porDia[f.dia] || 0) + monto;
+            porUsuario[id].total += monto;
+            if (!porUsuario[id].usuario) porUsuario[id].usuario = f.usuario;
+          });
+
+          // Ventana de días: los últimos N días con datos reales (no fechas
+          // fijas), para que la matriz no quede llena de columnas vacías si
+          // todavía no hay tanto historial acumulado.
+          const todosLosDias = Array.from(new Set(filas.map((f) => f.dia))).sort();
+          const dias = todosLosDias.slice(-DIAS_VENTANA);
+
+          const topUsuarios = Object.values(porUsuario)
+            .sort((a, b) => b.total - a.total)
+            .slice(0, TOP_USUARIOS);
+
+          let maximo = 0;
+          const usuarios = topUsuarios.map((u) => {
+            const ordenados = dias.map((d) => u.porDia[d] || 0);
+            ordenados.forEach((v) => { if (v > maximo) maximo = v; });
+
+            // Misma heurística de tendencia que alertas_ganancias y las
+            // proyecciones: compara el promedio de la primera mitad del
+            // historial completo del usuario contra la segunda mitad.
+            const historialCompleto = Object.keys(u.porDia).sort().map((d) => u.porDia[d]);
+            let tendencia = 'sin_dato';
+            if (historialCompleto.length >= 4) {
+              const mitad = Math.floor(historialCompleto.length / 2);
+              const promAnterior = historialCompleto.slice(0, mitad).reduce((s, v) => s + v, 0) / mitad;
+              const promReciente = historialCompleto.slice(mitad).reduce((s, v) => s + v, 0) / (historialCompleto.length - mitad);
+              if (promAnterior > 0) {
+                const cambio = (promReciente - promAnterior) / promAnterior;
+                if (cambio >= 0.2) tendencia = 'alza';
+                else if (cambio <= -0.2) tendencia = 'baja';
+                else tendencia = 'estable';
+              }
+            }
+
+            return {
+              id_usuario_novusbet: u.id_usuario_novusbet,
+              usuario: u.usuario,
+              casa_apuestas: u.casa_apuestas,
+              total: u.total,
+              tendencia,
+              valores: ordenados,
+            };
+          });
+
+          matriz = { dias, usuarios: await agregarNombresReales(usuarios), maximo };
+        } catch (e) {
+          // resumen_diario_usuarios puede no existir/no tener datos todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ real: true, fuente: 'resumen_diario_usuarios (sincronización automática real)', ...matriz }));
       return;
     }
 
