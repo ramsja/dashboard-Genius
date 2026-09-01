@@ -1033,4 +1033,5 @@ if (require.main === module) {
 module.exports = {
   main, syncHistorico, syncRangoHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML,
   actualizarResumenDiario, podarTransaccionesDelDia, END_DATE, RETENCION_TRANSACCIONES_DIAS,
+  JUEGO_JUNK_REGEX,
 };

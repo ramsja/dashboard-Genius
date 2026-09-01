@@ -1119,6 +1119,9 @@ const server = http.createServer(async (req, res) => {
     // (aproximado, porque el resumen diario no guarda el monto por
     // juego individual, solo la lista de juegos jugados esa jornada).
     if (pathname === '/api/estudio-juegos') {
+      // Mismo filtro defensivo que /api/juegos-dashboard: descarta nombres
+      // que quedaron sucios de antes del fix, ver JUEGO_JUNK_REGEX.
+      const { JUEGO_JUNK_REGEX } = require('./sync-novusbet');
       let juegos = [];
 
       if (supabase) {
@@ -1129,7 +1132,7 @@ const server = http.createServer(async (req, res) => {
           );
           const porJuego = {};
           dias.forEach((d) => {
-            const lista = (d.juegos || []).filter(Boolean);
+            const lista = (d.juegos || []).filter((j) => j && !JUEGO_JUNK_REGEX.test(j));
             if (lista.length === 0) return;
             const apostadoPorJuego = (Number(d.apostado) || 0) / lista.length;
             const yaContados = new Set();
@@ -1169,6 +1172,12 @@ const server = http.createServer(async (req, res) => {
     // día, el resumen no guarda el monto por juego individual) — se marca
     // explícito en cada campo para no mezclar exacto con aproximado.
     if (pathname === '/api/juegos-dashboard') {
+      // Filtro defensivo: aunque resumen_diario_usuarios todavía tenga
+      // nombres viejos sin limpiar (ej. "{{gamename}}" de antes del fix,
+      // ver JUEGO_JUNK_REGEX en sync-novusbet.js), esta página nunca
+      // debería mostrarlos como "juego". No reemplaza limpiar el dato de
+      // origen, pero evita que un dato sucio arruine "más popular".
+      const { JUEGO_JUNK_REGEX } = require('./sync-novusbet');
       let juegos = [];
       let resumenGeneral = { totalJuegos: 0, totalApostadoEstimado: 0, jugadoresActivos: 0 };
 
@@ -1182,7 +1191,7 @@ const server = http.createServer(async (req, res) => {
           const porJuego = {};
           const jugadoresActivos = new Set();
           dias.forEach((d) => {
-            const lista = (d.juegos || []).filter(Boolean);
+            const lista = (d.juegos || []).filter((j) => j && !JUEGO_JUNK_REGEX.test(j));
             if (d.id_usuario_novusbet) jugadoresActivos.add(d.id_usuario_novusbet);
             if (lista.length === 0) return;
             const apostadoPorJuego = (Number(d.apostado) || 0) / lista.length;

@@ -55,7 +55,8 @@
         <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
             <div>
                 <h1>🎮 Dashboard de Juegos</h1>
-                <p>Popularidad, apostado estimado y frecuencia por juego, sobre datos reales acumulados</p>
+                <p>Popularidad, apostado estimado y frecuencia por juego, sobre datos reales acumulados • Vista actualizada: <span id="actualizacion">--:--:--</span></p>
+                <p id="sync-status" style="font-size:12px; opacity:0.85; margin-top:4px;">Verificando sincronización...</p>
                 <p style="margin-top:6px;"><a href="/inicio.html">← Volver al panel principal</a></p>
             </div>
             <button onclick="cerrarSesion()" style="padding:10px 18px; background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.4); border-radius:6px; cursor:pointer; font-weight:600;">Cerrar sesión</button>
@@ -225,8 +226,39 @@
                 });
 
                 renderTabla();
+                document.getElementById('actualizacion').textContent = new Date().toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
             } catch (e) {
                 console.error('Error cargando juegos:', e);
+            }
+
+            cargarEstadoSync();
+        }
+
+        // Cuándo corrió de verdad la sincronización con Novusbet (el
+        // trigger real de backend, cada 60 min) — no confundir con
+        // "Vista actualizada" de arriba, que es solo cuándo esta pestaña
+        // volvió a pedir los datos (cada 30s, puede no haber cambios).
+        async function cargarEstadoSync() {
+            try {
+                const s = await fetch('/api/sync-status').then((r) => r.json());
+                const el = document.getElementById('sync-status');
+                const iconos = { nunca: '⚪', sincronizando: '🔄', completado: '✅', error: '⚠️' };
+                const icono = iconos[s.estado] || '⚪';
+
+                if (s.estado === 'sincronizando') {
+                    el.textContent = `${icono} Sincronizando datos reales desde Novusbet...`;
+                } else if (s.estado === 'completado') {
+                    const cuando = s.fin
+                        ? new Date(s.fin).toLocaleString('es-ES', { weekday: 'long', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+                        : '';
+                    el.textContent = `${icono} Última sincronización real con Novusbet: ${cuando} • ${s.filas} transacciones (se repite cada 60 min)`;
+                } else if (s.estado === 'error') {
+                    el.textContent = `${icono} Error de sincronización: ${s.mensaje}`;
+                } else {
+                    el.textContent = `${icono} Sin sincronizar todavía`;
+                }
+            } catch (e) {
+                // silencioso, no es crítico
             }
         }
 
