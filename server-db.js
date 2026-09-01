@@ -1327,6 +1327,148 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // API: ANÁLISIS DE RIESGO. Heurística de riesgo transparente (no una
+    // caja negra) sobre datos reales: apostado/ganado acumulado
+    // (resumen_diario_usuarios) + historial COMPLETO de alertas ya
+    // disparadas (alertas_apuestas/alertas_ganancias, que va más atrás que
+    // los pocos días que tiene el resumen todavía). Cada señal suma puntos
+    // a un puntaje 0-100, documentados uno por uno — pensado para que un
+    // analista pueda auditar por qué un usuario quedó donde quedó, no para
+    // confiar en el número ciegamente.
+    if (pathname === '/api/analisis-riesgo') {
+      const TOP = Math.min(Math.max(parseInt(parsedUrl.query.top, 10) || 25, 5), 100);
+      let jugadores = [];
+
+      if (supabase) {
+        try {
+          const resumen = await fetchTodasLasFilas(
+            'resumen_diario_usuarios',
+            'id_usuario_novusbet, usuario, casa_apuestas, dia, apostado, ganado, apuestas'
+          );
+
+          const porUsuario = {};
+          resumen.forEach((r) => {
+            const id = r.id_usuario_novusbet;
+            if (!id) return;
+            if (!porUsuario[id]) {
+              porUsuario[id] = {
+                id_usuario_novusbet: id,
+                usuario: r.usuario,
+                casa_apuestas: r.casa_apuestas,
+                apostado_total: 0,
+                ganado_total: 0,
+                apuestas_total: 0,
+                maxApuestasDia: 0,
+                porDia: {},
+              };
+            }
+            const u = porUsuario[id];
+            const apostado = Number(r.apostado) || 0;
+            const ganado = Number(r.ganado) || 0;
+            u.apostado_total += apostado;
+            u.ganado_total += ganado;
+            u.apuestas_total += r.apuestas || 0;
+            if ((r.apuestas || 0) > u.maxApuestasDia) u.maxApuestasDia = r.apuestas || 0;
+            u.porDia[r.dia] = apostado;
+            if (!u.usuario) u.usuario = r.usuario;
+          });
+
+          const ids = Object.keys(porUsuario);
+          if (ids.length > 0) {
+            // Historial COMPLETO de alertas (no limitado a los días del
+            // resumen) — es la señal de riesgo más confiable porque no se
+            // pierde cuando se poda el detalle crudo.
+            const [{ data: alertasApuestas }, { data: alertasGanancias }] = await Promise.all([
+              supabase.from('alertas_apuestas').select('id_usuario_novusbet, severidad').in('id_usuario_novusbet', ids),
+              supabase.from('alertas_ganancias').select('id_usuario_novusbet, severidad').in('id_usuario_novusbet', ids),
+            ]);
+            const conteoAlertasApuestas = {};
+            const conteoAlertasCriticasApuestas = {};
+            (alertasApuestas || []).forEach((a) => {
+              conteoAlertasApuestas[a.id_usuario_novusbet] = (conteoAlertasApuestas[a.id_usuario_novusbet] || 0) + 1;
+              if (a.severidad === 'critica') conteoAlertasCriticasApuestas[a.id_usuario_novusbet] = (conteoAlertasCriticasApuestas[a.id_usuario_novusbet] || 0) + 1;
+            });
+            const conteoAlertasGanancias = {};
+            (alertasGanancias || []).forEach((a) => {
+              conteoAlertasGanancias[a.id_usuario_novusbet] = (conteoAlertasGanancias[a.id_usuario_novusbet] || 0) + 1;
+            });
+
+            const { data: reales } = await supabase
+              .from('usuarios_novusbet')
+              .select('id_usuario, nombre, apellido, estado')
+              .in('id_usuario', ids);
+            const porIdReal = {};
+            (reales || []).forEach((u) => { porIdReal[u.id_usuario] = u; });
+
+            jugadores = Object.values(porUsuario).map((u) => {
+              const dias = Object.keys(u.porDia).sort();
+              const retorno = u.apostado_total > 0 ? u.ganado_total / u.apostado_total : 0;
+              const alertasApuestasCount = conteoAlertasApuestas[u.id_usuario_novusbet] || 0;
+              const alertasCriticasCount = conteoAlertasCriticasApuestas[u.id_usuario_novusbet] || 0;
+              const alertasGananciasCount = conteoAlertasGanancias[u.id_usuario_novusbet] || 0;
+
+              // Caída súbita: tuvo actividad fuerte un día y CERO al día
+              // siguiente (fin de sesión abrupto, posible autoexclusión o
+              // revisión — no necesariamente malo, pero se marca).
+              let caidaSubita = false;
+              for (let i = 0; i < dias.length - 1; i++) {
+                if (u.porDia[dias[i]] > 1000 && (u.porDia[dias[i + 1]] || 0) === 0) { caidaSubita = true; break; }
+              }
+
+              const señales = [];
+              let puntaje = 0;
+              if (alertasApuestasCount >= 100) { puntaje += 30; señales.push('alertas_historicas_muy_altas'); }
+              else if (alertasApuestasCount >= 20) { puntaje += 15; señales.push('alertas_historicas_altas'); }
+              if (alertasCriticasCount > 0) { puntaje += 10; señales.push('alertas_criticas'); }
+              if (u.maxApuestasDia >= 2000) { puntaje += 25; señales.push('frecuencia_muy_alta'); }
+              else if (u.maxApuestasDia >= 500) { puntaje += 10; señales.push('frecuencia_alta'); }
+              if (retorno >= 0.9) { puntaje += 15; señales.push('retorno_inusualmente_alto'); }
+              else if (retorno > 0 && retorno <= 0.05) { puntaje += 15; señales.push('retorno_inusualmente_bajo'); }
+              if (u.ganado_total > u.apostado_total) { puntaje += 15; señales.push('ganancia_neta'); }
+              if (caidaSubita) { puntaje += 15; señales.push('caida_subita_actividad'); }
+              puntaje = Math.min(100, puntaje);
+
+              const nivel = puntaje >= 60 ? 'alto' : puntaje >= 30 ? 'medio' : 'bajo';
+              const real = porIdReal[u.id_usuario_novusbet];
+
+              return {
+                id_usuario_novusbet: u.id_usuario_novusbet,
+                usuario: u.usuario,
+                casa_apuestas: u.casa_apuestas,
+                nombre_completo: real ? [real.nombre, real.apellido].filter(Boolean).join(' ') : null,
+                estado_real: real ? real.estado : null,
+                apostado_total: u.apostado_total,
+                ganado_total: u.ganado_total,
+                retorno,
+                apuestas_total: u.apuestas_total,
+                max_apuestas_dia: u.maxApuestasDia,
+                dias_con_actividad: dias.length,
+                alertas_apuestas: alertasApuestasCount,
+                alertas_apuestas_criticas: alertasCriticasCount,
+                alertas_ganancias: alertasGananciasCount,
+                puntaje_riesgo: puntaje,
+                nivel_riesgo: nivel,
+                señales,
+              };
+            })
+              .sort((a, b) => b.puntaje_riesgo - a.puntaje_riesgo || b.apostado_total - a.apostado_total)
+              .slice(0, TOP);
+          }
+        } catch (e) {
+          // resumen_diario_usuarios/alertas pueden no tener datos todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        real: true,
+        fuente: 'resumen_diario_usuarios + historial de alertas_apuestas/alertas_ganancias',
+        metodologia: 'Puntaje 0-100 por señales explícitas (no es un modelo entrenado): alertas históricas acumuladas, frecuencia de apuestas por día, retorno inusual, ganancia neta sobre lo apostado, y caída súbita de actividad. Cada señal está documentada, no es una caja negra.',
+        jugadores,
+      }));
+      return;
+    }
+
     // API: SUBIR CSV DEL REPORTE DE NOVUSBET para (re)llenar
     // ranking_historico_base. Mismo formato que customreport.csv:
     // línea 1 = encabezado del resumen, línea 2 = valores del resumen,

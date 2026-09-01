@@ -402,6 +402,38 @@
                 </div>
             </div>
 
+            <!-- Análisis de riesgo: puntaje 0-100 por señales explícitas -->
+            <!-- (no una caja negra) sobre datos reales acumulados + -->
+            <!-- historial completo de alertas. -->
+            <div class="section" style="grid-column: 1 / -1;">
+                <div class="section-header">
+                    <h2>🕵️ Análisis de Riesgo</h2>
+                </div>
+                <div class="section-content">
+                    <p style="font-size:12px; color:#999; margin-bottom:12px;">
+                        Puntaje 0-100 por señales explícitas sobre datos reales: alertas históricas acumuladas (van más atrás que los días del resumen), frecuencia de apuestas por día, retorno inusual (muy alto o muy bajo), ganancia neta sobre lo apostado, y caída súbita de actividad. No es un modelo entrenado — cada señal está documentada, pensado para auditar el porqué, no para confiar ciegamente en el número.
+                    </p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Jugador</th>
+                                <th>Estado</th>
+                                <th>Apostado Total</th>
+                                <th>Ganado Total</th>
+                                <th>Retorno</th>
+                                <th>Máx Apuestas/Día</th>
+                                <th>Alertas Históricas</th>
+                                <th>Riesgo</th>
+                                <th>Señales</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-analisis-riesgo">
+                            <tr><td colspan="9" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Estudio de juegos -->
             <div class="section" style="grid-column: 1 / -1;">
                 <div class="section-header">
@@ -558,7 +590,7 @@
 
         async function cargarDatos() {
             try {
-                const [transRes, usuarios, disc, resumen, matrizUsuarios, rankingRes, alertas, alertasGanancias, proyeccionRes, proyeccionApuestasRes, estudioJuegosRes, fuenteDatosRes, matrizPatronRes] = await Promise.all([
+                const [transRes, usuarios, disc, resumen, matrizUsuarios, rankingRes, alertas, alertasGanancias, proyeccionRes, proyeccionApuestasRes, estudioJuegosRes, fuenteDatosRes, matrizPatronRes, analisisRiesgoRes] = await Promise.all([
                     fetchJSON(buildTransQuery()).catch(() => ({ datos: [], total: 0 })),
                     fetchJSON('/api/usuarios').catch(() => []),
                     fetchJSON('/api/disciplinas').catch(() => []),
@@ -571,7 +603,8 @@
                     fetchJSON('/api/proyeccion-apuestas').catch(() => ({ proyeccion: [] })),
                     fetchJSON('/api/estudio-juegos').catch(() => ({ juegos: [] })),
                     fetchJSON('/api/fuente-datos').catch(() => ({ fuentes: {} })),
-                    fetchJSON('/api/matriz-patron').catch(() => ({ dias: [], usuarios: [], maximo: 0 }))
+                    fetchJSON('/api/matriz-patron').catch(() => ({ dias: [], usuarios: [], maximo: 0 })),
+                    fetchJSON('/api/analisis-riesgo').catch(() => ({ jugadores: [] }))
                 ]);
 
                 const trans = transRes.datos || [];
@@ -582,7 +615,8 @@
                     matrizUsuarios: matrizUsuarios || [], rankingJugadores: rankingRes.ranking || [], alertasApuestas: alertas || [],
                     alertasGanancias: alertasGanancias || [], proyeccionGanancias: proyeccionRes.proyeccion || [],
                     proyeccionApuestas: proyeccionApuestasRes.proyeccion || [], estudioJuegos: estudioJuegosRes.juegos || [],
-                    fuenteDatos: fuenteDatosRes.fuentes || {}, matrizPatron: matrizPatronRes || { dias: [], usuarios: [], maximo: 0 }
+                    fuenteDatos: fuenteDatosRes.fuentes || {}, matrizPatron: matrizPatronRes || { dias: [], usuarios: [], maximo: 0 },
+                    analisisRiesgo: analisisRiesgoRes.jugadores || []
                 };
 
                 actualizarUI();
@@ -596,6 +630,7 @@
                 actualizarEstudioJuegos();
                 actualizarFuenteDatos();
                 actualizarMatrizPatron();
+                actualizarAnalisisRiesgo();
                 document.getElementById('actualizacion').textContent = new Date().toLocaleTimeString('es-ES');
             } catch (error) {
                 console.error('Error:', error);
@@ -878,6 +913,52 @@
                     <tbody>${filas}</tbody>
                 </table>
             `;
+        }
+
+        function badgeRiesgo(nivel) {
+            const estilos = {
+                alto: 'background:#f8d7da; color:#721c24; font-weight:700;',
+                medio: 'background:#fff3cd; color:#856404;',
+                bajo: 'background:#d4edda; color:#155724;',
+            };
+            const texto = { alto: '🔴 Alto', medio: '🟡 Medio', bajo: '🟢 Bajo' };
+            return `<span class="badge" style="${estilos[nivel] || estilos.bajo}">${texto[nivel] || nivel}</span>`;
+        }
+
+        const TEXTO_SEÑAL = {
+            alertas_historicas_muy_altas: 'Alertas históricas muy altas',
+            alertas_historicas_altas: 'Alertas históricas altas',
+            alertas_criticas: 'Tiene alertas críticas',
+            frecuencia_muy_alta: 'Frecuencia muy alta (posible bot)',
+            frecuencia_alta: 'Frecuencia alta',
+            retorno_inusualmente_alto: 'Retorno inusualmente alto',
+            retorno_inusualmente_bajo: 'Retorno inusualmente bajo',
+            ganancia_neta: 'Ganó más de lo que apostó',
+            caida_subita_actividad: 'Caída súbita de actividad',
+        };
+
+        function actualizarAnalisisRiesgo() {
+            const filas = datos.analisisRiesgo || [];
+            const html = filas.map((j) => {
+                const señales = (j.señales || []).map((s) => `<span class="badge" style="background:#eee; color:#555; font-size:10px; margin:1px;">${TEXTO_SEÑAL[s] || s}</span>`).join(' ') || '<span style="color:#999; font-size:11px;">Sin señales</span>';
+                return `
+                <tr>
+                    <td>
+                        <strong>${j.nombre_completo || j.usuario || '-'}</strong><br>
+                        <span style="font-size:10px; color:#999;">${j.id_usuario_novusbet || '-'}</span>
+                    </td>
+                    <td>${j.estado_real || '<span style="color:#999;">sin sync</span>'}</td>
+                    <td class="numero">$${(j.apostado_total || 0).toFixed(2)}</td>
+                    <td class="numero">$${(j.ganado_total || 0).toFixed(2)}</td>
+                    <td class="numero">${((j.retorno || 0) * 100).toFixed(1)}%</td>
+                    <td class="numero">${j.max_apuestas_dia || 0}</td>
+                    <td class="numero">${j.alertas_apuestas || 0}${j.alertas_apuestas_criticas ? ` (${j.alertas_apuestas_criticas} críticas)` : ''}</td>
+                    <td>${badgeRiesgo(j.nivel_riesgo)}</td>
+                    <td style="max-width:260px;">${señales}</td>
+                </tr>
+            `;
+            }).join('');
+            document.getElementById('tabla-analisis-riesgo').innerHTML = html || '<tr><td colspan="9" class="loading">Todavía no hay suficientes datos</td></tr>';
         }
 
         function actualizarEstudioJuegos() {
