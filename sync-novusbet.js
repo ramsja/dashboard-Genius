@@ -374,14 +374,19 @@ function esGanancia(descripcion) {
 // financiadas con bono que Novusbet reporta con un código de cupón en
 // vez de un juego ("Apuesta de bono: GSV-XXXXX-XXXXX") — sí son apuestas
 // reales (por eso pasan esApuesta), pero no tienen un juego asociado.
-const JUEGO_JUNK_REGEX = /\{\{|\}\}|^premio$|^solicitud\b|^ajuste$|^bono$|^cashback$|^credito$|^crédito$|^comisión$|^comision$|^n\/?a$|^-$|^apuesta de bono\b|^dep[oó]sito\b|^ganancia de cup[oó]n\b|^retiro\b/i;
+const JUEGO_JUNK_REGEX = /\{\{|\}\}|^premio$|^solicitud\b|^ajuste$|^bono$|^cashback$|^credito$|^crédito$|^comisión$|^comision$|^n\/?a$|^-$|^apuesta de bono\b|^dep[oó]sito\b|^ganancia de cup[oó]n\b|^retiro\b|^cup[oó]n\b/i;
+
+// Categorías reales que Novusbet a veces manda con mayúsculas distintas
+// según la transacción ("Live Casino" / "Live casino") — sin esto quedan
+// como dos juegos separados en vez de uno solo.
+const JUEGO_CANONICO = { 'live casino': 'Live Casino' };
 
 function extraerJuego(record) {
   const descripcion = getField(record, 'descripción', 'descripcion', 'description');
   if (!descripcion) return '';
   const limpio = (descripcion.replace(SUFIJOS_REGEX, '').trim() || descripcion).trim();
   if (!limpio || limpio.length < 3 || JUEGO_JUNK_REGEX.test(limpio)) return '';
-  return limpio;
+  return JUEGO_CANONICO[limpio.toLowerCase()] || limpio;
 }
 
 function classifyClientStatus(record) {

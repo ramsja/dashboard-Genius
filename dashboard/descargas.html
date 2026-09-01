@@ -392,9 +392,10 @@
                     <h2>🔥 Matriz de Patrón</h2>
                 </div>
                 <div class="section-content">
-                    <p style="font-size:12px; color:#999; margin-bottom:12px;">
+                    <p style="font-size:12px; color:#999; margin-bottom:4px;">
                         Apostado real por día de los jugadores con más movimiento (últimos días con datos sincronizados). Más oscuro = más apostado ese día. "Tendencia" compara la primera mitad de su historial contra la segunda.
                     </p>
+                    <p id="matriz-patron-nota" style="font-size:12px; color:#a3671a; margin-bottom:12px;"></p>
                     <div id="matriz-patron-wrap" style="overflow-x:auto;">
                         <div class="loading">Cargando...</div>
                     </div>
@@ -839,6 +840,15 @@
         function actualizarMatrizPatron() {
             const m = datos.matrizPatron || { dias: [], usuarios: [], maximo: 0 };
             const wrap = document.getElementById('matriz-patron-wrap');
+            const nota = document.getElementById('matriz-patron-nota');
+            // La tendencia necesita al menos 4 días de historial para no ser
+            // ruido — con menos, es normal y esperado ver "Sin datos
+            // suficientes" en todos los jugadores todavía.
+            if (nota) {
+                nota.textContent = m.dias.length < 4
+                    ? `Con solo ${m.dias.length} día(s) de historial acumulado, "Tendencia" todavía no tiene suficiente base — empieza a mostrar alza/baja/estable a partir de 4 días.`
+                    : '';
+            }
             if (!m.usuarios.length || !m.dias.length) {
                 wrap.innerHTML = '<p class="loading">Todavía no hay suficiente historial diario para armar la matriz.</p>';
                 return;
