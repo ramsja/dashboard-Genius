@@ -151,6 +151,39 @@
                 </div>
             </div>
         </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>🎮 Juegos del Período</h2>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="text" id="filtro-juego-historico" placeholder="Buscar juego..." oninput="renderTablaJuegos()">
+                    <button onclick="descargarJuegosHistoricoExcel()" class="btn btn-header">📊 Descargar Excel</button>
+                </div>
+            </div>
+            <div class="section-content">
+                <p class="nota">Apostado, ganado y retorno exactos por juego (separando bet de win), sobre los mismos CSV subidos arriba — mismo criterio que el Dashboard de Juegos en tiempo real, pero acá alimentado solo por lo que subiste a mano.</p>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="ordenarPorJuego('juego')">Juego</th>
+                                <th onclick="ordenarPorJuego('jugadoresDistintos')">Jugadores Distintos</th>
+                                <th onclick="ordenarPorJuego('apuestas')">Apuestas (Bet)</th>
+                                <th onclick="ordenarPorJuego('ganancias')">Ganancias (Win)</th>
+                                <th onclick="ordenarPorJuego('apostado')" class="activo">Apostado</th>
+                                <th onclick="ordenarPorJuego('ganado')">Ganado</th>
+                                <th onclick="ordenarPorJuego('retorno')">Retorno</th>
+                                <th onclick="ordenarPorJuego('promedioApuesta')">Promedio por Apuesta</th>
+                                <th onclick="ordenarPorJuego('participacionPct')">Participación</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-juegos-historico">
+                            <tr><td colspan="9" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -159,6 +192,8 @@
         let periodos = [];
         let periodoActual = null;
         let orden = { campo: 'apostado', asc: false };
+        let juegosHistorico = [];
+        let ordenJuegos = { campo: 'apostado', asc: false };
 
         async function fetchJSON(url, opts) {
             const r = await fetch(url, opts);
@@ -266,6 +301,67 @@
             a.click();
         }
 
+        function ordenarPorJuego(campo) {
+            if (ordenJuegos.campo === campo) ordenJuegos.asc = !ordenJuegos.asc;
+            else { ordenJuegos.campo = campo; ordenJuegos.asc = false; }
+            const tabla = document.getElementById('tabla-juegos-historico').closest('table');
+            tabla.querySelectorAll('th').forEach((th) => th.classList.remove('activo'));
+            const th = [...tabla.querySelectorAll('th')].find((t) => t.getAttribute('onclick') === `ordenarPorJuego('${campo}')`);
+            if (th) th.classList.add('activo');
+            renderTablaJuegos();
+        }
+
+        function renderTablaJuegos() {
+            const filtro = (document.getElementById('filtro-juego-historico').value || '').toLowerCase();
+            const filas = juegosHistorico
+                .filter((j) => j.juego.toLowerCase().includes(filtro))
+                .sort((a, b) => {
+                    const dir = ordenJuegos.asc ? 1 : -1;
+                    if (typeof a[ordenJuegos.campo] === 'string') return a[ordenJuegos.campo].localeCompare(b[ordenJuegos.campo]) * dir;
+                    return (a[ordenJuegos.campo] - b[ordenJuegos.campo]) * dir;
+                });
+            const html = filas.map((j) => `
+                <tr>
+                    <td><strong>${j.juego}</strong></td>
+                    <td class="numero">${j.jugadoresDistintos}</td>
+                    <td class="numero">${j.apuestas}</td>
+                    <td class="numero">${j.ganancias}</td>
+                    <td class="numero">$${j.apostado.toFixed(2)}</td>
+                    <td class="numero">$${j.ganado.toFixed(2)}</td>
+                    <td class="numero">${(j.retorno * 100).toFixed(1)}%</td>
+                    <td class="numero">$${j.promedioApuesta.toFixed(2)}</td>
+                    <td class="numero">${j.participacionPct.toFixed(1)}%</td>
+                </tr>
+            `).join('');
+            document.getElementById('tabla-juegos-historico').innerHTML = html || '<tr><td colspan="9" class="loading">Sin juegos en este período</td></tr>';
+        }
+
+        function descargarJuegosHistoricoExcel() {
+            const filtro = (document.getElementById('filtro-juego-historico').value || '').toLowerCase();
+            const filas = juegosHistorico.filter((j) => j.juego.toLowerCase().includes(filtro));
+            let html = '<table border="1"><tr><th>Juego</th><th>Jugadores Distintos</th><th>Apuestas (Bet)</th><th>Ganancias (Win)</th><th>Apostado</th><th>Ganado</th><th>Retorno %</th><th>Promedio por Apuesta</th><th>Participación %</th></tr>';
+            filas.forEach((j) => {
+                html += `<tr>
+                    <td>${j.juego}</td>
+                    <td>${j.jugadoresDistintos}</td>
+                    <td>${j.apuestas}</td>
+                    <td>${j.ganancias}</td>
+                    <td>${j.apostado.toFixed(2)}</td>
+                    <td>${j.ganado.toFixed(2)}</td>
+                    <td>${(j.retorno * 100).toFixed(1)}%</td>
+                    <td>${j.promedioApuesta.toFixed(2)}</td>
+                    <td>${j.participacionPct.toFixed(1)}%</td>
+                </tr>`;
+            });
+            html += '</table>';
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `historico-juegos-${periodoActual || 'periodo'}.xls`;
+            a.click();
+        }
+
         async function cargarDatos(periodoPedido) {
             try {
                 const url = periodoPedido ? `/api/historico-dashboard?periodo=${encodeURIComponent(periodoPedido)}` : '/api/historico-dashboard';
@@ -322,8 +418,21 @@
                 }
 
                 renderTabla();
+
+                await cargarJuegosHistorico(periodoActual);
             } catch (e) {
                 console.error('Error cargando históricos:', e);
+            }
+        }
+
+        async function cargarJuegosHistorico(periodo) {
+            try {
+                const url = periodo ? `/api/historico-juegos-dashboard?periodo=${encodeURIComponent(periodo)}` : '/api/historico-juegos-dashboard';
+                const res = await fetchJSON(url);
+                juegosHistorico = res.juegos || [];
+                renderTablaJuegos();
+            } catch (e) {
+                console.error('Error cargando juegos del histórico:', e);
             }
         }
 

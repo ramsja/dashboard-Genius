@@ -1734,6 +1734,7 @@ const server = http.createServer(async (req, res) => {
           if (registros.length === 0) throw new Error('El CSV no tiene filas de transacciones reconocibles');
 
           const porUsuarioDia = {};
+          const porJuegoDia = {};
           registros.forEach((r) => {
             const idUsuario = getField(r, 'id de usuario', 'id_usuario', 'user_id', 'user id');
             if (!idUsuario) return;
@@ -1765,6 +1766,21 @@ const server = http.createServer(async (req, res) => {
             const u = porUsuarioDia[key];
             if (apuesta) { u.apuestas += 1; u.apostado += Math.abs(monto); }
             if (ganancia) u.ganado += Math.abs(monto);
+
+            // Mismo cálculo que resumen_diario_juegos (tiempo real), pero
+            // acá alimentado por el CSV subido: apostado/ganado exactos
+            // por juego, separando bet de win. Sin juego (deposito/retiro
+            // mal etiquetado) nunca entra acá.
+            if (juego) {
+              const keyJuego = `${juego}|${dia}`;
+              if (!porJuegoDia[keyJuego]) {
+                porJuegoDia[keyJuego] = { dia, juego, apostado: 0, ganado: 0, apuestas: 0, ganancias: 0, jugadores: new Set() };
+              }
+              const j = porJuegoDia[keyJuego];
+              j.jugadores.add(idUsuario);
+              if (apuesta) { j.apostado += Math.abs(monto); j.apuestas += 1; }
+              if (ganancia) { j.ganado += Math.abs(monto); j.ganancias += 1; }
+            }
           });
 
           const paraGuardar = Object.values(porUsuarioDia).map((u) => ({
@@ -1778,6 +1794,16 @@ const server = http.createServer(async (req, res) => {
             return;
           }
 
+          const paraGuardarJuegos = Object.values(porJuegoDia).map((j) => ({
+            dia: j.dia,
+            juego: j.juego,
+            apostado: j.apostado,
+            ganado: j.ganado,
+            apuestas: j.apuestas,
+            ganancias: j.ganancias,
+            jugadores_distintos: j.jugadores.size,
+          }));
+
           const BATCH_SIZE = 500;
           let subidos = 0;
           for (let i = 0; i < paraGuardar.length; i += BATCH_SIZE) {
@@ -1789,9 +1815,23 @@ const server = http.createServer(async (req, res) => {
             subidos += lote.length;
           }
 
+          // No crítico: si historico_csv_juegos no existe todavía (falta
+          // correr su SQL), no debe tirar abajo la subida de jugadores.
+          try {
+            for (let i = 0; i < paraGuardarJuegos.length; i += BATCH_SIZE) {
+              const lote = paraGuardarJuegos.slice(i, i + BATCH_SIZE);
+              const { error } = await supabase
+                .from('historico_csv_juegos')
+                .upsert(lote, { onConflict: 'dia,juego' });
+              if (error) throw error;
+            }
+          } catch (e) {
+            console.log('⚠️ No se pudo guardar historico_csv_juegos:', e.message);
+          }
+
           const dias = [...new Set(paraGuardar.map((u) => u.dia))].sort();
           res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ ok: true, dias, subidos, transaccionesProcesadas: registros.length }));
+          res.end(JSON.stringify({ ok: true, dias, subidos, juegosDistintos: paraGuardarJuegos.length, transaccionesProcesadas: registros.length }));
         } catch (err) {
           res.writeHead(500, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: err.message }));
@@ -1886,6 +1926,81 @@ const server = http.createServer(async (req, res) => {
         resumenGeneral,
         jugadores,
         evolucion,
+      }));
+      return;
+    }
+
+    // API: JUEGOS DEL DASHBOARD DE HISTÓRICOS. Igual que /api/juegos-
+    // dashboard (apostado/ganado exactos por juego, separando bet de win),
+    // pero desde historico_csv_juegos — alimentado por los CSV subidos a
+    // mano en /historicos.html, agrupando días en el mes pedido (o el más
+    // reciente con datos).
+    if (pathname === '/api/historico-juegos-dashboard') {
+      const { JUEGO_JUNK_REGEX } = require('./sync-novusbet');
+      let periodoActual = (parsedUrl.query.periodo || '').trim() || null;
+      let juegos = [];
+      let resumenGeneral = { totalJuegos: 0, totalApostado: 0, totalGanado: 0 };
+
+      if (supabase) {
+        try {
+          const todas = await fetchTodasLasFilas(
+            'historico_csv_juegos',
+            'dia, juego, apostado, ganado, apuestas, ganancias, jugadores_distintos'
+          );
+
+          const mesDe = (dia) => (dia || '').slice(0, 7);
+          const periodosDisponibles = [...new Set(todas.map((f) => mesDe(f.dia)))].filter(Boolean).sort();
+          if (!periodoActual || !periodosDisponibles.includes(periodoActual)) {
+            periodoActual = periodosDisponibles.length > 0 ? periodosDisponibles[periodosDisponibles.length - 1] : null;
+          }
+
+          if (periodoActual) {
+            const filasMes = todas.filter((f) => mesDe(f.dia) === periodoActual);
+            const porJuego = {};
+            filasMes.forEach((f) => {
+              if (!f.juego || JUEGO_JUNK_REGEX.test(f.juego)) return;
+              if (!porJuego[f.juego]) porJuego[f.juego] = { juego: f.juego, apostado: 0, ganado: 0, apuestas: 0, ganancias: 0, jugadoresDistintosMax: 0 };
+              const j = porJuego[f.juego];
+              j.apostado += Number(f.apostado) || 0;
+              j.ganado += Number(f.ganado) || 0;
+              j.apuestas += f.apuestas || 0;
+              j.ganancias += f.ganancias || 0;
+              if ((f.jugadores_distintos || 0) > j.jugadoresDistintosMax) j.jugadoresDistintosMax = f.jugadores_distintos || 0;
+            });
+
+            const totalApostado = Object.values(porJuego).reduce((s, j) => s + j.apostado, 0);
+            juegos = Object.values(porJuego)
+              .map((j) => ({
+                juego: j.juego,
+                apostado: j.apostado,
+                ganado: j.ganado,
+                retorno: j.apostado > 0 ? j.ganado / j.apostado : 0,
+                apuestas: j.apuestas,
+                ganancias: j.ganancias,
+                promedioApuesta: j.apuestas > 0 ? j.apostado / j.apuestas : 0,
+                jugadoresDistintos: j.jugadoresDistintosMax,
+                participacionPct: totalApostado > 0 ? (j.apostado / totalApostado) * 100 : 0,
+              }))
+              .sort((a, b) => b.apostado - a.apostado);
+
+            resumenGeneral = {
+              totalJuegos: juegos.length,
+              totalApostado,
+              totalGanado: Object.values(porJuego).reduce((s, j) => s + j.ganado, 0),
+            };
+          }
+        } catch (e) {
+          // historico_csv_juegos puede no existir todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        real: true,
+        fuente: 'historico_csv_juegos (solo CSV subidos a mano, apostado/ganado exactos por juego)',
+        periodoActual,
+        resumenGeneral,
+        juegos,
       }));
       return;
     }
