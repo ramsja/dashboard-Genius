@@ -1159,6 +1159,86 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // API: DASHBOARD DE JUEGOS. Versión más completa de /api/estudio-juegos
+    // para la página dedicada /juegos.html: agrega, por juego, cuántos
+    // usuarios DISTINTOS lo jugaron (exacto, cuenta de IDs únicos) y la
+    // frecuencia promedio (apariciones / jugadores distintos — pocos
+    // jugadores repitiendo mucho vs. muchos jugadores ocasionales), además
+    // de lo que ya daba estudio-juegos (apostado estimado, participación %).
+    // El apostado sigue siendo estimado (repartido entre los juegos del
+    // día, el resumen no guarda el monto por juego individual) — se marca
+    // explícito en cada campo para no mezclar exacto con aproximado.
+    if (pathname === '/api/juegos-dashboard') {
+      let juegos = [];
+      let resumenGeneral = { totalJuegos: 0, totalApostadoEstimado: 0, jugadoresActivos: 0 };
+
+      if (supabase) {
+        try {
+          const dias = await fetchTodasLasFilas(
+            'resumen_diario_usuarios',
+            'id_usuario_novusbet, apostado, juegos'
+          );
+
+          const porJuego = {};
+          const jugadoresActivos = new Set();
+          dias.forEach((d) => {
+            const lista = (d.juegos || []).filter(Boolean);
+            if (d.id_usuario_novusbet) jugadoresActivos.add(d.id_usuario_novusbet);
+            if (lista.length === 0) return;
+            const apostadoPorJuego = (Number(d.apostado) || 0) / lista.length;
+            const yaContados = new Set();
+            lista.forEach((j) => {
+              if (!porJuego[j]) {
+                porJuego[j] = { juego: j, apariciones: 0, apostadoEstimado: 0, jugadores: new Set() };
+              }
+              porJuego[j].apariciones += 1;
+              if (d.id_usuario_novusbet) porJuego[j].jugadores.add(d.id_usuario_novusbet);
+              // Reparte el monto una sola vez por juego distinto en ese día,
+              // para no inflarlo si el mismo juego aparece repetido.
+              if (!yaContados.has(j)) {
+                porJuego[j].apostadoEstimado += apostadoPorJuego;
+                yaContados.add(j);
+              }
+            });
+          });
+
+          const totalApostadoEstimado = Object.values(porJuego).reduce((s, j) => s + j.apostadoEstimado, 0);
+
+          juegos = Object.values(porJuego)
+            .map((j) => ({
+              juego: j.juego,
+              apariciones: j.apariciones,
+              jugadoresDistintos: j.jugadores.size,
+              // Exacto (conteos), no una estimación: cuántas veces en
+              // promedio vuelve cada jugador distinto a este juego.
+              frecuenciaPromedio: j.jugadores.size > 0 ? j.apariciones / j.jugadores.size : 0,
+              apostadoEstimado: j.apostadoEstimado,
+              promedioEstimado: j.apostadoEstimado / j.apariciones,
+              participacionPct: totalApostadoEstimado > 0 ? (j.apostadoEstimado / totalApostadoEstimado) * 100 : 0,
+            }))
+            .sort((a, b) => b.apostadoEstimado - a.apostadoEstimado);
+
+          resumenGeneral = {
+            totalJuegos: juegos.length,
+            totalApostadoEstimado,
+            jugadoresActivos: jugadoresActivos.size,
+          };
+        } catch (e) {
+          // resumen_diario_usuarios puede no existir todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        real: true,
+        fuente: 'resumen_diario_usuarios (sincronización automática real)',
+        nota: 'apariciones, jugadoresDistintos y frecuenciaPromedio son conteos exactos. apostadoEstimado, promedioEstimado y participacionPct son estimados: el resumen diario no guarda el monto apostado por juego individual, se reparte el total del día entre los juegos jugados esa jornada.',
+        resumenGeneral,
+        juegos,
+      }));
+      return;
+    }
+
     // API: ORIGEN DE LOS DATOS. Para que quede explícito en el dashboard de
     // dónde sale cada número (nada es de prueba/inventado): el CSV real que
     // se sube a mano, la sincronización automática día a día, el detalle
