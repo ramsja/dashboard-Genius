@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime
@@ -66,8 +67,8 @@ HEADERS_HTML = {
 def get_credentials() -> tuple[str, str]:
     load_dotenv()
 
-    username = os.getenv("BO_USERNAME", "FinanceSV").strip()
-    password = os.getenv("BO_PASSWORD", "Anma07covi*").strip()
+    username = os.getenv("BO_USERNAME", "").strip()
+    password = os.getenv("BO_PASSWORD", "").strip()
 
     if not username or not password:
         raise RuntimeError(
@@ -590,6 +591,18 @@ def normalize_text(value: Any) -> str:
     return str(value or "").strip()
 
 
+def parse_float(value: Any) -> float:
+    if value is None:
+        return 0.0
+    text = str(value).replace(",", ".").strip().replace("$", "")
+    if not text:
+        return 0.0
+    try:
+        return float(text)
+    except ValueError:
+        return 0.0
+
+
 def get_row_value(row: dict[str, Any], *names: str) -> str:
     for name in names:
         key = name.casefold()
@@ -601,7 +614,46 @@ def get_row_value(row: dict[str, Any], *names: str) -> str:
     return ""
 
 
+def contains_any(text: str, terms: tuple[str, ...]) -> bool:
+    """Busca términos respetando límites de palabra (evita 'inactivo' -> 'activo')."""
+    return any(
+        re.search(rf"\b{re.escape(term)}\b", text)
+        for term in terms
+    )
+
+
+def classify_connection(row: dict[str, Any]) -> str:
+    """Clasifica el tipo de conexión del cliente desde la columna 'Tipo'."""
+    value = " ".join(
+        item
+        for item in (
+            get_row_value(
+                row,
+                "Tipo",
+                "tipo",
+                "Tipo de transacción",
+                "connection",
+                "tipo_conexion",
+            ),
+        )
+        if item
+    ).casefold()
+
+    if contains_any(value, ("player online", "online", "conectado", "en línea", "en linea")):
+        return "online"
+    if contains_any(value, ("player retail", "retail", "local")):
+        return "retail"
+    return "desconocido"
+
+
 def classify_client_status(row: dict[str, Any]) -> str:
+    connection = classify_connection(row)
+
+    if connection == "online":
+        return "activo"
+    if connection == "retail":
+        return "inactivo"
+
     status_text = " ".join(
         get_row_value(
             row,
@@ -615,6 +667,12 @@ def classify_client_status(row: dict[str, Any]) -> str:
         for _ in [0]
     ).casefold()
 
+    status_text = " ".join(
+        token
+        for token in status_text.split()
+        if not re.fullmatch(r"[+-]?\d*\.?\d+(?:e[+-]?\d+)?", token)
+    )
+
     if not status_text:
         combined_text = " ".join(
             value for value in (
@@ -625,13 +683,13 @@ def classify_client_status(row: dict[str, Any]) -> str:
         ).casefold()
         status_text = combined_text
 
-    if any(term in status_text for term in ("activo", "active", "online", "conectado", "connected", "online")):
+    if contains_any(status_text, ("activo", "active", "online", "conectado", "connected")):
         return "activo"
-    if any(term in status_text for term in ("inactivo", "inactive", "offline", "sin actividad", "no activo")):
+    if contains_any(status_text, ("inactivo", "inactive", "offline", "sin actividad", "no activo")):
         return "inactivo"
-    if any(term in status_text for term in ("desconectado", "disconnected", "logout", "cerrado")):
+    if contains_any(status_text, ("desconectado", "disconnected", "logout", "cerrado")):
         return "desconectado"
-    if any(term in status_text for term in ("bloqueado", "blocked", "suspendido", "suspended", "pendiente")):
+    if contains_any(status_text, ("bloqueado", "blocked", "suspendido", "suspended", "pendiente")):
         return "suspendido"
     return "otros"
 
@@ -653,6 +711,13 @@ def generate_reports(filepath: Path) -> dict[str, Path]:
     field_counts: dict[str, dict[str, int]] = {}
     discipline_counts: dict[str, int] = {key: 0 for key in discipline_paths}
     client_status_counts: dict[str, int] = {key: 0 for key in client_status_paths}
+    connection_counts: dict[str, int] = {
+        "online": 0,
+        "retail": 0,
+        "desconocido": 0,
+    }
+    matrix: dict[str, dict[str, int]] = {}
+    money: dict[str, dict[str, float]] = {}
 
     with filepath.open("r", encoding="utf-8-sig", newline="", errors="replace") as source:
         reader = csv.DictReader(source)
@@ -676,6 +741,24 @@ def generate_reports(filepath: Path) -> dict[str, Path]:
                 client_status = classify_client_status(row)
                 writers[client_status].writerow(row)
                 client_status_counts[client_status] += 1
+
+                connection = classify_connection(row)
+                connection_counts[connection] = connection_counts.get(connection, 0) + 1
+
+                row_matrix = matrix.setdefault(discipline, {"total": 0})
+                row_matrix["total"] += 1
+                row_matrix[connection] = row_matrix.get(connection, 0) + 1
+
+                status_by_discipline = row_matrix.setdefault("status", {})
+                status_by_discipline[client_status] = status_by_discipline.get(client_status, 0) + 1
+
+                row_money = money.setdefault(
+                    discipline,
+                    {"income": 0.0, "total": 0.0, "commission": 0.0},
+                )
+                row_money["income"] += parse_float(get_row_value(row, "Ingresos", "income", "ingresos"))
+                row_money["total"] += parse_float(get_row_value(row, "Total", "total"))
+                row_money["commission"] += parse_float(get_row_value(row, "Comisión", "commission", "comision"))
 
                 for field in header:
                     value = (row.get(field) or "").strip()
@@ -723,6 +806,54 @@ def generate_reports(filepath: Path) -> dict[str, Path]:
                 "disconnected": client_status_counts.get("desconectado", 0),
                 "suspended": client_status_counts.get("suspendido", 0),
                 "other": client_status_counts.get("otros", 0),
+                "connection": {
+                    "online": connection_counts.get("online", 0),
+                    "retail": connection_counts.get("retail", 0),
+                    "desconocido": connection_counts.get("desconocido", 0),
+                },
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    top_products = sorted(
+        field_counts.get("producto causal", {}).items(),
+        key=lambda item: item[1],
+        reverse=True,
+    )[:10]
+
+    dashboard_snapshot = REPORTS_DIR / "dashboard-data.json"
+    dashboard_snapshot.write_text(
+        json.dumps(
+            {
+                "version": 2,
+                "generated_at": datetime.now().isoformat(timespec="seconds"),
+                "source": str(filepath),
+                "total": sum(discipline_counts.values()),
+                "discipline": discipline_counts,
+                "connection": connection_counts,
+                "status": client_status_counts,
+                "matrix": {
+                    discipline: {
+                        "online": counts.get("online", 0),
+                        "retail": counts.get("retail", 0),
+                        "desconocido": counts.get("desconocido", 0),
+                        "total": counts.get("total", 0),
+                        "status": counts.get("status", {}),
+                    }
+                    for discipline, counts in matrix.items()
+                },
+                "money": {
+                    discipline: {
+                        "income": round(values["income"], 2),
+                        "total": round(values["total"], 2),
+                        "commission": round(values["commission"], 2),
+                    }
+                    for discipline, values in money.items()
+                },
+                "top_products": top_products,
             },
             ensure_ascii=False,
             indent=2,
@@ -740,6 +871,7 @@ def generate_reports(filepath: Path) -> dict[str, Path]:
       wallet text, transaction_type text, causal_group text, causal text, causal_product text,
       description text, note text, ip_address inet, discipline text not null,
       client_status text not null default 'otros',
+      connection text not null default 'desconocido',
       source_file text, raw jsonb not null, imported_at timestamptz default now()
     );
 
@@ -747,10 +879,11 @@ def generate_reports(filepath: Path) -> dict[str, Path]:
     create index if not exists transaction_records_discipline_idx on transaction_records(discipline);
     create index if not exists transaction_records_user_id_idx on transaction_records(user_id);
     create index if not exists transaction_records_client_status_idx on transaction_records(client_status);
+    create index if not exists transaction_records_connection_idx on transaction_records(connection);
 
     create or replace view transaction_discipline_summary as
-    select discipline, client_status, count(*) as records, sum(total) as total, sum(income) as income
-    from transaction_records group by discipline, client_status;
+    select discipline, client_status, connection, count(*) as records, sum(total) as total, sum(income) as income
+    from transaction_records group by discipline, client_status, connection;
     """,
         encoding="utf-8",
     )
@@ -759,6 +892,7 @@ def generate_reports(filepath: Path) -> dict[str, Path]:
         **client_status_paths,
         "clientes": client_snapshot,
         "fields": fields_report,
+        "dashboard": dashboard_snapshot,
         "schema": schema,
     }
 
@@ -786,6 +920,7 @@ def sync_to_supabase(filepath: Path) -> str | None:
             normalized = {field: (row.get(field) or "").strip() for field in fieldnames}
             normalized["discipline"] = classify_discipline(normalized)
             normalized["client_status"] = classify_client_status(normalized)
+            normalized["connection"] = classify_connection(normalized)
             normalized["source_file"] = str(filepath)
             normalized["imported_at"] = datetime.now().isoformat(timespec="seconds")
             normalized["raw"] = json.dumps(normalized, ensure_ascii=False)

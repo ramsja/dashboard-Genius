@@ -1,0 +1,93 @@
+name: Deploy dashboard a GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dashboard/**'
+      - 'extraccionDatos.py'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: python -m pip install requests beautifulsoup4 python-dotenv
+
+      - name: Regenerar snapshot si hay CSV descargado
+        run: |
+          python - <<'EOF'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, '.')
+          from extraccionDatos import generate_reports
+          csvs = sorted(Path('descargas').glob('*.csv'))
+          if csvs:
+              reports = generate_reports(csvs[-1])
+              snap = reports['dashboard'].read_text(encoding='utf-8')
+              Path('dashboard/data').mkdir(parents=True, exist_ok=True)
+              Path('dashboard/data/snapshot.json').write_text(snap, encoding='utf-8')
+              print('Snapshot regenerado desde', csvs[-1])
+          else:
+              print('Sin CSV en descargas; se mantiene el snapshot commiteado')
+          EOF
+
+      - name: Preconfigurar dashboard con Supabase
+        run: |
+          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_ANON_KEY" ]; then
+            cat > dashboard/config.js <<CONFIG
+          window.DASHBOARD_CONFIG = {
+            snapshotUrl: './data/snapshot.json',
+            supabase: {
+              enabled: true,
+              url: '$SUPABASE_URL',
+              anonKey: '$SUPABASE_ANON_KEY',
+              view: 'transaction_discipline_summary',
+            },
+          };
+          CONFIG
+            echo "config.js generado con Supabase habilitado"
+          else
+            echo "Supabase no configurado; se usa el JSON estático"
+          fi
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir artefacto
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dashboard
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar
+        id: deployment
+        uses: actions/deploy-pages@v4

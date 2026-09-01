@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Panel de control diario</title>
+    <meta name="description" content="Panel de control de transacciones por disciplina y conexión" />
+    <title>Dashboard · Panel de control</title>
     <style>
       :root {
         --bg: #0b1020;
@@ -16,161 +17,243 @@
         --amber: #f5b942;
         --red: #f87171;
         --blue: #60a5fa;
+        --purple: #a78bfa;
+        --pink: #f472b6;
       }
       * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: Arial, sans-serif;
-        background: var(--bg);
+        font-family: "Segoe UI", Arial, sans-serif;
+        background:
+          radial-gradient(1200px 400px at 15% -10%, rgba(96,165,250,0.10), transparent 60%),
+          var(--bg);
         color: var(--text);
+        min-height: 100vh;
       }
-      .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px 80px; }
-      h1 { margin-bottom: 8px; }
+      .container { max-width: 1240px; margin: 0 auto; padding: 28px 20px 80px; }
+      header.top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+      }
+      h1 { margin: 0; font-size: clamp(20px, 3vw, 28px); }
       .muted { color: var(--muted); }
-      .grid {
+      .updated { font-size: 13px; }
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        appearance: none;
+        background: var(--panel-soft);
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: border-color 0.15s, background 0.15s;
+      }
+      .btn:hover { border-color: var(--blue); }
+      .btn.active { background: rgba(96,165,250,0.18); border-color: var(--blue); color: #dbeafe; }
+      .chip { display: inline-flex; align-items: center; gap: 6px; }
+      .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+      .source {
+        font-size: 12px;
+        color: var(--muted);
+        border: 1px solid var(--line);
+        border-radius: 100px;
+        padding: 4px 12px;
+        background: var(--panel);
+      }
+      .kpis {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 18px;
-        margin: 24px 0 30px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+        margin: 24px 0;
       }
       .card {
         background: var(--panel);
         border: 1px solid var(--line);
         border-radius: 14px;
-        padding: 18px;
+        padding: 16px 18px;
       }
-      .card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+      .card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
       .card .value {
-        margin-top: 12px;
-        font-size: clamp(24px, 3vw, 38px);
+        margin-top: 10px;
+        font-size: clamp(22px, 2.6vw, 34px);
         font-weight: 700;
+        line-height: 1.1;
       }
-      .status-row { display: flex; gap: 10px; flex-wrap: wrap; }
-      .pill {
-        display: inline-flex;
-        border-radius: 100px;
-        padding: 6px 12px;
-        font-size: 12px;
+      .card .sub { margin-top: 6px; font-size: 12px; color: var(--muted); }
+      .grid2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 18px;
+        margin: 0 0 18px;
+      }
+      .panel {
+        background: var(--panel);
         border: 1px solid var(--line);
-        background: var(--panel-soft);
+        border-radius: 14px;
+        padding: 18px 20px;
       }
+      .panel h2 { margin: 0 0 14px; font-size: 15px; color: var(--muted); font-weight: 600; }
+      svg { display: block; width: 100%; height: auto; }
+      .bars .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .bars .row .lbl { width: 84px; font-size: 13px; color: var(--muted); flex-shrink: 0; }
+      .bars .track { flex: 1; background: var(--panel-soft); border-radius: 8px; height: 22px; overflow: hidden; }
+      .bars .fill { height: 100%; border-radius: 8px; min-width: 2px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 12px; font-weight: 600; color: #06121f; }
       .table-wrap {
         background: var(--panel);
         border: 1px solid var(--line);
         border-radius: 14px;
-        overflow: hidden;
+        overflow-x: auto;
+        margin-bottom: 18px;
       }
-      table { width: 100%; border-collapse: collapse; }
-      th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; }
-      th { background: var(--panel-soft); color: var(--muted); }
+      table { width: 100%; border-collapse: collapse; min-width: 520px; }
+      th, td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: left; font-size: 14px; }
+      th { background: var(--panel-soft); color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 12px; }
       tr:last-child td { border-bottom: none; }
+      td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+      tfoot td { font-weight: 700; background: var(--panel-soft); }
       .tag {
         display: inline-block;
         border-radius: 999px;
-        padding: 4px 8px;
-        font-size: 11px;
-        color: white;
+        padding: 3px 9px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: capitalize;
       }
-      .activo { background: rgba(48,196,141,0.2); color: #96f0c8; }
-      .inactivo { background: rgba(245,185,66,0.2); color: #ffd88a; }
-      .desconectado { background: rgba(248,113,113,0.2); color: #ffb5b5; }
-      .suspendido { background: rgba(96,165,250,0.2); color: #bfe1ff; }
-      .otros { background: rgba(148,163,184,0.2); color: #dfe9ff; }
-      .error { color: #ffb5b5; margin-top: 12px; }
+      .c-online { background: rgba(48,196,141,0.18); color: #96f0c8; }
+      .c-retail { background: rgba(245,185,66,0.18); color: #ffd88a; }
+      .c-desconocido { background: rgba(148,163,184,0.2); color: #dfe9ff; }
+      .d-casino { background: rgba(167,139,250,0.18); color: #ddd0ff; }
+      .d-deportes { background: rgba(96,165,250,0.18); color: #bfe1ff; }
+      .d-otros { background: rgba(148,163,184,0.2); color: #dfe9ff; }
+      .s-activo { background: rgba(48,196,141,0.18); color: #96f0c8; }
+      .s-inactivo { background: rgba(245,185,66,0.18); color: #ffd88a; }
+      .s-desconectado { background: rgba(248,113,113,0.18); color: #ffb5b5; }
+      .s-suspendido { background: rgba(96,165,250,0.18); color: #bfe1ff; }
+      .s-otros { background: rgba(148,163,184,0.2); color: #dfe9ff; }
+      .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; font-size: 12px; color: var(--muted); }
+      .legend span { display: inline-flex; align-items: center; gap: 6px; }
+      .error {
+        color: #ffb5b5;
+        background: rgba(248,113,113,0.08);
+        border: 1px solid rgba(248,113,113,0.35);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-top: 14px;
+        font-size: 14px;
+      }
+      .loading { color: var(--muted); padding: 40px 0; text-align: center; }
+      @media (max-width: 560px) {
+        .bars .row .lbl { width: 60px; }
+        .controls { width: 100%; }
+        .container { padding: 18px 14px 60px; }
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>Panel de control diario</h1>
-      <div class="muted" id="generatedAt">Cargando resumen…</div>
+      <header class="top">
+        <div>
+          <h1>Panel de control</h1>
+          <div class="muted updated" id="generatedAt">Cargando resumen…</div>
+        </div>
+        <div class="controls">
+          <span class="chip">
+            <span class="dot" id="connDot" style="background: var(--muted);"></span>
+            <span class="source" id="connMode">fuente</span>
+          </span>
+          <button class="btn" id="btnFilter" data-filter="all">Todas las conexiones</button>
+          <button class="btn" id="btnRefresh">Actualizar</button>
+        </div>
+      </header>
 
-      <div class="grid" id="stats"></div>
+      <div id="loading" class="loading">Cargando datos…</div>
+      <div id="errorBox" style="display:none;"></div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Discipline</th>
-              <th>Activo</th>
-              <th>Inactivo</th>
-              <th>Desconectado</th>
-              <th>Suspendido</th>
-              <th>Otros</th>
-            </tr>
-          </thead>
-          <tbody id="statusTable"></tbody>
-        </table>
-      </div>
+      <section id="content" style="display:none;">
+        <div class="kpis" id="kpis"></div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h2>Transacciones por disciplina</h2>
+            <div class="bars" id="chartDiscipline"></div>
+          </div>
+          <div class="panel">
+            <h2>Conexión de clientes</h2>
+            <div id="chartConnection"></div>
+            <div class="legend" id="legendConnection"></div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h2>Disciplina × Conexión</h2>
+            <div class="bars" id="chartMatrix"></div>
+          </div>
+          <div class="panel">
+            <h2>Volumen por disciplina</h2>
+            <div class="table-wrap" style="border:0; margin:0;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Disciplina</th>
+                    <th class="num">Ingresos</th>
+                    <th class="num">Total</th>
+                    <th class="num">Comisión</th>
+                  </tr>
+                </thead>
+                <tbody id="moneyTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Disciplina</th>
+                <th class="num">Online</th>
+                <th class="num">Retail</th>
+                <th class="num">Desconocido</th>
+                <th class="num">Total</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="matrixTable"></tbody>
+            <tfoot id="matrixFooter"></tfoot>
+          </table>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h2>Productos principales</h2>
+            <div class="bars" id="chartProducts"></div>
+          </div>
+          <div class="panel">
+            <h2>Resumen por estado</h2>
+            <div class="bars" id="chartStatus"></div>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <script>
-      async function loadData() {
-        const summaryUrl = '../reportes/clientes-resumen.json';
-        const fieldsUrl = '../reportes/resumen-campos.json';
-
-        try {
-          const [summaryRes, fieldsRes] = await Promise.all([
-            fetch(summaryUrl),
-            fetch(fieldsUrl)
-          ]);
-
-          if (!summaryRes.ok || !fieldsRes.ok) {
-            throw new Error('No se pudo cargar el resumen generado.');
-          }
-
-          const summary = await summaryRes.json();
-          const fields = await fieldsRes.json();
-
-          renderSummary(summary, fields);
-        } catch (error) {
-          document.body.insertAdjacentHTML(
-            'beforeend',
-            '<div class="container"><div class="error">' + error.message + '</div></div>'
-          );
-          console.error(error);
-        }
-      }
-
-      function renderSummary(summary, fields) {
-        const stats = document.getElementById('stats');
-        const statuses = [
-          ['activo', 'Activos', 'green'],
-          ['inactivo', 'Inactivos', 'amber'],
-          ['desconectado', 'Desconectados', 'red'],
-          ['suspendido', 'Suspendidos', 'blue'],
-          ['otros', 'Otros', 'blue']
-        ];
-
-        stats.innerHTML = statuses.map(([key, label, color]) => {
-          const value = summary.totals?.[key] ?? 0;
-          return `
-            <div class="card">
-              <div class="label">${label}</div>
-              <div class="value" style="color: var(--${color});">${value}</div>
-            </div>
-          `;
-        }).join('');
-
-        document.getElementById('generatedAt').textContent = `Actualizado: ${summary.generated_at}`;
-
-        const rows = Object.entries(fields.disciplines || {}).map(([discipline, count]) => {
-          const statusTotals = summary.totals || {};
-          return `
-            <tr>
-              <td><span class="tag ${discipline === 'deportes' ? 'activo' : discipline === 'casino' ? 'inactivo' : 'otros'}">${discipline}</span></td>
-              <td>${statusTotals.activo ?? 0}</td>
-              <td>${statusTotals.inactivo ?? 0}</td>
-              <td>${statusTotals.desconectado ?? 0}</td>
-              <td>${statusTotals.suspendido ?? 0}</td>
-              <td>${statusTotals.otros ?? 0}</td>
-            </tr>
-          `;
-        });
-
-        document.getElementById('statusTable').innerHTML = rows.join('');
-      }
-
-      loadData();
-    </script>
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
   </body>
 </html>

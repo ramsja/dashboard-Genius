@@ -26,6 +26,7 @@ create table if not exists public.transaction_records (
     ip_address inet,
     discipline text not null default 'otros',
     client_status text not null default 'otros',
+    connection text not null default 'desconocido',
     source_file text,
     raw jsonb not null default '{}'::jsonb,
     imported_at timestamptz not null default now()
@@ -34,6 +35,7 @@ create table if not exists public.transaction_records (
 create index if not exists transaction_records_created_at_idx on public.transaction_records(created_at);
 create index if not exists transaction_records_discipline_idx on public.transaction_records(discipline);
 create index if not exists transaction_records_client_status_idx on public.transaction_records(client_status);
+create index if not exists transaction_records_connection_idx on public.transaction_records(connection);
 create index if not exists transaction_records_user_id_idx on public.transaction_records(user_id);
 
 alter table public.transaction_records enable row level security;
@@ -73,10 +75,11 @@ create or replace view public.transaction_discipline_summary as
 select
     discipline,
     client_status,
+    connection,
     count(*) as records,
     sum(total) as total,
     sum(income) as income
 from public.transaction_records
-group by discipline, client_status;
+group by discipline, client_status, connection;
 
 comment on table public.transaction_records is 'Registros diarios exportados del back office para dashboard y análisis.';
