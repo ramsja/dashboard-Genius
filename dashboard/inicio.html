@@ -229,6 +229,7 @@
                     <div style="display:flex; gap:8px; align-items:center;">
                         <input type="file" id="input-csv-ranking" accept=".csv" style="display:none;" onchange="subirCSVRanking(this.files[0])">
                         <button onclick="document.getElementById('input-csv-ranking').click()" style="padding:6px 14px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:4px; cursor:pointer; font-size:12px;">📤 Subir CSV de Novusbet</button>
+                        <button onclick="descargarRankingExcel()" style="padding:6px 14px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:4px; cursor:pointer; font-size:12px;">📊 Descargar Excel</button>
                     </div>
                 </div>
                 <div class="section-content">
@@ -410,8 +411,9 @@
             <!-- (no una caja negra) sobre datos reales acumulados + -->
             <!-- historial completo de alertas. -->
             <div class="section" style="grid-column: 1 / -1;">
-                <div class="section-header">
+                <div class="section-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                     <h2>🕵️ Análisis de Riesgo</h2>
+                    <button onclick="descargarAnalisisRiesgoExcel()" style="padding:6px 14px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:4px; cursor:pointer; font-size:12px;">📊 Descargar Excel</button>
                 </div>
                 <div class="section-content">
                     <p style="font-size:12px; color:#999; margin-bottom:12px;">
@@ -1472,6 +1474,44 @@
             a.href = url;
             a.download = `transacciones-${new Date().toISOString().split('T')[0]}.xls`;
             a.click();
+        }
+
+        // Mismo truco que descargarMatrizUsuariosExcel: una tabla HTML con
+        // MIME de Excel, que Excel abre directo sin necesitar ninguna
+        // librería. Genérico para no repetir esto en cada sección.
+        function descargarTablaExcel(nombreArchivo, columnas, filas) {
+            let html = '<table border="1"><tr>' + columnas.map((c) => `<th>${c}</th>`).join('') + '</tr>';
+            filas.forEach((fila) => {
+                html += '<tr>' + fila.map((v) => `<td>${v ?? ''}</td>`).join('') + '</tr>';
+            });
+            html += '</table>';
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${nombreArchivo}-${new Date().toISOString().split('T')[0]}.xls`;
+            a.click();
+        }
+
+        function descargarAnalisisRiesgoExcel() {
+            const filas = (datos.analisisRiesgo || []).map((j) => [
+                j.id_usuario_novusbet, j.nombre_completo || j.usuario, j.estado_real || 'sin sync',
+                (j.apostado_total || 0).toFixed(2), (j.ganado_total || 0).toFixed(2),
+                ((j.retorno || 0) * 100).toFixed(1) + '%', j.max_apuestas_dia || 0,
+                j.alertas_apuestas || 0, j.nivel_riesgo, (j.señales || []).map((s) => TEXTO_SEÑAL[s] || s).join('; '),
+            ]);
+            descargarTablaExcel('analisis-riesgo', ['ID Usuario', 'Jugador', 'Estado', 'Apostado Total', 'Ganado Total', 'Retorno', 'Máx Apuestas/Día', 'Alertas Históricas', 'Nivel Riesgo', 'Señales'], filas);
+        }
+
+        function descargarRankingExcel() {
+            const filas = (datos.rankingJugadores || []).map((u) => [
+                u.id_usuario_novusbet, u.nombre_completo || u.usuario, u.casa_apuestas,
+                u.apuestas || 0, (u.apostado || 0).toFixed(2), (u.ganado || 0).toFixed(2),
+                (u.beneficio || 0).toFixed(2), u.meses_activo || 0,
+                u.ultima_actividad ? new Date(u.ultima_actividad).toLocaleString('es-ES') : '',
+            ]);
+            descargarTablaExcel('ranking-jugadores', ['ID Usuario', 'Usuario', 'Casa', 'Apuestas', 'Apostado', 'Ganado', 'Beneficio', 'Meses Activo', 'Última Actividad'], filas);
         }
 
         function descargarJSON() {

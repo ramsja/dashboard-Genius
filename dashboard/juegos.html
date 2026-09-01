@@ -99,7 +99,10 @@
         <div class="section">
             <div class="section-header">
                 <h2>📋 Todos los Juegos</h2>
-                <input type="text" id="filtro-juego" placeholder="Buscar juego..." oninput="renderTabla()">
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="text" id="filtro-juego" placeholder="Buscar juego..." oninput="renderTabla()">
+                    <button onclick="descargarJuegosExcel()" style="padding:8px 14px; background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:6px; cursor:pointer; font-size:13px;">📊 Descargar Excel</button>
+                </div>
             </div>
             <div class="section-content">
                 <p class="nota" id="metodologia-info"></p>
@@ -141,6 +144,34 @@
         async function cerrarSesion() {
             await fetch('/api/logout').catch(() => {});
             window.location.href = '/login.html';
+        }
+
+        // Tabla HTML con MIME de Excel: Excel la abre directo, sin
+        // necesitar ninguna librería (mismo truco que ya usa el panel
+        // principal para "Descargar Excel" de la matriz de usuarios).
+        function descargarJuegosExcel() {
+            const filtro = (document.getElementById('filtro-juego').value || '').toLowerCase();
+            const filas = juegos.filter((j) => j.juego.toLowerCase().includes(filtro));
+            let html = '<table border="1"><tr><th>Juego</th><th>Jugadores Distintos</th><th>Apariciones</th><th>Frecuencia Promedio</th><th>Apostado Estimado</th><th>Promedio por Aparición</th><th>Participación %</th></tr>';
+            filas.forEach((j) => {
+                html += `<tr>
+                    <td>${j.juego}</td>
+                    <td>${j.jugadoresDistintos}</td>
+                    <td>${j.apariciones}</td>
+                    <td>${j.frecuenciaPromedio.toFixed(2)}</td>
+                    <td>${j.apostadoEstimado.toFixed(2)}</td>
+                    <td>${j.promedioEstimado.toFixed(2)}</td>
+                    <td>${j.participacionPct.toFixed(1)}%</td>
+                </tr>`;
+            });
+            html += '</table>';
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `juegos-${new Date().toISOString().split('T')[0]}.xls`;
+            a.click();
         }
 
         const chartInstances = {};
