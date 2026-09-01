@@ -893,6 +893,82 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // API: PROYECCIÓN DE GANANCIAS. Para usuarios que TODAVÍA no dispararon
+    // una alerta, estima qué tan probable es que su ganancia llegue a
+    // UMBRAL_ALERTA_GANANCIA pronto — con el promedio de sus últimos días
+    // reales y la dirección de su tendencia (misma lógica que "Patrón" en
+    // alertas_ganancias). Es una proyección estadística simple, honesta
+    // sobre su propio límite: no es una red neuronal entrenada, es la
+    // misma clase de heurística que ya usamos para "alza/baja".
+    if (pathname === '/api/proyeccion-ganancias') {
+      const UMBRAL_GANANCIA_REF = 15000; // mismo default que UMBRAL_ALERTA_GANANCIA
+      let proyeccion = [];
+
+      if (supabase) {
+        try {
+          const dias = await fetchTodasLasFilas(
+            'resumen_diario_usuarios',
+            'id_usuario_novusbet, usuario, casa_apuestas, dia, ganado'
+          );
+          const porUsuario = {};
+          dias.forEach((d) => {
+            const id = d.id_usuario_novusbet;
+            if (!porUsuario[id]) porUsuario[id] = { usuario: d.usuario, casa_apuestas: d.casa_apuestas, dias: [] };
+            porUsuario[id].dias.push({ dia: d.dia, ganado: Number(d.ganado) || 0 });
+            if (!porUsuario[id].usuario) porUsuario[id].usuario = d.usuario;
+          });
+
+          proyeccion = Object.entries(porUsuario)
+            .map(([id, u]) => {
+              const ordenados = u.dias.sort((a, b) => (a.dia < b.dia ? -1 : 1));
+              if (ordenados.length < 3) return null; // no hay suficiente historial
+
+              const recientes = ordenados.slice(-7);
+              const promedioReciente = recientes.reduce((s, d) => s + d.ganado, 0) / recientes.length;
+              if (promedioReciente <= 0) return null;
+
+              let tendencia = 'sin_dato';
+              let factor = 1;
+              if (ordenados.length >= 4) {
+                const mitad = Math.floor(ordenados.length / 2);
+                const promAnterior = ordenados.slice(0, mitad).reduce((s, d) => s + d.ganado, 0) / mitad;
+                const promRecienteCompleto = ordenados.slice(mitad).reduce((s, d) => s + d.ganado, 0) / (ordenados.length - mitad);
+                if (promAnterior > 0) {
+                  const cambio = (promRecienteCompleto - promAnterior) / promAnterior;
+                  if (cambio >= 0.2) { tendencia = 'alza'; factor = 1.25; }
+                  else if (cambio <= -0.2) { tendencia = 'baja'; factor = 0.75; }
+                  else tendencia = 'estable';
+                }
+              }
+
+              const probabilidad = Math.max(0, Math.min(100, Math.round((promedioReciente / UMBRAL_GANANCIA_REF) * 100 * factor)));
+              if (probabilidad < 20) return null; // descarta ruido, casos muy lejos del umbral
+
+              return {
+                id_usuario_novusbet: id,
+                usuario: u.usuario,
+                casa_apuestas: u.casa_apuestas,
+                promedio_reciente: promedioReciente,
+                tendencia,
+                probabilidad,
+                dias_con_historial: ordenados.length,
+              };
+            })
+            .filter(Boolean)
+            .sort((a, b) => b.probabilidad - a.probabilidad)
+            .slice(0, 25);
+
+          proyeccion = await agregarNombresReales(proyeccion);
+        } catch (e) {
+          // resumen_diario_usuarios puede no tener suficiente historial todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ umbral: UMBRAL_GANANCIA_REF, proyeccion }));
+      return;
+    }
+
     // API: SUBIR CSV DEL REPORTE DE NOVUSBET para (re)llenar
     // ranking_historico_base. Mismo formato que customreport.csv:
     // línea 1 = encabezado del resumen, línea 2 = valores del resumen,
