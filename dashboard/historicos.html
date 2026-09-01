@@ -152,16 +152,52 @@
             </div>
         </div>
 
+        <p class="nota" id="fuente-juegos-info">Cargando...</p>
+
+        <div class="kpis-row">
+            <div class="kpi">
+                <div class="kpi-label">Juegos Distintos</div>
+                <div class="kpi-value" id="kpi-juegos-total">0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Apostado Total</div>
+                <div class="kpi-value" id="kpi-juegos-apostado">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Ganado Total</div>
+                <div class="kpi-value" id="kpi-juegos-ganado">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Jugadores Activos</div>
+                <div class="kpi-value" id="kpi-juegos-jugadores">0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Juego Más Popular</div>
+                <div class="kpi-value" id="kpi-juegos-top" style="font-size:18px;">-</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title">💰 Top 10 Juegos por Apostado</div>
+                <canvas id="chartJuegosApostado"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">👥 Top 10 Juegos por Jugadores Distintos</div>
+                <canvas id="chartJuegosJugadores"></canvas>
+            </div>
+        </div>
+
         <div class="section">
             <div class="section-header">
-                <h2>🎮 Juegos del Período</h2>
+                <h2>🎮 Todos los Juegos</h2>
                 <div style="display:flex; gap:8px; align-items:center;">
                     <input type="text" id="filtro-juego-historico" placeholder="Buscar juego..." oninput="renderTablaJuegos()">
                     <button onclick="descargarJuegosHistoricoExcel()" class="btn btn-header">📊 Descargar Excel</button>
                 </div>
             </div>
             <div class="section-content">
-                <p class="nota">Apostado, ganado y retorno exactos por juego (separando bet de win), sobre los mismos CSV subidos arriba — mismo criterio que el Dashboard de Juegos en tiempo real, pero acá alimentado solo por lo que subiste a mano.</p>
+                <p class="nota">apostado, ganado, apuestas, ganancias y retorno son datos exactos (no estimados): se calculan sumando cada transacción real de apuesta o de ganancia de ese juego. jugadoresDistintos usa el máximo de un solo día como piso (no se puede sumar entre días sin contar dos veces al mismo jugador).</p>
                 <div style="overflow-x:auto;">
                     <table>
                         <thead>
@@ -430,6 +466,41 @@
                 const url = periodo ? `/api/historico-juegos-dashboard?periodo=${encodeURIComponent(periodo)}` : '/api/historico-juegos-dashboard';
                 const res = await fetchJSON(url);
                 juegosHistorico = res.juegos || [];
+                const resumen = res.resumenGeneral || {};
+
+                document.getElementById('fuente-juegos-info').textContent = `Fuente: ${res.fuente} · Real, no datos de prueba.`;
+                document.getElementById('kpi-juegos-total').textContent = resumen.totalJuegos || 0;
+                document.getElementById('kpi-juegos-apostado').textContent = `$${(resumen.totalApostado || 0).toFixed(2)}`;
+                document.getElementById('kpi-juegos-ganado').textContent = `$${(resumen.totalGanado || 0).toFixed(2)}`;
+                // Mismos jugadores del período que ya trae /api/historico-dashboard
+                // (cuenta exacta de distintos ese mes), en vez de sumar el
+                // "jugadoresDistintos" por juego, que es por día y no se puede
+                // sumar sin contar dos veces al mismo jugador.
+                document.getElementById('kpi-juegos-jugadores').textContent = jugadores.length || 0;
+
+                const topPopular = [...juegosHistorico].sort((a, b) => b.jugadoresDistintos - a.jugadoresDistintos)[0];
+                document.getElementById('kpi-juegos-top').textContent = topPopular ? topPopular.juego : '-';
+
+                const top10Apostado = [...juegosHistorico].sort((a, b) => b.apostado - a.apostado).slice(0, 10);
+                dibujarChart('chartJuegosApostado', {
+                    type: 'bar',
+                    data: {
+                        labels: top10Apostado.map((j) => j.juego.length > 16 ? j.juego.slice(0, 16) + '…' : j.juego),
+                        datasets: [{ label: 'Apostado', data: top10Apostado.map((j) => j.apostado), backgroundColor: '#667eea' }]
+                    },
+                    options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+                });
+
+                const top10Jugadores = [...juegosHistorico].sort((a, b) => b.jugadoresDistintos - a.jugadoresDistintos).slice(0, 10);
+                dibujarChart('chartJuegosJugadores', {
+                    type: 'bar',
+                    data: {
+                        labels: top10Jugadores.map((j) => j.juego.length > 16 ? j.juego.slice(0, 16) + '…' : j.juego),
+                        datasets: [{ label: 'Jugadores Distintos', data: top10Jugadores.map((j) => j.jugadoresDistintos), backgroundColor: '#764ba2' }]
+                    },
+                    options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+                });
+
                 renderTablaJuegos();
             } catch (e) {
                 console.error('Error cargando juegos del histórico:', e);
