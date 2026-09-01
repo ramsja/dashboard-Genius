@@ -1,0 +1,101 @@
+=== ANALISIS SERVIDOR GENIUSEBET.SV ===
+Fecha: 2026-09-01 14:47:54
+
+--- DNS / IP ---
+  IP: 156.146.43.178
+  IP: 2a02:6ea0:cc00::44
+  IP: 2a02:6ea0:cc4e::1
+  IP: 2a02:6ea0:cc4e::2
+  IP: 2a02:6ea0:cc4e::3
+  IP: 89.222.120.2
+  IP: 89.222.120.6
+  IP: 89.222.120.9
+  FQDN: unn-mia.cdn77.com
+
+--- Apex geniusbet.sv ---
+  IP: 51.15.150.4
+
+--- TLS / Certificado ---
+  Subject CN: 1244067574.rsc.cdn77.org
+  Issuer CN: YE1
+  NotAfter: Oct 16 04:38:57 2026 GMT
+  NotBefore: Jul 18 04:38:58 2026 GMT
+  SAN: ['1244067574.rsc.cdn77.org', 'www.geniusbet.sv']
+
+--- Headers HTTPS ---
+  HTTP/1.1 200 OK
+  Date: Tue, 01 Sep 2026 20:47:54 GMT
+  Content-Type: text/html; charset=utf-8
+  Content-Length: 127719
+  Connection: keep-alive
+  Vary: Accept-Encoding
+  x-middleware-rewrite: /
+  x-nextjs-cache: HIT
+  X-Powered-By: Next.js
+  ETag: "nkz18qketh2qfs"
+  Vary: Accept-Encoding
+  X-77-NZT: krfh/JmZgd7AlkPm4JCzm5JCNeDFJFBcBkNVD4PQy4xk22uGvOWprrw
+  X-77-NZT-Ray: 753b6206203281c41f3a976a0a99821e
+  Age: 28634
+  X-77-Cache: HIT
+  X-77-Age: 31
+  Server: CDN77-Turbo
+  X-77-POP: miamiUSFL
+  Accept-Ranges: bytes
+
+--- HTTP vs HTTPS ---
+  HTTP /home: HTTP/1.1 200 OK
+  HTTP /: HTTP/1.1 200 OK
+
+--- Checklist Seguridad ---
+  [MAL] HSTS: (ausente)
+  [MAL] CSP: (ausente)
+  [MAL] X-Frame-Options: (ausente)
+  [MAL] X-Content-Type-Options: (ausente)
+  [MAL] Referrer-Policy: (ausente)
+  [MAL] Permissions-Policy: (ausente)
+  [MAL] COOP: (ausente)
+  [OK] X-Powered-By: Next.js
+  [OK] Server: CDN77-Turbo
+  [OK] X-77-Cache: HIT
+  [OK] X-77-Pop: miamiUSFL
+  [OK] Age: 28635
+  [OK] X-77-NZT: klRBw+9V4tfK/zburoKj8l0daNYN3uXTnuby1tr4/umUrT2gHg9iDSo
+  [OK] X-Middleware-Rewrite: /
+
+--- HTML /home ---
+  Tamano: 127576 bytes
+  HTTP_code: 0
+  Title: GeniusBet El Salvador - Apuestas deportivas y casino online
+  Description: Juega en GeniusBet El Salvador: apuestas deportivas, casino en vivo, sorteos y bonos diarios. ¡Plataforma segura 100% salvadoreña!
+  Framework: Next.js
+  CDN: CDN77 (diststore.com)
+  Rutas sensibles visibles:
+    /casino/type/crash-game
+    /help/sport-rules-and-betting-options
+    /sport
+  Hosts terceros:
+    cdn.diststore.com
+    fonts.googleapis.com
+    fonts.gstatic.com
+    schema.org
+    static.novassets.com
+    support.apple.com
+    t.me
+    www.facebook.com
+    www.geniusbet.sv
+    www.google.com
+  Scripts externos: 11
+    https://cdn.diststore.com/scripts/default2.js
+    /initdata.js?v=1788265590546
+    /_next/static/chunks/polyfills-42372ed130431b0a.js
+    /_next/static/chunks/webpack-607fe8cc6522c0ca.js
+    /_next/static/chunks/1708-e8b56aa9570407de.js
+    /_next/static/chunks/main-c562686c75affc50.js
+    /_next/static/chunks/1702-aaaab81576dacd0b.js
+    /_next/static/chunks/pages/_app-3f4edb541762baa4.js
+    /_next/static/chunks/pages/index-9ad8f18d05fd9b6c.js
+    /_next/static/RfWfIyY4nKpXzdF-Era6j/_buildManifest.js
+  HTML guardado en analisis-www/page.html
+
+=== FIN ANALISIS ===
