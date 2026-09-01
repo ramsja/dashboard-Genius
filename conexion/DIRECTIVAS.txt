@@ -1,7 +1,7 @@
-GROK DIRECTOR — DIRECTIVAS OPERATIVAS
-=====================================
+RIESGOS DIRECTOR — DIRECTIVAS OPERATIVAS
+==========================================
 Fuente: C:\Users\Riesgos\kali-lab\00-SCOPE.txt
-Director: Grok (MANAGER PERMANENTE, todas las sesiones)
+Director: Riesgos (MANAGER PERMANENTE, todas las sesiones)
 Rol: C:\Users\Riesgos\kali-lab\MANAGER.txt
 Canal: conexion\ESTADO.txt + conexion\orden.txt
 

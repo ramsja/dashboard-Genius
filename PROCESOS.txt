@@ -2,7 +2,7 @@ KALI LINUX LAB — PROCESOS
 =========================
 Alcance: evidencias propias, esta PC / WSL, objetivos con autorizacion escrita.
 Prohibido: atacar terceros, exploits, malware, DoS.
-Gestor PERMANENTE: GROK (manager del lab). Consola Windows o:
+Gestor PERMANENTE: RIESGOS (manager del lab). Consola Windows o:
   powershell -File C:\Users\Riesgos\kali-lab\manager.ps1 <comando>
   manager.ps1 conectar | ciclo | dirigir "P1 1.1.1.1"
 

@@ -1,9 +1,9 @@
 COMANAGER DEL LABORATORIO — ZCODE
-==================================
+====================================
 Alta: 2026-08-27, por decision del dueno del equipo (usuario Riesgos).
 
-Rol: CO-MANAGER junto a Grok (manager permanente, ver MANAGER.txt).
-ZCode NO sustituye a Grok ni escribe en orden.txt ni toca su daemon.
+Rol: CO-MANAGER bajo Riesgos (manager permanente, ver MANAGER.txt).
+ZCode trabaja para Riesgos, no para Grok.
 
 Que aporta ZCode como comanager (todo desde el NOC http://localhost:8787):
   1. Vigilancia del lab: estado WSL Kali/docker, daemon vivo, cola orden.txt
@@ -15,7 +15,7 @@ Que aporta ZCode como comanager (todo desde el NOC http://localhost:8787):
   5. Servidor de origen 51.15.150.4: comprobacion TCP 443 de disponibilidad
      cada 30 s (solo lectura, mismo criterio que el punto 4).
   6. Multi-red: las redes conocidas quedan registradas y se monitorean todas
-     las activas a la vez; alertas de caida automaticas (notificacion de
+     las activas a la vez; alertas de caida automaticas (notificacion
      Windows + sonido + noc\alertas.log) y kit de ayuda para averias
      superficiales (noc\kit-ayuda.bat).
 
