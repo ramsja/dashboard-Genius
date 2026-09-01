@@ -1,0 +1,29 @@
+name: Deploy a Fly.io
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dashboard/**'
+      - 'herramientas/**'
+      - 'fly.toml'
+      - 'Dockerfile'
+      - 'nginx.conf'
+      - '.github/workflows/deploy-flyio.yml'
+  workflow_dispatch:
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy to Fly.io
+        run: fly deploy --app dashboard-genius
