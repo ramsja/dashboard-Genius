@@ -1201,11 +1201,14 @@
 
             // Juegos (usa el campo "juego" ya normalizado en Supabase, y
             // solo cuenta apuestas reales, no Ganancia/Depósito/Retiro).
+            // Si no se pudo extraer un nombre de juego real, la transacción
+            // se descarta en vez de caer en un cajón genérico "Otros" — solo
+            // deben aparecer los nombres tal cual figuran en Novusbet.
             // Si la página visible vino vacía, cae al ranking agregado.
             const juegos = {};
             datos.transacciones.filter(esApuesta).forEach(t => {
-                const j = t.juego || t.descripcion || 'Otros';
-                juegos[j] = (juegos[j] || 0) + 1;
+                if (!t.juego) return;
+                juegos[t.juego] = (juegos[t.juego] || 0) + 1;
             });
             if (Object.keys(juegos).length === 0) {
                 (datos.rankingJugadores || []).forEach(u => {
@@ -1276,11 +1279,13 @@
             // Juegos (solo apuestas reales). Preferí la página visible de
             // transacciones (cuenta exacta); si viene vacía (por ejemplo justo
             // en medio de una sincronización), caé al ranking agregado para
-            // que el gráfico no quede en blanco sin motivo.
+            // que el gráfico no quede en blanco sin motivo. Si no hay nombre
+            // de juego extraído, se descarta en vez de mostrar "Otros" — el
+            // gráfico solo debe mostrar juegos reales, tal cual en Novusbet.
             const juegos = {};
             datos.transacciones.filter(esApuesta).forEach(t => {
-                const j = t.juego || t.descripcion || 'Otros';
-                juegos[j] = (juegos[j] || 0) + 1;
+                if (!t.juego) return;
+                juegos[t.juego] = (juegos[t.juego] || 0) + 1;
             });
             if (Object.keys(juegos).length === 0) {
                 (datos.rankingJugadores || []).forEach(u => {
