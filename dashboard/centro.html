@@ -872,28 +872,34 @@
                 options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
             });
 
-            // Top usuarios
-            const usrMonto = {};
-            datos.transacciones.forEach(t => {
-                usrMonto[t.usuario] = (usrMonto[t.usuario] || 0) + (t.monto || 0);
-            });
-            const top5 = Object.entries(usrMonto).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            // Top usuarios (usa el ranking agregado completo — base histórica +
+            // acumulado diario — en vez de solo la página visible de
+            // transacciones, que podía dar vacío o inconsistente)
+            const top5 = (datos.rankingJugadores || []).slice(0, 5);
 
             dibujarChart('chartTopUsuarios', {
                 type: 'bar',
                 data: {
-                    labels: top5.map(u => u[0].substring(0, 12)),
-                    datasets: [{ label: 'Monto', data: top5.map(u => u[1]), backgroundColor: '#667eea' }]
+                    labels: top5.map(u => (u.nombre_completo || u.usuario || '').substring(0, 12)),
+                    datasets: [{ label: 'Apostado', data: top5.map(u => u.apostado || 0), backgroundColor: '#667eea' }]
                 },
                 options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
             });
 
-            // Juegos (solo apuestas reales)
+            // Juegos (solo apuestas reales). Preferí la página visible de
+            // transacciones (cuenta exacta); si viene vacía (por ejemplo justo
+            // en medio de una sincronización), caé al ranking agregado para
+            // que el gráfico no quede en blanco sin motivo.
             const juegos = {};
             datos.transacciones.filter(esApuesta).forEach(t => {
                 const j = t.juego || t.descripcion || 'Otros';
                 juegos[j] = (juegos[j] || 0) + 1;
             });
+            if (Object.keys(juegos).length === 0) {
+                (datos.rankingJugadores || []).forEach(u => {
+                    (u.juegos || []).forEach(j => { juegos[j] = (juegos[j] || 0) + 1; });
+                });
+            }
             const top8 = Object.entries(juegos).sort((a, b) => b[1] - a[1]).slice(0, 8);
 
             dibujarChart('chartJuegos', {
