@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Genius - Históricos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        header h1 { font-size: 32px; margin-bottom: 5px; }
+        header p { opacity: 0.9; font-size: 14px; }
+        header a { color: white; text-decoration: none; opacity: 0.9; font-size: 13px; margin-right: 14px; }
+        header a:hover { opacity: 1; text-decoration: underline; }
+        .container { max-width: 2000px; margin: 0 auto; padding: 30px 20px; }
+
+        .kpis-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 20px; margin: 0 0 30px; }
+        .kpi { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); border-left: 5px solid #667eea; }
+        .kpi-value { font-size: 30px; font-weight: bold; color: #667eea; margin: 10px 0; }
+        .kpi-label { font-size: 12px; color: #999; text-transform: uppercase; font-weight: 600; }
+
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 25px; margin: 0 0 30px; }
+        .chart-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
+        .chart-title { font-size: 16px; font-weight: 600; margin-bottom: 15px; color: #333; }
+        .chart-card canvas { max-height: 380px; }
+
+        .section { background: white; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 25px; }
+        .section-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+        .section-header h2 { font-size: 18px; margin: 0; }
+        .section-content { padding: 20px; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f9f9f9; padding: 12px; text-align: left; font-weight: 600; font-size: 12px; border-bottom: 2px solid #e0e0e0; text-transform: uppercase; color: #667eea; cursor: pointer; white-space: nowrap; }
+        th:hover { color: #4c2a7a; }
+        th.activo::after { content: ' ▾'; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+        tr:hover { background: #fafafa; }
+        .numero { text-align: right; font-weight: 500; }
+        .loading { text-align: center; padding: 40px; color: #999; }
+
+        select, input[type=text] { padding: 8px 12px; border-radius: 6px; border: 1px solid #ddd; font-size: 13px; }
+        .btn { padding: 8px 14px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .btn:hover { background: #5a6fd8; }
+        .btn-header { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.5); }
+
+        .nota { font-size: 12px; color: #999; margin-bottom: 15px; line-height: 1.5; }
+        .upload-box { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: #f8f9fc; border: 1px dashed #ccc; border-radius: 8px; padding: 14px; margin-bottom: 20px; }
+        .upload-box label { font-size: 12px; color: #667eea; font-weight: 600; text-transform: uppercase; }
+
+        @media (max-width: 1200px) { .charts-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <h1>📚 Dashboard de Históricos</h1>
+                <p>Reportes mensuales subidos a mano desde Novusbet — no se actualiza solo, es un snapshot por período</p>
+                <p style="margin-top:6px;">
+                    <a href="/inicio.html">← Panel principal</a>
+                    <a href="/juegos.html">🎮 Dashboard de Juegos (tiempo real)</a>
+                </p>
+            </div>
+            <button onclick="cerrarSesion()" class="btn btn-header" style="padding:10px 18px; border-radius:6px; font-weight:600;">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <div class="section-header">
+                <h2>📤 Subir Reporte Mensual (CSV)</h2>
+            </div>
+            <div class="section-content">
+                <p class="nota">Mismo formato que el reporte agregado de Novusbet (customreport.csv). Cada subida queda guardada bajo su propio período — no pisa los meses anteriores, así se puede comparar mes a mes. Si volvés a subir el mismo período, lo actualiza.</p>
+                <div class="upload-box">
+                    <div>
+                        <label>Período (mes)</label><br>
+                        <input type="text" id="input-periodo" placeholder="2026-08" style="width:110px;">
+                    </div>
+                    <input type="file" id="input-csv-historico" accept=".csv" style="display:none;" onchange="subirCSVHistorico(this.files[0])">
+                    <button class="btn" onclick="document.getElementById('input-csv-historico').click()">📤 Elegir CSV y subir</button>
+                    <span id="upload-status" style="font-size:12px; color:#666;"></span>
+                </div>
+            </div>
+        </div>
+
+        <p class="nota" id="fuente-info">Cargando...</p>
+
+        <div style="display:flex; gap:12px; align-items:center; margin-bottom:20px; flex-wrap:wrap;">
+            <label style="font-size:13px; font-weight:600; color:#4c2a7a;">Período:</label>
+            <select id="selector-periodo" onchange="cambiarPeriodo()"><option>Cargando...</option></select>
+        </div>
+
+        <div class="kpis-row">
+            <div class="kpi">
+                <div class="kpi-label">Apostado (período)</div>
+                <div class="kpi-value" id="kpi-apostado">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Ganado (período)</div>
+                <div class="kpi-value" id="kpi-ganado">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Beneficio (casa)</div>
+                <div class="kpi-value" id="kpi-beneficio">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Jugadores</div>
+                <div class="kpi-value" id="kpi-jugadores">0</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title">🏆 Top 10 Jugadores del Período</div>
+                <canvas id="chartTop"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">📈 Evolución Mes a Mes</div>
+                <canvas id="chartEvolucion"></canvas>
+                <p class="nota" id="evolucion-nota" style="margin-top:10px; margin-bottom:0;"></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>📋 Jugadores del Período</h2>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="text" id="filtro-jugador" placeholder="Buscar jugador..." oninput="renderTabla()">
+                    <button onclick="descargarHistoricoExcel()" class="btn btn-header">📊 Descargar Excel</button>
+                </div>
+            </div>
+            <div class="section-content">
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="ordenarPor('usuario')">Jugador</th>
+                                <th onclick="ordenarPor('casa_apuestas')">Casa</th>
+                                <th onclick="ordenarPor('apuestas')">Apuestas</th>
+                                <th onclick="ordenarPor('apostado')" class="activo">Apostado</th>
+                                <th onclick="ordenarPor('ganado')">Ganado</th>
+                                <th onclick="ordenarPor('beneficio')">Beneficio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-historico">
+                            <tr><td colspan="6" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let jugadores = [];
+        let evolucion = [];
+        let periodos = [];
+        let periodoActual = null;
+        let orden = { campo: 'apostado', asc: false };
+
+        async function fetchJSON(url, opts) {
+            const r = await fetch(url, opts);
+            if (r.status === 401) {
+                window.location.href = '/login.html';
+                throw new Error('No autenticado');
+            }
+            return r.json();
+        }
+
+        async function cerrarSesion() {
+            await fetch('/api/logout').catch(() => {});
+            window.location.href = '/login.html';
+        }
+
+        const chartInstances = {};
+        function dibujarChart(canvasId, config) {
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+            chartInstances[canvasId] = new Chart(document.getElementById(canvasId), config);
+        }
+
+        function mesActualDefault() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+        document.getElementById('input-periodo').value = mesActualDefault();
+
+        async function subirCSVHistorico(file) {
+            if (!file) return;
+            const periodo = (document.getElementById('input-periodo').value || '').trim();
+            const estadoEl = document.getElementById('upload-status');
+            if (!periodo) {
+                estadoEl.textContent = '⚠️ Poné un período primero (ej. 2026-08)';
+                estadoEl.style.color = '#c0392b';
+                return;
+            }
+            estadoEl.textContent = 'Subiendo...';
+            estadoEl.style.color = '#666';
+            try {
+                const texto = await file.text();
+                const res = await fetchJSON(`/api/admin/importar-historico?periodo=${encodeURIComponent(periodo)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/csv' },
+                    body: texto,
+                });
+                if (res.error) throw new Error(res.error);
+                estadoEl.textContent = `✅ ${res.subidos} jugadores cargados en el período ${res.periodo}`;
+                estadoEl.style.color = '#155724';
+                document.getElementById('input-csv-historico').value = '';
+                await cargarDatos(periodo);
+            } catch (e) {
+                estadoEl.textContent = `❌ Error: ${e.message}`;
+                estadoEl.style.color = '#c0392b';
+            }
+        }
+
+        function cambiarPeriodo() {
+            const sel = document.getElementById('selector-periodo').value;
+            cargarDatos(sel);
+        }
+
+        function ordenarPor(campo) {
+            if (orden.campo === campo) orden.asc = !orden.asc;
+            else { orden.campo = campo; orden.asc = false; }
+            document.querySelectorAll('th').forEach((th) => th.classList.remove('activo'));
+            const th = [...document.querySelectorAll('th')].find((t) => t.getAttribute('onclick') === `ordenarPor('${campo}')`);
+            if (th) th.classList.add('activo');
+            renderTabla();
+        }
+
+        function renderTabla() {
+            const filtro = (document.getElementById('filtro-jugador').value || '').toLowerCase();
+            const filas = jugadores
+                .filter((j) => (j.nombre_completo || j.usuario || '').toLowerCase().includes(filtro))
+                .sort((a, b) => {
+                    const dir = orden.asc ? 1 : -1;
+                    const av = a[orden.campo], bv = b[orden.campo];
+                    if (typeof av === 'string') return (av || '').localeCompare(bv || '') * dir;
+                    return ((av || 0) - (bv || 0)) * dir;
+                });
+            const html = filas.map((j) => `
+                <tr>
+                    <td><strong>${j.nombre_completo || j.usuario || '-'}</strong><br><span style="font-size:10px; color:#999;">${j.id_usuario_novusbet || ''}</span></td>
+                    <td>${j.casa_apuestas || '-'}</td>
+                    <td class="numero">${j.apuestas || 0}</td>
+                    <td class="numero">$${(j.apostado || 0).toFixed(2)}</td>
+                    <td class="numero">$${(j.ganado || 0).toFixed(2)}</td>
+                    <td class="numero" style="color:${(j.beneficio || 0) >= 0 ? '#155724' : '#c0392b'}; font-weight:600;">$${(j.beneficio || 0).toFixed(2)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tabla-historico').innerHTML = html || '<tr><td colspan="6" class="loading">Sin jugadores en este período</td></tr>';
+        }
+
+        function descargarHistoricoExcel() {
+            const filtro = (document.getElementById('filtro-jugador').value || '').toLowerCase();
+            const filas = jugadores.filter((j) => (j.nombre_completo || j.usuario || '').toLowerCase().includes(filtro));
+            let html = '<table border="1"><tr><th>ID Usuario</th><th>Jugador</th><th>Casa</th><th>Apuestas</th><th>Apostado</th><th>Ganado</th><th>Beneficio</th></tr>';
+            filas.forEach((j) => {
+                html += `<tr>
+                    <td>${j.id_usuario_novusbet || ''}</td>
+                    <td>${j.nombre_completo || j.usuario || ''}</td>
+                    <td>${j.casa_apuestas || ''}</td>
+                    <td>${j.apuestas || 0}</td>
+                    <td>${(j.apostado || 0).toFixed(2)}</td>
+                    <td>${(j.ganado || 0).toFixed(2)}</td>
+                    <td>${(j.beneficio || 0).toFixed(2)}</td>
+                </tr>`;
+            });
+            html += '</table>';
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `historico-${periodoActual || 'periodo'}.xls`;
+            a.click();
+        }
+
+        async function cargarDatos(periodoPedido) {
+            try {
+                const url = periodoPedido ? `/api/historico-dashboard?periodo=${encodeURIComponent(periodoPedido)}` : '/api/historico-dashboard';
+                const res = await fetchJSON(url);
+
+                periodos = res.periodos || [];
+                periodoActual = res.periodoActual;
+                jugadores = res.jugadores || [];
+                evolucion = res.evolucion || [];
+                const resumen = res.resumenGeneral || {};
+
+                document.getElementById('fuente-info').textContent = `Fuente: ${res.fuente} · Real, no datos de prueba.`;
+
+                const sel = document.getElementById('selector-periodo');
+                if (periodos.length === 0) {
+                    sel.innerHTML = '<option>Sin períodos subidos todavía</option>';
+                } else {
+                    sel.innerHTML = periodos.map((p) => `<option value="${p}" ${p === periodoActual ? 'selected' : ''}>${p}</option>`).join('');
+                }
+
+                document.getElementById('kpi-apostado').textContent = `$${(resumen.apostado || 0).toFixed(2)}`;
+                document.getElementById('kpi-ganado').textContent = `$${(resumen.ganado || 0).toFixed(2)}`;
+                document.getElementById('kpi-beneficio').textContent = `$${(resumen.beneficio || 0).toFixed(2)}`;
+                document.getElementById('kpi-jugadores').textContent = resumen.jugadores || 0;
+
+                const top10 = [...jugadores].sort((a, b) => b.apostado - a.apostado).slice(0, 10);
+                dibujarChart('chartTop', {
+                    type: 'bar',
+                    data: {
+                        labels: top10.map((j) => (j.nombre_completo || j.usuario || '').substring(0, 16)),
+                        datasets: [{ label: 'Apostado', data: top10.map((j) => j.apostado), backgroundColor: '#667eea' }]
+                    },
+                    options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+                });
+
+                const notaEl = document.getElementById('evolucion-nota');
+                if (evolucion.length < 2) {
+                    notaEl.textContent = 'Subí más de un período (mes) para ver la evolución en el tiempo.';
+                    dibujarChart('chartEvolucion', { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true } });
+                } else {
+                    notaEl.textContent = '';
+                    dibujarChart('chartEvolucion', {
+                        type: 'line',
+                        data: {
+                            labels: evolucion.map((e) => e.periodo),
+                            datasets: [
+                                { label: 'Apostado', data: evolucion.map((e) => e.apostado), borderColor: '#667eea', backgroundColor: 'rgba(102,126,234,0.15)', tension: 0.3 },
+                                { label: 'Ganado', data: evolucion.map((e) => e.ganado), borderColor: '#764ba2', backgroundColor: 'rgba(118,75,162,0.15)', tension: 0.3 },
+                            ]
+                        },
+                        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                    });
+                }
+
+                renderTabla();
+            } catch (e) {
+                console.error('Error cargando históricos:', e);
+            }
+        }
+
+        cargarDatos();
+    </script>
+</body>
+</html>
