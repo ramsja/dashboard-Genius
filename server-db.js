@@ -969,6 +969,128 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // API: PROYECCIÓN DE APUESTAS. Misma lógica que la de ganancias, pero
+    // sobre "apostado": rango pedido de $5,000 (referencia de probabilidad)
+    // a $20,000 (se marca "en rango crítico" si el promedio reciente ya lo
+    // supera). No reemplaza las alertas reales — es un radar de quién se
+    // viene acercando, antes de que dispare una alerta de verdad.
+    if (pathname === '/api/proyeccion-apuestas') {
+      const UMBRAL_APUESTA_REF = 5000;
+      const UMBRAL_APUESTA_CRITICO = 20000;
+      let proyeccion = [];
+
+      if (supabase) {
+        try {
+          const dias = await fetchTodasLasFilas(
+            'resumen_diario_usuarios',
+            'id_usuario_novusbet, usuario, casa_apuestas, dia, apostado'
+          );
+          const porUsuario = {};
+          dias.forEach((d) => {
+            const id = d.id_usuario_novusbet;
+            if (!porUsuario[id]) porUsuario[id] = { usuario: d.usuario, casa_apuestas: d.casa_apuestas, dias: [] };
+            porUsuario[id].dias.push({ dia: d.dia, apostado: Number(d.apostado) || 0 });
+            if (!porUsuario[id].usuario) porUsuario[id].usuario = d.usuario;
+          });
+
+          proyeccion = Object.entries(porUsuario)
+            .map(([id, u]) => {
+              const ordenados = u.dias.sort((a, b) => (a.dia < b.dia ? -1 : 1));
+              if (ordenados.length < 3) return null;
+
+              const recientes = ordenados.slice(-7);
+              const promedioReciente = recientes.reduce((s, d) => s + d.apostado, 0) / recientes.length;
+              if (promedioReciente <= 0) return null;
+
+              let tendencia = 'sin_dato';
+              let factor = 1;
+              if (ordenados.length >= 4) {
+                const mitad = Math.floor(ordenados.length / 2);
+                const promAnterior = ordenados.slice(0, mitad).reduce((s, d) => s + d.apostado, 0) / mitad;
+                const promRecienteCompleto = ordenados.slice(mitad).reduce((s, d) => s + d.apostado, 0) / (ordenados.length - mitad);
+                if (promAnterior > 0) {
+                  const cambio = (promRecienteCompleto - promAnterior) / promAnterior;
+                  if (cambio >= 0.2) { tendencia = 'alza'; factor = 1.25; }
+                  else if (cambio <= -0.2) { tendencia = 'baja'; factor = 0.75; }
+                  else tendencia = 'estable';
+                }
+              }
+
+              const probabilidad = Math.max(0, Math.min(100, Math.round((promedioReciente / UMBRAL_APUESTA_REF) * 100 * factor)));
+              if (probabilidad < 20) return null;
+
+              return {
+                id_usuario_novusbet: id,
+                usuario: u.usuario,
+                casa_apuestas: u.casa_apuestas,
+                promedio_reciente: promedioReciente,
+                tendencia,
+                probabilidad,
+                enRangoCritico: promedioReciente >= UMBRAL_APUESTA_CRITICO,
+              };
+            })
+            .filter(Boolean)
+            .sort((a, b) => b.probabilidad - a.probabilidad)
+            .slice(0, 25);
+
+          proyeccion = await agregarNombresReales(proyeccion);
+        } catch (e) {
+          // resumen_diario_usuarios puede no tener suficiente historial todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ umbralRef: UMBRAL_APUESTA_REF, umbralCritico: UMBRAL_APUESTA_CRITICO, proyeccion }));
+      return;
+    }
+
+    // API: ESTUDIO DE JUEGOS. Analiza, sobre los datos reales acumulados
+    // día a día (resumen_diario_usuarios), qué juegos concentran los
+    // montos más altos — no cuenta apariciones sueltas, reparte el
+    // apostado de cada usuario entre los juegos que jugó ese día
+    // (aproximado, porque el resumen diario no guarda el monto por
+    // juego individual, solo la lista de juegos jugados esa jornada).
+    if (pathname === '/api/estudio-juegos') {
+      let juegos = [];
+
+      if (supabase) {
+        try {
+          const dias = await fetchTodasLasFilas(
+            'resumen_diario_usuarios',
+            'apostado, juegos'
+          );
+          const porJuego = {};
+          dias.forEach((d) => {
+            const lista = (d.juegos || []).filter(Boolean);
+            if (lista.length === 0) return;
+            const apostadoPorJuego = (Number(d.apostado) || 0) / lista.length;
+            const yaContados = new Set();
+            lista.forEach((j) => {
+              if (!porJuego[j]) porJuego[j] = { juego: j, apariciones: 0, apostadoEstimado: 0 };
+              porJuego[j].apariciones += 1;
+              // Reparte el monto una sola vez por juego distinto en ese día,
+              // para no inflarlo si el mismo juego aparece repetido.
+              if (!yaContados.has(j)) {
+                porJuego[j].apostadoEstimado += apostadoPorJuego;
+                yaContados.add(j);
+              }
+            });
+          });
+
+          juegos = Object.values(porJuego)
+            .map((j) => ({ ...j, promedioEstimado: j.apostadoEstimado / j.apariciones }))
+            .sort((a, b) => b.apostadoEstimado - a.apostadoEstimado)
+            .slice(0, 20);
+        } catch (e) {
+          // resumen_diario_usuarios puede no existir todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ juegos }));
+      return;
+    }
+
     // API: SUBIR CSV DEL REPORTE DE NOVUSBET para (re)llenar
     // ranking_historico_base. Mismo formato que customreport.csv:
     // línea 1 = encabezado del resumen, línea 2 = valores del resumen,
