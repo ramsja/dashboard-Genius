@@ -341,6 +341,28 @@
                     <p style="font-size:12px; color:#999; margin-bottom:12px;">
                         Usuarios que TODAVÍA no llegaron a $15,000 en ganancia, pero cuyo promedio reciente y tendencia sugieren que podrían acercarse. Es una proyección estadística sobre su propio historial — no una alerta confirmada.
                     </p>
+                    <div class="kpis-row" style="margin:0 0 20px;">
+                        <div class="kpi">
+                            <div class="kpi-label">Jugadores en Radar</div>
+                            <div class="kpi-value" id="kpi-pg-total" style="font-size:26px;">0</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="kpi-label">Probabilidad Promedio</div>
+                            <div class="kpi-value" id="kpi-pg-promedio" style="font-size:26px;">0%</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="kpi-label">Más Cerca del Umbral</div>
+                            <div class="kpi-value" id="kpi-pg-top" style="font-size:16px;">-</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="kpi-label">En Alza</div>
+                            <div class="kpi-value" id="kpi-pg-alza" style="font-size:26px;">0</div>
+                        </div>
+                    </div>
+                    <div class="chart-card" style="box-shadow:none; border:1px solid #f0f0f0; margin-bottom:20px;">
+                        <div class="chart-title">Top 10 por Probabilidad</div>
+                        <canvas id="chartProyeccionGanancias"></canvas>
+                    </div>
                     <table>
                         <thead>
                             <tr>
@@ -369,6 +391,28 @@
                     <p style="font-size:12px; color:#999; margin-bottom:12px;">
                         Radar de apuesta: usuarios cuyo promedio reciente y tendencia sugieren que se acercan a $5,000 por apuesta. Se marca "Rango crítico" si el promedio ya está en o por encima de $20,000.
                     </p>
+                    <div class="kpis-row" style="margin:0 0 20px;">
+                        <div class="kpi">
+                            <div class="kpi-label">Jugadores en Radar</div>
+                            <div class="kpi-value" id="kpi-pa-total" style="font-size:26px;">0</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="kpi-label">Probabilidad Promedio</div>
+                            <div class="kpi-value" id="kpi-pa-promedio" style="font-size:26px;">0%</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="kpi-label">Más Cerca del Umbral</div>
+                            <div class="kpi-value" id="kpi-pa-top" style="font-size:16px;">-</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="kpi-label">En Rango Crítico</div>
+                            <div class="kpi-value" id="kpi-pa-critico" style="font-size:26px;">0</div>
+                        </div>
+                    </div>
+                    <div class="chart-card" style="box-shadow:none; border:1px solid #f0f0f0; margin-bottom:20px;">
+                        <div class="chart-title">Top 10 por Probabilidad</div>
+                        <canvas id="chartProyeccionApuestas"></canvas>
+                    </div>
                     <table>
                         <thead>
                             <tr>
@@ -792,6 +836,12 @@
             return `<span class="badge" style="${estilos[nivel] || estilos.baja}" title="Días de historial real que respaldan esta proyección">${texto[nivel] || '-'}</span>`;
         }
 
+        // Mismos colores que barraProbabilidad, para que la barra y el
+        // gráfico lean como una sola cosa.
+        function colorProbabilidad(pct) {
+            return pct >= 70 ? '#c0392b' : pct >= 45 ? '#a3671a' : '#1f7a4d';
+        }
+
         function actualizarProyeccionGanancias() {
             const filas = datos.proyeccionGanancias || [];
             const html = filas.map((p) => `
@@ -806,6 +856,24 @@
                 </tr>
             `).join('');
             document.getElementById('tabla-proyeccion-ganancias').innerHTML = html || '<tr><td colspan="7" class="loading">Sin candidatos por ahora — nadie se acerca al umbral todavía</td></tr>';
+
+            const total = filas.length;
+            const promedio = total > 0 ? filas.reduce((s, p) => s + (p.probabilidad || 0), 0) / total : 0;
+            const top = [...filas].sort((a, b) => b.probabilidad - a.probabilidad)[0];
+            document.getElementById('kpi-pg-total').textContent = total;
+            document.getElementById('kpi-pg-promedio').textContent = `${promedio.toFixed(0)}%`;
+            document.getElementById('kpi-pg-top').textContent = top ? `${top.nombre_completo || top.usuario} (${top.probabilidad}%)` : '-';
+            document.getElementById('kpi-pg-alza').textContent = filas.filter((p) => p.tendencia === 'alza').length;
+
+            const top10 = [...filas].sort((a, b) => b.probabilidad - a.probabilidad).slice(0, 10);
+            dibujarChart('chartProyeccionGanancias', {
+                type: 'bar',
+                data: {
+                    labels: top10.map((p) => (p.nombre_completo || p.usuario || '').substring(0, 16)),
+                    datasets: [{ label: 'Probabilidad %', data: top10.map((p) => p.probabilidad || 0), backgroundColor: top10.map((p) => colorProbabilidad(p.probabilidad || 0)) }]
+                },
+                options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { max: 100 } } }
+            });
         }
 
         function actualizarProyeccionApuestas() {
@@ -823,6 +891,24 @@
                 </tr>
             `).join('');
             document.getElementById('tabla-proyeccion-apuestas').innerHTML = html || '<tr><td colspan="8" class="loading">Sin candidatos por ahora — nadie se acerca al umbral todavía</td></tr>';
+
+            const total = filas.length;
+            const promedio = total > 0 ? filas.reduce((s, p) => s + (p.probabilidad || 0), 0) / total : 0;
+            const top = [...filas].sort((a, b) => b.probabilidad - a.probabilidad)[0];
+            document.getElementById('kpi-pa-total').textContent = total;
+            document.getElementById('kpi-pa-promedio').textContent = `${promedio.toFixed(0)}%`;
+            document.getElementById('kpi-pa-top').textContent = top ? `${top.nombre_completo || top.usuario} (${top.probabilidad}%)` : '-';
+            document.getElementById('kpi-pa-critico').textContent = filas.filter((p) => p.enRangoCritico).length;
+
+            const top10 = [...filas].sort((a, b) => b.probabilidad - a.probabilidad).slice(0, 10);
+            dibujarChart('chartProyeccionApuestas', {
+                type: 'bar',
+                data: {
+                    labels: top10.map((p) => (p.nombre_completo || p.usuario || '').substring(0, 16)),
+                    datasets: [{ label: 'Probabilidad %', data: top10.map((p) => p.probabilidad || 0), backgroundColor: top10.map((p) => colorProbabilidad(p.probabilidad || 0)) }]
+                },
+                options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { max: 100 } } }
+            });
         }
 
         // Panel "Origen de los Datos": 4 tarjetas, una por fuente real.
