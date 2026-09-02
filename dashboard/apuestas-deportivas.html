@@ -334,17 +334,17 @@
 
         <div class="section">
             <div class="section-header">
-                <h2>📊 Probabilidad de Acierto por Categoría</h2>
+                <h2>📐 Matriz de Validación de Categorías</h2>
             </div>
             <div class="section-content">
-                <p class="nota">Tasa de acierto histórica (Won / (Won+Lost)) de TODO el historial cargado, agrupado por la misma categoría de arriba (Tipo de Cupón + Tipo de Apuesta). "Muestra" es cuántos tickets resueltos respaldan ese número — con pocos tickets, es solo una señal preliminar.</p>
+                <p class="nota">Valida con un test de proporciones (z) si la tasa de acierto de cada categoría (Tipo de Cupón + Tipo de Apuesta, TODO el historial cargado) es un patrón real o está dentro de la variación esperada de la tasa promedio general (<strong id="tasa-global-texto">-</strong>). Con |z| ≥ 1.96 (95% de confianza) y muestra ≥ 10, la diferencia se marca "Patrón real"; si no, "Dentro de lo esperado" — no lo suficiente para sacar conclusiones todavía. Esto valida la categoría PROXY disponible (Cupón/Modalidad), no el deporte real — ver nota arriba.</p>
                 <div style="overflow-x:auto;">
                     <table>
                         <thead>
-                            <tr><th>Categoría</th><th>Tasa de Acierto</th><th>Muestra (tickets)</th><th>Confianza</th></tr>
+                            <tr><th>Categoría</th><th>Tasa de Acierto</th><th>vs. Promedio General</th><th>z</th><th>Muestra (tickets)</th><th>Confianza</th><th>Validación</th></tr>
                         </thead>
                         <tbody id="tabla-probabilidad-categoria">
-                            <tr><td colspan="4" class="loading">Cargando...</td></tr>
+                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -685,19 +685,30 @@
                 radarApostado = res.radarApostado || [];
                 radarGanancia = res.radarGanancia || [];
                 const probabilidadPorCategoria = res.probabilidadPorCategoria || [];
+                const tasaGlobalAcierto = res.tasaGlobalAcierto || 0;
 
                 renderRadar('apostado', radarApostado, 'ra', 'chartRadarApostado', 'tabla-radar-apostado');
                 renderRadar('ganancia', radarGanancia, 'rg', 'chartRadarGanancia', 'tabla-radar-ganancia');
 
-                const htmlCat = probabilidadPorCategoria.map((c) => `
-                    <tr>
+                document.getElementById('tasa-global-texto').textContent = `${(tasaGlobalAcierto * 100).toFixed(1)}% general`;
+
+                const htmlCat = probabilidadPorCategoria.map((c) => {
+                    const desvPct = (c.desviacion * 100);
+                    const colorDesv = c.significativo ? (desvPct >= 0 ? '#155724' : '#721c24') : '#666';
+                    const bgFila = c.significativo ? (desvPct >= 0 ? '#f0faf2' : '#fdf2f2') : 'transparent';
+                    return `
+                    <tr style="background:${bgFila};">
                         <td><strong>${c.categoria}</strong></td>
                         <td style="min-width:140px;">${barraProbabilidad(Math.round(c.tasaAcierto * 100))}</td>
+                        <td class="numero" style="color:${colorDesv}; font-weight:600;">${desvPct >= 0 ? '+' : ''}${desvPct.toFixed(1)} pts</td>
+                        <td class="numero">${c.z}</td>
                         <td class="numero">${c.muestra}</td>
                         <td>${badgeConfianza(c.confianza)}</td>
+                        <td>${c.significativo ? '<span class="badge" style="background:#d4edda; color:#155724;">Patrón real</span>' : '<span class="badge" style="background:#e2e3e5; color:#383d41;">Dentro de lo esperado</span>'}</td>
                     </tr>
-                `).join('');
-                document.getElementById('tabla-probabilidad-categoria').innerHTML = htmlCat || '<tr><td colspan="4" class="loading">Todavía no hay tickets resueltos (Won/Lost)</td></tr>';
+                `;
+                }).join('');
+                document.getElementById('tabla-probabilidad-categoria').innerHTML = htmlCat || '<tr><td colspan="7" class="loading">Todavía no hay tickets resueltos (Won/Lost)</td></tr>';
             } catch (e) {
                 console.error('Error cargando agente predictivo:', e);
             }

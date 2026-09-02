@@ -2027,6 +2027,7 @@ const server = http.createServer(async (req, res) => {
       let radarApostado = [];
       let radarGanancia = [];
       let probabilidadPorCategoria = [];
+      let tasaGlobalAcierto = 0;
 
       if (supabase) {
         try {
@@ -2094,19 +2095,37 @@ const server = http.createServer(async (req, res) => {
           radarGanancia = await agregarNombresReales(proyectar('ganado', UMBRAL_GANANCIA_DEPORTIVA_REF), 'id_usuario_externo');
 
           const porCategoriaMap = {};
+          let ganadosGlobal = 0, perdidosGlobal = 0;
           todas.forEach((f) => {
             const categoria = `${f.coupon_type || 'Sin dato'} · ${f.bet_type || 'Sin dato'}`;
             if (!porCategoriaMap[categoria]) porCategoriaMap[categoria] = { categoria, ganados: 0, perdidos: 0 };
-            if (f.outcome === 'Won') porCategoriaMap[categoria].ganados += 1;
-            if (f.outcome === 'Lost') porCategoriaMap[categoria].perdidos += 1;
+            if (f.outcome === 'Won') { porCategoriaMap[categoria].ganados += 1; ganadosGlobal += 1; }
+            if (f.outcome === 'Lost') { porCategoriaMap[categoria].perdidos += 1; perdidosGlobal += 1; }
           });
+          const muestraGlobal = ganadosGlobal + perdidosGlobal;
+          const tasaGlobal = muestraGlobal > 0 ? ganadosGlobal / muestraGlobal : 0;
+          tasaGlobalAcierto = tasaGlobal;
+
+          // Validación estadística de la matriz categoría × resultado: en vez
+          // de solo mostrar la tasa de acierto de cada categoría, la compara
+          // contra la tasa promedio general con un test de proporciones (z).
+          // Con |z| >= 1.96 (95% de confianza) la diferencia es un patrón
+          // real, no ruido de muestra chica — así "matrices y patrones" se
+          // valida con un método explícito, no a ojo.
           probabilidadPorCategoria = Object.values(porCategoriaMap)
             .map((c) => {
               const muestra = c.ganados + c.perdidos;
+              const tasaAcierto = muestra > 0 ? c.ganados / muestra : 0;
+              const desviacion = tasaAcierto - tasaGlobal;
+              const errorEstandar = muestra > 0 ? Math.sqrt(tasaGlobal * (1 - tasaGlobal) / muestra) : 0;
+              const z = errorEstandar > 0 ? desviacion / errorEstandar : 0;
               return {
                 categoria: c.categoria,
                 muestra,
-                tasaAcierto: muestra > 0 ? c.ganados / muestra : 0,
+                tasaAcierto,
+                desviacion,
+                z: Number(z.toFixed(2)),
+                significativo: muestra >= 10 && Math.abs(z) >= 1.96,
                 confianza: muestra >= 30 ? 'alta' : muestra >= 10 ? 'media' : 'baja',
               };
             })
@@ -2125,6 +2144,7 @@ const server = http.createServer(async (req, res) => {
         umbralGanancia: UMBRAL_GANANCIA_DEPORTIVA_REF,
         radarApostado,
         radarGanancia,
+        tasaGlobalAcierto,
         probabilidadPorCategoria,
       }));
       return;
