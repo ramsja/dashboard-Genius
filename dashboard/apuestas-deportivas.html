@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Genius - Apuestas Deportivas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        header h1 { font-size: 32px; margin-bottom: 5px; }
+        header p { opacity: 0.9; font-size: 14px; }
+        header a { color: white; text-decoration: none; opacity: 0.9; font-size: 13px; margin-right: 14px; }
+        header a:hover { opacity: 1; text-decoration: underline; }
+        .container { max-width: 2000px; margin: 0 auto; padding: 30px 20px; }
+
+        .kpis-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 20px; margin: 0 0 30px; }
+        .kpi { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); border-left: 5px solid #667eea; }
+        .kpi-value { font-size: 28px; font-weight: bold; color: #667eea; margin: 10px 0; }
+        .kpi-label { font-size: 12px; color: #999; text-transform: uppercase; font-weight: 600; }
+
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 25px; margin: 0 0 30px; }
+        .chart-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
+        .chart-title { font-size: 16px; font-weight: 600; margin-bottom: 15px; color: #333; }
+        .chart-card canvas { max-height: 380px; }
+
+        .section { background: white; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 25px; }
+        .section-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+        .section-header h2 { font-size: 18px; margin: 0; }
+        .section-content { padding: 20px; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f9f9f9; padding: 12px; text-align: left; font-weight: 600; font-size: 12px; border-bottom: 2px solid #e0e0e0; text-transform: uppercase; color: #667eea; cursor: pointer; white-space: nowrap; }
+        th:hover { color: #4c2a7a; }
+        th.activo::after { content: ' ▾'; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+        tr:hover { background: #fafafa; }
+        .numero { text-align: right; font-weight: 500; }
+        .loading { text-align: center; padding: 40px; color: #999; }
+
+        select, input[type=text] { padding: 8px 12px; border-radius: 6px; border: 1px solid #ddd; font-size: 13px; }
+        .btn { padding: 8px 14px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .btn:hover { background: #5a6fd8; }
+        .btn-header { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.5); }
+
+        .nota { font-size: 12px; color: #999; margin-bottom: 15px; line-height: 1.5; }
+        .upload-box { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: #f8f9fc; border: 1px dashed #ccc; border-radius: 8px; padding: 14px; margin-bottom: 20px; }
+        .upload-box label { font-size: 12px; color: #667eea; font-weight: 600; text-transform: uppercase; }
+
+        .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; }
+        .badge-won { background:#d4edda; color:#155724; }
+        .badge-lost { background:#f8d7da; color:#721c24; }
+        .badge-running { background:#fff3cd; color:#856404; }
+
+        @media (max-width: 1200px) { .charts-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <h1>🏟️ Apuestas Deportivas</h1>
+                <p>Bet list de tickets deportivos (export de Novusbet) — Won / Lost / Running, cuota y monto exactos por ticket</p>
+                <p style="margin-top:6px;">
+                    <a href="/inicio.html">← Panel principal</a>
+                    <a href="/juegos.html">🎮 Dashboard de Juegos</a>
+                    <a href="/historicos.html">📚 Históricos</a>
+                </p>
+            </div>
+            <button onclick="cerrarSesion()" class="btn btn-header" style="padding:10px 18px; border-radius:6px; font-weight:600;">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <div class="section-header">
+                <h2>📤 Subir Bet List (CSV)</h2>
+            </div>
+            <div class="section-content">
+                <p class="nota">Export "Bet List" de Novusbet (columnas en inglés: Ticket ID, User, Amount, Outcome, Winning, Total Odds...) — distinto del CSV de transacciones que alimenta Juegos/Históricos. Cada ticket es único (Ticket ID), así que volver a subir un CSV que se solape actualiza en vez de duplicar. Por ahora se alimenta solo con CSV subido a mano; si más adelante se puede conectar directo al backoffice de Novusbet para sincronizar en tiempo real (como ya pasa con transacciones), esta misma tabla queda lista para recibirlo sin cambios.</p>
+                <div class="upload-box">
+                    <input type="file" id="input-csv-betlist" accept=".csv" style="display:none;" onchange="subirCSVBetlist(this.files[0])">
+                    <button class="btn" onclick="document.getElementById('input-csv-betlist').click()">📤 Elegir CSV y subir</button>
+                    <span id="upload-status" style="font-size:12px; color:#666;"></span>
+                </div>
+            </div>
+        </div>
+
+        <p class="nota" id="fuente-info">Cargando...</p>
+
+        <div style="display:flex; gap:12px; align-items:center; margin-bottom:20px; flex-wrap:wrap;">
+            <label style="font-size:13px; font-weight:600; color:#4c2a7a;">Período:</label>
+            <select id="selector-periodo" onchange="cambiarPeriodo()"><option>Cargando...</option></select>
+        </div>
+
+        <div class="kpis-row">
+            <div class="kpi">
+                <div class="kpi-label">Tickets</div>
+                <div class="kpi-value" id="kpi-tickets">0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Apostado</div>
+                <div class="kpi-value" id="kpi-apostado">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Pagado (Ganado)</div>
+                <div class="kpi-value" id="kpi-ganado">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Beneficio (casa)</div>
+                <div class="kpi-value" id="kpi-beneficio">$0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Jugadores</div>
+                <div class="kpi-value" id="kpi-jugadores">0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Tasa de Acierto</div>
+                <div class="kpi-value" id="kpi-acierto">0%</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Cuota Promedio</div>
+                <div class="kpi-value" id="kpi-cuota">0</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Pendientes (Running)</div>
+                <div class="kpi-value" id="kpi-pendientes">0</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title">🏆 Top 10 Jugadores por Apostado</div>
+                <canvas id="chartTop"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">🎯 Resultado de los Tickets</div>
+                <canvas id="chartOutcome"></canvas>
+            </div>
+            <div class="chart-card" style="grid-column: 1 / -1;">
+                <div class="chart-title">📈 Evolución Mes a Mes</div>
+                <canvas id="chartEvolucion"></canvas>
+                <p class="nota" id="evolucion-nota" style="margin-top:10px; margin-bottom:0;"></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>📋 Jugadores del Período</h2>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="text" id="filtro-jugador" placeholder="Buscar jugador..." oninput="renderTablaJugadores()">
+                    <button id="btn-toggle-jugadores" onclick="toggleTabla('wrap-tabla-jugadores', this)" class="btn btn-header">📋 Ver lista</button>
+                    <button onclick="descargarJugadoresExcel()" class="btn btn-header">📊 Descargar Excel</button>
+                </div>
+            </div>
+            <div class="section-content">
+                <div id="wrap-tabla-jugadores" style="display:none; overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="ordenarPorJugador('nombre_completo')">Jugador</th>
+                                <th onclick="ordenarPorJugador('tickets')">Tickets</th>
+                                <th onclick="ordenarPorJugador('apostado')" class="activo">Apostado</th>
+                                <th onclick="ordenarPorJugador('ganado')">Pagado</th>
+                                <th onclick="ordenarPorJugador('beneficio')">Beneficio</th>
+                                <th onclick="ordenarPorJugador('ganados')">Ganados</th>
+                                <th onclick="ordenarPorJugador('perdidos')">Perdidos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-jugadores">
+                            <tr><td colspan="7" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>🎟️ Todos los Tickets</h2>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="text" id="filtro-ticket" placeholder="Buscar jugador o ticket..." oninput="renderTablaTickets()">
+                    <button id="btn-toggle-tickets" onclick="toggleTabla('wrap-tabla-tickets', this)" class="btn btn-header">📋 Ver lista</button>
+                    <button onclick="descargarTicketsExcel()" class="btn btn-header">📊 Descargar Excel</button>
+                </div>
+            </div>
+            <div class="section-content">
+                <p class="nota">monto, ganancia (Winning) y cuota son datos exactos del CSV, uno por ticket — no hay estimación ni agregación en la carga.</p>
+                <div id="wrap-tabla-tickets" style="display:none; overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="ordenarPorTicket('ticket_code')">Ticket</th>
+                                <th onclick="ordenarPorTicket('nombre_completo')">Jugador</th>
+                                <th onclick="ordenarPorTicket('fecha')" class="activo">Fecha</th>
+                                <th onclick="ordenarPorTicket('bet_type')">Tipo</th>
+                                <th onclick="ordenarPorTicket('no_eventos')">Eventos</th>
+                                <th onclick="ordenarPorTicket('total_odds')">Cuota</th>
+                                <th onclick="ordenarPorTicket('monto')">Monto</th>
+                                <th onclick="ordenarPorTicket('outcome')">Resultado</th>
+                                <th onclick="ordenarPorTicket('ganancia')">Ganancia</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-tickets">
+                            <tr><td colspan="9" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let jugadores = [];
+        let tickets = [];
+        let evolucion = [];
+        let periodos = [];
+        let periodoActual = null;
+        let ordenJugadores = { campo: 'apostado', asc: false };
+        let ordenTickets = { campo: 'fecha', asc: false };
+
+        function toggleTabla(id, btn) {
+            const el = document.getElementById(id);
+            const oculto = el.style.display === 'none';
+            el.style.display = oculto ? 'block' : 'none';
+            if (btn) btn.textContent = oculto ? '🔼 Ocultar lista' : '📋 Ver lista';
+        }
+
+        async function fetchJSON(url, opts) {
+            const r = await fetch(url, opts);
+            if (r.status === 401) {
+                window.location.href = '/login.html';
+                throw new Error('No autenticado');
+            }
+            return r.json();
+        }
+
+        async function cerrarSesion() {
+            await fetch('/api/logout').catch(() => {});
+            window.location.href = '/login.html';
+        }
+
+        const chartInstances = {};
+        function dibujarChart(canvasId, config) {
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+            chartInstances[canvasId] = new Chart(document.getElementById(canvasId), config);
+        }
+
+        function badgeOutcome(outcome) {
+            if (outcome === 'Won') return '<span class="badge badge-won">Won</span>';
+            if (outcome === 'Lost') return '<span class="badge badge-lost">Lost</span>';
+            if (outcome === 'Running') return '<span class="badge badge-running">Running</span>';
+            return outcome || '-';
+        }
+
+        async function subirCSVBetlist(file) {
+            if (!file) return;
+            const estadoEl = document.getElementById('upload-status');
+            estadoEl.textContent = 'Subiendo...';
+            estadoEl.style.color = '#666';
+            try {
+                const texto = await file.text();
+                const res = await fetchJSON('/api/admin/importar-apuestas-deportivas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/csv' },
+                    body: texto,
+                });
+                if (res.error) throw new Error(res.error);
+                const diasTexto = (res.dias || []).join(', ');
+                estadoEl.textContent = `✅ ${res.subidos} tickets cargados (día${(res.dias || []).length > 1 ? 's' : ''}: ${diasTexto}) de ${res.ticketsProcesados} filas`;
+                estadoEl.style.color = '#155724';
+                document.getElementById('input-csv-betlist').value = '';
+                const mesSubido = (res.dias && res.dias[0]) ? res.dias[0].slice(0, 7) : null;
+                await cargarDatos(mesSubido);
+            } catch (e) {
+                estadoEl.textContent = `❌ Error: ${e.message}`;
+                estadoEl.style.color = '#c0392b';
+            }
+        }
+
+        function cambiarPeriodo() {
+            const sel = document.getElementById('selector-periodo').value;
+            cargarDatos(sel);
+        }
+
+        function ordenarPorJugador(campo) {
+            if (ordenJugadores.campo === campo) ordenJugadores.asc = !ordenJugadores.asc;
+            else { ordenJugadores.campo = campo; ordenJugadores.asc = false; }
+            const tabla = document.getElementById('tabla-jugadores').closest('table');
+            tabla.querySelectorAll('th').forEach((th) => th.classList.remove('activo'));
+            const th = [...tabla.querySelectorAll('th')].find((t) => t.getAttribute('onclick') === `ordenarPorJugador('${campo}')`);
+            if (th) th.classList.add('activo');
+            renderTablaJugadores();
+        }
+
+        function renderTablaJugadores() {
+            const filtro = (document.getElementById('filtro-jugador').value || '').toLowerCase();
+            const filas = jugadores
+                .filter((j) => (j.nombre_completo || j.id_usuario_externo || '').toString().toLowerCase().includes(filtro))
+                .sort((a, b) => {
+                    const dir = ordenJugadores.asc ? 1 : -1;
+                    const av = a[ordenJugadores.campo], bv = b[ordenJugadores.campo];
+                    if (typeof av === 'string') return (av || '').localeCompare(bv || '') * dir;
+                    return ((av || 0) - (bv || 0)) * dir;
+                });
+            const html = filas.map((j) => `
+                <tr>
+                    <td><strong>${j.nombre_completo || 'Jugador ' + j.id_usuario_externo}</strong><br><span style="font-size:10px; color:#999;">${j.id_usuario_externo || ''}</span></td>
+                    <td class="numero">${j.tickets || 0}</td>
+                    <td class="numero">$${(j.apostado || 0).toFixed(2)}</td>
+                    <td class="numero">$${(j.ganado || 0).toFixed(2)}</td>
+                    <td class="numero" style="color:${(j.beneficio || 0) >= 0 ? '#155724' : '#c0392b'}; font-weight:600;">$${(j.beneficio || 0).toFixed(2)}</td>
+                    <td class="numero">${j.ganados || 0}</td>
+                    <td class="numero">${j.perdidos || 0}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tabla-jugadores').innerHTML = html || '<tr><td colspan="7" class="loading">Sin jugadores en este período</td></tr>';
+        }
+
+        function descargarJugadoresExcel() {
+            const filtro = (document.getElementById('filtro-jugador').value || '').toLowerCase();
+            const filas = jugadores.filter((j) => (j.nombre_completo || j.id_usuario_externo || '').toString().toLowerCase().includes(filtro));
+            let html = '<table border="1"><tr><th>ID Usuario</th><th>Jugador</th><th>Tickets</th><th>Apostado</th><th>Pagado</th><th>Beneficio</th><th>Ganados</th><th>Perdidos</th></tr>';
+            filas.forEach((j) => {
+                html += `<tr>
+                    <td>${j.id_usuario_externo || ''}</td>
+                    <td>${j.nombre_completo || ''}</td>
+                    <td>${j.tickets || 0}</td>
+                    <td>${(j.apostado || 0).toFixed(2)}</td>
+                    <td>${(j.ganado || 0).toFixed(2)}</td>
+                    <td>${(j.beneficio || 0).toFixed(2)}</td>
+                    <td>${j.ganados || 0}</td>
+                    <td>${j.perdidos || 0}</td>
+                </tr>`;
+            });
+            html += '</table>';
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `apuestas-deportivas-jugadores-${periodoActual || 'periodo'}.xls`;
+            a.click();
+        }
+
+        function ordenarPorTicket(campo) {
+            if (ordenTickets.campo === campo) ordenTickets.asc = !ordenTickets.asc;
+            else { ordenTickets.campo = campo; ordenTickets.asc = false; }
+            const tabla = document.getElementById('tabla-tickets').closest('table');
+            tabla.querySelectorAll('th').forEach((th) => th.classList.remove('activo'));
+            const th = [...tabla.querySelectorAll('th')].find((t) => t.getAttribute('onclick') === `ordenarPorTicket('${campo}')`);
+            if (th) th.classList.add('activo');
+            renderTablaTickets();
+        }
+
+        function renderTablaTickets() {
+            const filtro = (document.getElementById('filtro-ticket').value || '').toLowerCase();
+            const filas = tickets
+                .filter((t) => (
+                    (t.nombre_completo || '').toLowerCase().includes(filtro) ||
+                    (t.id_usuario_externo || '').toString().toLowerCase().includes(filtro) ||
+                    (t.ticket_code || '').toLowerCase().includes(filtro)
+                ))
+                .sort((a, b) => {
+                    const dir = ordenTickets.asc ? 1 : -1;
+                    const av = a[ordenTickets.campo], bv = b[ordenTickets.campo];
+                    if (ordenTickets.campo === 'fecha') return (new Date(av || 0) - new Date(bv || 0)) * dir;
+                    if (typeof av === 'string') return (av || '').localeCompare(bv || '') * dir;
+                    return ((av || 0) - (bv || 0)) * dir;
+                })
+                .slice(0, 500);
+            const html = filas.map((t) => `
+                <tr>
+                    <td>${t.ticket_code || t.ticket_id || '-'}</td>
+                    <td><strong>${t.nombre_completo || t.id_usuario_externo || '-'}</strong></td>
+                    <td>${t.fecha ? new Date(t.fecha).toLocaleString('es-ES') : '-'}</td>
+                    <td>${t.bet_type || '-'}${t.coupon_type ? ` (${t.coupon_type})` : ''}</td>
+                    <td class="numero">${t.no_eventos || 0}</td>
+                    <td class="numero">${(t.total_odds || 0).toFixed(2)}</td>
+                    <td class="numero">$${(t.monto || 0).toFixed(2)}</td>
+                    <td>${badgeOutcome(t.outcome)}</td>
+                    <td class="numero" style="color:${(t.ganancia || 0) > 0 ? '#155724' : '#333'}; font-weight:${(t.ganancia || 0) > 0 ? '600' : '400'};">$${(t.ganancia || 0).toFixed(2)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tabla-tickets').innerHTML = html || '<tr><td colspan="9" class="loading">Sin tickets en este período</td></tr>';
+        }
+
+        function descargarTicketsExcel() {
+            const filtro = (document.getElementById('filtro-ticket').value || '').toLowerCase();
+            const filas = tickets.filter((t) => (
+                (t.nombre_completo || '').toLowerCase().includes(filtro) ||
+                (t.id_usuario_externo || '').toString().toLowerCase().includes(filtro) ||
+                (t.ticket_code || '').toLowerCase().includes(filtro)
+            ));
+            let html = '<table border="1"><tr><th>Ticket</th><th>ID Usuario</th><th>Jugador</th><th>Fecha</th><th>Tipo</th><th>Eventos</th><th>Cuota</th><th>Monto</th><th>Resultado</th><th>Ganancia</th></tr>';
+            filas.forEach((t) => {
+                html += `<tr>
+                    <td>${t.ticket_code || t.ticket_id || ''}</td>
+                    <td>${t.id_usuario_externo || ''}</td>
+                    <td>${t.nombre_completo || ''}</td>
+                    <td>${t.fecha ? new Date(t.fecha).toLocaleString('es-ES') : ''}</td>
+                    <td>${t.bet_type || ''}</td>
+                    <td>${t.no_eventos || 0}</td>
+                    <td>${(t.total_odds || 0).toFixed(2)}</td>
+                    <td>${(t.monto || 0).toFixed(2)}</td>
+                    <td>${t.outcome || ''}</td>
+                    <td>${(t.ganancia || 0).toFixed(2)}</td>
+                </tr>`;
+            });
+            html += '</table>';
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `apuestas-deportivas-tickets-${periodoActual || 'periodo'}.xls`;
+            a.click();
+        }
+
+        async function cargarDatos(periodoPedido) {
+            try {
+                const url = periodoPedido ? `/api/apuestas-deportivas-dashboard?periodo=${encodeURIComponent(periodoPedido)}` : '/api/apuestas-deportivas-dashboard';
+                const res = await fetchJSON(url);
+
+                periodos = res.periodos || [];
+                periodoActual = res.periodoActual;
+                jugadores = res.jugadores || [];
+                tickets = res.tickets || [];
+                evolucion = res.evolucion || [];
+                const resumen = res.resumenGeneral || {};
+                const porOutcome = res.porOutcome || [];
+
+                document.getElementById('fuente-info').textContent = `Fuente: ${res.fuente} · Real, no datos de prueba.`;
+
+                const sel = document.getElementById('selector-periodo');
+                if (periodos.length === 0) {
+                    sel.innerHTML = '<option>Sin períodos subidos todavía</option>';
+                } else {
+                    sel.innerHTML = periodos.map((p) => `<option value="${p}" ${p === periodoActual ? 'selected' : ''}>${p}</option>`).join('');
+                }
+
+                document.getElementById('kpi-tickets').textContent = resumen.tickets || 0;
+                document.getElementById('kpi-apostado').textContent = `$${(resumen.apostado || 0).toFixed(2)}`;
+                document.getElementById('kpi-ganado').textContent = `$${(resumen.ganado || 0).toFixed(2)}`;
+                document.getElementById('kpi-beneficio').textContent = `$${(resumen.beneficio || 0).toFixed(2)}`;
+                document.getElementById('kpi-jugadores').textContent = resumen.jugadores || 0;
+                document.getElementById('kpi-acierto').textContent = `${((resumen.tasaAcierto || 0) * 100).toFixed(1)}%`;
+                document.getElementById('kpi-cuota').textContent = (resumen.cuotaPromedio || 0).toFixed(2);
+                document.getElementById('kpi-pendientes').textContent = resumen.pendientes || 0;
+
+                const top10 = [...jugadores].sort((a, b) => b.apostado - a.apostado).slice(0, 10);
+                dibujarChart('chartTop', {
+                    type: 'bar',
+                    data: {
+                        labels: top10.map((j) => (j.nombre_completo || ('Jugador ' + j.id_usuario_externo) || '').toString().substring(0, 16)),
+                        datasets: [{ label: 'Apostado', data: top10.map((j) => j.apostado), backgroundColor: '#667eea' }]
+                    },
+                    options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+                });
+
+                const coloresOutcome = { Won: '#1f7a4d', Lost: '#c0392b', Running: '#a3671a' };
+                dibujarChart('chartOutcome', {
+                    type: 'doughnut',
+                    data: {
+                        labels: porOutcome.map((o) => o.outcome),
+                        datasets: [{ data: porOutcome.map((o) => o.cantidad), backgroundColor: porOutcome.map((o) => coloresOutcome[o.outcome] || '#999') }]
+                    },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                });
+
+                const notaEl = document.getElementById('evolucion-nota');
+                if (evolucion.length < 2) {
+                    notaEl.textContent = 'Subí más de un período (mes) para ver la evolución en el tiempo.';
+                    dibujarChart('chartEvolucion', { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true } });
+                } else {
+                    notaEl.textContent = '';
+                    dibujarChart('chartEvolucion', {
+                        type: 'line',
+                        data: {
+                            labels: evolucion.map((e) => e.periodo),
+                            datasets: [
+                                { label: 'Apostado', data: evolucion.map((e) => e.apostado), borderColor: '#667eea', backgroundColor: 'rgba(102,126,234,0.15)', tension: 0.3 },
+                                { label: 'Pagado', data: evolucion.map((e) => e.ganado), borderColor: '#764ba2', backgroundColor: 'rgba(118,75,162,0.15)', tension: 0.3 },
+                            ]
+                        },
+                        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                    });
+                }
+
+                renderTablaJugadores();
+                renderTablaTickets();
+            } catch (e) {
+                console.error('Error cargando apuestas deportivas:', e);
+            }
+        }
+
+        cargarDatos();
+    </script>
+</body>
+</html>

@@ -662,6 +662,102 @@ async function calcularYGuardarResumenJuegos(formattedRecords) {
   }
 }
 
+// Módulo "Apuestas Deportivas" (bet list / tickets) — CSV distinto al de
+// transacciones (columnas en inglés: Ticket ID, User, Amount, Outcome,
+// Winning, Total Odds...), un ticket por fila. UNIQUE(ticket_id) hace que
+// subir el mismo CSV (o uno que se solape) actualice en vez de duplicar,
+// y deja la puerta abierta a alimentar la misma tabla con sincronización
+// automática más adelante sin cambiar el esquema.
+function numeroTexto(v) {
+  return parseFloat((v || '').toString().replace(/[^0-9.-]/g, '')) || 0;
+}
+
+function fechaOVacio(v) {
+  if (!v) return null;
+  const d = new Date(v.replace(' ', 'T'));
+  return isNaN(d.getTime()) ? null : d.toISOString();
+}
+
+function diaDeFecha(v) {
+  if (!v) return null;
+  const soloFecha = v.toString().trim().split(' ')[0];
+  return /^\d{4}-\d{2}-\d{2}$/.test(soloFecha) ? soloFecha : null;
+}
+
+async function guardarApuestasDeportivas(records, fuente = 'csv') {
+  if (!supabase) {
+    console.log('⚠️  Supabase no configurado');
+    return { inserted: 0, fallidos: 0, dias: new Set() };
+  }
+
+  const formattedRecords = records.map((r) => ({
+    ticket_id: getField(r, 'ticket id'),
+    ticket_code: getField(r, 'ticket code'),
+    site: getField(r, 'site'),
+    owner: getField(r, 'owner'),
+    id_usuario_externo: getField(r, 'user'),
+    coupon_type: getField(r, 'coupon type'),
+    bet_type: getField(r, 'bet type'),
+    bono: getField(r, 'bonus'),
+    fecha: fechaOVacio(getField(r, 'date')),
+    dia: diaDeFecha(getField(r, 'date')),
+    moneda: getField(r, 'currency'),
+    monto: numeroTexto(getField(r, 'amount')),
+    comision: numeroTexto(getField(r, 'commission')),
+    total_odds: numeroTexto(getField(r, 'total odds')),
+    no_eventos: parseInt(getField(r, 'no. of events'), 10) || 0,
+    pendiente: getField(r, 'pending').toLowerCase() === 'yes',
+    bono_pagado: numeroTexto(getField(r, 'bonus paid')),
+    ganancia_base: numeroTexto(getField(r, 'base p. winnings')),
+    outcome: getField(r, 'outcome'),
+    fecha_outcome: fechaOVacio(getField(r, 'outcome date')),
+    fecha_pago: fechaOVacio(getField(r, 'payment date')),
+    ganancia: numeroTexto(getField(r, 'winning')),
+    ganancia_impuesto: numeroTexto(getField(r, 'winning_tax')),
+    aplicacion: getField(r, 'application'),
+    navegador: getField(r, 'browser'),
+    fuente,
+  })).filter((r) => r.ticket_id);
+
+  const dias = new Set(formattedRecords.map((r) => r.dia).filter(Boolean));
+
+  const BATCH_SIZE = 250;
+  let inserted = 0;
+  let fallidos = 0;
+
+  const insertarLote = async (lote) => {
+    const { error } = await supabase
+      .from('apuestas_deportivas')
+      .upsert(lote, { onConflict: 'ticket_id', ignoreDuplicates: false });
+    return error;
+  };
+
+  for (let i = 0; i < formattedRecords.length; i += BATCH_SIZE) {
+    const batch = formattedRecords.slice(i, i + BATCH_SIZE);
+    let error = await insertarLote(batch);
+
+    if (error) {
+      console.error(`⚠️ Lote de apuestas deportivas falló (${batch.length} filas), reintentando en mitades:`, error.message);
+      const mitad = Math.ceil(batch.length / 2);
+      const mitades = [batch.slice(0, mitad), batch.slice(mitad)].filter((m) => m.length > 0);
+      for (const sub of mitades) {
+        const subError = await insertarLote(sub);
+        if (subError) {
+          console.error(`❌ Sub-lote de apuestas deportivas descartado (${sub.length} filas):`, subError.message);
+          fallidos += sub.length;
+        } else {
+          inserted += sub.length;
+        }
+      }
+    } else {
+      inserted += batch.length;
+    }
+  }
+
+  console.log(`✅ ${inserted} tickets de apuestas deportivas cargados${fallidos ? ` (⚠️ ${fallidos} descartados)` : ''}`);
+  return { inserted, fallidos, dias };
+}
+
 // Cualquier apuesta >= UMBRAL_FIJO_APUESTA (monto fijo, sin cálculo
 // adaptativo) queda registrada en alertas_apuestas. No es crítico si
 // falla, no debe tirar el resto de la sincronización.
@@ -1110,4 +1206,5 @@ module.exports = {
   main, syncHistorico, syncRangoHistorico, parseCSV, sincronizarUsuarios, parseUsuariosHTML,
   actualizarResumenDiario, podarTransaccionesDelDia, END_DATE, RETENCION_TRANSACCIONES_DIAS,
   JUEGO_JUNK_REGEX, getField, classifyDiscipline, esApuesta, esGanancia, extraerJuego,
+  guardarApuestasDeportivas, asegurarSupabase,
 };

@@ -1840,6 +1840,154 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // Módulo Apuestas Deportivas (bet list / tickets): CSV con columnas
+    // en inglés distintas a las de transacciones (Ticket ID, User, Amount,
+    // Outcome, Winning, Total Odds...). Un ticket por fila, UNIQUE(ticket_id)
+    // así re-subir el mismo día no duplica.
+    if (pathname === '/api/admin/importar-apuestas-deportivas' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => (body += chunk));
+      req.on('end', async () => {
+        try {
+          if (!supabase) throw new Error('Supabase no configurado');
+
+          const { parseCSV, guardarApuestasDeportivas, asegurarSupabase } = require('./sync-novusbet');
+          asegurarSupabase();
+
+          const registros = parseCSV(body);
+          if (registros.length === 0) throw new Error('El CSV no tiene filas de tickets reconocibles');
+
+          const { inserted, fallidos, dias } = await guardarApuestasDeportivas(registros, 'csv');
+
+          if (inserted === 0) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'No se pudo cargar ningún ticket válido del CSV' }));
+            return;
+          }
+
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ ok: true, subidos: inserted, descartados: fallidos, dias: [...dias].sort(), ticketsProcesados: registros.length }));
+        } catch (err) {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: err.message }));
+        }
+      });
+      return;
+    }
+
+    // API: Dashboard de Apuestas Deportivas — agrupa los tickets subidos
+    // (o sincronizados a futuro) por mes, igual que /api/historico-dashboard,
+    // pero con las métricas propias de bet list: tasa de acierto, cuota
+    // promedio, tickets pendientes (Running), etc.
+    if (pathname === '/api/apuestas-deportivas-dashboard') {
+      let periodos = [];
+      let periodoActual = (parsedUrl.query.periodo || '').trim() || null;
+      let jugadores = [];
+      let tickets = [];
+      let resumenGeneral = {
+        tickets: 0, apostado: 0, ganado: 0, beneficio: 0, jugadores: 0, diasConDatos: 0,
+        ganados: 0, perdidos: 0, pendientes: 0, tasaAcierto: 0, cuotaPromedio: 0, ticketPromedio: 0,
+      };
+      let evolucion = [];
+      let porOutcome = [];
+
+      if (supabase) {
+        try {
+          const todas = await fetchTodasLasFilas(
+            'apuestas_deportivas',
+            'ticket_id, ticket_code, dia, fecha, id_usuario_externo, bet_type, coupon_type, moneda, monto, total_odds, no_eventos, outcome, ganancia, fuente'
+          );
+
+          const mesDe = (dia) => (dia || '').slice(0, 7);
+          periodos = [...new Set(todas.map((f) => mesDe(f.dia)))].filter(Boolean).sort();
+          if (!periodoActual || !periodos.includes(periodoActual)) {
+            periodoActual = periodos.length > 0 ? periodos[periodos.length - 1] : null;
+          }
+
+          if (periodoActual) {
+            const filasMes = todas.filter((f) => mesDe(f.dia) === periodoActual);
+
+            const porUsuario = {};
+            filasMes.forEach((f) => {
+              const id = f.id_usuario_externo;
+              if (!id) return;
+              if (!porUsuario[id]) {
+                porUsuario[id] = { id_usuario_externo: id, tickets: 0, apostado: 0, ganado: 0, ganados: 0, perdidos: 0 };
+              }
+              const u = porUsuario[id];
+              u.tickets += 1;
+              u.apostado += Number(f.monto) || 0;
+              u.ganado += Number(f.ganancia) || 0;
+              if (f.outcome === 'Won') u.ganados += 1;
+              if (f.outcome === 'Lost') u.perdidos += 1;
+            });
+            jugadores = Object.values(porUsuario).map((u) => ({ ...u, beneficio: u.apostado - u.ganado }));
+            jugadores = await agregarNombresReales(jugadores, 'id_usuario_externo');
+            jugadores.sort((a, b) => b.apostado - a.apostado);
+
+            const ganados = filasMes.filter((f) => f.outcome === 'Won').length;
+            const perdidos = filasMes.filter((f) => f.outcome === 'Lost').length;
+            const pendientes = filasMes.filter((f) => f.outcome === 'Running').length;
+            const apostado = filasMes.reduce((s, f) => s + (Number(f.monto) || 0), 0);
+            const ganado = filasMes.reduce((s, f) => s + (Number(f.ganancia) || 0), 0);
+            const cuotas = filasMes.map((f) => Number(f.total_odds) || 0).filter((v) => v > 0);
+
+            resumenGeneral = {
+              tickets: filasMes.length,
+              apostado,
+              ganado,
+              beneficio: apostado - ganado,
+              jugadores: jugadores.length,
+              diasConDatos: new Set(filasMes.map((f) => f.dia)).size,
+              ganados,
+              perdidos,
+              pendientes,
+              tasaAcierto: (ganados + perdidos) > 0 ? ganados / (ganados + perdidos) : 0,
+              cuotaPromedio: cuotas.length > 0 ? cuotas.reduce((s, v) => s + v, 0) / cuotas.length : 0,
+              ticketPromedio: filasMes.length > 0 ? apostado / filasMes.length : 0,
+            };
+
+            porOutcome = ['Won', 'Lost', 'Running'].map((o) => ({
+              outcome: o,
+              cantidad: filasMes.filter((f) => f.outcome === o).length,
+            })).filter((o) => o.cantidad > 0);
+
+            tickets = await agregarNombresReales(
+              filasMes.map((f) => ({ ...f })).sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0)),
+              'id_usuario_externo'
+            );
+          }
+
+          evolucion = periodos.map((p) => {
+            const filas = todas.filter((f) => mesDe(f.dia) === p);
+            return {
+              periodo: p,
+              apostado: filas.reduce((s, f) => s + (Number(f.monto) || 0), 0),
+              ganado: filas.reduce((s, f) => s + (Number(f.ganancia) || 0), 0),
+              tickets: filas.length,
+              jugadores: new Set(filas.map((f) => f.id_usuario_externo)).size,
+            };
+          });
+        } catch (e) {
+          // apuestas_deportivas puede no existir todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        real: true,
+        fuente: 'apuestas_deportivas (bet list — CSV subido a mano; el mismo esquema queda listo para sincronización automática si se habilita)',
+        periodoActual,
+        periodos,
+        resumenGeneral,
+        jugadores,
+        tickets,
+        porOutcome,
+        evolucion,
+      }));
+      return;
+    }
+
     // API: DASHBOARD DE HISTÓRICOS. La tabla guarda un día real por fila
     // (usuario + día, sale de cada transacción del CSV subido) — acá se
     // agrupan esos días en MESES ("periodo" = YYYY-MM) para el margen de
