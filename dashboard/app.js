@@ -158,6 +158,7 @@
         if (data) {
           state.data = data;
           setSource('Supabase · en vivo', 'var(--green)');
+          els.content.style.display = 'block';
           return render();
         }
       } catch (err) {
@@ -166,6 +167,7 @@
       const fallback = await fetchJson(CONFIG.snapshotUrl, 15000);
       state.data = fallback;
       setSource('JSON estático', 'var(--blue)');
+      els.content.style.display = 'block';
       render();
     } catch (err) {
       showError(err.message);

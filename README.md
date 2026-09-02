@@ -52,6 +52,22 @@ Abre <http://localhost:8000/dashboard/>.
 
 Para apuntar el dashboard a Supabase: copia `dashboard/config.example.js` a `dashboard/config.js`, activa `supabase.enabled` y pega tu URL y anon key (solo lectura).
 
+## 2b) Tickets deportivos por disciplina
+
+Sección del dashboard que desglosa los **tickets de apuestas deportivas por deporte/disciplina** (Soccer, Baseball, Tennis, eSoccer, …), con selector de periodo, KPIs (tickets, importe apostado, deportes con actividad, ticket promedio), barras top 12 y tabla con %, importe, pendiente, cuota media y estados (Running/Won/Lost/Cashout/Void).
+
+- **Extractor:** `extraccion-tickets-deporte.py` — recorre el catálogo de deportes del filtro `sport_id[]` de la betlist V2 del Back Office, cuenta tickets por deporte (Fecha de colocación) y descarga el export CSV de los deportes con actividad (flujo Elastic: `export` → `scrollId` → `download`).
+- **Salida:** `dashboard/data/desglose-tickets.json` (acumula periodos) y `reportes/desglose-tickets.csv`.
+- **Uso:**
+
+```bash
+python extraccion-tickets-deporte.py                  # mes en curso
+python extraccion-tickets-deporte.py --mes 2026-08    # un mes concreto
+```
+
+- La extracción diaria (workflow) lo ejecuta automáticamente y commitea el JSON; el dashboard lo lee con selector "Periodo:".
+- Duración típica: ~10-13 min por mes (206 deportes, pausa de cortesía entre consultas).
+
 ## 3) Supabase
 
 1. Crea un proyecto en Supabase.

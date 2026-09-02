@@ -163,6 +163,9 @@
       .chart-box { position: relative; height: 320px; }
       .sub { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
       .gold { color: var(--amber); }
+      #tkTabla th, #tkTabla td { padding: 9px 10px; font-size: 13px; }
+      #tkTabla td:last-child { font-size: 11.5px; line-height: 1.7; }
+      #tkTabla td:last-child .dot { width: 7px; height: 7px; }
       @media (max-width: 560px) {
         .bars .row .lbl { width: 60px; }
         .controls { width: 100%; }
@@ -257,10 +260,46 @@
             <div class="bars" id="chartStatus"></div>
           </div>
         </div>
+
+        <section id="tkSeccion" style="display:none;">
+          <div class="panel" style="margin-bottom:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+              <h2 style="margin:0;">Tickets deportivos por disciplina</h2>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span id="tkEstado" class="muted" style="font-size:12px;"></span>
+                <select id="tkPeriodo" class="btn" style="appearance:auto;"></select>
+              </div>
+            </div>
+            <div class="kpis" id="tkKpis" style="margin:0 0 18px;"></div>
+            <div class="grid2">
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Tickets por deporte (top 12 + otros)</h2>
+                <div class="bars" id="tkBarras"></div>
+              </div>
+              <div class="table-wrap" style="border:0; margin:0;">
+                <table id="tkTabla">
+                  <thead>
+                    <tr>
+                      <th>Deporte / disciplina</th>
+                      <th class="num">Tickets</th>
+                      <th class="num">%</th>
+                      <th class="num">Importe</th>
+                      <th class="num">Pendiente</th>
+                      <th class="num">Cuota media</th>
+                      <th>Estados</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
       </div>
 
     <script src="./config.js"></script>
     <script src="./app.js"></script>
+    <script src="./tickets-deporte.js"></script>
   </body>
 </html>
