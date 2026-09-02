@@ -363,6 +363,11 @@
                         <div class="chart-title">Top 10 por Probabilidad</div>
                         <canvas id="chartProyeccionGanancias"></canvas>
                     </div>
+                    <div style="display:flex; gap:10px; margin-bottom:10px;">
+                        <button id="btn-toggle-pg" onclick="toggleTabla('wrap-tabla-pg', this)" style="padding:6px 14px; background:#f0f0f5; color:#555; border:1px solid #ddd; border-radius:4px; cursor:pointer; font-size:12px;">📋 Ver lista</button>
+                        <button onclick="descargarProyeccionGananciasExcel()" style="padding:6px 14px; background:#667eea; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">📊 Descargar Excel</button>
+                    </div>
+                    <div id="wrap-tabla-pg" style="display:none;">
                     <table>
                         <thead>
                             <tr>
@@ -379,6 +384,7 @@
                             <tr><td colspan="7" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
 
@@ -413,6 +419,11 @@
                         <div class="chart-title">Top 10 por Probabilidad</div>
                         <canvas id="chartProyeccionApuestas"></canvas>
                     </div>
+                    <div style="display:flex; gap:10px; margin-bottom:10px;">
+                        <button id="btn-toggle-pa" onclick="toggleTabla('wrap-tabla-pa', this)" style="padding:6px 14px; background:#f0f0f5; color:#555; border:1px solid #ddd; border-radius:4px; cursor:pointer; font-size:12px;">📋 Ver lista</button>
+                        <button onclick="descargarProyeccionApuestasExcel()" style="padding:6px 14px; background:#667eea; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">📊 Descargar Excel</button>
+                    </div>
+                    <div id="wrap-tabla-pa" style="display:none;">
                     <table>
                         <thead>
                             <tr>
@@ -430,6 +441,7 @@
                             <tr><td colspan="8" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
 
@@ -1590,6 +1602,32 @@
             a.href = url;
             a.download = `${nombreArchivo}-${new Date().toISOString().split('T')[0]}.xls`;
             a.click();
+        }
+
+        // Colapsa/expande una tabla sin tocar el gráfico ni el KPI que la
+        // acompañan — el Excel sigue disponible aunque la lista esté oculta.
+        function toggleTabla(id, btn) {
+            const el = document.getElementById(id);
+            const oculto = el.style.display === 'none';
+            el.style.display = oculto ? 'block' : 'none';
+            if (btn) btn.textContent = oculto ? '🔼 Ocultar lista' : '📋 Ver lista';
+        }
+
+        function descargarProyeccionGananciasExcel() {
+            const filas = (datos.proyeccionGanancias || []).map((p) => [
+                p.id_usuario_novusbet, p.nombre_completo || p.usuario, p.casa_apuestas,
+                (p.promedio_reciente || 0).toFixed(2), p.tendencia, (p.probabilidad || 0) + '%', p.confianza,
+            ]);
+            descargarTablaExcel('proyeccion-ganancias', ['ID Usuario', 'Usuario', 'Casa', 'Promedio Reciente', 'Tendencia', 'Probabilidad', 'Confianza'], filas);
+        }
+
+        function descargarProyeccionApuestasExcel() {
+            const filas = (datos.proyeccionApuestas || []).map((p) => [
+                p.id_usuario_novusbet, p.nombre_completo || p.usuario, p.casa_apuestas,
+                (p.promedio_reciente || 0).toFixed(2), p.tendencia, (p.probabilidad || 0) + '%',
+                p.enRangoCritico ? 'Rango crítico' : 'Bajo umbral', p.confianza,
+            ]);
+            descargarTablaExcel('proyeccion-apuestas', ['ID Usuario', 'Usuario', 'Casa', 'Promedio Reciente', 'Tendencia', 'Probabilidad', 'Rango', 'Confianza'], filas);
         }
 
         function descargarAnalisisRiesgoExcel() {

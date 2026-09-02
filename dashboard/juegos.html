@@ -105,12 +105,13 @@
                 <h2>📋 Todos los Juegos</h2>
                 <div style="display:flex; gap:8px; align-items:center;">
                     <input type="text" id="filtro-juego" placeholder="Buscar juego..." oninput="renderTabla()">
+                    <button id="btn-toggle-juegos" onclick="toggleTabla('wrap-tabla-juegos', this)" style="padding:8px 14px; background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:6px; cursor:pointer; font-size:13px;">📋 Ver lista</button>
                     <button onclick="descargarJuegosExcel()" style="padding:8px 14px; background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.5); border-radius:6px; cursor:pointer; font-size:13px;">📊 Descargar Excel</button>
                 </div>
             </div>
             <div class="section-content">
                 <p class="nota" id="metodologia-info"></p>
-                <div style="overflow-x:auto;">
+                <div id="wrap-tabla-juegos" style="display:none; overflow-x:auto;">
                     <table>
                         <thead>
                             <tr>
@@ -137,6 +138,14 @@
     <script>
         let juegos = [];
         let orden = { campo: 'apostado', asc: false };
+
+        // Colapsa/expande la tabla sin tocar los gráficos ni el Excel.
+        function toggleTabla(id, btn) {
+            const el = document.getElementById(id);
+            const oculto = el.style.display === 'none';
+            el.style.display = oculto ? 'block' : 'none';
+            if (btn) btn.textContent = oculto ? '🔼 Ocultar lista' : '📋 Ver lista';
+        }
 
         async function fetchJSON(url) {
             const r = await fetch(url);

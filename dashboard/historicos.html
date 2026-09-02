@@ -128,11 +128,12 @@
                 <h2>📋 Jugadores del Período</h2>
                 <div style="display:flex; gap:8px; align-items:center;">
                     <input type="text" id="filtro-jugador" placeholder="Buscar jugador..." oninput="renderTabla()">
+                    <button id="btn-toggle-historico" onclick="toggleTabla('wrap-tabla-historico', this)" class="btn btn-header">📋 Ver lista</button>
                     <button onclick="descargarHistoricoExcel()" class="btn btn-header">📊 Descargar Excel</button>
                 </div>
             </div>
             <div class="section-content">
-                <div style="overflow-x:auto;">
+                <div id="wrap-tabla-historico" style="display:none; overflow-x:auto;">
                     <table>
                         <thead>
                             <tr>
@@ -193,12 +194,13 @@
                 <h2>🎮 Todos los Juegos</h2>
                 <div style="display:flex; gap:8px; align-items:center;">
                     <input type="text" id="filtro-juego-historico" placeholder="Buscar juego..." oninput="renderTablaJuegos()">
+                    <button id="btn-toggle-juegos-historico" onclick="toggleTabla('wrap-tabla-juegos-historico', this)" class="btn btn-header">📋 Ver lista</button>
                     <button onclick="descargarJuegosHistoricoExcel()" class="btn btn-header">📊 Descargar Excel</button>
                 </div>
             </div>
             <div class="section-content">
                 <p class="nota">apostado, ganado, apuestas, ganancias y retorno son datos exactos (no estimados): se calculan sumando cada transacción real de apuesta o de ganancia de ese juego. jugadoresDistintos usa el máximo de un solo día como piso (no se puede sumar entre días sin contar dos veces al mismo jugador).</p>
-                <div style="overflow-x:auto;">
+                <div id="wrap-tabla-juegos-historico" style="display:none; overflow-x:auto;">
                     <table>
                         <thead>
                             <tr>
@@ -230,6 +232,14 @@
         let orden = { campo: 'apostado', asc: false };
         let juegosHistorico = [];
         let ordenJuegos = { campo: 'apostado', asc: false };
+
+        // Colapsa/expande una tabla sin tocar los gráficos ni el Excel.
+        function toggleTabla(id, btn) {
+            const el = document.getElementById(id);
+            const oculto = el.style.display === 'none';
+            el.style.display = oculto ? 'block' : 'none';
+            if (btn) btn.textContent = oculto ? '🔼 Ocultar lista' : '📋 Ver lista';
+        }
 
         async function fetchJSON(url, opts) {
             const r = await fetch(url, opts);
