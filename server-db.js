@@ -1890,6 +1890,7 @@ const server = http.createServer(async (req, res) => {
       };
       let evolucion = [];
       let porOutcome = [];
+      let porCategoria = [];
 
       if (supabase) {
         try {
@@ -1952,6 +1953,28 @@ const server = http.createServer(async (req, res) => {
               cantidad: filasMes.filter((f) => f.outcome === o).length,
             })).filter((o) => o.cantidad > 0);
 
+            // El CSV de Bet List no trae deporte/evento por ticket, así que
+            // "disciplina/juego" acá es el mejor proxy real disponible:
+            // Coupon Type (Normal=prematch, Live=en vivo, Mix=combinado) +
+            // Bet Type (Single/Multiple). No es el deporte real — es el tipo
+            // de cupón/apuesta, y se etiqueta como tal en el dashboard.
+            const porCategoriaMap = {};
+            filasMes.forEach((f) => {
+              const categoria = `${f.coupon_type || 'Sin dato'} · ${f.bet_type || 'Sin dato'}`;
+              if (!porCategoriaMap[categoria]) {
+                porCategoriaMap[categoria] = { categoria, tickets: 0, apostado: 0, ganado: 0, ganados: 0, perdidos: 0 };
+              }
+              const c = porCategoriaMap[categoria];
+              c.tickets += 1;
+              c.apostado += Number(f.monto) || 0;
+              c.ganado += Number(f.ganancia) || 0;
+              if (f.outcome === 'Won') c.ganados += 1;
+              if (f.outcome === 'Lost') c.perdidos += 1;
+            });
+            porCategoria = Object.values(porCategoriaMap)
+              .map((c) => ({ ...c, tasaAcierto: (c.ganados + c.perdidos) > 0 ? c.ganados / (c.ganados + c.perdidos) : 0 }))
+              .sort((a, b) => b.apostado - a.apostado);
+
             tickets = await agregarNombresReales(
               filasMes.map((f) => ({ ...f })).sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0)),
               'id_usuario_externo'
@@ -1983,7 +2006,126 @@ const server = http.createServer(async (req, res) => {
         jugadores,
         tickets,
         porOutcome,
+        porCategoria,
         evolucion,
+      }));
+      return;
+    }
+
+    // API: AGENTE PREDICTIVO — Apuestas Deportivas. Mismo método que
+    // /api/proyeccion-ganancias y /api/proyeccion-apuestas (promedio de
+    // los últimos días + tendencia alza/baja/estable sobre historial REAL,
+    // heurística estadística, no una red entrenada), aplicado acá sobre
+    // apuestas_deportivas agrupado por jugador+día en memoria (no hay
+    // resumen diario propio todavía para este módulo). Además agrega la
+    // tasa de acierto histórica por categoría (coupon type + bet type,
+    // ver nota en /api/apuestas-deportivas-dashboard sobre por qué esa es
+    // la mejor aproximación de "disciplina/juego" disponible en el CSV).
+    if (pathname === '/api/proyeccion-apuestas-deportivas') {
+      const UMBRAL_APUESTA_DEPORTIVA_REF = 500;
+      const UMBRAL_GANANCIA_DEPORTIVA_REF = 500;
+      let radarApostado = [];
+      let radarGanancia = [];
+      let probabilidadPorCategoria = [];
+
+      if (supabase) {
+        try {
+          const todas = await fetchTodasLasFilas(
+            'apuestas_deportivas',
+            'dia, id_usuario_externo, monto, ganancia, outcome, coupon_type, bet_type'
+          );
+
+          const porUsuarioDia = {};
+          todas.forEach((f) => {
+            const id = f.id_usuario_externo;
+            if (!id || !f.dia) return;
+            const key = `${id}|${f.dia}`;
+            if (!porUsuarioDia[key]) porUsuarioDia[key] = { id_usuario_externo: id, dia: f.dia, apostado: 0, ganado: 0 };
+            porUsuarioDia[key].apostado += Number(f.monto) || 0;
+            porUsuarioDia[key].ganado += Number(f.ganancia) || 0;
+          });
+
+          const porUsuario = {};
+          Object.values(porUsuarioDia).forEach((d) => {
+            if (!porUsuario[d.id_usuario_externo]) porUsuario[d.id_usuario_externo] = [];
+            porUsuario[d.id_usuario_externo].push(d);
+          });
+
+          const proyectar = (campo, umbralRef) => Object.entries(porUsuario)
+            .map(([id, dias]) => {
+              const ordenados = dias.sort((a, b) => (a.dia < b.dia ? -1 : 1));
+              if (ordenados.length < 3) return null;
+
+              const recientes = ordenados.slice(-7);
+              const promedioReciente = recientes.reduce((s, d) => s + d[campo], 0) / recientes.length;
+              if (promedioReciente <= 0) return null;
+
+              let tendencia = 'sin_dato';
+              let factor = 1;
+              if (ordenados.length >= 4) {
+                const mitad = Math.floor(ordenados.length / 2);
+                const promAnterior = ordenados.slice(0, mitad).reduce((s, d) => s + d[campo], 0) / mitad;
+                const promRecienteCompleto = ordenados.slice(mitad).reduce((s, d) => s + d[campo], 0) / (ordenados.length - mitad);
+                if (promAnterior > 0) {
+                  const cambio = (promRecienteCompleto - promAnterior) / promAnterior;
+                  if (cambio >= 0.2) { tendencia = 'alza'; factor = 1.25; }
+                  else if (cambio <= -0.2) { tendencia = 'baja'; factor = 0.75; }
+                  else tendencia = 'estable';
+                }
+              }
+
+              const probabilidad = Math.max(0, Math.min(100, Math.round((promedioReciente / umbralRef) * 100 * factor)));
+              if (probabilidad < 20) return null;
+
+              return {
+                id_usuario_externo: id,
+                promedio_reciente: promedioReciente,
+                tendencia,
+                probabilidad,
+                dias_con_historial: ordenados.length,
+                confianza: ordenados.length >= 14 ? 'alta' : ordenados.length >= 7 ? 'media' : 'baja',
+              };
+            })
+            .filter(Boolean)
+            .sort((a, b) => b.probabilidad - a.probabilidad)
+            .slice(0, 25);
+
+          radarApostado = await agregarNombresReales(proyectar('apostado', UMBRAL_APUESTA_DEPORTIVA_REF), 'id_usuario_externo');
+          radarGanancia = await agregarNombresReales(proyectar('ganado', UMBRAL_GANANCIA_DEPORTIVA_REF), 'id_usuario_externo');
+
+          const porCategoriaMap = {};
+          todas.forEach((f) => {
+            const categoria = `${f.coupon_type || 'Sin dato'} · ${f.bet_type || 'Sin dato'}`;
+            if (!porCategoriaMap[categoria]) porCategoriaMap[categoria] = { categoria, ganados: 0, perdidos: 0 };
+            if (f.outcome === 'Won') porCategoriaMap[categoria].ganados += 1;
+            if (f.outcome === 'Lost') porCategoriaMap[categoria].perdidos += 1;
+          });
+          probabilidadPorCategoria = Object.values(porCategoriaMap)
+            .map((c) => {
+              const muestra = c.ganados + c.perdidos;
+              return {
+                categoria: c.categoria,
+                muestra,
+                tasaAcierto: muestra > 0 ? c.ganados / muestra : 0,
+                confianza: muestra >= 30 ? 'alta' : muestra >= 10 ? 'media' : 'baja',
+              };
+            })
+            .filter((c) => c.muestra > 0)
+            .sort((a, b) => b.muestra - a.muestra);
+        } catch (e) {
+          // apuestas_deportivas puede no existir todavía
+        }
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        real: true,
+        fuente: 'apuestas_deportivas agrupado en memoria por jugador+día (heurística estadística, no una red entrenada)',
+        umbralApostado: UMBRAL_APUESTA_DEPORTIVA_REF,
+        umbralGanancia: UMBRAL_GANANCIA_DEPORTIVA_REF,
+        radarApostado,
+        radarGanancia,
+        probabilidadPorCategoria,
       }));
       return;
     }

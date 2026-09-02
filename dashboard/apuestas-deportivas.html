@@ -147,6 +147,25 @@
 
         <div class="section">
             <div class="section-header">
+                <h2>🏷️ Categorías (Cupón / Modalidad)</h2>
+            </div>
+            <div class="section-content">
+                <p class="nota">El export "Bet List" de Novusbet no trae deporte ni evento por ticket, así que acá "categoría" es el mejor proxy real disponible en el CSV: Tipo de Cupón (Normal = prematch, Live = en vivo, Mix = combinado) + Tipo de Apuesta (Single/Multiple). No es el deporte real (fútbol, tenis, etc.) — si Novusbet expone un reporte más detallado con esa información, esto se puede actualizar para usarla.</p>
+                <div class="charts-grid" style="margin-bottom:0;">
+                    <div class="chart-card">
+                        <div class="chart-title">💰 Apostado por Categoría</div>
+                        <canvas id="chartCategoriaApostado"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">🎯 Tasa de Acierto por Categoría</div>
+                        <canvas id="chartCategoriaAcierto"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
                 <h2>📋 Jugadores del Período</h2>
                 <div style="display:flex; gap:8px; align-items:center;">
                     <input type="text" id="filtro-jugador" placeholder="Buscar jugador..." oninput="renderTablaJugadores()">
@@ -204,6 +223,128 @@
                         </thead>
                         <tbody id="tabla-tickets">
                             <tr><td colspan="9" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agente Predictivo: mismo método que en el panel principal -->
+        <!-- (promedio de los últimos días + tendencia sobre historial REAL, -->
+        <!-- heurística estadística explicada, no una red entrenada), acá -->
+        <!-- aplicado a apuestas_deportivas agrupado por jugador+día. -->
+        <div class="section" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="section-content" style="color:white; padding:18px 24px;">
+                <h2 style="margin:0 0 6px;">🤖 Agente Predictivo</h2>
+                <p style="font-size:13px; opacity:0.9; margin:0;">
+                    Analiza el historial diario REAL de cada jugador en apuestas deportivas (agrupado en memoria por jugador+día, no hay resumen propio todavía) y estima, con el promedio de los últimos 7 días y la tendencia, qué tan cerca está de acercarse a un monto de referencia. También calcula la tasa de acierto histórica por categoría, para ver qué tipo de cupón/apuesta rinde mejor. "Confianza" indica cuánto historial real respalda cada estimación.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>🎯 Radar de Apuesta (Monto)</h2>
+            </div>
+            <div class="section-content">
+                <p class="nota">Jugadores cuyo promedio reciente de monto apostado por día y tendencia sugieren que se acercan a $500/día (referencia inicial, ajustable). Es una proyección estadística sobre su propio historial, no una alerta confirmada.</p>
+                <div class="kpis-row" style="margin:0 0 20px;">
+                    <div class="kpi">
+                        <div class="kpi-label">Jugadores en Radar</div>
+                        <div class="kpi-value" id="kpi-ra-total" style="font-size:26px;">0</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Probabilidad Promedio</div>
+                        <div class="kpi-value" id="kpi-ra-promedio" style="font-size:26px;">0%</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Más Cerca del Umbral</div>
+                        <div class="kpi-value" id="kpi-ra-top" style="font-size:16px;">-</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">En Alza</div>
+                        <div class="kpi-value" id="kpi-ra-alza" style="font-size:26px;">0</div>
+                    </div>
+                </div>
+                <div class="chart-card" style="box-shadow:none; border:1px solid #f0f0f0; margin-bottom:20px;">
+                    <div class="chart-title">Top 10 por Probabilidad</div>
+                    <canvas id="chartRadarApostado"></canvas>
+                </div>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <button id="btn-toggle-radar-apostado" onclick="toggleTabla('wrap-tabla-radar-apostado', this)" class="btn btn-header" style="background:#f0f0f5; color:#555; border:1px solid #ddd;">📋 Ver lista</button>
+                    <button onclick="descargarRadarExcel('apostado')" class="btn">📊 Descargar Excel</button>
+                </div>
+                <div id="wrap-tabla-radar-apostado" style="display:none; overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr><th>Jugador</th><th>Promedio Reciente</th><th>Tendencia</th><th>Probabilidad</th><th>Confianza</th></tr>
+                        </thead>
+                        <tbody id="tabla-radar-apostado">
+                            <tr><td colspan="5" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>💵 Radar de Ganancia</h2>
+            </div>
+            <div class="section-content">
+                <p class="nota">Mismo método, sobre el monto pagado (Winning) por día. Referencia inicial: $500/día.</p>
+                <div class="kpis-row" style="margin:0 0 20px;">
+                    <div class="kpi">
+                        <div class="kpi-label">Jugadores en Radar</div>
+                        <div class="kpi-value" id="kpi-rg-total" style="font-size:26px;">0</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Probabilidad Promedio</div>
+                        <div class="kpi-value" id="kpi-rg-promedio" style="font-size:26px;">0%</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Más Cerca del Umbral</div>
+                        <div class="kpi-value" id="kpi-rg-top" style="font-size:16px;">-</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">En Alza</div>
+                        <div class="kpi-value" id="kpi-rg-alza" style="font-size:26px;">0</div>
+                    </div>
+                </div>
+                <div class="chart-card" style="box-shadow:none; border:1px solid #f0f0f0; margin-bottom:20px;">
+                    <div class="chart-title">Top 10 por Probabilidad</div>
+                    <canvas id="chartRadarGanancia"></canvas>
+                </div>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <button id="btn-toggle-radar-ganancia" onclick="toggleTabla('wrap-tabla-radar-ganancia', this)" class="btn btn-header" style="background:#f0f0f5; color:#555; border:1px solid #ddd;">📋 Ver lista</button>
+                    <button onclick="descargarRadarExcel('ganancia')" class="btn">📊 Descargar Excel</button>
+                </div>
+                <div id="wrap-tabla-radar-ganancia" style="display:none; overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr><th>Jugador</th><th>Promedio Reciente</th><th>Tendencia</th><th>Probabilidad</th><th>Confianza</th></tr>
+                        </thead>
+                        <tbody id="tabla-radar-ganancia">
+                            <tr><td colspan="5" class="loading">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>📊 Probabilidad de Acierto por Categoría</h2>
+            </div>
+            <div class="section-content">
+                <p class="nota">Tasa de acierto histórica (Won / (Won+Lost)) de TODO el historial cargado, agrupado por la misma categoría de arriba (Tipo de Cupón + Tipo de Apuesta). "Muestra" es cuántos tickets resueltos respaldan ese número — con pocos tickets, es solo una señal preliminar.</p>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr><th>Categoría</th><th>Tasa de Acierto</th><th>Muestra (tickets)</th><th>Confianza</th></tr>
+                        </thead>
+                        <tbody id="tabla-probabilidad-categoria">
+                            <tr><td colspan="4" class="loading">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -428,6 +569,7 @@
                 evolucion = res.evolucion || [];
                 const resumen = res.resumenGeneral || {};
                 const porOutcome = res.porOutcome || [];
+                const porCategoria = res.porCategoria || [];
 
                 document.getElementById('fuente-info').textContent = `Fuente: ${res.fuente} · Real, no datos de prueba.`;
 
@@ -486,6 +628,23 @@
                     });
                 }
 
+                dibujarChart('chartCategoriaApostado', {
+                    type: 'bar',
+                    data: {
+                        labels: porCategoria.map((c) => c.categoria),
+                        datasets: [{ label: 'Apostado', data: porCategoria.map((c) => c.apostado), backgroundColor: '#667eea' }]
+                    },
+                    options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+                });
+                dibujarChart('chartCategoriaAcierto', {
+                    type: 'bar',
+                    data: {
+                        labels: porCategoria.map((c) => c.categoria),
+                        datasets: [{ label: 'Tasa de Acierto %', data: porCategoria.map((c) => (c.tasaAcierto * 100).toFixed(1)), backgroundColor: '#764ba2' }]
+                    },
+                    options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { max: 100 } } }
+                });
+
                 renderTablaJugadores();
                 renderTablaTickets();
             } catch (e) {
@@ -493,7 +652,106 @@
             }
         }
 
+        function barraProbabilidad(pct) {
+            const color = pct >= 70 ? '#c0392b' : pct >= 45 ? '#a3671a' : '#1f7a4d';
+            return `
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <div style="flex:1; background:#eee; border-radius:6px; height:10px; overflow:hidden; min-width:80px;">
+                        <div style="width:${pct}%; background:${color}; height:100%;"></div>
+                    </div>
+                    <span style="font-size:12px; font-weight:600; color:${color};">${pct}%</span>
+                </div>
+            `;
+        }
+        function colorProbabilidad(pct) {
+            return pct >= 70 ? '#c0392b' : pct >= 45 ? '#a3671a' : '#1f7a4d';
+        }
+        function badgeConfianza(nivel) {
+            const estilos = { alta: 'background:#d4edda; color:#155724;', media: 'background:#fff3cd; color:#856404;', baja: 'background:#f8d7da; color:#721c24;' };
+            const texto = { alta: 'Alta', media: 'Media', baja: 'Baja' };
+            return `<span class="badge" style="${estilos[nivel] || estilos.baja}" title="Días de historial real que respaldan esta proyección">${texto[nivel] || '-'}</span>`;
+        }
+        function textoTendencia(t) {
+            const map = { alza: '📈 En alza', baja: '📉 En baja', estable: '➡️ Estable', sin_dato: 'Sin dato suficiente' };
+            return map[t] || t;
+        }
+
+        let radarApostado = [];
+        let radarGanancia = [];
+
+        async function cargarAgentePredictivo() {
+            try {
+                const res = await fetchJSON('/api/proyeccion-apuestas-deportivas');
+                radarApostado = res.radarApostado || [];
+                radarGanancia = res.radarGanancia || [];
+                const probabilidadPorCategoria = res.probabilidadPorCategoria || [];
+
+                renderRadar('apostado', radarApostado, 'ra', 'chartRadarApostado', 'tabla-radar-apostado');
+                renderRadar('ganancia', radarGanancia, 'rg', 'chartRadarGanancia', 'tabla-radar-ganancia');
+
+                const htmlCat = probabilidadPorCategoria.map((c) => `
+                    <tr>
+                        <td><strong>${c.categoria}</strong></td>
+                        <td style="min-width:140px;">${barraProbabilidad(Math.round(c.tasaAcierto * 100))}</td>
+                        <td class="numero">${c.muestra}</td>
+                        <td>${badgeConfianza(c.confianza)}</td>
+                    </tr>
+                `).join('');
+                document.getElementById('tabla-probabilidad-categoria').innerHTML = htmlCat || '<tr><td colspan="4" class="loading">Todavía no hay tickets resueltos (Won/Lost)</td></tr>';
+            } catch (e) {
+                console.error('Error cargando agente predictivo:', e);
+            }
+        }
+
+        function renderRadar(campo, filas, prefijo, canvasId, tablaId) {
+            const html = filas.map((p) => `
+                <tr>
+                    <td><strong>${p.nombre_completo || ('Jugador ' + p.id_usuario_externo)}</strong></td>
+                    <td class="numero">$${(p.promedio_reciente || 0).toFixed(2)}</td>
+                    <td>${textoTendencia(p.tendencia)}</td>
+                    <td style="min-width:140px;">${barraProbabilidad(p.probabilidad || 0)}</td>
+                    <td>${badgeConfianza(p.confianza)}</td>
+                </tr>
+            `).join('');
+            document.getElementById(tablaId).innerHTML = html || '<tr><td colspan="5" class="loading">Sin candidatos por ahora — nadie se acerca al umbral todavía</td></tr>';
+
+            const total = filas.length;
+            const promedio = total > 0 ? filas.reduce((s, p) => s + (p.probabilidad || 0), 0) / total : 0;
+            const top = [...filas].sort((a, b) => b.probabilidad - a.probabilidad)[0];
+            document.getElementById(`kpi-${prefijo}-total`).textContent = total;
+            document.getElementById(`kpi-${prefijo}-promedio`).textContent = `${promedio.toFixed(0)}%`;
+            document.getElementById(`kpi-${prefijo}-top`).textContent = top ? `${top.nombre_completo || ('Jugador ' + top.id_usuario_externo)} (${top.probabilidad}%)` : '-';
+            document.getElementById(`kpi-${prefijo}-alza`).textContent = filas.filter((p) => p.tendencia === 'alza').length;
+
+            const top10 = [...filas].sort((a, b) => b.probabilidad - a.probabilidad).slice(0, 10);
+            dibujarChart(canvasId, {
+                type: 'bar',
+                data: {
+                    labels: top10.map((p) => (p.nombre_completo || ('Jugador ' + p.id_usuario_externo) || '').toString().substring(0, 16)),
+                    datasets: [{ label: 'Probabilidad %', data: top10.map((p) => p.probabilidad || 0), backgroundColor: top10.map((p) => colorProbabilidad(p.probabilidad || 0)) }]
+                },
+                options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { max: 100 } } }
+            });
+        }
+
+        function descargarRadarExcel(tipo) {
+            const filas = tipo === 'apostado' ? radarApostado : radarGanancia;
+            const rows = filas.map((p) => [
+                p.id_usuario_externo, p.nombre_completo || '', (p.promedio_reciente || 0).toFixed(2), p.tendencia, (p.probabilidad || 0) + '%', p.confianza,
+            ]);
+            let html = '<table border="1"><tr><th>ID Usuario</th><th>Jugador</th><th>Promedio Reciente</th><th>Tendencia</th><th>Probabilidad</th><th>Confianza</th></tr>';
+            rows.forEach((r) => { html += '<tr>' + r.map((v) => `<td>${v}</td>`).join('') + '</tr>'; });
+            html += '</table>';
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `apuestas-deportivas-radar-${tipo}.xls`;
+            a.click();
+        }
+
         cargarDatos();
+        cargarAgentePredictivo();
     </script>
 </body>
 </html>
