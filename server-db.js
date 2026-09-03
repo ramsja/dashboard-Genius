@@ -95,37 +95,6 @@ async function fetchTodasLasFilas(tabla, columnas, limiteMax = 100000) {
   return todas;
 }
 
-// Caché en memoria para las consultas caras. Medido en producción
-// (2026-09-03): /api/transacciones-resumen tarda ~55s y /api/fuente-datos
-// ~50s, y el panel se auto-refresca cada 30 segundos — o sea que cada
-// pestaña abierta disparaba un recorrido completo de las 500,000+
-// transacciones una y otra vez, sin que los datos hubieran cambiado (el
-// sync trae datos nuevos cada 60 min). Con este caché, la primera carga
-// paga el costo y el resto sale instantáneo.
-const cacheConsultas = new Map(); // clave -> { valor, expira }
-const consultasEnCurso = new Map(); // clave -> Promise, para no duplicar una consulta que ya está corriendo
-const CACHE_TTL_MS = 10 * 60 * 1000; // 10 min, bien por debajo del ciclo de sync
-
-async function conCache(clave, calcular) {
-  const guardado = cacheConsultas.get(clave);
-  if (guardado && guardado.expira > Date.now()) return guardado.valor;
-
-  // Si la consulta ya está corriendo (otra pestaña, o el refresh de 30s
-  // llegó antes de que terminara la anterior), todos esperan la misma
-  // promesa en vez de lanzar otro escaneo completo cada uno — sin esto,
-  // con Supabase lento se apilaban recorridos de 500k filas en paralelo.
-  if (consultasEnCurso.has(clave)) return consultasEnCurso.get(clave);
-
-  const promesa = calcular()
-    .then((valor) => {
-      cacheConsultas.set(clave, { valor, expira: Date.now() + CACHE_TTL_MS });
-      return valor;
-    })
-    .finally(() => consultasEnCurso.delete(clave));
-  consultasEnCurso.set(clave, promesa);
-  return promesa;
-}
-
 // Le agrega nombre_completo a cada fila (nombre + apellido reales de
 // usuarios_novusbet) buscando solo los IDs que aparecen en `filas`, para
 // mostrar el nombre real en vez del código numérico donde ya lo tenemos
@@ -299,8 +268,6 @@ async function cargarDatosAutomatico() {
       new Promise((_, reject) => setTimeout(() => reject(new Error(`Sync colgado más de ${SYNC_TIMEOUT_MS / 60000} min, se abandona este ciclo`)), SYNC_TIMEOUT_MS)),
     ]);
     console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
-    // Hay datos nuevos: el caché de las consultas caras ya no sirve.
-    cacheConsultas.clear();
     syncStatus.estado = 'completado';
     syncStatus.fin = new Date().toISOString();
     syncStatus.filas = total || 0;
@@ -759,10 +726,6 @@ const server = http.createServer(async (req, res) => {
     // API: RESUMEN POR DISCIPLINA NOVUSBET (agregados sobre TODAS las filas,
     // no solo las primeras 1000 que Supabase devuelve por defecto)
     if (pathname === '/api/transacciones-resumen') {
-      // Recorre las 500,000+ transacciones crudas, así que va por caché
-      // (ver conCache): sin él, cada refresh de 30s de cada pestaña abierta
-      // repetía el mismo escaneo completo de la tabla.
-      const resumen = await conCache('transacciones-resumen', async () => {
       let resumen = {
         total_transacciones: 0,
         monto_total: 0,
@@ -807,9 +770,6 @@ const server = http.createServer(async (req, res) => {
           resumen.usuarios_unicos = usuariosSet.size;
         }
       }
-
-        return resumen;
-      });
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(resumen));
@@ -1369,9 +1329,6 @@ const server = http.createServer(async (req, res) => {
     // tablas grandes ya nos generó "statement timeout" en el plan gratuito.
     if (pathname === '/api/fuente-datos') {
       const { RETENCION_TRANSACCIONES_DIAS } = require('./sync-novusbet');
-      // También va por caché: los ORDER BY sobre transacciones_novusbet
-      // (500,000+ filas) hacían que esto tardara ~50s medido en producción.
-      const fuente = await conCache('fuente-datos', async () => {
       const fuente = {
         real: true,
         fuentes: {
@@ -1444,9 +1401,6 @@ const server = http.createServer(async (req, res) => {
           fuente.fuentes.usuariosReales.registros = count || 0;
         } catch (e) { /* usuarios_novusbet puede no existir todavía */ }
       }
-
-        return fuente;
-      });
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(fuente));
