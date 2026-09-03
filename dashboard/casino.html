@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="PERP · Casino por proveedor/juego · GeniusBet" />
+    <title>Casino (PERP) · Genius</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      #pcTabla th, #pcTabla td { padding: 9px 10px; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="top">
+        <div>
+          <h1>Casino · PERP por proveedor/juego</h1>
+          <div class="muted updated" id="pcEstado">Cargando…</div>
+        </div>
+        <div class="controls">
+          <a class="btn" href="./index.html">← Operaciones</a>
+          <select id="pcPeriodo" class="btn" style="appearance:auto;"></select>
+          <button class="btn" id="btnRefreshPerp">Actualizar</button>
+        </div>
+      </header>
+
+      <div id="pcVacio" class="error" style="display:none;">
+        Aún no hay datos de PERP importados. Corre
+        <code>python importar-perp-casino.py descargas/&lt;export&gt;.csv</code>
+        con un export del backoffice, o <code>extraccion-perp-casino.py</code>
+        una vez confirmada la ruta real del reporte.
+      </div>
+
+      <section id="pcContenido" style="display:none;">
+        <div class="kpis" id="pcKpis"></div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h2>Rondas por proveedor (top 12 + otros)</h2>
+            <div class="bars" id="pcBarras"></div>
+          </div>
+          <div class="table-wrap" style="border:0; margin:0;">
+            <table id="pcTabla">
+              <thead>
+                <tr>
+                  <th>Proveedor / juego</th>
+                  <th class="num">Rondas</th>
+                  <th class="num">%</th>
+                  <th class="num">Apuesta</th>
+                  <th class="num">GGR</th>
+                  <th class="num">RTP</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="./perp-casino.js"></script>
+  </body>
+</html>
