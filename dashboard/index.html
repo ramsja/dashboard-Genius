@@ -163,7 +163,7 @@
       .chart-box { position: relative; height: 320px; }
       .sub { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
       .gold { color: var(--amber); }
-      #tkTabla th, #tkTabla td { padding: 9px 10px; font-size: 13px; }
+      #tkTabla th, #tkTabla td, #pcTabla th, #pcTabla td { padding: 9px 10px; font-size: 13px; }
       #tkTabla td:last-child { font-size: 11.5px; line-height: 1.7; }
       #tkTabla td:last-child .dot { width: 7px; height: 7px; }
       @media (max-width: 560px) {
@@ -295,11 +295,47 @@
             </div>
           </div>
         </section>
+
+        <section id="pcSeccion" style="display:none;">
+          <div class="panel" style="margin-bottom:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+              <h2 style="margin:0;">PERP · Casino por proveedor/juego</h2>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span id="pcEstado" class="muted" style="font-size:12px;"></span>
+                <select id="pcPeriodo" class="btn" style="appearance:auto;"></select>
+                <button class="btn" id="btnRefreshPerp">Actualizar</button>
+              </div>
+            </div>
+            <div class="kpis" id="pcKpis" style="margin:0 0 18px;"></div>
+            <div class="grid2">
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Rondas por proveedor (top 12 + otros)</h2>
+                <div class="bars" id="pcBarras"></div>
+              </div>
+              <div class="table-wrap" style="border:0; margin:0;">
+                <table id="pcTabla">
+                  <thead>
+                    <tr>
+                      <th>Proveedor / juego</th>
+                      <th class="num">Rondas</th>
+                      <th class="num">%</th>
+                      <th class="num">Apuesta</th>
+                      <th class="num">GGR</th>
+                      <th class="num">RTP</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
       </div>
 
     <script src="./config.js"></script>
     <script src="./app.js"></script>
     <script src="./tickets-deporte.js"></script>
+    <script src="./perp-casino.js"></script>
   </body>
 </html>
