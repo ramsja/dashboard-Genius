@@ -125,18 +125,14 @@
   }
 
   async function cargar() {
-    const vacio = $('#pcVacio');
-    const contenido = $('#pcContenido');
+    const seccion = $('#pcSeccion');
     try {
       datos = await fetchJson(DATA_URL);
-      if (!pintarSelector()) throw new Error('JSON sin periodos');
-      vacio.style.display = 'none';
-      contenido.style.display = '';
-      render($('#pcPeriodo').value);
+      seccion.style.display = '';
+      if (pintarSelector()) render($('#pcPeriodo').value);
     } catch (err) {
-      contenido.style.display = 'none';
-      vacio.style.display = '';
-      $('#pcEstado').textContent = 'Sin datos';
+      // sin datos generados aún: se mantiene oculta la sección
+      seccion.style.display = 'none';
       console.warn('PERP de casino no disponible:', err);
     }
   }
