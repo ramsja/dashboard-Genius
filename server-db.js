@@ -227,26 +227,11 @@ const RUTAS_PUBLICAS = new Set(['/login.html', '/api/login']);
 // CARGA DE DATOS REALES DESDE NOVUSBET
 // ============================================================
 
-// Tope duro para un ciclo de sync: en producción se vio (2026-09-03) que
-// una corrida puede quedarse colgada sin resolver NI rechazar (un socket
-// que ni completa ni dispara el timeout HTTP interno), y como esta función
-// no tenía guarda de reentrada, el siguiente disparo del setInterval nunca
-// llegaba a correr — el estado quedaba en "sincronizando" para siempre y
-// no entraban transacciones nuevas hasta reiniciar la máquina a mano.
-// Con el guard + este tope, un colgado libera el estado solo en el
-// siguiente ciclo en vez de bloquear el sync para siempre.
-const SYNC_TIMEOUT_MS = 8 * 60 * 1000; // 8 min — una corrida normal tarda ~100s
-
 async function cargarDatosAutomatico() {
   if (!supabase) return;
 
   if (!process.env.BO_USERNAME || !process.env.BO_PASSWORD) {
     console.log('⚠️ Faltan BO_USERNAME/BO_PASSWORD, no se puede sincronizar con Novusbet');
-    return;
-  }
-
-  if (syncStatus.estado === 'sincronizando') {
-    console.log('⚠️ Ya hay una sincronización en curso, se salta este ciclo');
     return;
   }
 
@@ -263,10 +248,7 @@ async function cargarDatosAutomatico() {
     // El resumen diario y las alertas ya se calculan solos (en memoria,
     // sin volver a consultar la base) dentro de la sincronización.
     const { main: sincronizarNovusbet } = require('./sync-novusbet');
-    const total = await Promise.race([
-      sincronizarNovusbet(),
-      new Promise((_, reject) => setTimeout(() => reject(new Error(`Sync colgado más de ${SYNC_TIMEOUT_MS / 60000} min, se abandona este ciclo`)), SYNC_TIMEOUT_MS)),
-    ]);
+    const total = await sincronizarNovusbet();
     console.log(`✅ Sincronización real completada: ${total || 0} transacciones`);
     syncStatus.estado = 'completado';
     syncStatus.fin = new Date().toISOString();
@@ -299,12 +281,9 @@ async function sincronizarUsuariosAutomatico() {
 
   try {
     const { sincronizarUsuarios } = require('./sync-novusbet');
-    const total = await Promise.race([
-      sincronizarUsuarios((progreso) => {
-        syncStatusUsuarios.mensaje = `Página ${progreso.pagina}: ${progreso.totalGuardados}${progreso.totalEsperado ? ` / ${progreso.totalEsperado}` : ''} usuarios`;
-      }),
-      new Promise((_, reject) => setTimeout(() => reject(new Error(`Sync de usuarios colgado más de ${SYNC_TIMEOUT_MS / 60000} min, se abandona este ciclo`)), SYNC_TIMEOUT_MS)),
-    ]);
+    const total = await sincronizarUsuarios((progreso) => {
+      syncStatusUsuarios.mensaje = `Página ${progreso.pagina}: ${progreso.totalGuardados}${progreso.totalEsperado ? ` / ${progreso.totalEsperado}` : ''} usuarios`;
+    });
     console.log(`✅ Sincronización de usuarios completada: ${total} usuarios`);
     syncStatusUsuarios.estado = 'completado';
     syncStatusUsuarios.fin = new Date().toISOString();
