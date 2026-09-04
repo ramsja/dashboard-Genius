@@ -1,0 +1,44 @@
+{
+ "version": 1,
+ "actualizado": "2026-09-04T15:45:20",
+ "dias": {
+  "2026-09-03": {
+   "transacciones": 87792,
+   "disciplina": {
+    "casino": 86499,
+    "deportes": 1293,
+    "otros": 0
+   },
+   "conexion": {
+    "online": 76168,
+    "retail": 11624,
+    "desconocido": 0
+   },
+   "clientes": {
+    "total": 308,
+    "online": 244,
+    "retail": 64
+   },
+   "money": {
+    "casino": {
+     "income": 32774.12,
+     "total": -2895.66,
+     "commission": 0.0
+    },
+    "deportes": {
+     "income": 23121.35,
+     "total": 5072.25,
+     "commission": 0.0
+    },
+    "otros": {
+     "income": 0.0,
+     "total": 0.0,
+     "commission": 0.0
+    }
+   }
+  }
+ },
+ "fuentes": [
+  "transacciones_producto__2026-09-03_2026-09-03.csv"
+ ]
+}

@@ -261,6 +261,44 @@
           </div>
         </div>
 
+        <section id="hiSeccion" style="display:none;">
+          <div class="panel" style="margin-bottom:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+              <h2 style="margin:0;">Historial de transacciones y clientes</h2>
+              <span id="hiEstado" class="muted" style="font-size:12px;"></span>
+            </div>
+            <div class="kpis" id="hiKpis" style="margin:0 0 18px;"></div>
+            <div class="grid2">
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Transacciones por día</h2>
+                <div class="bars" id="hiBarrasTx"></div>
+              </div>
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Clientes únicos por día (online vs retail)</h2>
+                <div class="bars" id="hiBarrasClientes"></div>
+              </div>
+            </div>
+            <div class="table-wrap" style="margin:18px 0 0;">
+              <table id="hiTabla">
+                <thead>
+                  <tr>
+                    <th>Día</th>
+                    <th class="num">Transacciones</th>
+                    <th class="num">Online</th>
+                    <th class="num">Retail</th>
+                    <th class="num">Clientes únicos</th>
+                    <th class="num">Clientes online</th>
+                    <th class="num">Clientes retail</th>
+                    <th class="num">Ingresos</th>
+                    <th class="num">Total</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
         <section id="tkSeccion" style="display:none;">
           <div class="panel" style="margin-bottom:18px;">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
@@ -335,6 +373,7 @@
 
     <script src="./config.js"></script>
     <script src="./app.js"></script>
+    <script src="./historico.js"></script>
     <script src="./tickets-deporte.js"></script>
     <script src="./perp-casino.js"></script>
   </body>

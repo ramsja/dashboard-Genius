@@ -68,6 +68,22 @@ python extraccion-tickets-deporte.py --mes 2026-08    # un mes concreto
 - La extracción diaria (workflow) lo ejecuta automáticamente y commitea el JSON; el dashboard lo lee con selector "Periodo:".
 - Duración típica: ~10-13 min por mes (206 deportes, pausa de cortesía entre consultas).
 
+## 2c) Historial de transacciones y clientes únicos
+
+Sección del dashboard con la **serie histórica por día**: transacciones totales, reparto online/retail, **clientes únicos** por día (cuántos clientes distintos operaron, separados online vs retail), ingresos y total. Las barras comparan las últimas semanas y la tabla lista todos los días registrados.
+
+- **Constructor:** `construir-historico.py` — lee los CSV de `descargas/` (o rutas que se le pasen), agrupa por la columna "Crear hora" y actualiza `dashboard/data/historico.json` acumulando días. Si un día ya existía, se reemplaza (idempotente, sin duplicados).
+- **Clientes únicos:** cuenta `ID de usuario` distintos por día; "online" = tuvo al menos una transacción `Player Online`, "retail" = solo `Player Retail` (un cliente mixto cuenta en ambos).
+- **Uso:**
+
+```bash
+python construir-historico.py                # procesa todos los CSV de descargas/
+python construir-historico.py descargas/     # equivalente explícito
+```
+
+- La extracción diaria (workflow) lo ejecuta tras cada descarga y commitea el JSON junto al snapshot.
+- Para rellenar histórico antiguo: `START_DATE=2026-08-01 END_DATE=2026-08-31 python extraccionDatos.py` y luego `python construir-historico.py` (un solo export de rago, agrupa por día).
+
 ## 3) Supabase
 
 1. Crea un proyecto en Supabase.
@@ -114,12 +130,18 @@ La ejecución genera el CSV, los reportes, sincroniza Supabase y actualiza y com
 .
 ├── .env.example
 ├── extraccionDatos.py
+├── extraccion-tickets-deporte.py
+├── construir-historico.py
 ├── test_extraccionDatos.py
+├── test_construir_historico.py
 ├── dashboard/
 │   ├── index.html
 │   ├── app.js
+│   ├── historico.js
+│   ├── tickets-deporte.js
 │   ├── config.example.js
 │   ├── data/snapshot.json
+│   ├── data/historico.json
 ├── descargas/             # CSVs descargados (gitignored)
 ├── reportes/              # reportes generados (gitignored)
 ├── supabase/schema.sql
