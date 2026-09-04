@@ -1,6 +1,6 @@
 {
  "version": 1,
- "actualizado": "2026-09-04T16:14:25",
+ "actualizado": "2026-09-04T16:25:45",
  "dias": {
   "2026-08-28": {
    "transacciones": 76620,
@@ -246,6 +246,41 @@
      "commission": 0.0
     }
    }
+  },
+  "2026-09-04": {
+   "transacciones": 37170,
+   "disciplina": {
+    "casino": 36079,
+    "deportes": 1091,
+    "otros": 0
+   },
+   "conexion": {
+    "online": 30787,
+    "retail": 6383,
+    "desconocido": 0
+   },
+   "clientes": {
+    "total": 297,
+    "online": 232,
+    "retail": 65
+   },
+   "money": {
+    "casino": {
+     "income": 14296.64,
+     "total": 642.85,
+     "commission": 0.0
+    },
+    "deportes": {
+     "income": 8874.88,
+     "total": -3766.68,
+     "commission": 0.0
+    },
+    "otros": {
+     "income": 0.0,
+     "total": 0.0,
+     "commission": 0.0
+    }
+   }
   }
  },
  "fuentes": [
@@ -255,6 +290,7 @@
   "transacciones_producto__2026-08-31_2026-08-31.csv",
   "transacciones_producto__2026-09-01_2026-09-01.csv",
   "transacciones_producto__2026-09-02_2026-09-02.csv",
-  "transacciones_producto__2026-09-03_2026-09-03.csv"
+  "transacciones_producto__2026-09-03_2026-09-03.csv",
+  "transacciones_producto__2026-09-04_2026-09-04.csv"
  ]
 }

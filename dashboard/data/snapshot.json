@@ -1,83 +1,83 @@
 {
   "version": 2,
-  "generated_at": "2026-09-01T12:13:03",
-  "source": "descargas\\transacciones_producto__2026-08-28_2026-08-28.csv",
-  "total": 34532,
+  "generated_at": "2026-09-04T16:25:10",
+  "source": "C:\\Users\\Riesgos\\.zcode\\workspace\\default\\descargas\\dashboard-Genius\\descargas\\transacciones_producto__2026-09-04_2026-09-04.csv",
+  "total": 37170,
   "discipline": {
-    "deportes": 898,
-    "casino": 33634,
+    "deportes": 1091,
+    "casino": 36079,
     "otros": 0
   },
   "connection": {
-    "online": 28353,
-    "retail": 6179,
+    "online": 30787,
+    "retail": 6383,
     "desconocido": 0
   },
   "status": {
-    "activo": 28353,
-    "inactivo": 6179,
+    "activo": 30787,
+    "inactivo": 6383,
     "desconectado": 0,
     "suspendido": 0,
     "otros": 0
   },
   "matrix": {
     "casino": {
-      "online": 27735,
-      "retail": 5899,
+      "online": 29999,
+      "retail": 6080,
       "desconocido": 0,
-      "total": 33634,
+      "total": 36079,
       "status": {
-        "activo": 27735,
-        "inactivo": 5899
+        "inactivo": 6080,
+        "activo": 29999
       }
     },
     "deportes": {
-      "online": 618,
-      "retail": 280,
+      "online": 788,
+      "retail": 303,
       "desconocido": 0,
-      "total": 898,
+      "total": 1091,
       "status": {
-        "activo": 618,
-        "inactivo": 280
+        "inactivo": 303,
+        "activo": 788
       }
     }
   },
   "money": {
     "casino": {
-      "income": 8317.86,
-      "total": -448.76,
+      "income": 14296.64,
+      "total": 642.85,
       "commission": 0.0
     },
     "deportes": {
-      "income": 12454.31,
-      "total": 4179.75,
+      "income": 8874.88,
+      "total": -3766.68,
       "commission": 0.0
     }
   },
   "top_products": [
     [
       "Casino",
-      32581
+      35099
     ],
     [
       "Casino Live",
-      1053
+      980
     ],
     [
       "Deporte",
-      684
+      847
     ],
     [
       "Payments",
-      205
+      232
     ],
     [
       "Banco",
-      6
+      11
     ],
     [
-      "Miscellaneous",
-      3
+      "Jackpot",
+      1
     ]
   ]
 }
