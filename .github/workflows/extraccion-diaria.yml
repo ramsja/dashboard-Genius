@@ -12,7 +12,7 @@ permissions:
 jobs:
   extraer:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,14 +49,23 @@ jobs:
           print('Snapshot actualizado:', dst)
           EOF
 
+      - name: Desglose de tickets por deporte/disciplina
+        run: python extraccion-tickets-deporte.py
+        env:
+          BO_USERNAME: ${{ secrets.BO_USERNAME }}
+          BO_PASSWORD: ${{ secrets.BO_PASSWORD }}
+
+      - name: Historial diario de transacciones y clientes
+        run: python construir-historico.py descargas/
+
       - name: Commit y push del snapshot
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add dashboard/data/snapshot.json
+          git add dashboard/data/snapshot.json dashboard/data/desglose-tickets.json dashboard/data/historico.json
           if git diff --cached --quiet; then
             echo 'Sin cambios en el snapshot'
           else
-            git commit -m 'chore: actualizar snapshot diario de transacciones'
+            git commit -m 'chore: snapshot diario + historial + desglose de tickets por deporte'
             git push
           fi
