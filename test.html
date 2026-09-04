@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Graphify</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #0b1020;
+            color: #edf3ff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test {
+            background: #161d2f;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #60a5fa;
+        }
+        .pass {
+            border-left-color: #30c48d;
+        }
+        .fail {
+            border-left-color: #f87171;
+        }
+        .chart {
+            height: 300px;
+            margin-top: 20px;
+            border: 1px solid #2e3d5e;
+            border-radius: 8px;
+        }
+        h1 { color: #60a5fa; }
+        h2 { color: #a7b9d8; }
+        code {
+            background: #0b1020;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        button {
+            background: #60a5fa;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Graphify - Dashboard Genius</h1>
+
+        <div class="test" id="test-echarts">
+            <h2>1. Apache ECharts</h2>
+            <p id="echarts-status">Comprobando...</p>
+        </div>
+
+        <div class="test" id="test-graphify">
+            <h2>2. Graphify Module</h2>
+            <p id="graphify-status">Comprobando...</p>
+        </div>
+
+        <div class="test" id="test-data">
+            <h2>3. Datos del Dashboard</h2>
+            <p id="data-status">Comprobando...</p>
+        </div>
+
+        <div class="test">
+            <h2>4. Gráfico de prueba</h2>
+            <div id="test-chart" class="chart"></div>
+            <button onclick="createTestChart()">Crear gráfico de prueba</button>
+        </div>
+
+        <div class="test">
+            <h2>5. Dashboard real</h2>
+            <p><button onclick="window.location.href='/dashboard/'">Ir al Dashboard</button></p>
+        </div>
+    </div>
+
+    <!-- Apache ECharts CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.1/echarts.min.js"></script>
+    <!-- Graphify Module -->
+    <script src="/dashboard/graphify.js"></script>
+
+    <script>
+        // Test 1: ECharts
+        function testECharts() {
+            const status = document.getElementById('echarts-status');
+            if (typeof echarts !== 'undefined') {
+                status.innerHTML = '✅ ECharts cargado correctamente (v' + echarts.version + ')';
+                document.getElementById('test-echarts').classList.add('pass');
+            } else {
+                status.innerHTML = '❌ ECharts NO está disponible';
+                document.getElementById('test-echarts').classList.add('fail');
+            }
+        }
+
+        // Test 2: Graphify
+        function testGraphify() {
+            const status = document.getElementById('graphify-status');
+            if (typeof Graphify !== 'undefined') {
+                status.innerHTML = '✅ Graphify cargado correctamente<br>' +
+                    '📊 Funciones disponibles: ' + Object.keys(Graphify).filter(k => k.includes('Chart') || k.includes('chart')).length;
+                document.getElementById('test-graphify').classList.add('pass');
+            } else {
+                status.innerHTML = '❌ Graphify NO está disponible';
+                document.getElementById('test-graphify').classList.add('fail');
+            }
+        }
+
+        // Test 3: Datos
+        function testData() {
+            const status = document.getElementById('data-status');
+            fetch('/dashboard/data/snapshot.json')
+                .then(r => r.json())
+                .then(data => {
+                    if (data && data.total) {
+                        status.innerHTML = '✅ Datos disponibles<br>' +
+                            '📊 Total registros: <strong>' + data.total.toLocaleString() + '</strong><br>' +
+                            '📅 Generado: ' + data.generated_at + '<br>' +
+                            '🏪 Online: ' + data.connection.online + ' | Retail: ' + data.connection.retail;
+                        document.getElementById('test-data').classList.add('pass');
+                    } else {
+                        throw new Error('Datos vacíos');
+                    }
+                })
+                .catch(e => {
+                    status.innerHTML = '❌ Error cargando datos: ' + e.message;
+                    document.getElementById('test-data').classList.add('fail');
+                });
+        }
+
+        // Test 4: Crear gráfico de prueba
+        function createTestChart() {
+            if (typeof Graphify === 'undefined') {
+                alert('Graphify no está disponible. Recarga la página.');
+                return;
+            }
+
+            const data = {
+                labels: ['Casino', 'Deportes', 'Otros'],
+                values: [33634, 898, 0]
+            };
+
+            Graphify.barChartDiscipline('test-chart', data);
+            alert('✅ Gráfico de prueba creado!');
+        }
+
+        // Ejecutar tests al cargar
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                testECharts();
+                testGraphify();
+                testData();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
