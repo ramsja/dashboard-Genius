@@ -1,0 +1,42 @@
+.env
+.env.local
+.env.*
+!.env.example
+*.pyc
+__pycache__/
+.venv/
+venv/
+.DS_Store
+reportes/*.csv
+reportes/*.json
+reportes/*.sql
+reportes/*.txt
+!reportes/.gitkeep
+!reportes/README.txt
+# Configuración local del dashboard (contiene credenciales)
+dashboard/config.js
+# Optional: keep generated outputs if you want them in repo
+# reportes/
+
+# Datos descargados del back office (información personal de clientes)
+descargas/*.csv
+descargas/*.zip
+!descargas/.gitkeep
+
+# Bases de datos y registros de ejecución locales
+*.duckdb
+*.duckdb.wal
+install-tools.log
+install.log
+kali-help.err
+kali-help.out
+proceso.log
+visor-error.err
+visor-error.log
+visor.out
+conexion/daemon.log
+conexion/daemon.pid
+
+# Laboratorio forense (datos locales, no subir)
+evidencias/
+casos/

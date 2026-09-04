@@ -1,0 +1,18 @@
+HTTP/2 200 
+date: Tue, 25 Aug 2026 22:59:33 GMT
+content-type: text/html; charset=utf-8
+content-length: 123211
+vary: Accept-Encoding
+x-nextjs-cache: HIT
+x-powered-by: Next.js
+etag: "ojbk6iw2pi2mzt"
+vary: Accept-Encoding
+x-77-nzt: khaDu+BQAk33i5pP87ByvhrqMI/4vEz10v2GKNIivaYGyYH4GoNAOFE
+x-77-nzt-ray: 416cb724b294fa577a1e8e6a8dd5f30d
+age: 50336
+x-77-cache: HIT
+x-77-age: 50336
+server: CDN77-Turbo
+x-77-pop: miamiUSFL
+accept-ranges: bytes
+

@@ -1,0 +1,26 @@
+RIESGOS DIRECTOR — DIRECTIVAS OPERATIVAS
+==========================================
+Fuente: C:\Users\Riesgos\kali-lab\00-SCOPE.txt
+Director: Riesgos (MANAGER PERMANENTE, todas las sesiones)
+Rol: C:\Users\Riesgos\kali-lab\MANAGER.txt
+Canal: conexion\ESTADO.txt + conexion\orden.txt
+
+PERMITIDO
+- Forense de evidencias en evidencias\ (logs, dumps, pcap propios)
+- P1 localizar IP (DNS/WHOIS/geo, solo lectura)
+- P2 detectar fuerza bruta en TUS logs
+- P3 extraer datos/IOCs de evidencias propias
+- P4 hydra SOLO 127.0.0.1
+- P5/P7 pruebas en localhost / esta instancia WSL
+
+BLOQUEADO (el director rechaza la orden)
+- geniusbet.sv  www.geniusbet.sv  51.15.150.4
+- hydra/nmap/brute contra cualquier host que no sea 127.0.0.1 o localhost
+- exploits, msf payload, malware, ransomware, DoS
+
+CICLO INICIAL AL CONECTAR
+1. Cargar directivas
+2. Estado del lab
+3. P2 fuerza bruta sobre evidencias\
+4. P3 extraer datos
+5. P1 localizar las IP ALTO del ranking (no atacarlas)

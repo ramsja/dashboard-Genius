@@ -1,0 +1,2329 @@
+{
+ "meta": {
+  "fuente": "https://headoffice.novusbet.com/backoffice/ticket/V2",
+  "cuenta": "FinanceSV",
+  "generado": "2026-09-02T13:38:47-06:00",
+  "periodo": "2026-08",
+  "desde": "2026-08-01 00:00",
+  "hasta": "2026-08-31 23:59",
+  "deportes_consultados": 206,
+  "errores": 0,
+  "duracion_s": 797.5,
+  "actualizado": "2026-09-02T13:38:47-06:00",
+  "periodos_disponibles": [
+   "2026-08",
+   "2026-09"
+  ]
+ },
+ "periodos": {
+  "2026-09": {
+   "meta": {
+    "fuente": "https://headoffice.novusbet.com/backoffice/ticket/V2",
+    "cuenta": "FinanceSV",
+    "generado": "2026-09-02T13:24:51-06:00",
+    "periodo": "2026-09",
+    "desde": "2026-09-01 00:00",
+    "hasta": "2026-09-30 23:59",
+    "deportes_consultados": 206,
+    "errores": 0,
+    "duracion_s": 641.5
+   },
+   "total_tickets": 1124,
+   "por_deporte": [
+    {
+     "sport_id": 1,
+     "deporte": "Soccer",
+     "tickets": 946,
+     "importe": 6826.94,
+     "pendiente": 0.0,
+     "ganancias": 3136.42,
+     "cuota_media": 66.121,
+     "estados": {
+      "Running": 277,
+      "Lost": 479,
+      "Won": 179,
+      "Cashout": 8,
+      "Void": 3
+     }
+    },
+    {
+     "sport_id": 3,
+     "deporte": "Baseball",
+     "tickets": 119,
+     "importe": 2197.72,
+     "pendiente": 0.0,
+     "ganancias": 1735.35,
+     "cuota_media": 326.064,
+     "estados": {
+      "Lost": 62,
+      "Won": 27,
+      "Void": 11,
+      "Running": 18,
+      "Cashout": 1
+     }
+    },
+    {
+     "sport_id": 5,
+     "deporte": "Tennis",
+     "tickets": 44,
+     "importe": 1876.23,
+     "pendiente": 0.0,
+     "ganancias": 1246.88,
+     "cuota_media": 42.109,
+     "estados": {
+      "Lost": 20,
+      "Running": 15,
+      "Cashout": 4,
+      "Won": 4,
+      "Void": 1
+     }
+    },
+    {
+     "sport_id": 2,
+     "deporte": "Basketball",
+     "tickets": 12,
+     "importe": 396.2,
+     "pendiente": 0.0,
+     "ganancias": 33.75,
+     "cuota_media": 2.352,
+     "estados": {
+      "Lost": 10,
+      "Won": 2
+     }
+    },
+    {
+     "sport_id": 20,
+     "deporte": "Table Tennis",
+     "tickets": 2,
+     "importe": 10.0,
+     "pendiente": 0.0,
+     "ganancias": 23.04,
+     "cuota_media": 3.295,
+     "estados": {
+      "Won": 2
+     }
+    },
+    {
+     "sport_id": 31,
+     "deporte": "Badminton",
+     "tickets": 1,
+     "importe": 2.0,
+     "pendiente": 0.0,
+     "ganancias": 10.56,
+     "cuota_media": 5.03,
+     "estados": {
+      "Won": 1
+     }
+    },
+    {
+     "sport_id": 4,
+     "deporte": "Ice Hockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 6,
+     "deporte": "Handball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 7,
+     "deporte": "Floorball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 8,
+     "deporte": "Trotting",
+     "tickets": 0
+    },
+    {
+     "sport_id": 9,
+     "deporte": "Golf",
+     "tickets": 0
+    },
+    {
+     "sport_id": 10,
+     "deporte": "Boxing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 11,
+     "deporte": "Motorsport",
+     "tickets": 0
+    },
+    {
+     "sport_id": 12,
+     "deporte": "Rugby",
+     "tickets": 0
+    },
+    {
+     "sport_id": 13,
+     "deporte": "Aussie Rules",
+     "tickets": 0
+    },
+    {
+     "sport_id": 14,
+     "deporte": "Winter Sports",
+     "tickets": 0
+    },
+    {
+     "sport_id": 15,
+     "deporte": "Bandy",
+     "tickets": 0
+    },
+    {
+     "sport_id": 16,
+     "deporte": "American Football",
+     "tickets": 0
+    },
+    {
+     "sport_id": 17,
+     "deporte": "Cycling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 18,
+     "deporte": "Specials",
+     "tickets": 0
+    },
+    {
+     "sport_id": 19,
+     "deporte": "Snooker",
+     "tickets": 0
+    },
+    {
+     "sport_id": 21,
+     "deporte": "Cricket",
+     "tickets": 0
+    },
+    {
+     "sport_id": 22,
+     "deporte": "Darts",
+     "tickets": 0
+    },
+    {
+     "sport_id": 23,
+     "deporte": "Volleyball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 24,
+     "deporte": "Field hockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 25,
+     "deporte": "Pool",
+     "tickets": 0
+    },
+    {
+     "sport_id": 26,
+     "deporte": "Waterpolo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 27,
+     "deporte": "Gaelic sports",
+     "tickets": 0
+    },
+    {
+     "sport_id": 28,
+     "deporte": "Curling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 29,
+     "deporte": "Futsal",
+     "tickets": 0
+    },
+    {
+     "sport_id": 30,
+     "deporte": "Olympics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 32,
+     "deporte": "Bowls",
+     "tickets": 0
+    },
+    {
+     "sport_id": 33,
+     "deporte": "Chess",
+     "tickets": 0
+    },
+    {
+     "sport_id": 34,
+     "deporte": "Beach Volley",
+     "tickets": 0
+    },
+    {
+     "sport_id": 35,
+     "deporte": "Netball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 36,
+     "deporte": "Athletics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 37,
+     "deporte": "Squash",
+     "tickets": 0
+    },
+    {
+     "sport_id": 38,
+     "deporte": "Rink Hockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 39,
+     "deporte": "Lacrosse",
+     "tickets": 0
+    },
+    {
+     "sport_id": 40,
+     "deporte": "Formula 1",
+     "tickets": 0
+    },
+    {
+     "sport_id": 41,
+     "deporte": "Bikes",
+     "tickets": 0
+    },
+    {
+     "sport_id": 42,
+     "deporte": "DTM",
+     "tickets": 0
+    },
+    {
+     "sport_id": 43,
+     "deporte": "Alpine Skiing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 44,
+     "deporte": "Biathlon",
+     "tickets": 0
+    },
+    {
+     "sport_id": 45,
+     "deporte": "Bobsleigh",
+     "tickets": 0
+    },
+    {
+     "sport_id": 46,
+     "deporte": "Cross-Country",
+     "tickets": 0
+    },
+    {
+     "sport_id": 47,
+     "deporte": "Nordic Combined",
+     "tickets": 0
+    },
+    {
+     "sport_id": 48,
+     "deporte": "Ski Jumping",
+     "tickets": 0
+    },
+    {
+     "sport_id": 49,
+     "deporte": "Snowboard",
+     "tickets": 0
+    },
+    {
+     "sport_id": 50,
+     "deporte": "Speed Skating",
+     "tickets": 0
+    },
+    {
+     "sport_id": 51,
+     "deporte": "Luge",
+     "tickets": 0
+    },
+    {
+     "sport_id": 52,
+     "deporte": "Swimming",
+     "tickets": 0
+    },
+    {
+     "sport_id": 53,
+     "deporte": "Finnish Baseball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 54,
+     "deporte": "Softball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 55,
+     "deporte": "Horse racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 56,
+     "deporte": "Schwingen",
+     "tickets": 0
+    },
+    {
+     "sport_id": 57,
+     "deporte": "Inline Hockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 58,
+     "deporte": "Greyhound",
+     "tickets": 0
+    },
+    {
+     "sport_id": 59,
+     "deporte": "Rugby League",
+     "tickets": 0
+    },
+    {
+     "sport_id": 60,
+     "deporte": "Beach Soccer",
+     "tickets": 0
+    },
+    {
+     "sport_id": 61,
+     "deporte": "Pesapallo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 62,
+     "deporte": "Streethockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 63,
+     "deporte": "World Championship",
+     "tickets": 0
+    },
+    {
+     "sport_id": 64,
+     "deporte": "Rowing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 65,
+     "deporte": "Freestyle",
+     "tickets": 0
+    },
+    {
+     "sport_id": 66,
+     "deporte": "Snowboardcross/Parallel",
+     "tickets": 0
+    },
+    {
+     "sport_id": 67,
+     "deporte": "MotoGP",
+     "tickets": 0
+    },
+    {
+     "sport_id": 68,
+     "deporte": "Moto2",
+     "tickets": 0
+    },
+    {
+     "sport_id": 69,
+     "deporte": "Moto3",
+     "tickets": 0
+    },
+    {
+     "sport_id": 70,
+     "deporte": "Nascar Cup Series",
+     "tickets": 0
+    },
+    {
+     "sport_id": 71,
+     "deporte": "Padel",
+     "tickets": 0
+    },
+    {
+     "sport_id": 72,
+     "deporte": "Canoeing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 73,
+     "deporte": "Horseball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 74,
+     "deporte": "Aquatics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 75,
+     "deporte": "Archery",
+     "tickets": 0
+    },
+    {
+     "sport_id": 76,
+     "deporte": "Equestrian",
+     "tickets": 0
+    },
+    {
+     "sport_id": 77,
+     "deporte": "Fencing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 78,
+     "deporte": "Gymnastics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 79,
+     "deporte": "Judo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 80,
+     "deporte": "Modern Pentathlon",
+     "tickets": 0
+    },
+    {
+     "sport_id": 81,
+     "deporte": "Sailing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 82,
+     "deporte": "Shooting",
+     "tickets": 0
+    },
+    {
+     "sport_id": 83,
+     "deporte": "Taekwondo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 84,
+     "deporte": "Triathlon",
+     "tickets": 0
+    },
+    {
+     "sport_id": 85,
+     "deporte": "Weightlifting",
+     "tickets": 0
+    },
+    {
+     "sport_id": 86,
+     "deporte": "Wrestling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 87,
+     "deporte": "Olympics Youth",
+     "tickets": 0
+    },
+    {
+     "sport_id": 88,
+     "deporte": "Mountain Bike",
+     "tickets": 0
+    },
+    {
+     "sport_id": 89,
+     "deporte": "Riding",
+     "tickets": 0
+    },
+    {
+     "sport_id": 90,
+     "deporte": "Surfing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 91,
+     "deporte": "BMX racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 92,
+     "deporte": "Canoe slalom",
+     "tickets": 0
+    },
+    {
+     "sport_id": 93,
+     "deporte": "Rhythmic gymnastics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 94,
+     "deporte": "Trampoline Gymnastics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 95,
+     "deporte": "Artistic Swimming",
+     "tickets": 0
+    },
+    {
+     "sport_id": 96,
+     "deporte": "Diving",
+     "tickets": 0
+    },
+    {
+     "sport_id": 97,
+     "deporte": "Track cycling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 98,
+     "deporte": "Beach Tennis",
+     "tickets": 0
+    },
+    {
+     "sport_id": 99,
+     "deporte": "Sumo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 100,
+     "deporte": "Superbike",
+     "tickets": 0
+    },
+    {
+     "sport_id": 101,
+     "deporte": "Rally",
+     "tickets": 0
+    },
+    {
+     "sport_id": 102,
+     "deporte": "Figure Skating",
+     "tickets": 0
+    },
+    {
+     "sport_id": 103,
+     "deporte": "Freestyle Skiing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 104,
+     "deporte": "Skeleton",
+     "tickets": 0
+    },
+    {
+     "sport_id": 105,
+     "deporte": "Short Track",
+     "tickets": 0
+    },
+    {
+     "sport_id": 106,
+     "deporte": "Soccer Mythical",
+     "tickets": 0
+    },
+    {
+     "sport_id": 107,
+     "deporte": "eSport",
+     "tickets": 0
+    },
+    {
+     "sport_id": 108,
+     "deporte": "World Lottery",
+     "tickets": 0
+    },
+    {
+     "sport_id": 109,
+     "deporte": "ESport Counter-Strike",
+     "tickets": 0
+    },
+    {
+     "sport_id": 110,
+     "deporte": "ESport League of Legends",
+     "tickets": 0
+    },
+    {
+     "sport_id": 111,
+     "deporte": "ESport Dota",
+     "tickets": 0
+    },
+    {
+     "sport_id": 112,
+     "deporte": "ESport StarCraft",
+     "tickets": 0
+    },
+    {
+     "sport_id": 113,
+     "deporte": "ESport Hearthstone",
+     "tickets": 0
+    },
+    {
+     "sport_id": 114,
+     "deporte": "ESport Heroes of the Storm",
+     "tickets": 0
+    },
+    {
+     "sport_id": 115,
+     "deporte": "ESport World of Tanks",
+     "tickets": 0
+    },
+    {
+     "sport_id": 116,
+     "deporte": "Polo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 117,
+     "deporte": "MMA",
+     "tickets": 0
+    },
+    {
+     "sport_id": 118,
+     "deporte": "ESport Call of Duty",
+     "tickets": 0
+    },
+    {
+     "sport_id": 119,
+     "deporte": "ESport Smite",
+     "tickets": 0
+    },
+    {
+     "sport_id": 120,
+     "deporte": "ESport Vainglory",
+     "tickets": 0
+    },
+    {
+     "sport_id": 121,
+     "deporte": "ESport Overwatch",
+     "tickets": 0
+    },
+    {
+     "sport_id": 122,
+     "deporte": "ESport WarCraft III",
+     "tickets": 0
+    },
+    {
+     "sport_id": 123,
+     "deporte": "ESport Crossfire",
+     "tickets": 0
+    },
+    {
+     "sport_id": 124,
+     "deporte": "ESport Halo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 125,
+     "deporte": "ESport Rainbow Six",
+     "tickets": 0
+    },
+    {
+     "sport_id": 126,
+     "deporte": "Sepak Takraw",
+     "tickets": 0
+    },
+    {
+     "sport_id": 127,
+     "deporte": "ESport Street Fighter V",
+     "tickets": 0
+    },
+    {
+     "sport_id": 128,
+     "deporte": "ESport Rocket League",
+     "tickets": 0
+    },
+    {
+     "sport_id": 129,
+     "deporte": "Indy Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 130,
+     "deporte": "Basque Pelota",
+     "tickets": 0
+    },
+    {
+     "sport_id": 131,
+     "deporte": "Speedway",
+     "tickets": 0
+    },
+    {
+     "sport_id": 132,
+     "deporte": "ESport Gears of War",
+     "tickets": 0
+    },
+    {
+     "sport_id": 133,
+     "deporte": "ESport Clash Royale",
+     "tickets": 0
+    },
+    {
+     "sport_id": 134,
+     "deporte": "ESport King of Glory",
+     "tickets": 0
+    },
+    {
+     "sport_id": 135,
+     "deporte": "Gaelic Football",
+     "tickets": 0
+    },
+    {
+     "sport_id": 136,
+     "deporte": "Gaelic Hurling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 137,
+     "deporte": "eSoccer",
+     "tickets": 0
+    },
+    {
+     "sport_id": 138,
+     "deporte": "Kabaddi",
+     "tickets": 0
+    },
+    {
+     "sport_id": 139,
+     "deporte": "ESport Quake",
+     "tickets": 0
+    },
+    {
+     "sport_id": 140,
+     "deporte": "ESport PlayerUnknowns Battlegrounds",
+     "tickets": 0
+    },
+    {
+     "sport_id": 141,
+     "deporte": "Cycling Cycle Ball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 142,
+     "deporte": "Formula E",
+     "tickets": 0
+    },
+    {
+     "sport_id": 143,
+     "deporte": "7BallRun",
+     "tickets": 0
+    },
+    {
+     "sport_id": 144,
+     "deporte": "Motocross",
+     "tickets": 0
+    },
+    {
+     "sport_id": 145,
+     "deporte": "Sprint Car Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 146,
+     "deporte": "Speed Boat Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 147,
+     "deporte": "Drag Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 149,
+     "deporte": "Modified Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 150,
+     "deporte": "Off Road",
+     "tickets": 0
+    },
+    {
+     "sport_id": 151,
+     "deporte": "Truck &amp; Tractor Pulling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 152,
+     "deporte": "ESport World of Warcraft",
+     "tickets": 0
+    },
+    {
+     "sport_id": 153,
+     "deporte": "eBasketball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 154,
+     "deporte": "ESport Dragon Ball FighterZ",
+     "tickets": 0
+    },
+    {
+     "sport_id": 155,
+     "deporte": "Basketball 3x3",
+     "tickets": 0
+    },
+    {
+     "sport_id": 156,
+     "deporte": "ESport Tekken",
+     "tickets": 0
+    },
+    {
+     "sport_id": 157,
+     "deporte": "Beach Handball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 158,
+     "deporte": "ESport Arena of Valor",
+     "tickets": 0
+    },
+    {
+     "sport_id": 159,
+     "deporte": "ESport TF2",
+     "tickets": 0
+    },
+    {
+     "sport_id": 160,
+     "deporte": "ESport SSBM",
+     "tickets": 0
+    },
+    {
+     "sport_id": 161,
+     "deporte": "ESport Paladins",
+     "tickets": 0
+    },
+    {
+     "sport_id": 162,
+     "deporte": "ESport Artifact",
+     "tickets": 0
+    },
+    {
+     "sport_id": 163,
+     "deporte": "Indoor Soccer",
+     "tickets": 0
+    },
+    {
+     "sport_id": 164,
+     "deporte": "ESport Apex Legends",
+     "tickets": 0
+    },
+    {
+     "sport_id": 165,
+     "deporte": "Indy Lights",
+     "tickets": 0
+    },
+    {
+     "sport_id": 166,
+     "deporte": "ESport Pro Evolution Soccer",
+     "tickets": 0
+    },
+    {
+     "sport_id": 167,
+     "deporte": "ESport Madden NFL",
+     "tickets": 0
+    },
+    {
+     "sport_id": 168,
+     "deporte": "ESport Brawl Stars",
+     "tickets": 0
+    },
+    {
+     "sport_id": 169,
+     "deporte": "Petanque",
+     "tickets": 0
+    },
+    {
+     "sport_id": 170,
+     "deporte": "ESport Fortnite",
+     "tickets": 0
+    },
+    {
+     "sport_id": 171,
+     "deporte": "ESport MTG",
+     "tickets": 0
+    },
+    {
+     "sport_id": 172,
+     "deporte": "Fishing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 173,
+     "deporte": "Esport Dota Underlords",
+     "tickets": 0
+    },
+    {
+     "sport_id": 174,
+     "deporte": "Esport Teamfight Tactics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 175,
+     "deporte": "Esport Auto Chess",
+     "tickets": 0
+    },
+    {
+     "sport_id": 176,
+     "deporte": "Esport Fighting Games",
+     "tickets": 0
+    },
+    {
+     "sport_id": 177,
+     "deporte": "DEPRECATED sc",
+     "tickets": 0
+    },
+    {
+     "sport_id": 178,
+     "deporte": "ESport Motorsport",
+     "tickets": 0
+    },
+    {
+     "sport_id": 179,
+     "deporte": "Cycling BMX Freestyle",
+     "tickets": 0
+    },
+    {
+     "sport_id": 180,
+     "deporte": "Cycling BMX Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 181,
+     "deporte": "Karate",
+     "tickets": 0
+    },
+    {
+     "sport_id": 182,
+     "deporte": "Marathon Swimming",
+     "tickets": 0
+    },
+    {
+     "sport_id": 183,
+     "deporte": "Skateboarding",
+     "tickets": 0
+    },
+    {
+     "sport_id": 184,
+     "deporte": "Sport Climbing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 185,
+     "deporte": "Nascar Camping World Truck",
+     "tickets": 0
+    },
+    {
+     "sport_id": 186,
+     "deporte": "Nascar Xfinity Series",
+     "tickets": 0
+    },
+    {
+     "sport_id": 187,
+     "deporte": "NHRA",
+     "tickets": 0
+    },
+    {
+     "sport_id": 188,
+     "deporte": "Touring Car Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 189,
+     "deporte": "Formula 2",
+     "tickets": 0
+    },
+    {
+     "sport_id": 190,
+     "deporte": "Motorcycle Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 191,
+     "deporte": "Stock Car Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 192,
+     "deporte": "Air Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 193,
+     "deporte": "Endurance Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 194,
+     "deporte": "ESport Valorant",
+     "tickets": 0
+    },
+    {
+     "sport_id": 195,
+     "deporte": "eIce Hockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 196,
+     "deporte": "eTennis",
+     "tickets": 0
+    },
+    {
+     "sport_id": 197,
+     "deporte": "eCricket",
+     "tickets": 0
+    },
+    {
+     "sport_id": 198,
+     "deporte": "eVolleyball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 199,
+     "deporte": "ESport Wild Rift",
+     "tickets": 0
+    },
+    {
+     "sport_id": 200,
+     "deporte": "T-Basket",
+     "tickets": 0
+    },
+    {
+     "sport_id": 201,
+     "deporte": "Racquetball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 202,
+     "deporte": "Muay Thai",
+     "tickets": 0
+    },
+    {
+     "sport_id": 203,
+     "deporte": "Soccer Specials",
+     "tickets": 0
+    },
+    {
+     "sport_id": 204,
+     "deporte": "Breaking",
+     "tickets": 0
+    },
+    {
+     "sport_id": 205,
+     "deporte": "Cornhole",
+     "tickets": 0
+    },
+    {
+     "sport_id": 206,
+     "deporte": "Pickleball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 229,
+     "deporte": "Customs",
+     "tickets": 0
+    }
+   ]
+  },
+  "2026-08": {
+   "meta": {
+    "fuente": "https://headoffice.novusbet.com/backoffice/ticket/V2",
+    "cuenta": "FinanceSV",
+    "generado": "2026-09-02T13:38:47-06:00",
+    "periodo": "2026-08",
+    "desde": "2026-08-01 00:00",
+    "hasta": "2026-08-31 23:59",
+    "deportes_consultados": 206,
+    "errores": 0,
+    "duracion_s": 797.5
+   },
+   "total_tickets": 8363,
+   "por_deporte": [
+    {
+     "sport_id": 1,
+     "deporte": "Soccer",
+     "tickets": 4894,
+     "importe": 23410.62,
+     "pendiente": 0.0,
+     "ganancias": 25786.78,
+     "cuota_media": 2003.672,
+     "estados": {
+      "Lost": 4307,
+      "Won": 498,
+      "Cashout": 19,
+      "Running": 70
+     }
+    },
+    {
+     "sport_id": 3,
+     "deporte": "Baseball",
+     "tickets": 2224,
+     "importe": 34374.52,
+     "pendiente": 0.0,
+     "ganancias": 32326.13,
+     "cuota_media": 221.697,
+     "estados": {
+      "Won": 1084,
+      "Lost": 1048,
+      "Cashout": 79,
+      "Void": 8,
+      "Rejected": 4,
+      "Running": 1
+     }
+    },
+    {
+     "sport_id": 5,
+     "deporte": "Tennis",
+     "tickets": 532,
+     "importe": 13414.23,
+     "pendiente": 0.0,
+     "ganancias": 11307.82,
+     "cuota_media": 114.648,
+     "estados": {
+      "Lost": 360,
+      "Won": 165,
+      "Void": 3,
+      "Cashout": 1,
+      "Rejected": 2,
+      "Running": 1
+     }
+    },
+    {
+     "sport_id": 2,
+     "deporte": "Basketball",
+     "tickets": 425,
+     "importe": 6929.44,
+     "pendiente": 0.0,
+     "ganancias": 6151.15,
+     "cuota_media": 250.545,
+     "estados": {
+      "Won": 155,
+      "Lost": 267,
+      "Cashout": 1,
+      "Running": 2
+     }
+    },
+    {
+     "sport_id": 16,
+     "deporte": "American Football",
+     "tickets": 85,
+     "importe": 560.12,
+     "pendiente": 0.0,
+     "ganancias": 266.92,
+     "cuota_media": 12.32,
+     "estados": {
+      "Lost": 64,
+      "Won": 21
+     }
+    },
+    {
+     "sport_id": 117,
+     "deporte": "MMA",
+     "tickets": 47,
+     "importe": 180.94,
+     "pendiente": 0.0,
+     "ganancias": 188.84,
+     "cuota_media": 7.795,
+     "estados": {
+      "Lost": 35,
+      "Won": 12
+     }
+    },
+    {
+     "sport_id": 23,
+     "deporte": "Volleyball",
+     "tickets": 40,
+     "importe": 2270.01,
+     "pendiente": 0.0,
+     "ganancias": 1785.41,
+     "cuota_media": 6.456,
+     "estados": {
+      "Won": 15,
+      "Lost": 24,
+      "Cashout": 1
+     }
+    },
+    {
+     "sport_id": 20,
+     "deporte": "Table Tennis",
+     "tickets": 31,
+     "importe": 154.05,
+     "pendiente": 0.0,
+     "ganancias": 46.99,
+     "cuota_media": 120.713,
+     "estados": {
+      "Lost": 24,
+      "Won": 7
+     }
+    },
+    {
+     "sport_id": 155,
+     "deporte": "Basketball 3x3",
+     "tickets": 24,
+     "importe": 173.25,
+     "pendiente": 0.0,
+     "ganancias": 189.74,
+     "cuota_media": 3.614,
+     "estados": {
+      "Won": 7,
+      "Lost": 17
+     }
+    },
+    {
+     "sport_id": 6,
+     "deporte": "Handball",
+     "tickets": 23,
+     "importe": 2526.45,
+     "pendiente": 0.0,
+     "ganancias": 2427.73,
+     "cuota_media": 1.909,
+     "estados": {
+      "Won": 11,
+      "Lost": 12
+     }
+    },
+    {
+     "sport_id": 31,
+     "deporte": "Badminton",
+     "tickets": 9,
+     "importe": 225.15,
+     "pendiente": 0.0,
+     "ganancias": 230.15,
+     "cuota_media": 2.0,
+     "estados": {
+      "Won": 5,
+      "Lost": 4
+     }
+    },
+    {
+     "sport_id": 110,
+     "deporte": "ESport League of Legends",
+     "tickets": 6,
+     "importe": 17.5,
+     "pendiente": 0.0,
+     "ganancias": 12.43,
+     "cuota_media": 2.545,
+     "estados": {
+      "Won": 2,
+      "Lost": 4
+     }
+    },
+    {
+     "sport_id": 4,
+     "deporte": "Ice Hockey",
+     "tickets": 5,
+     "importe": 11.8,
+     "pendiente": 0.0,
+     "ganancias": 0.0,
+     "cuota_media": 695.144,
+     "estados": {
+      "Lost": 5
+     }
+    },
+    {
+     "sport_id": 34,
+     "deporte": "Beach Volley",
+     "tickets": 5,
+     "importe": 358.28,
+     "pendiente": 0.0,
+     "ganancias": 206.5,
+     "cuota_media": 1.89,
+     "estados": {
+      "Won": 2,
+      "Lost": 3
+     }
+    },
+    {
+     "sport_id": 10,
+     "deporte": "Boxing",
+     "tickets": 4,
+     "importe": 36.96,
+     "pendiente": 0.0,
+     "ganancias": 77.52,
+     "cuota_media": 895.302,
+     "estados": {
+      "Won": 3,
+      "Lost": 1
+     }
+    },
+    {
+     "sport_id": 29,
+     "deporte": "Futsal",
+     "tickets": 4,
+     "importe": 160.0,
+     "pendiente": 0.0,
+     "ganancias": 9.61,
+     "cuota_media": 20.872,
+     "estados": {
+      "Won": 1,
+      "Lost": 3
+     }
+    },
+    {
+     "sport_id": 19,
+     "deporte": "Snooker",
+     "tickets": 3,
+     "importe": 32.66,
+     "pendiente": 0.0,
+     "ganancias": 31.37,
+     "cuota_media": 2.093,
+     "estados": {
+      "Lost": 2,
+      "Won": 1
+     }
+    },
+    {
+     "sport_id": 12,
+     "deporte": "Rugby",
+     "tickets": 1,
+     "importe": 3.0,
+     "pendiente": 0.0,
+     "ganancias": 3.6,
+     "cuota_media": 1.2,
+     "estados": {
+      "Won": 1
+     }
+    },
+    {
+     "sport_id": 13,
+     "deporte": "Aussie Rules",
+     "tickets": 1,
+     "importe": 5.0,
+     "pendiente": 0.0,
+     "ganancias": 0.0,
+     "cuota_media": 100.07,
+     "estados": {
+      "Lost": 1
+     }
+    },
+    {
+     "sport_id": 7,
+     "deporte": "Floorball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 8,
+     "deporte": "Trotting",
+     "tickets": 0
+    },
+    {
+     "sport_id": 9,
+     "deporte": "Golf",
+     "tickets": 0
+    },
+    {
+     "sport_id": 11,
+     "deporte": "Motorsport",
+     "tickets": 0
+    },
+    {
+     "sport_id": 14,
+     "deporte": "Winter Sports",
+     "tickets": 0
+    },
+    {
+     "sport_id": 15,
+     "deporte": "Bandy",
+     "tickets": 0
+    },
+    {
+     "sport_id": 17,
+     "deporte": "Cycling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 18,
+     "deporte": "Specials",
+     "tickets": 0
+    },
+    {
+     "sport_id": 21,
+     "deporte": "Cricket",
+     "tickets": 0
+    },
+    {
+     "sport_id": 22,
+     "deporte": "Darts",
+     "tickets": 0
+    },
+    {
+     "sport_id": 24,
+     "deporte": "Field hockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 25,
+     "deporte": "Pool",
+     "tickets": 0
+    },
+    {
+     "sport_id": 26,
+     "deporte": "Waterpolo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 27,
+     "deporte": "Gaelic sports",
+     "tickets": 0
+    },
+    {
+     "sport_id": 28,
+     "deporte": "Curling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 30,
+     "deporte": "Olympics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 32,
+     "deporte": "Bowls",
+     "tickets": 0
+    },
+    {
+     "sport_id": 33,
+     "deporte": "Chess",
+     "tickets": 0
+    },
+    {
+     "sport_id": 35,
+     "deporte": "Netball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 36,
+     "deporte": "Athletics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 37,
+     "deporte": "Squash",
+     "tickets": 0
+    },
+    {
+     "sport_id": 38,
+     "deporte": "Rink Hockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 39,
+     "deporte": "Lacrosse",
+     "tickets": 0
+    },
+    {
+     "sport_id": 40,
+     "deporte": "Formula 1",
+     "tickets": 0
+    },
+    {
+     "sport_id": 41,
+     "deporte": "Bikes",
+     "tickets": 0
+    },
+    {
+     "sport_id": 42,
+     "deporte": "DTM",
+     "tickets": 0
+    },
+    {
+     "sport_id": 43,
+     "deporte": "Alpine Skiing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 44,
+     "deporte": "Biathlon",
+     "tickets": 0
+    },
+    {
+     "sport_id": 45,
+     "deporte": "Bobsleigh",
+     "tickets": 0
+    },
+    {
+     "sport_id": 46,
+     "deporte": "Cross-Country",
+     "tickets": 0
+    },
+    {
+     "sport_id": 47,
+     "deporte": "Nordic Combined",
+     "tickets": 0
+    },
+    {
+     "sport_id": 48,
+     "deporte": "Ski Jumping",
+     "tickets": 0
+    },
+    {
+     "sport_id": 49,
+     "deporte": "Snowboard",
+     "tickets": 0
+    },
+    {
+     "sport_id": 50,
+     "deporte": "Speed Skating",
+     "tickets": 0
+    },
+    {
+     "sport_id": 51,
+     "deporte": "Luge",
+     "tickets": 0
+    },
+    {
+     "sport_id": 52,
+     "deporte": "Swimming",
+     "tickets": 0
+    },
+    {
+     "sport_id": 53,
+     "deporte": "Finnish Baseball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 54,
+     "deporte": "Softball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 55,
+     "deporte": "Horse racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 56,
+     "deporte": "Schwingen",
+     "tickets": 0
+    },
+    {
+     "sport_id": 57,
+     "deporte": "Inline Hockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 58,
+     "deporte": "Greyhound",
+     "tickets": 0
+    },
+    {
+     "sport_id": 59,
+     "deporte": "Rugby League",
+     "tickets": 0
+    },
+    {
+     "sport_id": 60,
+     "deporte": "Beach Soccer",
+     "tickets": 0
+    },
+    {
+     "sport_id": 61,
+     "deporte": "Pesapallo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 62,
+     "deporte": "Streethockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 63,
+     "deporte": "World Championship",
+     "tickets": 0
+    },
+    {
+     "sport_id": 64,
+     "deporte": "Rowing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 65,
+     "deporte": "Freestyle",
+     "tickets": 0
+    },
+    {
+     "sport_id": 66,
+     "deporte": "Snowboardcross/Parallel",
+     "tickets": 0
+    },
+    {
+     "sport_id": 67,
+     "deporte": "MotoGP",
+     "tickets": 0
+    },
+    {
+     "sport_id": 68,
+     "deporte": "Moto2",
+     "tickets": 0
+    },
+    {
+     "sport_id": 69,
+     "deporte": "Moto3",
+     "tickets": 0
+    },
+    {
+     "sport_id": 70,
+     "deporte": "Nascar Cup Series",
+     "tickets": 0
+    },
+    {
+     "sport_id": 71,
+     "deporte": "Padel",
+     "tickets": 0
+    },
+    {
+     "sport_id": 72,
+     "deporte": "Canoeing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 73,
+     "deporte": "Horseball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 74,
+     "deporte": "Aquatics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 75,
+     "deporte": "Archery",
+     "tickets": 0
+    },
+    {
+     "sport_id": 76,
+     "deporte": "Equestrian",
+     "tickets": 0
+    },
+    {
+     "sport_id": 77,
+     "deporte": "Fencing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 78,
+     "deporte": "Gymnastics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 79,
+     "deporte": "Judo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 80,
+     "deporte": "Modern Pentathlon",
+     "tickets": 0
+    },
+    {
+     "sport_id": 81,
+     "deporte": "Sailing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 82,
+     "deporte": "Shooting",
+     "tickets": 0
+    },
+    {
+     "sport_id": 83,
+     "deporte": "Taekwondo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 84,
+     "deporte": "Triathlon",
+     "tickets": 0
+    },
+    {
+     "sport_id": 85,
+     "deporte": "Weightlifting",
+     "tickets": 0
+    },
+    {
+     "sport_id": 86,
+     "deporte": "Wrestling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 87,
+     "deporte": "Olympics Youth",
+     "tickets": 0
+    },
+    {
+     "sport_id": 88,
+     "deporte": "Mountain Bike",
+     "tickets": 0
+    },
+    {
+     "sport_id": 89,
+     "deporte": "Riding",
+     "tickets": 0
+    },
+    {
+     "sport_id": 90,
+     "deporte": "Surfing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 91,
+     "deporte": "BMX racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 92,
+     "deporte": "Canoe slalom",
+     "tickets": 0
+    },
+    {
+     "sport_id": 93,
+     "deporte": "Rhythmic gymnastics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 94,
+     "deporte": "Trampoline Gymnastics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 95,
+     "deporte": "Artistic Swimming",
+     "tickets": 0
+    },
+    {
+     "sport_id": 96,
+     "deporte": "Diving",
+     "tickets": 0
+    },
+    {
+     "sport_id": 97,
+     "deporte": "Track cycling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 98,
+     "deporte": "Beach Tennis",
+     "tickets": 0
+    },
+    {
+     "sport_id": 99,
+     "deporte": "Sumo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 100,
+     "deporte": "Superbike",
+     "tickets": 0
+    },
+    {
+     "sport_id": 101,
+     "deporte": "Rally",
+     "tickets": 0
+    },
+    {
+     "sport_id": 102,
+     "deporte": "Figure Skating",
+     "tickets": 0
+    },
+    {
+     "sport_id": 103,
+     "deporte": "Freestyle Skiing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 104,
+     "deporte": "Skeleton",
+     "tickets": 0
+    },
+    {
+     "sport_id": 105,
+     "deporte": "Short Track",
+     "tickets": 0
+    },
+    {
+     "sport_id": 106,
+     "deporte": "Soccer Mythical",
+     "tickets": 0
+    },
+    {
+     "sport_id": 107,
+     "deporte": "eSport",
+     "tickets": 0
+    },
+    {
+     "sport_id": 108,
+     "deporte": "World Lottery",
+     "tickets": 0
+    },
+    {
+     "sport_id": 109,
+     "deporte": "ESport Counter-Strike",
+     "tickets": 0
+    },
+    {
+     "sport_id": 111,
+     "deporte": "ESport Dota",
+     "tickets": 0
+    },
+    {
+     "sport_id": 112,
+     "deporte": "ESport StarCraft",
+     "tickets": 0
+    },
+    {
+     "sport_id": 113,
+     "deporte": "ESport Hearthstone",
+     "tickets": 0
+    },
+    {
+     "sport_id": 114,
+     "deporte": "ESport Heroes of the Storm",
+     "tickets": 0
+    },
+    {
+     "sport_id": 115,
+     "deporte": "ESport World of Tanks",
+     "tickets": 0
+    },
+    {
+     "sport_id": 116,
+     "deporte": "Polo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 118,
+     "deporte": "ESport Call of Duty",
+     "tickets": 0
+    },
+    {
+     "sport_id": 119,
+     "deporte": "ESport Smite",
+     "tickets": 0
+    },
+    {
+     "sport_id": 120,
+     "deporte": "ESport Vainglory",
+     "tickets": 0
+    },
+    {
+     "sport_id": 121,
+     "deporte": "ESport Overwatch",
+     "tickets": 0
+    },
+    {
+     "sport_id": 122,
+     "deporte": "ESport WarCraft III",
+     "tickets": 0
+    },
+    {
+     "sport_id": 123,
+     "deporte": "ESport Crossfire",
+     "tickets": 0
+    },
+    {
+     "sport_id": 124,
+     "deporte": "ESport Halo",
+     "tickets": 0
+    },
+    {
+     "sport_id": 125,
+     "deporte": "ESport Rainbow Six",
+     "tickets": 0
+    },
+    {
+     "sport_id": 126,
+     "deporte": "Sepak Takraw",
+     "tickets": 0
+    },
+    {
+     "sport_id": 127,
+     "deporte": "ESport Street Fighter V",
+     "tickets": 0
+    },
+    {
+     "sport_id": 128,
+     "deporte": "ESport Rocket League",
+     "tickets": 0
+    },
+    {
+     "sport_id": 129,
+     "deporte": "Indy Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 130,
+     "deporte": "Basque Pelota",
+     "tickets": 0
+    },
+    {
+     "sport_id": 131,
+     "deporte": "Speedway",
+     "tickets": 0
+    },
+    {
+     "sport_id": 132,
+     "deporte": "ESport Gears of War",
+     "tickets": 0
+    },
+    {
+     "sport_id": 133,
+     "deporte": "ESport Clash Royale",
+     "tickets": 0
+    },
+    {
+     "sport_id": 134,
+     "deporte": "ESport King of Glory",
+     "tickets": 0
+    },
+    {
+     "sport_id": 135,
+     "deporte": "Gaelic Football",
+     "tickets": 0
+    },
+    {
+     "sport_id": 136,
+     "deporte": "Gaelic Hurling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 137,
+     "deporte": "eSoccer",
+     "tickets": 0
+    },
+    {
+     "sport_id": 138,
+     "deporte": "Kabaddi",
+     "tickets": 0
+    },
+    {
+     "sport_id": 139,
+     "deporte": "ESport Quake",
+     "tickets": 0
+    },
+    {
+     "sport_id": 140,
+     "deporte": "ESport PlayerUnknowns Battlegrounds",
+     "tickets": 0
+    },
+    {
+     "sport_id": 141,
+     "deporte": "Cycling Cycle Ball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 142,
+     "deporte": "Formula E",
+     "tickets": 0
+    },
+    {
+     "sport_id": 143,
+     "deporte": "7BallRun",
+     "tickets": 0
+    },
+    {
+     "sport_id": 144,
+     "deporte": "Motocross",
+     "tickets": 0
+    },
+    {
+     "sport_id": 145,
+     "deporte": "Sprint Car Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 146,
+     "deporte": "Speed Boat Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 147,
+     "deporte": "Drag Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 149,
+     "deporte": "Modified Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 150,
+     "deporte": "Off Road",
+     "tickets": 0
+    },
+    {
+     "sport_id": 151,
+     "deporte": "Truck &amp; Tractor Pulling",
+     "tickets": 0
+    },
+    {
+     "sport_id": 152,
+     "deporte": "ESport World of Warcraft",
+     "tickets": 0
+    },
+    {
+     "sport_id": 153,
+     "deporte": "eBasketball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 154,
+     "deporte": "ESport Dragon Ball FighterZ",
+     "tickets": 0
+    },
+    {
+     "sport_id": 156,
+     "deporte": "ESport Tekken",
+     "tickets": 0
+    },
+    {
+     "sport_id": 157,
+     "deporte": "Beach Handball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 158,
+     "deporte": "ESport Arena of Valor",
+     "tickets": 0
+    },
+    {
+     "sport_id": 159,
+     "deporte": "ESport TF2",
+     "tickets": 0
+    },
+    {
+     "sport_id": 160,
+     "deporte": "ESport SSBM",
+     "tickets": 0
+    },
+    {
+     "sport_id": 161,
+     "deporte": "ESport Paladins",
+     "tickets": 0
+    },
+    {
+     "sport_id": 162,
+     "deporte": "ESport Artifact",
+     "tickets": 0
+    },
+    {
+     "sport_id": 163,
+     "deporte": "Indoor Soccer",
+     "tickets": 0
+    },
+    {
+     "sport_id": 164,
+     "deporte": "ESport Apex Legends",
+     "tickets": 0
+    },
+    {
+     "sport_id": 165,
+     "deporte": "Indy Lights",
+     "tickets": 0
+    },
+    {
+     "sport_id": 166,
+     "deporte": "ESport Pro Evolution Soccer",
+     "tickets": 0
+    },
+    {
+     "sport_id": 167,
+     "deporte": "ESport Madden NFL",
+     "tickets": 0
+    },
+    {
+     "sport_id": 168,
+     "deporte": "ESport Brawl Stars",
+     "tickets": 0
+    },
+    {
+     "sport_id": 169,
+     "deporte": "Petanque",
+     "tickets": 0
+    },
+    {
+     "sport_id": 170,
+     "deporte": "ESport Fortnite",
+     "tickets": 0
+    },
+    {
+     "sport_id": 171,
+     "deporte": "ESport MTG",
+     "tickets": 0
+    },
+    {
+     "sport_id": 172,
+     "deporte": "Fishing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 173,
+     "deporte": "Esport Dota Underlords",
+     "tickets": 0
+    },
+    {
+     "sport_id": 174,
+     "deporte": "Esport Teamfight Tactics",
+     "tickets": 0
+    },
+    {
+     "sport_id": 175,
+     "deporte": "Esport Auto Chess",
+     "tickets": 0
+    },
+    {
+     "sport_id": 176,
+     "deporte": "Esport Fighting Games",
+     "tickets": 0
+    },
+    {
+     "sport_id": 177,
+     "deporte": "DEPRECATED sc",
+     "tickets": 0
+    },
+    {
+     "sport_id": 178,
+     "deporte": "ESport Motorsport",
+     "tickets": 0
+    },
+    {
+     "sport_id": 179,
+     "deporte": "Cycling BMX Freestyle",
+     "tickets": 0
+    },
+    {
+     "sport_id": 180,
+     "deporte": "Cycling BMX Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 181,
+     "deporte": "Karate",
+     "tickets": 0
+    },
+    {
+     "sport_id": 182,
+     "deporte": "Marathon Swimming",
+     "tickets": 0
+    },
+    {
+     "sport_id": 183,
+     "deporte": "Skateboarding",
+     "tickets": 0
+    },
+    {
+     "sport_id": 184,
+     "deporte": "Sport Climbing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 185,
+     "deporte": "Nascar Camping World Truck",
+     "tickets": 0
+    },
+    {
+     "sport_id": 186,
+     "deporte": "Nascar Xfinity Series",
+     "tickets": 0
+    },
+    {
+     "sport_id": 187,
+     "deporte": "NHRA",
+     "tickets": 0
+    },
+    {
+     "sport_id": 188,
+     "deporte": "Touring Car Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 189,
+     "deporte": "Formula 2",
+     "tickets": 0
+    },
+    {
+     "sport_id": 190,
+     "deporte": "Motorcycle Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 191,
+     "deporte": "Stock Car Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 192,
+     "deporte": "Air Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 193,
+     "deporte": "Endurance Racing",
+     "tickets": 0
+    },
+    {
+     "sport_id": 194,
+     "deporte": "ESport Valorant",
+     "tickets": 0
+    },
+    {
+     "sport_id": 195,
+     "deporte": "eIce Hockey",
+     "tickets": 0
+    },
+    {
+     "sport_id": 196,
+     "deporte": "eTennis",
+     "tickets": 0
+    },
+    {
+     "sport_id": 197,
+     "deporte": "eCricket",
+     "tickets": 0
+    },
+    {
+     "sport_id": 198,
+     "deporte": "eVolleyball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 199,
+     "deporte": "ESport Wild Rift",
+     "tickets": 0
+    },
+    {
+     "sport_id": 200,
+     "deporte": "T-Basket",
+     "tickets": 0
+    },
+    {
+     "sport_id": 201,
+     "deporte": "Racquetball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 202,
+     "deporte": "Muay Thai",
+     "tickets": 0
+    },
+    {
+     "sport_id": 203,
+     "deporte": "Soccer Specials",
+     "tickets": 0
+    },
+    {
+     "sport_id": 204,
+     "deporte": "Breaking",
+     "tickets": 0
+    },
+    {
+     "sport_id": 205,
+     "deporte": "Cornhole",
+     "tickets": 0
+    },
+    {
+     "sport_id": 206,
+     "deporte": "Pickleball",
+     "tickets": 0
+    },
+    {
+     "sport_id": 229,
+     "deporte": "Customs",
+     "tickets": 0
+    }
+   ]
+  }
+ }
+}

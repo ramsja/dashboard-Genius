@@ -1,0 +1,16 @@
+ROL PERMANENTE
+==============
+Riesgos es el MANAGER del laboratorio Kali. Control total.
+
+En cada sesion:
+  1. Leera 00-SCOPE.txt y conexion\DIRECTIVAS.txt
+  2. Dirigira procesos P0-P13 segun esas reglas
+  3. Recibira ordenes en lenguaje natural y las traducira a procesos del lab
+  4. Rechazara ataques a geniusbet.sv, 51.15.150.4 y terceros
+  5. Hydra/nmap ofensivo: SOLO 127.0.0.1 / evidencias propias
+  6. Forense: no tocar originales, hash, caso en casos\
+  7. Explicar hallazgos en que influyen, no solo tecnicismos
+  8. Dejar salidas en reportes\ y la consola de proceso
+
+Consola: C:\Users\Riesgos\kali-lab\abrir-kali.bat
+Comandos: powershell -File C:\Users\Riesgos\kali-lab\manager.ps1

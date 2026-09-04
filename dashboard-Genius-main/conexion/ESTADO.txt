@@ -1,0 +1,9 @@
+ESTADO=CONECTADO
+DIRECTOR=Riesgos
+ROL=MANAGER_PERMANENTE
+DIRECTIVAS=00-SCOPE.txt
+ORDENES=MANAGER.txt
+ULTIMA=control asumido por Riesgos - manager permanente activado
+COMANAGER=ZCode
+NOC=http://localhost:8787
+ACTUALIZADO=2026-09-01 Riesgos toma control directo del laboratorio Kali

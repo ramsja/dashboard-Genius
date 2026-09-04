@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Panel de control de transacciones GeniusBet" />
+    <title>Dashboard · Genius</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: #161d2f;
+        --panel-soft: #1d2942;
+        --line: #2e3d5e;
+        --text: #edf3ff;
+        --muted: #a7b9d8;
+        --green: #30c48d;
+        --amber: #f5b942;
+        --red: #f87171;
+        --blue: #60a5fa;
+        --purple: #a78bfa;
+        --pink: #f472b6;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background:
+          radial-gradient(1200px 400px at 15% -10%, rgba(96,165,250,0.10), transparent 60%),
+          var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+      .container { max-width: 1240px; margin: 0 auto; padding: 28px 20px 80px; }
+      header.top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+      }
+      h1 { margin: 0; font-size: clamp(20px, 3vw, 28px); }
+      .muted { color: var(--muted); }
+      .updated { font-size: 13px; }
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        appearance: none;
+        background: var(--panel-soft);
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: border-color 0.15s, background 0.15s;
+      }
+      .btn:hover { border-color: var(--blue); }
+      .btn.active { background: rgba(96,165,250,0.18); border-color: var(--blue); color: #dbeafe; }
+      .chip { display: inline-flex; align-items: center; gap: 6px; }
+      .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+      .source {
+        font-size: 12px;
+        color: var(--muted);
+        border: 1px solid var(--line);
+        border-radius: 100px;
+        padding: 4px 12px;
+        background: var(--panel);
+      }
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+        margin: 24px 0;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 16px 18px;
+      }
+      .card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+      .card .value {
+        margin-top: 10px;
+        font-size: clamp(22px, 2.6vw, 34px);
+        font-weight: 700;
+        line-height: 1.1;
+      }
+      .card .sub { margin-top: 6px; font-size: 12px; color: var(--muted); }
+      .grid2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 18px;
+        margin: 0 0 18px;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 18px 20px;
+      }
+      .panel h2 { margin: 0 0 14px; font-size: 15px; color: var(--muted); font-weight: 600; }
+      svg { display: block; width: 100%; height: auto; }
+      .bars .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .bars .row .lbl { width: 84px; font-size: 13px; color: var(--muted); flex-shrink: 0; }
+      .bars .track { flex: 1; background: var(--panel-soft); border-radius: 8px; height: 22px; overflow: hidden; }
+      .bars .fill { height: 100%; border-radius: 8px; min-width: 2px; }
+      .bars .bar-num { width: 72px; text-align: right; font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+      .table-wrap {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow-x: auto;
+        margin-bottom: 18px;
+      }
+      table { width: 100%; border-collapse: collapse; min-width: 520px; }
+      th, td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: left; font-size: 14px; }
+      th { background: var(--panel-soft); color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 12px; }
+      tr:last-child td { border-bottom: none; }
+      td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+      tfoot td { font-weight: 700; background: var(--panel-soft); }
+      .tag {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 3px 9px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+      .c-online { background: rgba(48,196,141,0.18); color: #96f0c8; }
+      .c-retail { background: rgba(245,185,66,0.18); color: #ffd88a; }
+      .c-desconocido { background: rgba(148,163,184,0.2); color: #dfe9ff; }
+      .d-casino { background: rgba(167,139,250,0.18); color: #ddd0ff; }
+      .d-deportes { background: rgba(96,165,250,0.18); color: #bfe1ff; }
+      .d-otros { background: rgba(148,163,184,0.2); color: #dfe9ff; }
+      .s-activo { background: rgba(48,196,141,0.18); color: #96f0c8; }
+      .s-inactivo { background: rgba(245,185,66,0.18); color: #ffd88a; }
+      .s-desconectado { background: rgba(248,113,113,0.18); color: #ffb5b5; }
+      .s-suspendido { background: rgba(96,165,250,0.18); color: #bfe1ff; }
+      .s-otros { background: rgba(148,163,184,0.2); color: #dfe9ff; }
+      .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; font-size: 12px; color: var(--muted); }
+      .legend span { display: inline-flex; align-items: center; gap: 6px; }
+      .error {
+        color: #ffb5b5;
+        background: rgba(248,113,113,0.08);
+        border: 1px solid rgba(248,113,113,0.35);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-top: 14px;
+        font-size: 14px;
+      }
+      .loading { color: var(--muted); padding: 40px 0; text-align: center; }
+      .tabs { display: flex; gap: 8px; margin: 16px 0 8px; }
+      .chart-box { position: relative; height: 320px; }
+      .sub { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+      .gold { color: var(--amber); }
+      #tkTabla th, #tkTabla td, #pcTabla th, #pcTabla td { padding: 9px 10px; font-size: 13px; }
+      #tkTabla td:last-child { font-size: 11.5px; line-height: 1.7; }
+      #tkTabla td:last-child .dot { width: 7px; height: 7px; }
+      @media (max-width: 560px) {
+        .bars .row .lbl { width: 60px; }
+        .controls { width: 100%; }
+        .container { padding: 18px 14px 60px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="top">
+        <div>
+          <h1>Panel de control</h1>
+          <div class="muted updated" id="generatedAt">Cargando resumen…</div>
+        </div>
+        <div class="controls">
+          <span class="chip">
+            <span class="dot" id="connDot" style="background: var(--muted);"></span>
+            <span class="source" id="connMode">fuente</span>
+          </span>
+          <button class="btn active" id="tabOps">Operaciones</button>
+          <button class="btn" id="btnFilter" data-filter="all">Todas las conexiones</button>
+          <button class="btn" id="btnRefresh">Actualizar</button>
+        </div>
+      </header>
+
+      <div id="viewOps">
+      <div id="loading" class="loading">Cargando datos…</div>
+      <div id="errorBox" style="display:none;"></div>
+
+      <section id="content" style="display:none;">
+        <div class="kpis" id="kpis"></div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h2>Transacciones por disciplina</h2>
+            <div class="bars" id="chartDiscipline"></div>
+          </div>
+          <div class="panel">
+            <h2>Conexión de clientes</h2>
+            <div id="chartConnection"></div>
+            <div class="legend" id="legendConnection"></div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h2>Disciplina × Conexión</h2>
+            <div class="bars" id="chartMatrix"></div>
+          </div>
+          <div class="panel">
+            <h2>Volumen por disciplina</h2>
+            <div class="table-wrap" style="border:0; margin:0;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Disciplina</th>
+                    <th class="num">Ingresos</th>
+                    <th class="num">Total</th>
+                    <th class="num">Comisión</th>
+                  </tr>
+                </thead>
+                <tbody id="moneyTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Disciplina</th>
+                <th class="num">Online</th>
+                <th class="num">Retail</th>
+                <th class="num">Desconocido</th>
+                <th class="num">Total</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="matrixTable"></tbody>
+            <tfoot id="matrixFooter"></tfoot>
+          </table>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h2>Productos principales</h2>
+            <div class="bars" id="chartProducts"></div>
+          </div>
+          <div class="panel">
+            <h2>Resumen por estado</h2>
+            <div class="bars" id="chartStatus"></div>
+          </div>
+        </div>
+
+        <section id="tkSeccion" style="display:none;">
+          <div class="panel" style="margin-bottom:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+              <h2 style="margin:0;">Tickets deportivos por disciplina</h2>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span id="tkEstado" class="muted" style="font-size:12px;"></span>
+                <select id="tkPeriodo" class="btn" style="appearance:auto;"></select>
+              </div>
+            </div>
+            <div class="kpis" id="tkKpis" style="margin:0 0 18px;"></div>
+            <div class="grid2">
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Tickets por deporte (top 12 + otros)</h2>
+                <div class="bars" id="tkBarras"></div>
+              </div>
+              <div class="table-wrap" style="border:0; margin:0;">
+                <table id="tkTabla">
+                  <thead>
+                    <tr>
+                      <th>Deporte / disciplina</th>
+                      <th class="num">Tickets</th>
+                      <th class="num">%</th>
+                      <th class="num">Importe</th>
+                      <th class="num">Pendiente</th>
+                      <th class="num">Cuota media</th>
+                      <th>Estados</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="pcSeccion" style="display:none;">
+          <div class="panel" style="margin-bottom:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+              <h2 style="margin:0;">PERP · Casino por proveedor/juego</h2>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span id="pcEstado" class="muted" style="font-size:12px;"></span>
+                <select id="pcPeriodo" class="btn" style="appearance:auto;"></select>
+                <button class="btn" id="btnRefreshPerp">Actualizar</button>
+              </div>
+            </div>
+            <div class="kpis" id="pcKpis" style="margin:0 0 18px;"></div>
+            <div class="grid2">
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Rondas por proveedor (top 12 + otros)</h2>
+                <div class="bars" id="pcBarras"></div>
+              </div>
+              <div class="table-wrap" style="border:0; margin:0;">
+                <table id="pcTabla">
+                  <thead>
+                    <tr>
+                      <th>Proveedor / juego</th>
+                      <th class="num">Rondas</th>
+                      <th class="num">%</th>
+                      <th class="num">Apuesta</th>
+                      <th class="num">GGR</th>
+                      <th class="num">RTP</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+      </div>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+    <script src="./tickets-deporte.js"></script>
+    <script src="./perp-casino.js"></script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+{
+  "version": 2,
+  "generated_at": "2026-09-01T12:13:03",
+  "source": "descargas\\transacciones_producto__2026-08-28_2026-08-28.csv",
+  "total": 34532,
+  "discipline": {
+    "deportes": 898,
+    "casino": 33634,
+    "otros": 0
+  },
+  "connection": {
+    "online": 28353,
+    "retail": 6179,
+    "desconocido": 0
+  },
+  "status": {
+    "activo": 28353,
+    "inactivo": 6179,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
+  },
+  "matrix": {
+    "casino": {
+      "online": 27735,
+      "retail": 5899,
+      "desconocido": 0,
+      "total": 33634,
+      "status": {
+        "activo": 27735,
+        "inactivo": 5899
+      }
+    },
+    "deportes": {
+      "online": 618,
+      "retail": 280,
+      "desconocido": 0,
+      "total": 898,
+      "status": {
+        "activo": 618,
+        "inactivo": 280
+      }
+    }
+  },
+  "money": {
+    "casino": {
+      "income": 8317.86,
+      "total": -448.76,
+      "commission": 0.0
+    },
+    "deportes": {
+      "income": 12454.31,
+      "total": 4179.75,
+      "commission": 0.0
+    }
+  },
+  "top_products": [
+    [
+      "Casino",
+      32581
+    ],
+    [
+      "Casino Live",
+      1053
+    ],
+    [
+      "Deporte",
+      684
+    ],
+    [
+      "Payments",
+      205
+    ],
+    [
+      "Banco",
+      6
+    ],
+    [
+      "Miscellaneous",
+      3
+    ]
+  ]
+}
