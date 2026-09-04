@@ -68,6 +68,21 @@ python extraccion-tickets-deporte.py --mes 2026-08    # un mes concreto
 - La extracción diaria (workflow) lo ejecuta automáticamente y commitea el JSON; el dashboard lo lee con selector "Periodo:".
 - Duración típica: ~10-13 min por mes (206 deportes, pausa de cortesía entre consultas).
 
+## 2c) Graphify · Apache ECharts
+
+Gráficos interactivos con **Graphify** (integración de Apache ECharts):
+
+- **Módulo:** `dashboard/graphify.js` — API de gráficos (barras, pastel, líneas, radar, dispersión).
+- **Integración automática:**
+  - `dashboard/app-graphify.js` — Convierte gráficos de **Operaciones** (disciplinas, conexiones, matriz, productos, estados).
+  - `dashboard/sections-graphify.js` — Convierte gráficos de **Tickets Deportivos** y **Casino PERP**.
+- **Características:** Interactivo (hover, zoom, leyenda clickeable), responsivo, tema oscuro automático.
+- **Documentación:** 
+  - `dashboard/GRAPHIFY.md` — API completa con ejemplos.
+  - `dashboard/GRAPHIFY-INTEGRATION.md` — Cómo funciona la integración.
+
+Para ver demo sin servidor: `dashboard/standalone.html` (ECharts offline).
+
 ## 3) Supabase
 
 1. Crea un proyecto en Supabase.
