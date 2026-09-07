@@ -221,7 +221,14 @@ async function verificarCredenciales(username, password) {
 }
 
 // Rutas que no requieren sesión iniciada
-const RUTAS_PUBLICAS = new Set(['/login.html', '/api/login']);
+const RUTAS_PUBLICAS = new Set([
+  '/login.html',
+  '/api/login',
+  '/api/sync-status',
+  '/api/sync-status-usuarios',
+  '/api/alertas-apuestas',
+  '/api/alertas-ganancias'
+]);
 
 // ============================================================
 // CARGA DE DATOS REALES DESDE NOVUSBET
