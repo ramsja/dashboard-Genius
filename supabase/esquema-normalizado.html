@@ -1,0 +1,775 @@
+<title>Esquema Genius Normalizado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;700&display=swap">
+
+<style>
+  :root{
+    --paper:#eef2f1;
+    --surface:#f8faf9;
+    --ink:#15202a;
+    --muted:#5a6b73;
+    --faint:#8798a0;
+    --rule:#cfd9d8;
+    --rule-soft:#e0e8e7;
+    --core:#0d6d68;
+    --core-soft:#dcecea;
+    --legacy:#a4553a;
+    --legacy-soft:#f2e2da;
+    --ok:#42704a;
+    --ok-soft:#dfeade;
+    --shadow:rgba(21,32,42,.07);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#111a1f;
+      --surface:#18242a;
+      --ink:#e6eeec;
+      --muted:#9db0b4;
+      --faint:#75898e;
+      --rule:#2c3d44;
+      --rule-soft:#223238;
+      --core:#5cc0b6;
+      --core-soft:#183630;
+      --legacy:#dd9a78;
+      --legacy-soft:#3a271d;
+      --ok:#83b884;
+      --ok-soft:#1e3122;
+      --shadow:rgba(0,0,0,.4);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#111a1f;
+    --surface:#18242a;
+    --ink:#e6eeec;
+    --muted:#9db0b4;
+    --faint:#75898e;
+    --rule:#2c3d44;
+    --rule-soft:#223238;
+    --core:#5cc0b6;
+    --core-soft:#183630;
+    --legacy:#dd9a78;
+    --legacy-soft:#3a271d;
+    --ok:#83b884;
+    --ok-soft:#1e3122;
+    --shadow:rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+    font-size:17px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px 88px}
+  .col{max-width:660px}
+
+  h1,h2,h3,.ui{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+  code,.mono{font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace}
+
+  /* ---------- masthead ---------- */
+  header.top{
+    border-bottom:1px solid var(--rule);
+    padding:56px 0 30px;
+    margin-bottom:44px;
+  }
+  .eyebrow{
+    font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--core);
+    margin:0 0 18px;
+  }
+  h1{
+    font-size:clamp(2.1rem,5.4vw,3.15rem);font-weight:700;line-height:1.06;
+    letter-spacing:-.021em;margin:0 0 18px;text-wrap:balance;
+  }
+  .standfirst{font-size:1.12rem;color:var(--muted);margin:0;max-width:60ch}
+
+  /* ---------- figures at a glance ---------- */
+  .counts{
+    display:flex;flex-wrap:wrap;gap:0;margin-top:34px;
+    border-top:1px solid var(--rule-soft);
+  }
+  .count{
+    flex:1 1 150px;padding:18px 22px 4px 0;
+    border-right:1px solid var(--rule-soft);margin-right:22px;
+  }
+  .count:last-child{border-right:0;margin-right:0}
+  .count b{
+    font-family:Archivo,sans-serif;font-size:1.85rem;font-weight:700;
+    display:block;line-height:1;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;
+  }
+  .count span{
+    font-family:Archivo,sans-serif;font-size:12px;color:var(--muted);
+    display:block;margin-top:7px;line-height:1.4;
+  }
+  .count .arrowed{color:var(--core)}
+
+  /* ---------- sections ---------- */
+  section{margin:56px 0 0}
+  h2{
+    font-size:1.52rem;font-weight:700;letter-spacing:-.014em;
+    margin:0 0 6px;text-wrap:balance;
+  }
+  h2 .num{
+    font-family:"JetBrains Mono",monospace;font-size:.72em;font-weight:400;
+    color:var(--faint);margin-right:.6em;
+  }
+  h3{font-size:1.03rem;font-weight:600;margin:32px 0 4px;letter-spacing:-.005em}
+  .lede{color:var(--muted);margin:0 0 22px;max-width:62ch}
+  p{margin:0 0 16px;max-width:66ch}
+  a{color:var(--core)}
+
+  code{
+    font-size:.845em;background:var(--rule-soft);
+    padding:.12em .38em;border-radius:3px;
+    border:1px solid transparent;
+  }
+  .t-old{color:var(--legacy);background:var(--legacy-soft)}
+  .t-new{color:var(--core);background:var(--core-soft)}
+
+  /* ---------- figures ---------- */
+  figure{margin:30px 0 34px;padding:0}
+  .fig-frame{
+    background:var(--surface);border:1px solid var(--rule);
+    border-radius:5px;padding:22px 20px 14px;overflow-x:auto;
+  }
+  figure svg{display:block;width:100%;height:auto;min-width:640px;color:var(--ink)}
+  figcaption{
+    font-family:Archivo,sans-serif;font-size:12.5px;color:var(--muted);
+    margin-top:12px;line-height:1.5;max-width:70ch;
+  }
+
+  /* ---------- ledger table ---------- */
+  .scroll{overflow-x:auto;margin:24px 0 8px}
+  table{border-collapse:collapse;width:100%;min-width:600px;font-size:15px}
+  th{
+    font-family:Archivo,sans-serif;font-size:11px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    text-align:left;padding:0 16px 9px 0;border-bottom:1px solid var(--rule);
+    vertical-align:bottom;
+  }
+  td{
+    padding:13px 16px 13px 0;border-bottom:1px solid var(--rule-soft);
+    vertical-align:top;
+  }
+  tr:last-child td{border-bottom:0}
+  td.norm{white-space:nowrap;width:1%}
+  .badge{
+    display:inline-block;font-family:Archivo,sans-serif;font-size:10.5px;
+    font-weight:600;letter-spacing:.06em;padding:3px 7px;border-radius:3px;
+    background:var(--core-soft);color:var(--core);white-space:nowrap;
+  }
+  .badge.dup{background:var(--legacy-soft);color:var(--legacy)}
+  td .why{display:block;color:var(--muted);font-size:14px;margin-top:3px}
+
+  /* ---------- access matrix ---------- */
+  .matrix td.y{color:var(--ok);font-weight:600}
+  .matrix td.n{color:var(--legacy);font-weight:600}
+  .matrix td.y,.matrix td.n{font-family:Archivo,sans-serif;font-size:13.5px}
+
+  /* ---------- migration steps ---------- */
+  ol.steps{list-style:none;counter-reset:s;padding:0;margin:22px 0 0}
+  ol.steps li{
+    counter-increment:s;position:relative;padding:0 0 20px 52px;
+    border-left:1px solid var(--rule);margin-left:13px;
+  }
+  ol.steps li:last-child{border-left-color:transparent;padding-bottom:0}
+  ol.steps li::before{
+    content:counter(s,decimal-leading-zero);
+    position:absolute;left:-13px;top:-2px;
+    width:26px;height:26px;border-radius:50%;
+    background:var(--surface);border:1px solid var(--rule);
+    color:var(--faint);font-family:"JetBrains Mono",monospace;font-size:10.5px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  ol.steps li.cut::before{border-color:var(--legacy);color:var(--legacy)}
+  ol.steps .file{
+    font-family:"JetBrains Mono",monospace;font-size:13.5px;font-weight:700;
+    display:block;margin-bottom:2px;
+  }
+  ol.steps .what{color:var(--muted);font-size:15px}
+
+  /* ---------- callout ---------- */
+  .note{
+    border-left:2px solid var(--legacy);
+    background:var(--legacy-soft);
+    padding:16px 20px;margin:26px 0;border-radius:0 4px 4px 0;
+  }
+  .note p{margin:0;max-width:64ch}
+  .note strong{font-family:Archivo,sans-serif;font-size:14px;letter-spacing:.01em}
+
+  .verified{
+    display:flex;gap:12px;align-items:flex-start;
+    border:1px solid var(--rule);background:var(--surface);
+    border-radius:5px;padding:18px 20px;margin:26px 0 0;
+  }
+  .verified .tick{
+    flex:none;width:20px;height:20px;border-radius:50%;
+    background:var(--ok-soft);color:var(--ok);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;margin-top:3px;
+  }
+  .verified p{margin:0;font-size:15.5px}
+  .verified .head{
+    font-family:Archivo,sans-serif;font-weight:600;font-size:14px;
+    display:block;margin-bottom:3px;
+  }
+
+  footer{
+    margin-top:64px;padding-top:22px;border-top:1px solid var(--rule);
+    font-family:Archivo,sans-serif;font-size:12.5px;color:var(--faint);
+  }
+  @media (max-width:640px){
+    body{font-size:16px}
+    .count{flex:1 1 44%}
+  }
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">Dashboard Genius · Base de datos</p>
+  <h1>De 25 tablas sueltas a un modelo con integridad</h1>
+  <p class="standfirst">
+    El esquema actual acumula cuatro etapas del proyecto: un diseño abandonado,
+    dos pipelines de transacciones en paralelo y varias importaciones de CSV.
+    Esta es la normalización que los une, qué reemplaza a qué y cómo aplicarla
+    sin romper lo que ya funciona.
+  </p>
+
+  <div class="counts">
+    <div class="count">
+      <b>25 <span class="arrowed" style="display:inline;font-size:.6em">→</span> 30</b>
+      <span>tablas, ahora agrupadas por función</span>
+    </div>
+    <div class="count">
+      <b>5 <span class="arrowed" style="display:inline;font-size:.6em">→</span> 36</b>
+      <span>claves foráneas que la base hace cumplir</span>
+    </div>
+    <div class="count">
+      <b>2 <span class="arrowed" style="display:inline;font-size:.6em">→</span> 1</b>
+      <span>tablas de transacciones</span>
+    </div>
+    <div class="count">
+      <b>7</b>
+      <span>migraciones, probadas sobre PostgreSQL&nbsp;16</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 1 · el problema central ============ -->
+<section>
+  <div class="col">
+    <h2><span class="num">01</span>El mismo hecho, guardado dos veces</h2>
+    <p class="lede">
+      Este es el problema que ordena todos los demás.
+    </p>
+    <p>
+      <code class="t-old">transacciones_novusbet</code> y
+      <code class="t-old">transaction_records</code> guardan lo mismo con
+      nombres distintos: <code>monto</code>/<code>total</code>,
+      <code>ingresos</code>/<code>income</code>,
+      <code>casa_apuestas</code>/<code>site</code>. Dos fuentes de verdad para
+      la misma cifra es la razón por la que los totales del dashboard pueden no
+      cuadrar entre sí.
+    </p>
+    <p>
+      Además, ambas repiten en cada fila datos que son del <em>usuario</em>, no
+      de la transacción. Si alguien cambia de nombre, quedan miles de filas con
+      el nombre viejo.
+    </p>
+  </div>
+
+  <figure>
+    <div class="fig-frame">
+      <svg viewBox="0 0 900 372" role="img"
+           aria-label="Las dos tablas de transacciones convergen en core.transaccion, y las columnas de texto repetido se sustituyen por claves foráneas a cuatro catálogos.">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,1 9,5 0,9" fill="currentColor"/>
+          </marker>
+          <marker id="ahc" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,1 9,5 0,9" fill="#0d6d68"/>
+          </marker>
+        </defs>
+
+        <!-- column headers -->
+        <text x="16" y="20" font-family="Archivo,sans-serif" font-size="11"
+              font-weight="600" letter-spacing="1.4" fill="#a4553a">ANTES</text>
+        <text x="470" y="20" font-family="Archivo,sans-serif" font-size="11"
+              font-weight="600" letter-spacing="1.4" fill="#0d6d68">DESPUÉS</text>
+
+        <!-- legacy box A -->
+        <rect x="16" y="40" width="240" height="122" rx="4"
+              fill="none" stroke="#a4553a" stroke-width="1.3"/>
+        <text x="30" y="62" font-family="JetBrains Mono,monospace" font-size="12"
+              font-weight="700" fill="#a4553a">transacciones_novusbet</text>
+        <line x1="16" y1="72" x2="256" y2="72" stroke="#a4553a" stroke-opacity=".3"/>
+        <text x="30" y="91"  font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">usuario          text</text>
+        <text x="30" y="109" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">casa_apuestas    text</text>
+        <text x="30" y="127" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">moneda           text</text>
+        <text x="30" y="145" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">disciplina       text</text>
+
+        <!-- legacy box B -->
+        <rect x="16" y="196" width="240" height="122" rx="4"
+              fill="none" stroke="#a4553a" stroke-width="1.3"/>
+        <text x="30" y="218" font-family="JetBrains Mono,monospace" font-size="12"
+              font-weight="700" fill="#a4553a">transaction_records</text>
+        <line x1="16" y1="228" x2="256" y2="228" stroke="#a4553a" stroke-opacity=".3"/>
+        <text x="30" y="247" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">username         text</text>
+        <text x="30" y="265" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">site             text</text>
+        <text x="30" y="283" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">currency         text</text>
+        <text x="30" y="301" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">discipline       text</text>
+
+        <!-- converging arrows -->
+        <path d="M256 101 C 300 101, 320 152, 362 152" fill="none"
+              stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+        <path d="M256 257 C 300 257, 320 206, 362 206" fill="none"
+              stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+        <text x="266" y="172" font-family="Archivo,sans-serif" font-size="10.5"
+              fill="currentColor" opacity=".72">origen =</text>
+        <text x="266" y="186" font-family="Archivo,sans-serif" font-size="10.5"
+              fill="currentColor" opacity=".72">'novusbet'</text>
+        <text x="266" y="232" font-family="Archivo,sans-serif" font-size="10.5"
+              fill="currentColor" opacity=".72">'backoffice'</text>
+
+        <!-- core fact table -->
+        <rect x="366" y="112" width="216" height="134" rx="4"
+              fill="none" stroke="#0d6d68" stroke-width="1.6"/>
+        <text x="380" y="134" font-family="JetBrains Mono,monospace" font-size="12"
+              font-weight="700" fill="#0d6d68">core.transaccion</text>
+        <line x1="366" y1="144" x2="582" y2="144" stroke="#0d6d68" stroke-opacity=".3"/>
+        <text x="380" y="163" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">usuario_id      →</text>
+        <text x="380" y="181" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">sitio_id        →</text>
+        <text x="380" y="199" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">moneda_codigo   →</text>
+        <text x="380" y="217" font-family="JetBrains Mono,monospace" font-size="11" fill="currentColor">disciplina_id   →</text>
+        <text x="380" y="236" font-family="JetBrains Mono,monospace" font-size="11"
+              fill="currentColor" opacity=".6">monto, comision…</text>
+
+        <!-- catalog chips -->
+        <g font-family="JetBrains Mono,monospace" font-size="11">
+          <rect x="676" y="93" width="208" height="30" rx="4" fill="none"
+                stroke="#0d6d68" stroke-width="1.1" stroke-opacity=".65"/>
+          <text x="690" y="112" fill="#0d6d68">core.usuario</text>
+
+          <rect x="676" y="137" width="208" height="30" rx="4" fill="none"
+                stroke="#0d6d68" stroke-width="1.1" stroke-opacity=".65"/>
+          <text x="690" y="156" fill="#0d6d68">core.sitio</text>
+
+          <rect x="676" y="181" width="208" height="30" rx="4" fill="none"
+                stroke="#0d6d68" stroke-width="1.1" stroke-opacity=".65"/>
+          <text x="690" y="200" fill="#0d6d68">core.moneda</text>
+
+          <rect x="676" y="225" width="208" height="30" rx="4" fill="none"
+                stroke="#0d6d68" stroke-width="1.1" stroke-opacity=".65"/>
+          <text x="690" y="244" fill="#0d6d68">core.disciplina</text>
+        </g>
+
+        <!-- fk arrows -->
+        <g stroke="#0d6d68" stroke-width="1.2" fill="none" marker-end="url(#ahc)">
+          <path d="M582 159 C 630 159, 636 108, 672 108"/>
+          <path d="M582 177 C 630 177, 636 152, 672 152"/>
+          <path d="M582 195 L 672 195"/>
+          <path d="M582 213 C 630 213, 636 240, 672 240"/>
+        </g>
+        <text x="600" y="278" font-family="Archivo,sans-serif" font-size="10.5"
+              fill="#0d6d68">clave foránea</text>
+
+        <!-- bottom note line -->
+        <line x1="16" y1="336" x2="884" y2="336" stroke="currentColor" stroke-opacity=".14"/>
+        <text x="16" y="356" font-family="Archivo,sans-serif" font-size="11.5"
+              fill="currentColor" opacity=".65">
+          El nombre del usuario deja de estar copiado en cada fila: vive una sola vez, en core.usuario.
+        </text>
+      </svg>
+    </div>
+    <figcaption>
+      Las dos tablas convergen en un único hecho. La columna <code>origen</code>
+      conserva de qué pipeline vino cada fila, así que puedes seguir
+      consultándolas por separado sin mantener dos tablas.
+    </figcaption>
+  </figure>
+</section>
+
+<!-- ============ 2 · el mapa ============ -->
+<section>
+  <div class="col">
+    <h2><span class="num">02</span>Cómo queda repartido</h2>
+    <p class="lede">
+      Las 30 tablas de <code class="t-new">core</code> se agrupan en cuatro
+      capas, y cada una solo depende de la anterior.
+    </p>
+  </div>
+
+  <figure>
+    <div class="fig-frame">
+      <svg viewBox="0 0 900 530" role="img"
+           aria-label="Modelo en cuatro capas: catálogos, entidades de usuario, hechos y agregados, con las claves foráneas que las conectan.">
+        <defs>
+          <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <polygon points="0,1 9,5 0,9" fill="currentColor"/>
+          </marker>
+        </defs>
+
+        <!-- band labels -->
+        <g font-family="Archivo,sans-serif" font-size="10.5" font-weight="600"
+           letter-spacing="1.3" fill="currentColor" opacity=".5">
+          <text x="16" y="34">CATÁLOGOS · 14</text>
+          <text x="16" y="142">ENTIDADES · 5</text>
+          <text x="16" y="304">HECHOS · 4</text>
+          <text x="16" y="444">AGREGADOS · 7</text>
+        </g>
+        <g stroke="currentColor" stroke-opacity=".12">
+          <line x1="16" y1="42" x2="884" y2="42"/>
+          <line x1="16" y1="150" x2="884" y2="150"/>
+          <line x1="16" y1="312" x2="884" y2="312"/>
+          <line x1="16" y1="452" x2="884" y2="452"/>
+        </g>
+
+        <!-- catalogs row -->
+        <g font-family="JetBrains Mono,monospace" font-size="10.5" fill="#0d6d68">
+          <rect x="16"  y="56" width="122" height="26" rx="3" fill="none" stroke="#0d6d68" stroke-opacity=".5"/>
+          <text x="27" y="73">sitio</text>
+          <rect x="150" y="56" width="122" height="26" rx="3" fill="none" stroke="#0d6d68" stroke-opacity=".5"/>
+          <text x="161" y="73">disciplina</text>
+          <rect x="284" y="56" width="122" height="26" rx="3" fill="none" stroke="#0d6d68" stroke-opacity=".5"/>
+          <text x="295" y="73">juego</text>
+          <rect x="418" y="56" width="150" height="26" rx="3" fill="none" stroke="#0d6d68" stroke-opacity=".5"/>
+          <text x="429" y="73">tipo_transaccion</text>
+          <rect x="580" y="56" width="122" height="26" rx="3" fill="none" stroke="#0d6d68" stroke-opacity=".5"/>
+          <text x="591" y="73">moneda</text>
+          <rect x="714" y="56" width="170" height="26" rx="3" fill="none" stroke="#0d6d68" stroke-opacity=".5"/>
+          <text x="725" y="73">+ 9 catálogos más</text>
+        </g>
+
+        <!-- entities row -->
+        <g font-family="JetBrains Mono,monospace" font-size="11">
+          <rect x="16" y="180" width="180" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-width="1.5"/>
+          <text x="29" y="201" font-weight="700" fill="currentColor">usuario</text>
+
+          <rect x="216" y="180" width="176" height="34" rx="4" fill="none"
+                stroke="#a4553a" stroke-width="1.4"/>
+          <text x="229" y="196" font-size="10.5" fill="#a4553a">usuario_contacto</text>
+          <text x="229" y="209" font-size="9" font-family="Archivo,sans-serif" fill="#a4553a">datos personales · sin acceso público</text>
+
+          <rect x="412" y="180" width="146" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-opacity=".45"/>
+          <text x="425" y="201" font-size="10.5" fill="currentColor">usuario_saldo</text>
+
+          <rect x="578" y="180" width="152" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-opacity=".45"/>
+          <text x="591" y="201" font-size="10.5" fill="currentColor">usuario_metrica</text>
+
+          <rect x="750" y="180" width="134" height="34" rx="4" fill="none"
+                stroke="#a4553a" stroke-width="1.4"/>
+          <text x="763" y="201" font-size="10.5" fill="#a4553a">admin_usuario</text>
+        </g>
+        <!-- 1:1 links -->
+        <g stroke="currentColor" stroke-opacity=".4" stroke-width="1">
+          <line x1="196" y1="197" x2="216" y2="197"/>
+          <line x1="392" y1="197" x2="412" y2="197"/>
+          <line x1="558" y1="197" x2="578" y2="197"/>
+        </g>
+        <text x="404" y="248" font-family="Archivo,sans-serif" font-size="9.5"
+              fill="currentColor" opacity=".55">uno a uno</text>
+
+        <!-- self reference -->
+        <path d="M106 180 C 106 162, 60 162, 60 180" fill="none"
+              stroke="currentColor" stroke-width="1.1" marker-end="url(#ah2)"/>
+        <text x="112" y="174" font-family="Archivo,sans-serif" font-size="9.5"
+              fill="currentColor" opacity=".6">padre_id</text>
+
+        <!-- facts row -->
+        <g font-family="JetBrains Mono,monospace" font-size="11">
+          <rect x="16" y="330" width="180" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-width="1.5"/>
+          <text x="29" y="352" font-weight="700" fill="currentColor">transaccion</text>
+
+          <rect x="236" y="330" width="156" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-opacity=".55"/>
+          <text x="249" y="352" font-size="10.5" fill="currentColor">alerta</text>
+
+          <rect x="412" y="330" width="176" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-opacity=".55"/>
+          <text x="425" y="352" font-size="10.5" fill="currentColor">apuesta_deportiva</text>
+
+          <rect x="608" y="330" width="146" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-opacity=".55"/>
+          <text x="621" y="352" font-size="10.5" fill="currentColor">parametro</text>
+        </g>
+        <g stroke="currentColor" stroke-width="1.1" fill="none" marker-end="url(#ah2)">
+          <path d="M106 328 L 106 218"/>
+          <path d="M480 328 L 190 220"/>
+          <path d="M232 347 L 202 347"/>
+        </g>
+        <text x="112" y="276" font-family="Archivo,sans-serif" font-size="9.5"
+              fill="currentColor" opacity=".6">quién la hizo</text>
+        <text x="240" y="386" font-family="Archivo,sans-serif" font-size="9.5"
+              fill="currentColor" opacity=".6">señala una transacción</text>
+
+        <!-- aggregates row -->
+        <g font-family="JetBrains Mono,monospace" font-size="11">
+          <rect x="16" y="470" width="212" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-opacity=".55"/>
+          <text x="29" y="492" font-size="10.5" fill="currentColor">resumen_diario_usuario</text>
+
+          <rect x="248" y="470" width="240" height="34" rx="4" fill="none"
+                stroke="#0d6d68" stroke-width="1.5"/>
+          <text x="261" y="486" font-size="10" fill="#0d6d68">resumen_diario_usuario_juego</text>
+          <text x="261" y="498" font-size="9" font-family="Archivo,sans-serif" fill="#0d6d68">nueva · sustituye al array «juegos»</text>
+
+          <rect x="508" y="470" width="180" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-opacity=".55"/>
+          <text x="521" y="492" font-size="10.5" fill="currentColor">metrica_diaria</text>
+
+          <rect x="708" y="470" width="176" height="34" rx="4" fill="none"
+                stroke="currentColor" stroke-opacity=".55"/>
+          <text x="721" y="492" font-size="10.5" fill="currentColor">+ 4 históricos</text>
+        </g>
+        <line x1="228" y1="487" x2="248" y2="487" stroke="currentColor" stroke-opacity=".4"/>
+        <path d="M170 468 L 170 368" fill="none" stroke="currentColor"
+              stroke-width="1.1" stroke-dasharray="3 3" marker-end="url(#ah2)"/>
+        <text x="178" y="424" font-family="Archivo,sans-serif" font-size="9.5"
+              fill="currentColor" opacity=".6">se calcula desde las transacciones</text>
+      </svg>
+    </div>
+    <figcaption>
+      Las dos cajas en tono cálido son las que quedan fuera del alcance de la
+      clave pública del dashboard. La línea punteada marca lo que se deriva:
+      los agregados no son datos nuevos, son transacciones sumadas.
+    </figcaption>
+  </figure>
+</section>
+
+<!-- ============ 3 · el registro de correcciones ============ -->
+<section>
+  <div class="col">
+    <h2><span class="num">03</span>Qué se corrigió, una por una</h2>
+    <p class="lede">
+      Cada fila es un problema concreto del esquema actual y la tabla o columna
+      que lo reemplaza.
+    </p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th class="norm">Regla</th>
+          <th>En el esquema actual</th>
+          <th>Cómo queda</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="norm"><span class="badge">1FN</span></td>
+          <td>
+            <code class="t-old">resumen_diario_usuarios.juegos</code> es una columna <code>ARRAY</code>
+            <span class="why">Un array dentro de una celda no se puede filtrar ni sumar: para saber cuánto se apostó en un juego hay que recorrer todas las filas y desarmarlo.</span>
+          </td>
+          <td><code class="t-new">resumen_diario_usuario_juego</code>, una fila por juego</td>
+        </tr>
+        <tr>
+          <td class="norm"><span class="badge">2FN</span></td>
+          <td>
+            Los resúmenes repiten <code>usuario</code> y <code>casa_apuestas</code> en cada fila
+            <span class="why">La clave es (usuario, día), pero esos campos dependen solo del usuario. Un cambio de nombre deja miles de filas desactualizadas.</span>
+          </td>
+          <td>Clave foránea a <code class="t-new">core.usuario</code></td>
+        </tr>
+        <tr>
+          <td class="norm"><span class="badge">3FN</span></td>
+          <td>
+            <code class="t-old">transacciones_novusbet</code> guarda <code>usuario</code>, <code>casa_apuestas</code>, <code>estado_cliente</code>, <code>moneda</code>
+            <span class="why">Ninguno es atributo de la transacción; todos son del usuario que la hizo.</span>
+          </td>
+          <td>Se obtienen por <code>JOIN</code>. La vista <code class="t-new">v_transaccion_detalle</code> devuelve el formato ancho de siempre</td>
+        </tr>
+        <tr>
+          <td class="norm"><span class="badge dup">Duplicado</span></td>
+          <td>
+            <code class="t-old">usuarios_novusbet</code> tiene <code>username</code>/<code>usuario</code>, <code>id_usuario_novusbet</code>/<code>id_usuario</code>, <code>id_padre</code>/<code>padre</code>/<code>nombre_usuario_padre</code>, <code>fecha_registro</code>/<code>fecha_creacion</code>
+            <span class="why">Pares que se acumularon en sucesivas importaciones. Cada consulta tiene que adivinar cuál está poblada.</span>
+          </td>
+          <td>Una columna por dato. La jerarquía pasa a ser <code class="t-new">padre_id</code>, una clave foránea real</td>
+        </tr>
+        <tr>
+          <td class="norm"><span class="badge dup">Duplicado</span></td>
+          <td>
+            <code class="t-old">alertas_apuestas</code> y <code class="t-old">alertas_ganancias</code>
+            <span class="why">Columnas idénticas salvo el nombre del motivo. Además copian disciplina, juego, descripción y fecha desde la transacción.</span>
+          </td>
+          <td><code class="t-new">core.alerta</code> con <code>tipo_alerta_id</code></td>
+        </tr>
+        <tr>
+          <td class="norm"><span class="badge">Derivado</span></td>
+          <td>
+            <code class="t-old">resumen_mensual_usuarios</code> y <code class="t-old">ranking_historico_base</code>
+            <span class="why">Son la suma de las tablas diarias. Mantenerlas como tablas obliga a recalcularlas y permite que queden desincronizadas.</span>
+          </td>
+          <td>Vistas: <code class="t-new">v_resumen_mensual_usuario</code> y <code class="t-new">v_ranking_historico</code></td>
+        </tr>
+        <tr>
+          <td class="norm"><span class="badge">Derivado</span></td>
+          <td>
+            <code>beneficio</code>, <code>apuestas_deportivas.pendiente</code>, <code>dia</code>, <code>es_apuesta</code>
+            <span class="why">Valores que se deducen de otros y por tanto pueden contradecirlos.</span>
+          </td>
+          <td><code>beneficio</code> es columna calculada; <code>pendiente</code> equivale a <code>outcome is null</code>; <code>es_apuesta</code> sube al catálogo de tipos</td>
+        </tr>
+        <tr>
+          <td class="norm"><span class="badge">Estructura</span></td>
+          <td>
+            <code class="t-old">parametros_alerta_apuestas</code> usa <code>id integer check (id = 1)</code>
+            <span class="why">Tabla de una sola fila: añadir un segundo parámetro exige una columna nueva.</span>
+          </td>
+          <td><code class="t-new">core.parametro</code>, clave-valor</td>
+        </tr>
+        <tr>
+          <td class="norm"><span class="badge">Huérfanas</span></td>
+          <td>
+            <code class="t-old">usuarios</code>, <code class="t-old">tipos_usuario</code>, <code class="t-old">estados_usuario</code>, <code class="t-old">disciplinas</code>
+            <span class="why">Del diseño inicial. Ningún proceso del repositorio las consulta.</span>
+          </td>
+          <td>Su contenido se absorbe en los catálogos; las tablas pasan a <code>legacy</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 4 · seguridad ============ -->
+<section>
+  <div class="col">
+    <h2><span class="num">04</span>Los datos personales, fuera del navegador</h2>
+    <p>
+      En Supabase, cualquier tabla sin RLS es legible con la clave
+      <code>anon</code>, que viaja incrustada en el navegador de quien abra el
+      dashboard. Hoy <code class="t-old">usuarios_novusbet</code> guarda correo,
+      teléfono, número de documento e IP junto al resto del perfil.
+    </p>
+    <p>
+      Esos campos pasan a <code class="t-new">core.usuario_contacto</code>, con
+      RLS activo y ninguna política de lectura: solo se llega con
+      <code>service_role</code>, es decir, desde tu backend. Lo mismo con los
+      hashes de <code class="t-new">core.admin_usuario</code>.
+    </p>
+  </div>
+
+  <div class="scroll">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th>Quién consulta</th>
+          <th>Catálogos</th>
+          <th>Transacciones y resúmenes</th>
+          <th>Contacto y credenciales</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>anon</code><span class="why">clave pública del dashboard</span></td>
+          <td class="y">Lee</td><td class="n">Sin acceso</td><td class="n">Sin acceso</td>
+        </tr>
+        <tr>
+          <td><code>authenticated</code><span class="why">sesión iniciada</span></td>
+          <td class="y">Lee</td><td class="y">Lee</td><td class="n">Sin acceso</td>
+        </tr>
+        <tr>
+          <td><code>service_role</code><span class="why">backend, nunca en el navegador</span></td>
+          <td class="y">Todo</td><td class="y">Todo</td><td class="y">Todo</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 5 · aplicar ============ -->
+<section>
+  <div class="col">
+    <h2><span class="num">05</span>Cómo aplicarlo</h2>
+    <p class="lede">
+      En orden, desde el SQL Editor de Supabase. Los cinco primeros archivos
+      solo crean cosas nuevas y copian datos: no modifican ni borran nada de lo
+      que tienes.
+    </p>
+
+    <ol class="steps">
+      <li>
+        <span class="file">001_core_dimensiones.sql</span>
+        <span class="what">Crea el esquema <code>core</code> y los 14 catálogos.</span>
+      </li>
+      <li>
+        <span class="file">002_core_entidades.sql</span>
+        <span class="what">Usuarios, contacto, saldos y métricas.</span>
+      </li>
+      <li>
+        <span class="file">003_core_hechos.sql</span>
+        <span class="what">Transacciones, apuestas deportivas y alertas.</span>
+      </li>
+      <li>
+        <span class="file">004_core_agregados.sql</span>
+        <span class="what">Resúmenes, históricos y las vistas derivadas.</span>
+      </li>
+      <li>
+        <span class="file">005_carga_desde_legacy.sql</span>
+        <span class="what">Copia los datos. Se puede ejecutar varias veces sin duplicar nada. Al final trae una consulta comentada que compara los conteos de origen y destino: <strong>ejecútala antes de seguir</strong>.</span>
+      </li>
+      <li class="cut">
+        <span class="file">006_vistas_compatibilidad.sql</span>
+        <span class="what">El corte. Mueve tus tablas al esquema <code>legacy</code> (no las borra) y deja en <code>public</code> vistas con los mismos nombres y columnas.</span>
+      </li>
+      <li>
+        <span class="file">007_rls.sql</span>
+        <span class="what">Activa la seguridad por fila y cierra el acceso al contacto y a las credenciales.</span>
+      </li>
+    </ol>
+  </div>
+
+  <div class="col">
+    <div class="note">
+      <p>
+        <strong>Dos cosas a tener en cuenta tras el corte.</strong><br>
+        Las vistas son de solo lectura: los procesos que <em>escriben</em>
+        —<code>extraccionDatos.py</code> y los importadores— deben pasar a
+        insertar en <code>core</code>, o seguir apuntando a <code>legacy</code>
+        mientras los adaptas. Y <code>public.usuarios_novusbet</code> puede
+        devolver alguna fila de más: son usuarios que antes solo existían como
+        texto suelto dentro de las transacciones y ahora tienen ficha propia,
+        que es justamente lo que evita las transacciones huérfanas.
+      </p>
+    </div>
+
+    <div class="verified">
+      <span class="tick">✓</span>
+      <p>
+        <span class="head">Probado, no solo escrito</span>
+        Las siete migraciones se ejecutaron sobre PostgreSQL 16 contra una copia
+        de tu esquema, con datos que cubren los casos difíciles: usuarios
+        cargados con las columnas viejas, jerarquía por identificador y por
+        nombre, usuarios huérfanos, arrays con varios juegos y las dos tablas de
+        transacciones a la vez. Se aplican sin error, la carga es idempotente,
+        cada vista de compatibilidad devuelve el mismo número de filas que su
+        tabla original y la matriz de acceso se comporta como la de arriba.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Dashboard Genius · <code>supabase/migrations/</code> ·
+  el detalle completo está en <code>supabase/NORMALIZACION.md</code>
+</footer>
+
+</div>
