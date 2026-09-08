@@ -6,13 +6,19 @@
     "sha256": "f8f89cb0d084955503d43c6a58ba69282f2dd014f0397e5a15f09d06676673b5",
     "filas": 139340,
     "filas_casino": 139340,
-    "importado_en": "2026-09-03T20:01:42+00:00",
+    "importado_en": "2026-09-08T12:12:07-06:00",
+    "cobertura": {
+     "2026-08": [
+      "2026-08-01 00:00:02",
+      "2026-08-04 14:10:08"
+     ]
+    },
     "deltas": {
      "2026-08": {
       "3Oaks": {
-       "rondas": 7163,
-       "apuesta": 1211.400000000097,
-       "premios": 1278.7999999999975
+       "rondas": 7133,
+       "apuesta": 1192.4000000000974,
+       "premios": 1259.7999999999977
       },
       "Pragmaticplay": {
        "rondas": 20655,
@@ -35,9 +41,9 @@
        "premios": 367.19000000000034
       },
       "Spribe": {
-       "rondas": 975,
-       "apuesta": 2681.7599999999684,
-       "premios": 1406.8399999999976
+       "rondas": 965,
+       "apuesta": 2673.4599999999687,
+       "premios": 1398.5399999999975
       },
       "Evoplay": {
        "rondas": 2909,
@@ -115,9 +121,9 @@
        "premios": 283.32
       },
       "In-Out": {
-       "rondas": 1266,
-       "apuesta": 446.5399999999986,
-       "premios": 405.69000000000017
+       "rondas": 1265,
+       "apuesta": 446.2399999999986,
+       "premios": 405.39000000000016
       },
       "Spinomenal": {
        "rondas": 3744,
@@ -180,9 +186,9 @@
        "premios": 110.76000000000002
       },
       "Solidicon": {
-       "rondas": 532,
-       "apuesta": 135.89999999999947,
-       "premios": 125.02999999999997
+       "rondas": 531,
+       "apuesta": 135.39999999999947,
+       "premios": 124.52999999999997
       },
       "PopiPlay": {
        "rondas": 134,
@@ -220,9 +226,9 @@
        "premios": 35.25999999999999
       },
       "Yggdrasil": {
-       "rondas": 810,
-       "apuesta": 394.30000000000047,
-       "premios": 448.0100000000001
+       "rondas": 809,
+       "apuesta": 393.7000000000005,
+       "premios": 447.4100000000001
       },
       "Apparat": {
        "rondas": 498,
@@ -245,9 +251,9 @@
        "premios": 183.24000000000018
       },
       "Aviatrix": {
-       "rondas": 210,
-       "apuesta": 72.4,
-       "premios": 45.05000000000002
+       "rondas": 160,
+       "apuesta": 58.400000000000006,
+       "premios": 31.050000000000008
       },
       "Spinoro": {
        "rondas": 52,
@@ -378,7 +384,7 @@
     }
    }
   ],
-  "actualizado": "2026-09-03T20:01:42+00:00",
+  "actualizado": "2026-09-08T12:12:07-06:00",
   "periodos_disponibles": [
    "2026-08"
   ]
@@ -386,9 +392,9 @@
  "acumulado": {
   "2026-08": {
    "3Oaks": {
-    "rondas": 7163,
-    "apuesta": 1211.4,
-    "premios": 1278.8
+    "rondas": 7133,
+    "apuesta": 1192.4,
+    "premios": 1259.8
    },
    "Pragmaticplay": {
     "rondas": 20655,
@@ -411,9 +417,9 @@
     "premios": 367.19
    },
    "Spribe": {
-    "rondas": 975,
-    "apuesta": 2681.76,
-    "premios": 1406.84
+    "rondas": 965,
+    "apuesta": 2673.46,
+    "premios": 1398.54
    },
    "Evoplay": {
     "rondas": 2909,
@@ -491,9 +497,9 @@
     "premios": 283.32
    },
    "In-Out": {
-    "rondas": 1266,
-    "apuesta": 446.54,
-    "premios": 405.69
+    "rondas": 1265,
+    "apuesta": 446.24,
+    "premios": 405.39
    },
    "Spinomenal": {
     "rondas": 3744,
@@ -556,9 +562,9 @@
     "premios": 110.76
    },
    "Solidicon": {
-    "rondas": 532,
-    "apuesta": 135.9,
-    "premios": 125.03
+    "rondas": 531,
+    "apuesta": 135.4,
+    "premios": 124.53
    },
    "PopiPlay": {
     "rondas": 134,
@@ -596,9 +602,9 @@
     "premios": 35.26
    },
    "Yggdrasil": {
-    "rondas": 810,
-    "apuesta": 394.3,
-    "premios": 448.01
+    "rondas": 809,
+    "apuesta": 393.7,
+    "premios": 447.41
    },
    "Apparat": {
     "rondas": 498,
@@ -621,9 +627,9 @@
     "premios": 183.24
    },
    "Aviatrix": {
-    "rondas": 210,
-    "apuesta": 72.4,
-    "premios": 45.05
+    "rondas": 160,
+    "apuesta": 58.4,
+    "premios": 31.05
    },
    "Spinoro": {
     "rondas": 52,
@@ -756,11 +762,15 @@
   "2026-08": {
    "meta": {
     "fuente": "importar-perp-casino.py (export manual del backoffice)",
-    "generado": "2026-09-03T20:01:42+00:00",
+    "generado": "2026-09-08T12:12:07-06:00",
     "periodo": "2026-08",
-    "errores": 0
+    "errores": 0,
+    "cobertura": [
+     "2026-08-01 00:00:02",
+     "2026-08-04 14:10:08"
+    ]
    },
-   "total_rondas": 113878,
+   "total_rondas": 113785,
    "por_proveedor": [
     {
      "provider_id": null,
@@ -792,11 +802,11 @@
     {
      "provider_id": null,
      "proveedor": "3Oaks",
-     "rondas": 7163,
-     "apuesta": 1211.4,
-     "premios": 1278.8,
+     "rondas": 7133,
+     "apuesta": 1192.4,
+     "premios": 1259.8,
      "ggr": -67.4,
-     "rtp": 105.56
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -805,7 +815,7 @@
      "apuesta": 1433.55,
      "premios": 878.58,
      "ggr": 554.97,
-     "rtp": 61.29
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -814,7 +824,7 @@
      "apuesta": 1553.67,
      "premios": 1474.67,
      "ggr": 79.0,
-     "rtp": 94.92
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -823,7 +833,7 @@
      "apuesta": 920.6,
      "premios": 864.72,
      "ggr": 55.88,
-     "rtp": 93.93
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -841,7 +851,7 @@
      "apuesta": 977.1,
      "premios": 777.69,
      "ggr": 199.41,
-     "rtp": 79.59
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -850,7 +860,7 @@
      "apuesta": 691.55,
      "premios": 758.3,
      "ggr": -66.75,
-     "rtp": 109.65
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -859,7 +869,7 @@
      "apuesta": 1058.2,
      "premios": 1522.99,
      "ggr": -464.79,
-     "rtp": 143.92
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -868,7 +878,7 @@
      "apuesta": 634.0,
      "premios": 686.28,
      "ggr": -52.28,
-     "rtp": 108.25
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -877,7 +887,7 @@
      "apuesta": 366.05,
      "premios": 283.32,
      "ggr": 82.73,
-     "rtp": 77.4
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -886,7 +896,7 @@
      "apuesta": 829.91,
      "premios": 1016.47,
      "ggr": -186.56,
-     "rtp": 122.48
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -895,7 +905,7 @@
      "apuesta": 452.46,
      "premios": 426.3,
      "ggr": 26.16,
-     "rtp": 94.22
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -904,7 +914,7 @@
      "apuesta": 604.18,
      "premios": 707.61,
      "ggr": -103.43,
-     "rtp": 117.12
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -913,7 +923,7 @@
      "apuesta": 533.32,
      "premios": 731.3,
      "ggr": -197.98,
-     "rtp": 137.12
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -922,7 +932,7 @@
      "apuesta": 709.21,
      "premios": 367.19,
      "ggr": 342.02,
-     "rtp": 51.77
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -931,16 +941,16 @@
      "apuesta": 313.19,
      "premios": 297.7,
      "ggr": 15.49,
-     "rtp": 95.05
+     "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "In-Out",
-     "rondas": 1266,
-     "apuesta": 446.54,
-     "premios": 405.69,
+     "rondas": 1265,
+     "apuesta": 446.24,
+     "premios": 405.39,
      "ggr": 40.85,
-     "rtp": 90.85
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -949,7 +959,7 @@
      "apuesta": 270.0,
      "premios": 244.62,
      "ggr": 25.38,
-     "rtp": 90.6
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -958,7 +968,7 @@
      "apuesta": 820.97,
      "premios": 576.24,
      "ggr": 244.73,
-     "rtp": 70.19
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -967,7 +977,7 @@
      "apuesta": 184.35,
      "premios": 183.24,
      "ggr": 1.11,
-     "rtp": 99.4
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -976,16 +986,16 @@
      "apuesta": 245.08,
      "premios": 162.78,
      "ggr": 82.3,
-     "rtp": 66.42
+     "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Spribe",
-     "rondas": 975,
-     "apuesta": 2681.76,
-     "premios": 1406.84,
+     "rondas": 965,
+     "apuesta": 2673.46,
+     "premios": 1398.54,
      "ggr": 1274.92,
-     "rtp": 52.46
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -994,7 +1004,7 @@
      "apuesta": 214.98,
      "premios": 131.22,
      "ggr": 83.76,
-     "rtp": 61.04
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1003,7 +1013,7 @@
      "apuesta": 356.7,
      "premios": 292.84,
      "ggr": 63.86,
-     "rtp": 82.1
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1012,16 +1022,16 @@
      "apuesta": 214.0,
      "premios": 203.65,
      "ggr": 10.35,
-     "rtp": 95.16
+     "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Yggdrasil",
-     "rondas": 810,
-     "apuesta": 394.3,
-     "premios": 448.01,
+     "rondas": 809,
+     "apuesta": 393.7,
+     "premios": 447.41,
      "ggr": -53.71,
-     "rtp": 113.62
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1030,16 +1040,16 @@
      "apuesta": 225.96,
      "premios": 338.81,
      "ggr": -112.85,
-     "rtp": 149.94
+     "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Solidicon",
-     "rondas": 532,
-     "apuesta": 135.9,
-     "premios": 125.03,
+     "rondas": 531,
+     "apuesta": 135.4,
+     "premios": 124.53,
      "ggr": 10.87,
-     "rtp": 92.0
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1048,7 +1058,7 @@
      "apuesta": 130.5,
      "premios": 109.28,
      "ggr": 21.22,
-     "rtp": 83.74
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1057,7 +1067,7 @@
      "apuesta": 59.6,
      "premios": 42.93,
      "ggr": 16.67,
-     "rtp": 72.03
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1066,7 +1076,7 @@
      "apuesta": 154.03,
      "premios": 83.82,
      "ggr": 70.21,
-     "rtp": 54.42
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1075,7 +1085,7 @@
      "apuesta": 151.64,
      "premios": 110.41,
      "ggr": 41.23,
-     "rtp": 72.81
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1084,7 +1094,7 @@
      "apuesta": 180.5,
      "premios": 108.88,
      "ggr": 71.62,
-     "rtp": 60.32
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1093,7 +1103,7 @@
      "apuesta": 148.82,
      "premios": 558.61,
      "ggr": -409.79,
-     "rtp": 375.36
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1102,7 +1112,7 @@
      "apuesta": 120.8,
      "premios": 0.0,
      "ggr": 120.8,
-     "rtp": 0.0
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1111,7 +1121,7 @@
      "apuesta": 138.1,
      "premios": 110.76,
      "ggr": 27.34,
-     "rtp": 80.2
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1120,7 +1130,7 @@
      "apuesta": 71.0,
      "premios": 164.45,
      "ggr": -93.45,
-     "rtp": 231.62
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1129,16 +1139,7 @@
      "apuesta": 69.45,
      "premios": 20.95,
      "ggr": 48.5,
-     "rtp": 30.17
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Aviatrix",
-     "rondas": 210,
-     "apuesta": 72.4,
-     "premios": 45.05,
-     "ggr": 27.35,
-     "rtp": 62.22
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1147,7 +1148,16 @@
      "apuesta": 73.55,
      "premios": 66.17,
      "ggr": 7.38,
-     "rtp": 89.97
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Aviatrix",
+     "rondas": 160,
+     "apuesta": 58.4,
+     "premios": 31.05,
+     "ggr": 27.35,
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1156,7 +1166,7 @@
      "apuesta": 80.6,
      "premios": 35.26,
      "ggr": 45.34,
-     "rtp": 43.75
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1165,7 +1175,7 @@
      "apuesta": 108.5,
      "premios": 128.5,
      "ggr": -20.0,
-     "rtp": 118.43
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1174,7 +1184,7 @@
      "apuesta": 35.1,
      "premios": 64.4,
      "ggr": -29.3,
-     "rtp": 183.48
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1183,7 +1193,7 @@
      "apuesta": 13.72,
      "premios": 3.91,
      "ggr": 9.81,
-     "rtp": 28.5
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1192,7 +1202,7 @@
      "apuesta": 41.92,
      "premios": 65.4,
      "ggr": -23.48,
-     "rtp": 156.01
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1201,7 +1211,7 @@
      "apuesta": 32.36,
      "premios": 0.0,
      "ggr": 32.36,
-     "rtp": 0.0
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1210,7 +1220,7 @@
      "apuesta": 15.1,
      "premios": 3.55,
      "ggr": 11.55,
-     "rtp": 23.51
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1219,7 +1229,7 @@
      "apuesta": 44.4,
      "premios": 8.53,
      "ggr": 35.87,
-     "rtp": 19.21
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1228,7 +1238,7 @@
      "apuesta": 53.0,
      "premios": 57.25,
      "ggr": -4.25,
-     "rtp": 108.02
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1237,7 +1247,7 @@
      "apuesta": 13.2,
      "premios": 6.64,
      "ggr": 6.56,
-     "rtp": 50.3
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1246,7 +1256,7 @@
      "apuesta": 48.3,
      "premios": 71.39,
      "ggr": -23.09,
-     "rtp": 147.81
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1255,7 +1265,7 @@
      "apuesta": 59.6,
      "premios": 31.75,
      "ggr": 27.85,
-     "rtp": 53.27
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1264,7 +1274,7 @@
      "apuesta": 32.98,
      "premios": 20.0,
      "ggr": 12.98,
-     "rtp": 60.64
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1273,7 +1283,7 @@
      "apuesta": 54.4,
      "premios": 79.56,
      "ggr": -25.16,
-     "rtp": 146.25
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1282,7 +1292,7 @@
      "apuesta": 19.4,
      "premios": 27.25,
      "ggr": -7.85,
-     "rtp": 140.46
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1291,7 +1301,7 @@
      "apuesta": 12.5,
      "premios": 3.45,
      "ggr": 9.05,
-     "rtp": 27.6
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1300,7 +1310,7 @@
      "apuesta": 3.7,
      "premios": 1.7,
      "ggr": 2.0,
-     "rtp": 45.95
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1309,7 +1319,7 @@
      "apuesta": 11.2,
      "premios": 1.2,
      "ggr": 10.0,
-     "rtp": 10.71
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1318,7 +1328,7 @@
      "apuesta": 5.94,
      "premios": 6.3,
      "ggr": -0.36,
-     "rtp": 106.06
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1327,7 +1337,7 @@
      "apuesta": 10.5,
      "premios": 2.67,
      "ggr": 7.83,
-     "rtp": 25.43
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1336,7 +1346,7 @@
      "apuesta": 1.45,
      "premios": 0.0,
      "ggr": 1.45,
-     "rtp": 0.0
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1345,7 +1355,7 @@
      "apuesta": 14.0,
      "premios": 0.8,
      "ggr": 13.2,
-     "rtp": 5.71
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1354,7 +1364,7 @@
      "apuesta": 8.0,
      "premios": 12.5,
      "ggr": -4.5,
-     "rtp": 156.25
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1363,7 +1373,7 @@
      "apuesta": 25.91,
      "premios": 12.49,
      "ggr": 13.42,
-     "rtp": 48.21
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1372,7 +1382,7 @@
      "apuesta": 6.2,
      "premios": 7.15,
      "ggr": -0.95,
-     "rtp": 115.32
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1381,7 +1391,7 @@
      "apuesta": 7.09,
      "premios": 5.61,
      "ggr": 1.48,
-     "rtp": 79.13
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1390,7 +1400,7 @@
      "apuesta": 2.2,
      "premios": 0.0,
      "ggr": 2.2,
-     "rtp": 0.0
+     "rtp": null
     },
     {
      "provider_id": null,
@@ -1399,7 +1409,7 @@
      "apuesta": 0.03,
      "premios": 17.0,
      "ggr": -16.97,
-     "rtp": 56666.67
+     "rtp": null
     },
     {
      "provider_id": null,

@@ -37,7 +37,7 @@
      "importe": 6826.94,
      "pendiente": 0.0,
      "ganancias": 3136.42,
-     "cuota_media": 66.121,
+     "cuota_media": null,
      "estados": {
       "Running": 277,
       "Lost": 479,
@@ -53,7 +53,7 @@
      "importe": 2197.72,
      "pendiente": 0.0,
      "ganancias": 1735.35,
-     "cuota_media": 326.064,
+     "cuota_media": null,
      "estados": {
       "Lost": 62,
       "Won": 27,
@@ -69,7 +69,7 @@
      "importe": 1876.23,
      "pendiente": 0.0,
      "ganancias": 1246.88,
-     "cuota_media": 42.109,
+     "cuota_media": null,
      "estados": {
       "Lost": 20,
       "Running": 15,
@@ -85,7 +85,7 @@
      "importe": 396.2,
      "pendiente": 0.0,
      "ganancias": 33.75,
-     "cuota_media": 2.352,
+     "cuota_media": null,
      "estados": {
       "Lost": 10,
       "Won": 2
@@ -98,7 +98,7 @@
      "importe": 10.0,
      "pendiente": 0.0,
      "ganancias": 23.04,
-     "cuota_media": 3.295,
+     "cuota_media": null,
      "estados": {
       "Won": 2
      }
@@ -110,7 +110,7 @@
      "importe": 2.0,
      "pendiente": 0.0,
      "ganancias": 10.56,
-     "cuota_media": 5.03,
+     "cuota_media": null,
      "estados": {
       "Won": 1
      }
@@ -1138,7 +1138,7 @@
      "importe": 23410.62,
      "pendiente": 0.0,
      "ganancias": 25786.78,
-     "cuota_media": 2003.672,
+     "cuota_media": null,
      "estados": {
       "Lost": 4307,
       "Won": 498,
@@ -1153,7 +1153,7 @@
      "importe": 34374.52,
      "pendiente": 0.0,
      "ganancias": 32326.13,
-     "cuota_media": 221.697,
+     "cuota_media": null,
      "estados": {
       "Won": 1084,
       "Lost": 1048,
@@ -1170,7 +1170,7 @@
      "importe": 13414.23,
      "pendiente": 0.0,
      "ganancias": 11307.82,
-     "cuota_media": 114.648,
+     "cuota_media": null,
      "estados": {
       "Lost": 360,
       "Won": 165,
@@ -1187,7 +1187,7 @@
      "importe": 6929.44,
      "pendiente": 0.0,
      "ganancias": 6151.15,
-     "cuota_media": 250.545,
+     "cuota_media": null,
      "estados": {
       "Won": 155,
       "Lost": 267,
@@ -1202,7 +1202,7 @@
      "importe": 560.12,
      "pendiente": 0.0,
      "ganancias": 266.92,
-     "cuota_media": 12.32,
+     "cuota_media": null,
      "estados": {
       "Lost": 64,
       "Won": 21
@@ -1215,7 +1215,7 @@
      "importe": 180.94,
      "pendiente": 0.0,
      "ganancias": 188.84,
-     "cuota_media": 7.795,
+     "cuota_media": null,
      "estados": {
       "Lost": 35,
       "Won": 12
@@ -1228,7 +1228,7 @@
      "importe": 2270.01,
      "pendiente": 0.0,
      "ganancias": 1785.41,
-     "cuota_media": 6.456,
+     "cuota_media": null,
      "estados": {
       "Won": 15,
       "Lost": 24,
@@ -1242,7 +1242,7 @@
      "importe": 154.05,
      "pendiente": 0.0,
      "ganancias": 46.99,
-     "cuota_media": 120.713,
+     "cuota_media": null,
      "estados": {
       "Lost": 24,
       "Won": 7
@@ -1255,7 +1255,7 @@
      "importe": 173.25,
      "pendiente": 0.0,
      "ganancias": 189.74,
-     "cuota_media": 3.614,
+     "cuota_media": null,
      "estados": {
       "Won": 7,
       "Lost": 17
@@ -1268,7 +1268,7 @@
      "importe": 2526.45,
      "pendiente": 0.0,
      "ganancias": 2427.73,
-     "cuota_media": 1.909,
+     "cuota_media": null,
      "estados": {
       "Won": 11,
       "Lost": 12
@@ -1281,7 +1281,7 @@
      "importe": 225.15,
      "pendiente": 0.0,
      "ganancias": 230.15,
-     "cuota_media": 2.0,
+     "cuota_media": null,
      "estados": {
       "Won": 5,
       "Lost": 4
@@ -1294,7 +1294,7 @@
      "importe": 17.5,
      "pendiente": 0.0,
      "ganancias": 12.43,
-     "cuota_media": 2.545,
+     "cuota_media": null,
      "estados": {
       "Won": 2,
       "Lost": 4
@@ -1307,7 +1307,7 @@
      "importe": 11.8,
      "pendiente": 0.0,
      "ganancias": 0.0,
-     "cuota_media": 695.144,
+     "cuota_media": null,
      "estados": {
       "Lost": 5
      }
@@ -1319,7 +1319,7 @@
      "importe": 358.28,
      "pendiente": 0.0,
      "ganancias": 206.5,
-     "cuota_media": 1.89,
+     "cuota_media": null,
      "estados": {
       "Won": 2,
       "Lost": 3
@@ -1332,7 +1332,7 @@
      "importe": 36.96,
      "pendiente": 0.0,
      "ganancias": 77.52,
-     "cuota_media": 895.302,
+     "cuota_media": null,
      "estados": {
       "Won": 3,
       "Lost": 1
@@ -1345,7 +1345,7 @@
      "importe": 160.0,
      "pendiente": 0.0,
      "ganancias": 9.61,
-     "cuota_media": 20.872,
+     "cuota_media": null,
      "estados": {
       "Won": 1,
       "Lost": 3
@@ -1358,7 +1358,7 @@
      "importe": 32.66,
      "pendiente": 0.0,
      "ganancias": 31.37,
-     "cuota_media": 2.093,
+     "cuota_media": null,
      "estados": {
       "Lost": 2,
       "Won": 1
@@ -1371,7 +1371,7 @@
      "importe": 3.0,
      "pendiente": 0.0,
      "ganancias": 3.6,
-     "cuota_media": 1.2,
+     "cuota_media": null,
      "estados": {
       "Won": 1
      }
@@ -1383,7 +1383,7 @@
      "importe": 5.0,
      "pendiente": 0.0,
      "ganancias": 0.0,
-     "cuota_media": 100.07,
+     "cuota_media": null,
      "estados": {
       "Lost": 1
      }

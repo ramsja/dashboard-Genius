@@ -73,6 +73,7 @@
     $('#pcEstado').innerHTML =
       '<span class="dot" style="background:var(--green);margin-right:6px;"></span>' +
       'real · <strong>' + fmt(total) + '</strong> rondas en ' + esc(periodo) +
+      (meta.cobertura ? ' · cubre ' + esc(String(meta.cobertura[0]).slice(0, 10)) + ' a ' + esc(String(meta.cobertura[1]).slice(0, 10)) : '') +
       (meta.generado ? ' · generado ' + esc(String(meta.generado).replace('T', ' ').slice(0, 16)) : '') +
       (meta.errores ? ' · <span style="color:var(--amber);">' + meta.errores + ' proveedores sin respuesta</span>' : '');
 

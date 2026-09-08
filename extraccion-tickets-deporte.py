@@ -27,6 +27,7 @@ import json
 import os
 import re
 import ssl
+import statistics
 import time
 import urllib.error
 import urllib.parse
@@ -235,6 +236,20 @@ def exportar_csv(bo: Bo, tok: str, desde: str, hasta: str, sport_id: int, intent
     return None
 
 
+def parse_cuota(texto: str | None) -> float | None:
+    t = (texto or "").strip().replace("$", "").replace(" ", "")
+    if not t:
+        return None
+    if "," in t and "." in t:
+        t = t.replace(",", "")      # coma de miles: 1,234.56
+    elif "," in t:
+        t = t.replace(",", ".")     # coma decimal: 2,35
+    try:
+        return float(t)
+    except ValueError:
+        return None
+
+
 def resumir_csv(texto: str) -> dict:
     filas = list(csv.DictReader(io.StringIO(texto)))
 
@@ -250,12 +265,9 @@ def resumir_csv(texto: str) -> dict:
     cuotas: list[float] = []
     estados: dict[str, int] = {}
     for f in filas:
-        try:
-            c = float((f.get("Cuotas Totales") or "").replace(",", "") or 0)
-            if c:
-                cuotas.append(c)
-        except ValueError:
-            pass
+        c = parse_cuota(f.get("Cuotas Totales"))
+        if c:
+            cuotas.append(c)
         e = (f.get("Estado") or "?").strip() or "?"
         estados[e] = estados.get(e, 0) + 1
     return {
@@ -263,7 +275,9 @@ def resumir_csv(texto: str) -> dict:
         "importe": num("Importe"),
         "pendiente": num("Pendiente"),
         "ganancias": num("Ganancias"),
-        "cuota_media": round(sum(cuotas) / len(cuotas), 3) if cuotas else None,
+        # Mediana: la media aritmetica la dominan combinadas con cuota extrema
+        # (hay tickets reales de hasta 56.000) y no describen el ticket tipico.
+        "cuota_media": round(statistics.median(cuotas), 3) if cuotas else None,
         "estados": estados,
     }
 

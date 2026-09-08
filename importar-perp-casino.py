@@ -14,6 +14,13 @@ Como se explica en las columnas:
     del jugador); Deposit es un pago al jugador (premio o reverso).
   - "Total" trae el monto con signo (negativo en Withdraw, positivo en
     Deposit).
+  - El sufijo "Rollback"/"Rollbackk" en causal marca un reverso: el Deposit
+    devuelve una apuesta anulada (resta rondas y apuesta) y el Withdraw
+    recupera un premio pagado (resta premios). Contabilizarlos por tipo,
+    como rondas o premios nuevos, inflaba el RTP por encima de 100%.
+  - Acepta las cabeceras del backoffice en ingles y en espanol
+    ("Product"/"producto causal", "Transaction Type"/"Tipo de transaccion",
+    "Created At"/"Crear hora").
 
 Cada archivo importado se identifica por su hash SHA-256 y sus aportes
 (deltas) por periodo/proveedor quedan guardados en el propio
@@ -46,15 +53,30 @@ JSON_PATH = OUT_DATA / "perp-casino.json"
 SUFIJOS = ("Rollbackk", "Rollback", "Bet", "Win")
 PATRON_ID = re.compile(r"^(.*?)\s*\((\d+)\)\s*$")
 
+# El RTP por proveedor es flujo de caja de la ventana importada: con muestra
+# pequena (pocos dias o pocos montos) la volatilidad y los premios de apuestas
+# colocadas fuera de la ventana lo disparan por encima de 100%. Por debajo de
+# estos minimos se publica null y el panel muestra "-".
+MIN_RONDAS_RTP = 1000
+MIN_APUESTA_RTP = 2000.0
 
-def proveedor_de(causal: str) -> str:
+
+def proveedor_y_sufijo(causal: str) -> tuple[str, str]:
     m = PATRON_ID.match(causal.strip())
     base = m.group(1).strip() if m else causal.strip()
     for suf in SUFIJOS:
         mm = re.match(r"^(.*?)[\s\-]*" + suf + r"$", base, flags=re.IGNORECASE)
         if mm:
-            return mm.group(1).strip() or base
-    return base
+            return mm.group(1).strip() or base, suf
+    return base, ""
+
+
+def campo(fila: dict, *nombres: str) -> str:
+    for n in nombres:
+        v = fila.get(n)
+        if v is not None:
+            return str(v)
+    return ""
 
 
 def num(valor: str | None) -> float:
@@ -77,35 +99,46 @@ def sha256_de(path: Path) -> str:
     return h.hexdigest()
 
 
-def procesar_archivo(path: Path) -> tuple[dict, int, int]:
-    """Devuelve (deltas, filas_leidas, filas_casino) donde
-    deltas[periodo][proveedor] = {"rondas": int, "apuesta": float, "premios": float}."""
+def procesar_archivo(path: Path) -> tuple[dict, int, int, dict]:
+    """Devuelve (deltas, filas_leidas, filas_casino, cobertura) donde
+    deltas[periodo][proveedor] = {"rondas": int, "apuesta": float, "premios": float}
+    y cobertura[periodo] = [fecha_min, fecha_max] reales del archivo."""
     deltas: dict[str, dict[str, dict[str, float]]] = {}
+    cobertura: dict[str, list[str]] = {}
     filas = 0
     filas_casino = 0
     with path.open("r", encoding="utf-8-sig", newline="", errors="replace") as f:
         lector = csv.DictReader(f)
         for fila in lector:
             filas += 1
-            if (fila.get("Product") or "").strip().casefold() != "casino":
+            if campo(fila, "Product", "producto causal").strip().casefold() != "casino":
                 continue
-            creado = (fila.get("Created At") or "").strip()
+            creado = campo(fila, "Created At", "Crear hora").strip()
             periodo = creado[:7]
             if len(periodo) != 7:
                 continue
             filas_casino += 1
-            proveedor = proveedor_de(fila.get("causal") or "?")
-            tipo = (fila.get("Transaction Type") or "").strip().casefold()
-            total = num(fila.get("Total"))
+            cov = cobertura.setdefault(periodo, [creado, creado])
+            cov[0] = min(cov[0], creado)
+            cov[1] = max(cov[1], creado)
+            proveedor, sufijo = proveedor_y_sufijo(campo(fila, "causal"))
+            tipo = campo(fila, "Transaction Type", "Tipo de transacción").strip().casefold()
+            total = num(campo(fila, "Total"))
             acc = deltas.setdefault(periodo, {}).setdefault(
                 proveedor, {"rondas": 0, "apuesta": 0.0, "premios": 0.0}
             )
-            if tipo == "withdraw":
+            if sufijo in ("Rollback", "Rollbackk"):
+                if tipo == "deposit":
+                    acc["rondas"] -= 1
+                    acc["apuesta"] -= abs(total)
+                elif tipo == "withdraw":
+                    acc["premios"] -= abs(total)
+            elif tipo == "withdraw":
                 acc["rondas"] += 1
                 acc["apuesta"] += abs(total)
             elif tipo == "deposit":
                 acc["premios"] += total
-    return deltas, filas, filas_casino
+    return deltas, filas, filas_casino, cobertura
 
 
 def aplicar_delta(acumulado: dict, deltas: dict, signo: int) -> None:
@@ -136,7 +169,9 @@ def construir_periodos(acumulado: dict) -> dict:
                 "apuesta": round(apuesta, 2),
                 "premios": round(premios, 2),
                 "ggr": round(apuesta - premios, 2),
-                "rtp": round(premios / apuesta * 100, 2) if apuesta else None,
+                "rtp": round(premios / apuesta * 100, 2)
+                if apuesta and vals["rondas"] >= MIN_RONDAS_RTP and apuesta >= MIN_APUESTA_RTP
+                else None,
             })
         filas.sort(key=lambda f: -f["rondas"])
         periodos[periodo] = {
@@ -179,16 +214,17 @@ def main() -> int:
         if previo and not args.forzar:
             print(f"  ya importado, se omite: {path.name} ({previo['filas_casino']} filas de casino, {previo['importado_en']})")
             continue
-        deltas, filas, filas_casino = procesar_archivo(path)
+        deltas, filas, filas_casino, cobertura = procesar_archivo(path)
         if previo:
             aplicar_delta(acumulado, previo["deltas"], -1)
-        aplicar_delta(acumulado, deltas, 1)
+        aplicar_delta(acumulado, deltas, +1)
         registro = {
             "archivo": path.name,
             "sha256": firma,
             "filas": filas,
             "filas_casino": filas_casino,
             "importado_en": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "cobertura": cobertura,
             "deltas": deltas,
         }
         fuentes[firma] = registro
@@ -201,6 +237,13 @@ def main() -> int:
 
     datos["meta"]["fuentes_importadas"] = list(fuentes.values())
     datos["periodos"] = construir_periodos(acumulado)
+    for reg in datos["meta"]["fuentes_importadas"]:
+        for per, cov in (reg.get("cobertura") or {}).items():
+            meta_p = datos["periodos"].get(per, {}).get("meta")
+            if not meta_p:
+                continue
+            cur = meta_p.get("cobertura")
+            meta_p["cobertura"] = [min(cur[0], cov[0]), max(cur[1], cov[1])] if cur else list(cov)
     datos["meta"]["actualizado"] = datetime.now().astimezone().isoformat(timespec="seconds")
     datos["meta"]["periodos_disponibles"] = sorted(datos["periodos"])
 
