@@ -1,75 +1,75 @@
 {
   "version": 2,
-  "generated_at": "2026-09-08T14:21:40",
+  "generated_at": "2026-09-08T14:55:42",
   "source": "C:\\Users\\Riesgos\\.zcode\\workspace\\default\\descargas\\dashboard-Genius\\descargas\\transacciones_producto__2026-09-08_2026-09-08.csv",
-  "total": 35332,
+  "total": 37872,
   "discipline": {
-    "deportes": 943,
-    "casino": 34389,
+    "deportes": 1014,
+    "casino": 36858,
     "otros": 0
   },
   "connection": {
-    "online": 25729,
-    "retail": 9603,
+    "online": 27718,
+    "retail": 10154,
     "desconocido": 0
   },
   "status": {
-    "activo": 25729,
-    "inactivo": 9603,
+    "activo": 27718,
+    "inactivo": 10154,
     "desconectado": 0,
     "suspendido": 0,
     "otros": 0
   },
   "matrix": {
     "casino": {
-      "online": 25006,
-      "retail": 9383,
+      "online": 26940,
+      "retail": 9918,
       "desconocido": 0,
-      "total": 34389,
+      "total": 36858,
       "status": {
-        "activo": 25006,
-        "inactivo": 9383
+        "activo": 26940,
+        "inactivo": 9918
       }
     },
     "deportes": {
-      "online": 723,
-      "retail": 220,
+      "online": 778,
+      "retail": 236,
       "desconocido": 0,
-      "total": 943,
+      "total": 1014,
       "status": {
-        "activo": 723,
-        "inactivo": 220
+        "inactivo": 236,
+        "activo": 778
       }
     }
   },
   "money": {
     "casino": {
-      "income": 16466.66,
-      "total": -1758.73,
+      "income": 17051.57,
+      "total": -1929.25,
       "commission": 0.0
     },
     "deportes": {
-      "income": 8221.56,
-      "total": -2278.91,
+      "income": 9141.98,
+      "total": -1501.13,
       "commission": 0.0
     }
   },
   "top_products": [
     [
       "Casino",
-      33704
+      36103
     ],
     [
       "Deporte",
-      737
+      797
     ],
     [
       "Casino Live",
-      685
+      755
     ],
     [
       "Payments",
-      202
+      213
     ],
     [
       "Banco",
