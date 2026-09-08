@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Registro histórico de usuarios, transacciones y juegos GeniusBet" />
+    <title>Registro histórico · Genius</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: #161d2f;
+        --panel-soft: #1d2942;
+        --line: #2e3d5e;
+        --text: #edf3ff;
+        --muted: #a7b9d8;
+        --green: #30c48d;
+        --amber: #f5b942;
+        --red: #f87171;
+        --blue: #60a5fa;
+        --purple: #a78bfa;
+        --pink: #f472b6;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background:
+          radial-gradient(1200px 400px at 15% -10%, rgba(96,165,250,0.10), transparent 60%),
+          var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+      .container { max-width: 1240px; margin: 0 auto; padding: 28px 20px 80px; }
+      header.top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+      }
+      h1 { margin: 0; font-size: clamp(20px, 3vw, 28px); }
+      .muted { color: var(--muted); }
+      .btn {
+        appearance: none;
+        background: var(--panel-soft);
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: border-color 0.15s, background 0.15s;
+      }
+      .btn:hover { border-color: var(--blue); }
+      .btn.active { background: rgba(96,165,250,0.18); border-color: var(--blue); color: #dbeafe; }
+      .tabs { display: flex; gap: 8px; margin: 24px 0 18px; flex-wrap: wrap; }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin-bottom: 18px;
+      }
+      .panel h2 { margin: 0 0 14px; font-size: 15px; color: var(--muted); font-weight: 600; }
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+        margin: 0 0 18px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 16px 18px;
+      }
+      .card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+      .card .value {
+        margin-top: 10px;
+        font-size: clamp(22px, 2.6vw, 34px);
+        font-weight: 700;
+        line-height: 1.1;
+      }
+      .table-wrap {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow-x: auto;
+        margin-bottom: 18px;
+      }
+      table { width: 100%; border-collapse: collapse; min-width: 520px; }
+      th, td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: left; font-size: 14px; }
+      th { background: var(--panel-soft); color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 12px; cursor: pointer; }
+      tr:last-child td { border-bottom: none; }
+      td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+      .tag {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 3px 9px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+      .c-online { background: rgba(48,196,141,0.18); color: #96f0c8; }
+      .c-retail { background: rgba(245,185,66,0.18); color: #ffd88a; }
+      .c-desconocido { background: rgba(148,163,184,0.2); color: #dfe9ff; }
+      .s-activo { background: rgba(48,196,141,0.18); color: #96f0c8; }
+      .s-inactivo { background: rgba(245,185,66,0.18); color: #ffd88a; }
+      .s-desconectado { background: rgba(248,113,113,0.18); color: #ffb5b5; }
+      .s-suspendido { background: rgba(96,165,250,0.18); color: #bfe1ff; }
+      .s-otros { background: rgba(148,163,184,0.2); color: #dfe9ff; }
+      .d-casino { background: rgba(167,139,250,0.18); color: #ddd0ff; }
+      .d-deportes { background: rgba(96,165,250,0.18); color: #bfe1ff; }
+      .bars .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .bars .row .lbl { width: 120px; font-size: 13px; color: var(--muted); flex-shrink: 0; }
+      .bars .track { flex: 1; background: var(--panel-soft); border-radius: 8px; height: 22px; overflow: hidden; }
+      .bars .fill { height: 100%; border-radius: 8px; min-width: 2px; }
+      .bars .bar-num { width: 90px; text-align: right; font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+      .search { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+      .search input {
+        flex: 1;
+        min-width: 220px;
+        background: var(--panel-soft);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 14px;
+        color: var(--text);
+        font-size: 14px;
+      }
+      .tab-content { display: none; }
+      .tab-content.active { display: block; }
+      .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; font-size: 12px; color: var(--muted); }
+      .legend span { display: inline-flex; align-items: center; gap: 6px; }
+      .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+      .empty { color: var(--muted); padding: 20px 0; text-align: center; }
+      @media (max-width: 560px) {
+        .bars .row .lbl { width: 80px; }
+        .container { padding: 18px 14px 60px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="top">
+        <div>
+          <h1>Registro histórico</h1>
+          <div class="muted">Usuarios, transacciones y top juegos/apuestas</div>
+        </div>
+        <a class="btn" href="./index.html">Volver al dashboard</a>
+      </header>
+
+      <div class="tabs">
+        <button class="btn active" data-tab="tabUsuarios">Usuarios</button>
+        <button class="btn" data-tab="tabTransacciones">Transacciones</button>
+        <button class="btn" data-tab="tabTop">Top juegos y apuestas</button>
+      </div>
+
+      <section id="tabUsuarios" class="tab-content active">
+        <div class="panel">
+          <div class="search">
+            <input type="text" id="usBuscar" placeholder="Buscar por ID o nombre de usuario..." />
+          </div>
+          <div class="kpis" id="usKpis"></div>
+          <div class="table-wrap">
+            <table id="usTabla">
+              <thead>
+                <tr>
+                  <th data-sort="usuario">Usuario</th>
+                  <th data-sort="canal">Canal</th>
+                  <th data-sort="estado_actual">Estado</th>
+                  <th data-sort="primer_dia">Primer día</th>
+                  <th data-sort="ultimo_dia">Último día</th>
+                  <th data-sort="dias_activos" class="num">Días</th>
+                  <th data-sort="transacciones" class="num">Tx</th>
+                  <th data-sort="apuesta_total" class="num">Apuesta</th>
+                  <th data-sort="ganancia_neta" class="num">Ganancia</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="tabTransacciones" class="tab-content">
+        <div class="panel">
+          <div class="kpis" id="trKpis"></div>
+          <h2>Transacciones e ingresos por día</h2>
+          <div class="bars" id="trBarras"></div>
+          <div class="table-wrap" style="margin-top:18px;">
+            <table id="trTabla">
+              <thead>
+                <tr>
+                  <th>Día</th>
+                  <th class="num">Transacciones</th>
+                  <th class="num">Clientes únicos</th>
+                  <th class="num">Activos</th>
+                  <th class="num">Inactivos</th>
+                  <th class="num">Ingresos</th>
+                  <th class="num">Total</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="tabTop" class="tab-content">
+        <div class="panel">
+          <div style="display:flex; gap:10px; flex-wrap: wrap; margin-bottom:14px;">
+            <select id="tjPeriodo" class="btn" style="appearance:auto;"></select>
+            <select id="tjMetrica" class="btn" style="appearance:auto;">
+              <option value="jugadas">Más jugados</option>
+              <option value="apuesta">Más apostados</option>
+            </select>
+            <select id="tjCategoria" class="btn" style="appearance:auto;">
+              <option value="todos">Todos</option>
+              <option value="casino">Casino</option>
+              <option value="deportes">Deportes</option>
+            </select>
+          </div>
+          <div class="kpis" id="tjKpis"></div>
+          <div class="grid2" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:18px;">
+            <div>
+              <h2 style="margin:0 0 14px; font-size:13px;">Ranking</h2>
+              <div class="bars" id="tjBarras"></div>
+            </div>
+            <div class="table-wrap" style="border:0; margin:0;">
+              <table id="tjTabla">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Juego / Deporte</th>
+                    <th>Categoría</th>
+                    <th class="num">Jugadas</th>
+                    <th class="num">Apuesta</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      (function () {
+        'use strict';
+
+        const $ = (sel) => document.querySelector(sel);
+        const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+        const esc = (s) =>
+          String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+          }[c]));
+        const fmt = (n) => new Intl.NumberFormat('es-SV', { maximumFractionDigits: 0 }).format(n || 0);
+        const fmtMoney = (n) => new Intl.NumberFormat('es-SV', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(n || 0);
+
+        const STATUS_LABELS = { activo: 'Activo', inactivo: 'Inactivo', desconectado: 'Desconectado', suspendido: 'Suspendido', otros: 'Otros' };
+        const STATUS_COLORS = { activo: 'var(--green)', inactivo: 'var(--amber)', desconectado: 'var(--red)', suspendido: 'var(--blue)', otros: 'var(--muted)' };
+        const CATEGORY_COLORS = { casino: 'var(--purple)', deportes: 'var(--blue)' };
+        const CATEGORY_TAGS = { casino: 'd-casino', deportes: 'd-deportes' };
+
+        let usuariosData = null;
+        let transaccionesData = null;
+        let topData = null;
+        let usuariosSort = { field: 'transacciones', dir: -1 };
+
+        async function fetchJson(url) {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 15000);
+          try {
+            const r = await fetch(url, { signal: controller.signal });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return await r.json();
+          } finally {
+            clearTimeout(timer);
+          }
+        }
+
+        // ---------- tabs ----------
+        $$('.tabs .btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            $$('.tabs .btn').forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+            $$('.tab-content').forEach((c) => c.classList.remove('active'));
+            $('#' + btn.dataset.tab).classList.add('active');
+          });
+        });
+
+        // ---------- usuarios ----------
+        function renderUsuarios(filterText) {
+          if (!usuariosData) return;
+          const list = Object.entries(usuariosData.usuarios || {})
+            .map(([id, u]) => Object.assign({ id }, u))
+            .filter((u) => {
+              if (!filterText) return true;
+              const q = filterText.toLowerCase();
+              return String(u.id).toLowerCase().includes(q) || String(u.usuario).toLowerCase().includes(q);
+            });
+
+          list.sort((a, b) => {
+            const av = a[usuariosSort.field] || 0;
+            const bv = b[usuariosSort.field] || 0;
+            if (typeof av === 'string') return String(av).localeCompare(String(bv)) * usuariosSort.dir;
+            return (bv - av) * usuariosSort.dir;
+          });
+
+          const totalApuesta = list.reduce((a, u) => a + (u.apuesta_total || 0), 0);
+          const totalGanancia = list.reduce((a, u) => a + (u.ganancia_neta || 0), 0);
+          $('#usKpis').innerHTML = [
+            ['Usuarios filtrados', fmt(list.length), 'var(--text)'],
+            ['Transacciones', fmt(list.reduce((a, u) => a + (u.transacciones || 0), 0)), 'var(--purple)'],
+            ['Apuesta total', fmtMoney(totalApuesta), 'var(--amber)'],
+            ['Ganancia neta', fmtMoney(totalGanancia), totalGanancia >= 0 ? 'var(--green)' : 'var(--red)'],
+          ].map(([label, value, color]) =>
+            '<div class="card"><div class="label">' + esc(label) + '</div>' +
+            '<div class="value" style="color:' + color + ';">' + value + '</div></div>'
+          ).join('');
+
+          $('#usTabla tbody').innerHTML = list.map((u) => {
+            const canalTag = u.canal === 'online' ? 'c-online' : u.canal === 'retail' ? 'c-retail' : 'c-desconocido';
+            const estadoTag = 's-' + (u.estado_actual || 'otros');
+            return (
+              '<tr><td><strong>' + esc(u.usuario || u.id) + '</strong><br><span class="muted" style="font-size:12px;">ID ' + esc(u.id) + '</span></td>' +
+              '<td><span class="tag ' + canalTag + '">' + esc(u.canal || 'desconocido') + '</span></td>' +
+              '<td><span class="tag ' + estadoTag + '">' + esc(STATUS_LABELS[u.estado_actual] || u.estado_actual || 'otros') + '</span></td>' +
+              '<td>' + esc(u.primer_dia || '-') + '</td>' +
+              '<td>' + esc(u.ultimo_dia || '-') + '</td>' +
+              '<td class="num">' + fmt(u.dias_activos) + '</td>' +
+              '<td class="num">' + fmt(u.transacciones) + '</td>' +
+              '<td class="num">' + fmtMoney(u.apuesta_total) + '</td>' +
+              '<td class="num" style="color:' + ((u.ganancia_neta || 0) >= 0 ? 'var(--green)' : 'var(--red)') + ';">' + fmtMoney(u.ganancia_neta) + '</td></tr>'
+            );
+          }).join('') || '<tr><td colspan="9" class="empty">Sin resultados</td></tr>';
+        }
+
+        $('#usBuscar').addEventListener('input', (e) => renderUsuarios(e.target.value.trim()));
+        $$('#usTabla th[data-sort]').forEach((th) => {
+          th.addEventListener('click', () => {
+            const field = th.dataset.sort;
+            usuariosSort.dir = usuariosSort.field === field ? -usuariosSort.dir : -1;
+            usuariosSort.field = field;
+            renderUsuarios($('#usBuscar').value.trim());
+          });
+        });
+
+        // ---------- transacciones ----------
+        function moneyDelDia(dia) {
+          const money = dia.money || {};
+          return Object.values(money).reduce(
+            (acc, m) => ({ income: acc.income + (m.income || 0), total: acc.total + (m.total || 0) }),
+            { income: 0, total: 0 }
+          );
+        }
+
+        function renderTransacciones() {
+          if (!transaccionesData) return;
+          const dias = Object.entries(transaccionesData.dias || {})
+            .map(([dia, res]) => Object.assign({ dia }, res))
+            .sort((a, b) => (a.dia < b.dia ? -1 : 1));
+
+          const totalTx = dias.reduce((a, d) => a + (d.transacciones || 0), 0);
+          const totalClientes = dias.reduce((a, d) => a + ((d.clientes || {}).total || 0), 0);
+          const totalMoney = dias.reduce((a, d) => a + moneyDelDia(d).total, 0);
+
+          $('#trKpis').innerHTML = [
+            ['Días', fmt(dias.length), 'var(--text)'],
+            ['Transacciones', fmt(totalTx), 'var(--purple)'],
+            ['Clientes únicos (suma diaria)', fmt(totalClientes), 'var(--green)'],
+            ['Volumen total', fmtMoney(totalMoney), 'var(--amber)'],
+          ].map(([label, value, color]) =>
+            '<div class="card"><div class="label">' + esc(label) + '</div>' +
+            '<div class="value" style="color:' + color + ';">' + value + '</div></div>'
+          ).join('');
+
+          const max = Math.max.apply(null, dias.map((d) => d.transacciones || 0).concat([1]));
+          $('#trBarras').innerHTML = dias.map((d) => {
+            const pct = max > 0 ? Math.round(((d.transacciones || 0) / max) * 100) : 0;
+            const money = moneyDelDia(d);
+            return (
+              '<div class="row"><div class="lbl" style="width:64px;">' + esc(d.dia.slice(5)) + '</div>' +
+              '<div class="track"><div class="fill" style="width:' + pct + '%;background:var(--purple);" title="' +
+              esc(fmt(d.transacciones) + ' transacciones') + '"></div></div>' +
+              '<div class="bar-num" style="width:90px;">' + fmtMoney(money.total) + '</div></div>'
+            );
+          }).join('');
+
+          $('#trTabla tbody').innerHTML = dias.slice().reverse().map((d) => {
+            const estados = d.estados_cliente || {};
+            const money = moneyDelDia(d);
+            return (
+              '<tr><td><strong>' + esc(d.dia) + '</strong></td>' +
+              '<td class="num">' + fmt(d.transacciones) + '</td>' +
+              '<td class="num">' + fmt((d.clientes || {}).total) + '</td>' +
+              '<td class="num">' + fmt(estados.activo || 0) + '</td>' +
+              '<td class="num">' + fmt(estados.inactivo || 0) + '</td>' +
+              '<td class="num">' + fmtMoney(money.income) + '</td>' +
+              '<td class="num">' + fmtMoney(money.total) + '</td></tr>'
+            );
+          }).join('');
+        }
+
+        // ---------- top juegos ----------
+        function renderTop() {
+          if (!topData) return;
+          const period = $('#tjPeriodo').value || 'acumulado';
+          const metric = $('#tjMetrica').value || 'jugadas';
+          const category = $('#tjCategoria').value || 'todos';
+
+          const bucket = period === 'acumulado' ? topData.acumulado : (topData.por_periodo || {})[period];
+          if (!bucket) return;
+
+          const key = metric === 'apuesta' ? 'mas_apostados' : 'mas_jugados';
+          let games = bucket[key] || [];
+          if (category !== 'todos') games = games.filter((g) => g.categoria === category);
+
+          const visible = games.slice(0, 50);
+          const totalJugadas = games.reduce((a, g) => a + (g.jugadas || 0), 0);
+          const totalApuesta = games.reduce((a, g) => a + (g.apuesta || 0), 0);
+
+          $('#tjKpis').innerHTML = [
+            ['Juegos/apuestas', fmt(games.length), 'var(--text)'],
+            [metric === 'apuesta' ? 'Apuesta total' : 'Jugadas total', metric === 'apuesta' ? fmtMoney(totalApuesta) : fmt(totalJugadas), 'var(--purple)'],
+          ].map(([label, value, color]) =>
+            '<div class="card"><div class="label">' + esc(label) + '</div>' +
+            '<div class="value" style="color:' + color + ';">' + value + '</div></div>'
+          ).join('');
+
+          const max = Math.max.apply(null, visible.map((g) => metric === 'apuesta' ? (g.apuesta || 0) : (g.jugadas || 0)).concat([1]));
+          $('#tjBarras').innerHTML = visible.slice(0, 12).map((g) => {
+            const value = metric === 'apuesta' ? (g.apuesta || 0) : (g.jugadas || 0);
+            const pct = max > 0 ? Math.round((value / max) * 100) : 0;
+            const label = (g.titulo || '').length > 16 ? (g.titulo || '').slice(0, 15) + '…' : (g.titulo || '');
+            return (
+              '<div class="row"><div class="lbl">' + esc(label) + '</div>' +
+              '<div class="track"><div class="fill" style="width:' + pct + '%;background:' + (CATEGORY_COLORS[g.categoria] || 'var(--muted)') + ';" title="' +
+              esc((g.titulo || '') + ' · ' + (g.proveedor || '')) + '"></div></div>' +
+              '<div class="bar-num">' + (metric === 'apuesta' ? fmtMoney(value) : fmt(value)) + '</div></div>'
+            );
+          }).join('');
+
+          $('#tjTabla tbody').innerHTML = visible.map((g, idx) => {
+            return (
+              '<tr><td class="num">' + (idx + 1) + '</td>' +
+              '<td><strong>' + esc(g.titulo || '') + '</strong><br><span class="muted" style="font-size:12px;">' + esc(g.proveedor || '') + '</span></td>' +
+              '<td><span class="tag ' + (CATEGORY_TAGS[g.categoria] || 'd-otros') + '">' + esc(g.categoria || '') + '</span></td>' +
+              '<td class="num">' + fmt(g.jugadas) + '</td>' +
+              '<td class="num">' + fmtMoney(g.apuesta) + '</td></tr>'
+            );
+          }).join('');
+        }
+
+        function populateTopPeriods() {
+          const select = $('#tjPeriodo');
+          if (!select || !topData) return;
+          select.innerHTML =
+            '<option value="acumulado">Todo el histórico</option>' +
+            (topData.periodos_disponibles || []).map((p) => '<option value="' + esc(p) + '">' + esc(p) + '</option>').join('');
+        }
+
+        $('#tjPeriodo').addEventListener('change', renderTop);
+        $('#tjMetrica').addEventListener('change', renderTop);
+        $('#tjCategoria').addEventListener('change', renderTop);
+
+        // ---------- carga inicial ----------
+        async function cargar() {
+          try {
+            [usuariosData, transaccionesData, topData] = await Promise.all([
+              fetchJson('./data/usuarios-historico.json'),
+              fetchJson('./data/historico.json'),
+              fetchJson('./data/top-juegos.json'),
+            ]);
+            renderUsuarios('');
+            renderTransacciones();
+            populateTopPeriods();
+            renderTop();
+          } catch (err) {
+            console.warn('Error cargando datos históricos:', err);
+          }
+        }
+        cargar();
+      })();
+    </script>
+  </body>
+</html>

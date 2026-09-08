@@ -1,6 +1,6 @@
 {
  "version": 1,
- "actualizado": "2026-09-04T16:25:45",
+ "actualizado": "2026-09-08T12:39:36",
  "dias": {
   "2026-08-28": {
    "transacciones": 76620,
@@ -18,6 +18,13 @@
     "total": 326,
     "online": 246,
     "retail": 80
+   },
+   "estados_cliente": {
+    "activo": 246,
+    "inactivo": 80,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
    },
    "money": {
     "casino": {
@@ -54,6 +61,13 @@
     "online": 270,
     "retail": 78
    },
+   "estados_cliente": {
+    "activo": 270,
+    "inactivo": 78,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
+   },
    "money": {
     "casino": {
      "income": 40904.11,
@@ -88,6 +102,13 @@
     "total": 329,
     "online": 248,
     "retail": 81
+   },
+   "estados_cliente": {
+    "activo": 248,
+    "inactivo": 81,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
    },
    "money": {
     "casino": {
@@ -124,6 +145,13 @@
     "online": 238,
     "retail": 78
    },
+   "estados_cliente": {
+    "activo": 238,
+    "inactivo": 78,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
+   },
    "money": {
     "casino": {
      "income": 13672.28,
@@ -158,6 +186,13 @@
     "total": 329,
     "online": 261,
     "retail": 68
+   },
+   "estados_cliente": {
+    "activo": 261,
+    "inactivo": 68,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
    },
    "money": {
     "casino": {
@@ -194,6 +229,13 @@
     "online": 239,
     "retail": 66
    },
+   "estados_cliente": {
+    "activo": 239,
+    "inactivo": 66,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
+   },
    "money": {
     "casino": {
      "income": 27851.57,
@@ -229,6 +271,13 @@
     "online": 244,
     "retail": 64
    },
+   "estados_cliente": {
+    "activo": 244,
+    "inactivo": 64,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
+   },
    "money": {
     "casino": {
      "income": 32774.12,
@@ -263,6 +312,13 @@
     "total": 297,
     "online": 232,
     "retail": 65
+   },
+   "estados_cliente": {
+    "activo": 232,
+    "inactivo": 65,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
    },
    "money": {
     "casino": {

@@ -278,6 +278,19 @@
                 <div class="bars" id="hiBarrasClientes"></div>
               </div>
             </div>
+
+            <div class="grid2" style="margin-top:18px;">
+              <div class="panel" style="padding:14px 16px;">
+                <h2 style="margin:0 0 14px; font-size:13px;">Distribución de estados (último día)</h2>
+                <div id="hiDonutEstados" style="display:flex; justify-content:center;"></div>
+                <div class="legend" id="hiLeyendaEstados"></div>
+              </div>
+              <div class="panel" style="padding:14px 16px;">
+                <h2 style="margin:0 0 14px; font-size:13px;">Evolución de estados</h2>
+                <div class="bars" id="hiBarrasEstados"></div>
+              </div>
+            </div>
+
             <div class="table-wrap" style="margin:18px 0 0;">
               <table id="hiTabla">
                 <thead>
@@ -289,12 +302,92 @@
                     <th class="num">Clientes únicos</th>
                     <th class="num">Clientes online</th>
                     <th class="num">Clientes retail</th>
+                    <th class="num">Activos</th>
+                    <th class="num">Inactivos</th>
                     <th class="num">Ingresos</th>
                     <th class="num">Total</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
               </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="usSeccion" style="display:none;">
+          <div class="panel" style="margin-bottom:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+              <h2 style="margin:0;">Usuarios</h2>
+              <span id="usEstado" class="muted" style="font-size:12px;"></span>
+            </div>
+            <div class="kpis" id="usKpis" style="margin:0 0 18px;"></div>
+            <div class="grid2">
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Top usuarios más activos</h2>
+                <div class="table-wrap" style="border:0; margin:0;">
+                  <table id="usTabla">
+                    <thead>
+                      <tr>
+                        <th>Usuario</th>
+                        <th class="num">Tx</th>
+                        <th class="num">Días</th>
+                        <th class="num">Apuesta</th>
+                        <th class="num">Ganancia</th>
+                        <th>Canal</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Canal de usuarios</h2>
+                <div class="bars" id="usBarrasCanal"></div>
+                <h2 style="margin:18px 0 14px; font-size:13px;">Estado de usuarios</h2>
+                <div class="bars" id="usBarrasEstado"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tjSeccion" style="display:none;">
+          <div class="panel" style="margin-bottom:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+              <h2 style="margin:0;">Top juegos y apuestas</h2>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span id="tjEstado" class="muted" style="font-size:12px;"></span>
+                <select id="tjPeriodo" class="btn" style="appearance:auto;"></select>
+                <select id="tjMetrica" class="btn" style="appearance:auto;">
+                  <option value="jugadas">Más jugados</option>
+                  <option value="apuesta">Más apostados</option>
+                </select>
+                <select id="tjCategoria" class="btn" style="appearance:auto;">
+                  <option value="todos">Todos</option>
+                  <option value="casino">Casino</option>
+                  <option value="deportes">Deportes</option>
+                </select>
+              </div>
+            </div>
+            <div class="kpis" id="tjKpis" style="margin:0 0 18px;"></div>
+            <div class="grid2">
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Ranking</h2>
+                <div class="bars" id="tjBarras"></div>
+              </div>
+              <div class="table-wrap" style="border:0; margin:0;">
+                <table id="tjTabla">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Juego / Deporte</th>
+                      <th>Categoría</th>
+                      <th class="num">Jugadas</th>
+                      <th class="num">Apuesta</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
@@ -374,6 +467,8 @@
     <script src="./config.js"></script>
     <script src="./app.js"></script>
     <script src="./historico.js"></script>
+    <script src="./usuarios-historico.js"></script>
+    <script src="./top-juegos.js"></script>
     <script src="./tickets-deporte.js"></script>
     <script src="./perp-casino.js"></script>
   </body>

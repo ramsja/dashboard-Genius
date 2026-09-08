@@ -9,6 +9,22 @@
   const COLOR_ONLINE = 'var(--green)';
   const COLOR_RETAIL = 'var(--amber)';
 
+  const STATUS_KEYS = ['activo', 'inactivo', 'desconectado', 'suspendido', 'otros'];
+  const STATUS_LABELS = {
+    activo: 'Activos',
+    inactivo: 'Inactivos',
+    desconectado: 'Desconectados',
+    suspendido: 'Suspendidos',
+    otros: 'Otros',
+  };
+  const STATUS_COLORS = {
+    activo: 'var(--green)',
+    inactivo: 'var(--amber)',
+    desconectado: 'var(--red)',
+    suspendido: 'var(--blue)',
+    otros: 'var(--muted)',
+  };
+
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) =>
     String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
@@ -64,7 +80,6 @@
   }
 
   function barrasClientes(filas) {
-    // Una fila por día con barra doble normalizada al máximo de clientes.
     const max = Math.max.apply(
       null,
       filas.flatMap((f) => [f.clientes.online, f.clientes.retail]).concat([1])
@@ -87,6 +102,72 @@
       .join('');
   }
 
+  function renderDonutEstados(estados) {
+    const total = STATUS_KEYS.reduce((a, k) => a + (estados[k] || 0), 0) || 1;
+    const groups = STATUS_KEYS
+      .map((key) => ({ key, value: estados[key] || 0 }))
+      .filter((g) => g.value > 0);
+    const size = 220;
+    const r = 80;
+    const cx = size / 2;
+    const cy = size / 2;
+    let angle = -90;
+    const arcs = groups.map((g) => {
+      const pct = g.value / total;
+      const start = angle;
+      angle += pct * 360;
+      const end = angle;
+      const large = end - start > 180 ? 1 : 0;
+      const x1 = cx + r * Math.cos((start * Math.PI) / 180);
+      const y1 = cy + r * Math.sin((start * Math.PI) / 180);
+      const x2 = cx + r * Math.cos((end * Math.PI) / 180);
+      const y2 = cy + r * Math.sin((end * Math.PI) / 180);
+      const path =
+        pct >= 0.9999
+          ? '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + STATUS_COLORS[g.key] + '"/>'
+          : '<path d="M' + cx + ' ' + cy + ' L' + x1.toFixed(1) + ' ' + y1.toFixed(1) +
+            ' A' + r + ' ' + r + ' 0 ' + large + ' 1 ' + x2.toFixed(1) + ' ' + y2.toFixed(1) + ' Z" fill="' + STATUS_COLORS[g.key] + '"/>';
+      return { ...g, path };
+    });
+
+    $('#hiDonutEstados').innerHTML =
+      '<svg viewBox="0 0 ' + size + ' ' + size + '" style="width:220px;height:220px;" role="img" aria-label="Distribución de estados">' +
+      arcs.map((a) => a.path).join('') +
+      '<text x="' + cx + '" y="' + (cy - 6) + '" text-anchor="middle" fill="#edf3ff" font-size="22" font-weight="700">' + fmt(total) + '</text>' +
+      '<text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" fill="#a7b9d8" font-size="12">clientes</text>' +
+      '</svg>';
+
+    $('#hiLeyendaEstados').innerHTML = groups
+      .map((g) => '<span><span class="dot" style="background:' + STATUS_COLORS[g.key] + '"></span>' + esc(STATUS_LABELS[g.key]) + ' · ' + fmt(g.value) + '</span>')
+      .join('');
+  }
+
+  function barrasEstados(filas) {
+    const max = Math.max.apply(
+      null,
+      filas.flatMap((f) => STATUS_KEYS.map((k) => (f.estados_cliente || {})[k] || 0)).concat([1])
+    );
+    return filas
+      .map((f) => {
+        const estados = f.estados_cliente || {};
+        const segments = STATUS_KEYS
+          .filter((k) => estados[k] > 0)
+          .map((k) => {
+            const pct = Math.round(((estados[k] || 0) / max) * 100);
+            return '<div class="fill" style="width:' + pct + '%;background:' + STATUS_COLORS[k] + ';margin-right:2px;border-radius:4px;" title="' +
+              esc(STATUS_LABELS[k] + ': ' + fmt(estados[k])) + '"></div>';
+          })
+          .join('');
+        const total = STATUS_KEYS.reduce((a, k) => a + (estados[k] || 0), 0);
+        return (
+          '<div class="row"><div class="lbl" style="width:64px;">' + esc(diaCorto(f.dia)) + '</div>' +
+          '<div class="track" style="background:transparent;display:flex;align-items:center;">' + segments + '</div>' +
+          '<div class="bar-num" style="width:76px;">' + fmt(total) + '</div></div>'
+        );
+      })
+      .join('');
+  }
+
   function render() {
     const dias = Object.entries(datos.dias || {})
       .map(([dia, res]) => Object.assign({ dia }, res))
@@ -100,7 +181,7 @@
 
     $('#hiEstado').innerHTML =
       '<span class="dot" style="background:var(--green);margin-right:6px;"></span>' +
-      '<strong>' + dias.length + '</strong> día(s) · ' + esc(dias[0].dia) + ' → ' + esc(ultimo.dia) +
+      '<strong>' + dias.length + '</strong> día(s) · ' + esc(dias[0].dia) + ' -> ' + esc(ultimo.dia) +
       (datos.actualizado ? ' · actualizado ' + esc(String(datos.actualizado).replace('T', ' ').slice(0, 16)) : '');
 
     const kpis = [
@@ -125,11 +206,15 @@
     );
     $('#hiBarrasClientes').innerHTML = barrasClientes(visibles);
 
+    renderDonutEstados(ultimo.estados_cliente || {});
+    $('#hiBarrasEstados').innerHTML = barrasEstados(visibles);
+
     $('#hiTabla tbody').innerHTML = dias
       .slice()
       .reverse()
       .map((d) => {
         const money = moneyDelDia(d);
+        const estados = d.estados_cliente || {};
         return (
           '<tr><td><strong>' + esc(d.dia) + '</strong></td>' +
           '<td class="num">' + fmt(d.transacciones) + '</td>' +
@@ -138,6 +223,8 @@
           '<td class="num"><span class="tag s-activo">' + fmt((d.clientes || {}).total) + '</span></td>' +
           '<td class="num">' + fmt((d.clientes || {}).online) + '</td>' +
           '<td class="num">' + fmt((d.clientes || {}).retail) + '</td>' +
+          '<td class="num">' + fmt(estados.activo || 0) + '</td>' +
+          '<td class="num">' + fmt(estados.inactivo || 0) + '</td>' +
           '<td class="num">' + fmtMoney(money.income) + '</td>' +
           '<td class="num">' + fmtMoney(money.total) + '</td></tr>'
         );
