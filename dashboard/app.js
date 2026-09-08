@@ -213,6 +213,10 @@
       ['activo', 'Activos', 'green'],
       ['inactivo', 'Inactivos', 'amber'],
     ];
+    const totalVolume = sumMoney(data, 'total');
+    const totalCommission = sumMoney(data, 'commission');
+    const commissionRate = totalVolume > 0 ? ((totalCommission / totalVolume) * 100).toFixed(2) : '0.00';
+    
     const cards = [
       { label: 'Transacciones', value: fmt(totals.total), color: 'var(--text)', sub: 'registros procesados' },
       ...statuses.map(([key, label, color]) => ({
@@ -223,7 +227,7 @@
       })),
       {
         label: 'Volumen total',
-        value: '$' + fmtMoney(sumMoney(data, 'total')),
+        value: '$' + fmtMoney(totalVolume),
         color: 'var(--amber)',
         sub: 'suma de Total',
       },
@@ -232,6 +236,12 @@
         value: '$' + fmtMoney(sumMoney(data, 'income')),
         color: 'var(--green)',
         sub: 'suma de Ingresos',
+      },
+      {
+        label: 'Tasa efectiva',
+        value: commissionRate + '%',
+        color: 'var(--blue)',
+        sub: 'comisión / volumen',
       },
     ];
     const kpis = $('#kpis');

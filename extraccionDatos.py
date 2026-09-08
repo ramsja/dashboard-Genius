@@ -904,6 +904,49 @@ def get_supabase_config() -> tuple[str, str]:
     return url, key
 
 
+# Mapeo explícito de columnas CSV -> base de datos
+COLUMN_MAPPING = {
+    "Crear hora": "crear_hora",
+    "Casa de apuestas": "casa_apuestas",
+    "ID Padre": "id_padre",
+    "ID de usuario": "id_usuario",
+    "Usuario": "usuario",
+    "Tipo": "tipo",
+    "ID de transacción": "id_transaccion",
+    "Nombre de usuario del emisor": "nombre_usuario_emisor",
+    "Moneda": "moneda",
+    "Ingresos": "ingresos",
+    "Estado": "estado",
+    "Total": "total",
+    "Comisión": "comision",
+    "Saldo": "saldo",
+    "Saldo actual": "saldo_actual",
+    "Billeteras": "billeteras",
+    "Tipo de transacción": "tipo_transaccion",
+    "grupo causal": "grupo_causal",
+    "causal": "causal",
+    "producto causal": "producto_causal",
+    "Descripción": "descripcion",
+    "Nota": "nota",
+    "Dirección IP": "direccion_ip",
+}
+
+
+def sanitize_column_name(name: str) -> str:
+    """Convierte nombres de columnas CSV a nombres válidos para base de datos."""
+    # Usar mapeo explícito si existe
+    if name in COLUMN_MAPPING:
+        return COLUMN_MAPPING[name]
+    
+    # Fallback: sanitización automática
+    import re
+    name = name.lower()
+    name = re.sub(r'[^a-z0-9_]', '_', name)
+    name = re.sub(r'_+', '_', name)
+    name = name.strip('_')
+    return name
+
+
 def sync_to_supabase(filepath: Path) -> str | None:
     url, service_key = get_supabase_config()
     if not url or not service_key:
@@ -911,13 +954,18 @@ def sync_to_supabase(filepath: Path) -> str | None:
         return None
 
     table_name = os.getenv("SUPABASE_TABLE", "transaction_records").strip() or "transaction_records"
+    batch_size = int(os.getenv("SUPABASE_BATCH_SIZE", "500").strip() or "500")
+    max_retries = int(os.getenv("SUPABASE_MAX_RETRIES", "3").strip() or "3")
 
     with filepath.open("r", encoding="utf-8-sig", newline="", errors="replace") as source:
         reader = csv.DictReader(source)
         fieldnames = reader.fieldnames or []
         rows: list[dict[str, Any]] = []
         for row in reader:
-            normalized = {field: (row.get(field) or "").strip() for field in fieldnames}
+            normalized = {}
+            for field in fieldnames:
+                sanitized_key = sanitize_column_name(field)
+                normalized[sanitized_key] = (row.get(field) or "").strip()
             normalized["discipline"] = classify_discipline(normalized)
             normalized["client_status"] = classify_client_status(normalized)
             normalized["connection"] = classify_connection(normalized)
@@ -936,22 +984,53 @@ def sync_to_supabase(filepath: Path) -> str | None:
         "Authorization": f"Bearer {service_key}",
         "Content-Type": "application/json",
         "Accept": "application/json",
+        "Prefer": "return=minimal",
     }
 
-    response = requests.post(
-        endpoint,
-        headers=headers,
-        json=rows,
-        timeout=TIMEOUT,
-    )
+    total = len(rows)
+    batches = range(0, total, batch_size)
+    failed_batches = 0
 
-    if response.status_code not in (200, 201, 204):
+    print(f"Sincronizando {total:,} filas con Supabase en lotes de {batch_size}...")
+
+    for idx, start in enumerate(batches, start=1):
+        batch = rows[start : start + batch_size]
+        attempt = 0
+        success = False
+        last_error = ""
+
+        while attempt < max_retries and not success:
+            attempt += 1
+            try:
+                response = requests.post(
+                    endpoint,
+                    headers=headers,
+                    json=batch,
+                    timeout=TIMEOUT,
+                )
+                if response.status_code in (200, 201, 204):
+                    success = True
+                else:
+                    last_error = f"HTTP {response.status_code}: {response.text[:500]}"
+            except requests.RequestException as exc:
+                last_error = str(exc)
+
+            if not success:
+                print(f"  Lote {idx}/{len(batches)} intento {attempt}/{max_retries} falló: {last_error}")
+                time.sleep(2 ** attempt)
+
+        if not success:
+            failed_batches += 1
+            print(f"  Lote {idx}/{len(batches)} no pudo sincronizarse después de {max_retries} intentos.")
+        else:
+            print(f"  Lote {idx}/{len(batches)} sincronizado ({min(start + batch_size, total):,}/{total:,})")
+
+    if failed_batches:
         raise RuntimeError(
-            "No se pudo sincronizar con Supabase. "
-            f"HTTP {response.status_code}. Respuesta: {response.text[:1000]}"
+            f"No se pudieron sincronizar {failed_batches} lotes de {len(batches)} con Supabase."
         )
 
-    print(f"Sincronización completada en Supabase: {endpoint}")
+    print(f"Sincronización completada en Supabase: {endpoint} ({total:,} filas)")
     return endpoint
 
 

@@ -461,6 +461,54 @@
             </div>
           </div>
         </section>
+
+        <section id="auSeccion" style="display:none;">
+          <div class="panel" style="margin-bottom:18px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+              <h2 style="margin:0;">Actividad y pérdidas de usuarios</h2>
+              <span id="auEstado" class="muted" style="font-size:12px;"></span>
+            </div>
+            <div class="kpis" id="auKpis" style="margin:0 0 18px;"></div>
+            <div class="grid2">
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Top 20 que más apuestan</h2>
+                <div class="table-wrap" style="border:0; margin:0;">
+                  <table id="auTablaApostadores">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Usuario</th>
+                        <th class="num">Apuesta</th>
+                        <th class="num">Tx</th>
+                        <th>Canal</th>
+                        <th>Última actividad</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+              <div>
+                <h2 style="margin:0 0 14px; font-size:13px;">Top 20 que generan pérdida</h2>
+                <div class="table-wrap" style="border:0; margin:0;">
+                  <table id="auTablaPerdidas">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Usuario</th>
+                        <th class="num">Pérdida neta</th>
+                        <th class="num">Apuesta</th>
+                        <th class="num">Ganado</th>
+                        <th>Canal</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
       </div>
 
@@ -471,5 +519,6 @@
     <script src="./top-juegos.js"></script>
     <script src="./tickets-deporte.js"></script>
     <script src="./perp-casino.js"></script>
+    <script src="./actividad-usuarios.js"></script>
   </body>
 </html>
