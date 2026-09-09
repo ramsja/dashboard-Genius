@@ -5,8 +5,6 @@ on:
     branches: [main]
     paths:
       - 'dashboard/**'
-      - 'extraccionDatos.py'
-      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -25,32 +23,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Instalar dependencias
-        run: python -m pip install requests beautifulsoup4 python-dotenv
-
-      - name: Regenerar snapshot si hay CSV descargado
-        run: |
-          python - <<'EOF'
-          import sys
-          from pathlib import Path
-          sys.path.insert(0, '.')
-          from extraccionDatos import generate_reports
-          csvs = sorted(Path('descargas').glob('*.csv'))
-          if csvs:
-              reports = generate_reports(csvs[-1])
-              snap = reports['dashboard'].read_text(encoding='utf-8')
-              Path('dashboard/data').mkdir(parents=True, exist_ok=True)
-              Path('dashboard/data/snapshot.json').write_text(snap, encoding='utf-8')
-              print('Snapshot regenerado desde', csvs[-1])
-          else:
-              print('Sin CSV en descargas; se mantiene el snapshot commiteado')
-          EOF
-
       - name: Preconfigurar dashboard con Supabase
         run: |
           if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_ANON_KEY" ]; then
@@ -67,7 +39,7 @@ jobs:
           CONFIG
             echo "config.js generado con Supabase habilitado"
           else
-            echo "Supabase no configurado; se usa el JSON estático"
+            echo "Supabase no configurado; se usa el JSON estatico"
           fi
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
