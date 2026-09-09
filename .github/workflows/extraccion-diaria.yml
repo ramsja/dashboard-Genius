@@ -53,6 +53,7 @@ jobs:
           python construir-top-juegos.py
           python construir-actividad-usuarios.py
           python construir-snapshot.py
+          python importar-perp-casino.py descargas/transacciones_producto__*.csv
 
       - name: Actualizar snapshot
         run: |
