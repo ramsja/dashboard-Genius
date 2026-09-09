@@ -1,40 +1,40 @@
 {
  "version": 1,
- "actualizado": "2026-09-08T12:39:36",
+ "actualizado": "2026-09-09T14:28:31",
  "dias": {
   "2026-08-28": {
-   "transacciones": 76620,
+   "transacciones": 34532,
    "disciplina": {
-    "casino": 74976,
-    "deportes": 1644,
+    "casino": 33634,
+    "deportes": 898,
     "otros": 0
    },
    "conexion": {
-    "online": 62182,
-    "retail": 14438,
+    "online": 28353,
+    "retail": 6179,
     "desconocido": 0
    },
    "clientes": {
-    "total": 326,
-    "online": 246,
-    "retail": 80
+    "total": 231,
+    "online": 175,
+    "retail": 56
    },
    "estados_cliente": {
-    "activo": 246,
-    "inactivo": 80,
+    "activo": 175,
+    "inactivo": 56,
     "desconectado": 0,
     "suspendido": 0,
     "otros": 0
    },
    "money": {
     "casino": {
-     "income": 40700.7,
-     "total": 1730.47,
+     "income": 8317.86,
+     "total": -448.76,
      "commission": 0.0
     },
     "deportes": {
-     "income": 23790.81,
-     "total": 4181.67,
+     "income": 12454.31,
+     "total": 4179.75,
      "commission": 0.0
     },
     "otros": {
@@ -337,6 +337,48 @@
      "commission": 0.0
     }
    }
+  },
+  "2026-09-09": {
+   "transacciones": 9799,
+   "disciplina": {
+    "casino": 9385,
+    "deportes": 414,
+    "otros": 0
+   },
+   "conexion": {
+    "online": 7626,
+    "retail": 2173,
+    "desconocido": 0
+   },
+   "clientes": {
+    "total": 201,
+    "online": 150,
+    "retail": 51
+   },
+   "estados_cliente": {
+    "activo": 150,
+    "inactivo": 51,
+    "desconectado": 0,
+    "suspendido": 0,
+    "otros": 0
+   },
+   "money": {
+    "casino": {
+     "income": 3066.01,
+     "total": -275.16,
+     "commission": 0.0
+    },
+    "deportes": {
+     "income": 3952.07,
+     "total": 1331.96,
+     "commission": 0.0
+    },
+    "otros": {
+     "income": 0.0,
+     "total": 0.0,
+     "commission": 0.0
+    }
+   }
   }
  },
  "fuentes": [
@@ -347,6 +389,7 @@
   "transacciones_producto__2026-09-01_2026-09-01.csv",
   "transacciones_producto__2026-09-02_2026-09-02.csv",
   "transacciones_producto__2026-09-03_2026-09-03.csv",
-  "transacciones_producto__2026-09-04_2026-09-04.csv"
+  "transacciones_producto__2026-09-04_2026-09-04.csv",
+  "transacciones_producto__2026-09-09_2026-09-09.csv"
  ]
 }
