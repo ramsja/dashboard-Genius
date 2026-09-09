@@ -1,79 +1,79 @@
 {
   "version": 2,
-  "generated_at": "2026-09-09T14:28:37",
-  "source": "C:\\Users\\Riesgos\\Documents\\Default Project\\dashboard-Genius\\descargas\\transacciones_producto__2026-09-09_2026-09-09.csv",
-  "total": 9799,
+  "generated_at": "2026-09-09T15:02:09",
+  "source": "C:\\Users\\Riesgos\\Documents\\Default Project\\dashboard-Genius\\descargas\\transacciones_producto__2026-09-08_2026-09-08.csv",
+  "total": 5377,
   "discipline": {
-    "deportes": 414,
-    "casino": 9385,
+    "deportes": 191,
+    "casino": 5186,
     "otros": 0
   },
   "connection": {
-    "online": 7626,
-    "retail": 2173,
+    "online": 5206,
+    "retail": 171,
     "desconocido": 0
   },
   "status": {
-    "activo": 7626,
-    "inactivo": 2173,
+    "activo": 5206,
+    "inactivo": 171,
     "desconectado": 0,
     "suspendido": 0,
     "otros": 0
   },
   "matrix": {
-    "deportes": {
-      "online": 313,
-      "retail": 101,
+    "casino": {
+      "online": 5056,
+      "retail": 130,
       "desconocido": 0,
-      "total": 414,
+      "total": 5186,
       "status": {
-        "activo": 313,
-        "inactivo": 101
+        "activo": 5056,
+        "inactivo": 130
       }
     },
-    "casino": {
-      "online": 7313,
-      "retail": 2072,
+    "deportes": {
+      "online": 150,
+      "retail": 41,
       "desconocido": 0,
-      "total": 9385,
+      "total": 191,
       "status": {
-        "activo": 7313,
-        "inactivo": 2072
+        "activo": 150,
+        "inactivo": 41
       }
     }
   },
   "money": {
-    "deportes": {
-      "income": 3952.07,
-      "total": 1331.96,
+    "casino": {
+      "income": 2892.77,
+      "total": -304.89,
       "commission": 0.0
     },
-    "casino": {
-      "income": 3066.01,
-      "total": -275.16,
+    "deportes": {
+      "income": 997.74,
+      "total": -1660.28,
       "commission": 0.0
     }
   },
   "top_products": [
     [
       "Casino",
-      9179
-    ],
-    [
-      "Deporte",
-      344
+      5011
     ],
     [
       "Casino Live",
-      206
+      175
+    ],
+    [
+      "Deporte",
+      156
     ],
     [
       "Payments",
-      68
+      34
     ],
     [
       "Banco",
-      2
+      1
     ]
   ]
 }
