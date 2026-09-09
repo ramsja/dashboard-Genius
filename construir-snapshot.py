@@ -28,18 +28,24 @@ SNAPSHOT_PATH = BASE_DIR / "dashboard" / "data" / "snapshot.json"
 
 
 def find_latest_csv(descargas: Path, date: str | None = None) -> Path:
-    """Busca el CSV mas reciente. Si date se proporciona (YYYY-MM-DD), busca ese dia."""
+    """Busca el CSV mas reciente por fecha del nombre, no por st_mtime."""
+    import re
     if date:
         pattern = f"transacciones_producto__{date}_*.csv"
         matches = list(descargas.glob(pattern))
         if not matches:
             raise FileNotFoundError(f"No hay CSV para la fecha {date}")
-        return max(matches, key=lambda p: p.stat().st_mtime)
+        return matches[0]
 
     csvs = list(descargas.glob("transacciones_producto__*.csv"))
     if not csvs:
         raise FileNotFoundError("No hay CSVs en descargas/")
-    return max(csvs, key=lambda p: p.stat().st_mtime)
+
+    def parse_date_from_name(p: Path) -> str:
+        m = re.search(r'transacciones_producto__(\d{4}-\d{2}-\d{2})_(\d{4}-\d{2}-\d{2})', p.name)
+        return m.group(2) if m else "0000-00-00"
+
+    return max(csvs, key=parse_date_from_name)
 
 
 def build_snapshot(filepath: Path) -> dict[str, Any]:

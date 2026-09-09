@@ -1,79 +1,79 @@
 {
   "version": 2,
-  "generated_at": "2026-09-09T15:02:09",
-  "source": "C:\\Users\\Riesgos\\Documents\\Default Project\\dashboard-Genius\\descargas\\transacciones_producto__2026-09-08_2026-09-08.csv",
-  "total": 5377,
+  "generated_at": "2026-09-09T15:04:16",
+  "source": "C:\\Users\\Riesgos\\Documents\\Default Project\\dashboard-Genius\\descargas\\transacciones_producto__2026-09-09_2026-09-09.csv",
+  "total": 9799,
   "discipline": {
-    "deportes": 191,
-    "casino": 5186,
+    "deportes": 414,
+    "casino": 9385,
     "otros": 0
   },
   "connection": {
-    "online": 5206,
-    "retail": 171,
+    "online": 7626,
+    "retail": 2173,
     "desconocido": 0
   },
   "status": {
-    "activo": 5206,
-    "inactivo": 171,
+    "activo": 7626,
+    "inactivo": 2173,
     "desconectado": 0,
     "suspendido": 0,
     "otros": 0
   },
   "matrix": {
-    "casino": {
-      "online": 5056,
-      "retail": 130,
+    "deportes": {
+      "online": 313,
+      "retail": 101,
       "desconocido": 0,
-      "total": 5186,
+      "total": 414,
       "status": {
-        "activo": 5056,
-        "inactivo": 130
+        "activo": 313,
+        "inactivo": 101
       }
     },
-    "deportes": {
-      "online": 150,
-      "retail": 41,
+    "casino": {
+      "online": 7313,
+      "retail": 2072,
       "desconocido": 0,
-      "total": 191,
+      "total": 9385,
       "status": {
-        "activo": 150,
-        "inactivo": 41
+        "activo": 7313,
+        "inactivo": 2072
       }
     }
   },
   "money": {
-    "casino": {
-      "income": 2892.77,
-      "total": -304.89,
+    "deportes": {
+      "income": 3952.07,
+      "total": 1331.96,
       "commission": 0.0
     },
-    "deportes": {
-      "income": 997.74,
-      "total": -1660.28,
+    "casino": {
+      "income": 3066.01,
+      "total": -275.16,
       "commission": 0.0
     }
   },
   "top_products": [
     [
       "Casino",
-      5011
-    ],
-    [
-      "Casino Live",
-      175
+      9179
     ],
     [
       "Deporte",
-      156
+      344
+    ],
+    [
+      "Casino Live",
+      206
     ],
     [
       "Payments",
-      34
+      68
     ],
     [
       "Banco",
-      1
+      2
     ]
   ]
 }
