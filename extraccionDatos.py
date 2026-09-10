@@ -505,7 +505,7 @@ def save_csv(
     clean_to = date_to[:10]
 
     filename = (
-        f"transacciones_producto_{CAUSAL_PRODUCT_ID}_"
+        f"transacciones_producto__"
         f"{clean_from}_{clean_to}.csv"
     )
 
@@ -694,6 +694,71 @@ def classify_client_status(row: dict[str, Any]) -> str:
     return "otros"
 
 
+def _normalize_key(text: str) -> str:
+    """Normaliza un nombre de columna quitando acentos y pasando a minúsculas."""
+    import unicodedata
+    nfkd = unicodedata.normalize("NFKD", text)
+    return nfkd.encode("ascii", "ignore").decode("ascii").casefold()
+
+
+def _get_normalized(row: dict[str, Any], *names: str) -> str:
+    """Busca columnas con normalización de acentos (accent-insensitive)."""
+    lookup = {_normalize_key(k): k for k in row.keys()}
+    for name in names:
+        key = lookup.get(_normalize_key(name))
+        if key is not None:
+            return (row.get(key) or "").strip()
+    return ""
+
+
+def _classify_product_type(row: dict[str, Any]) -> str:
+    """Clasifica la tipología de la transferencia para el analista."""
+    grupo = _get_normalized(row, "grupo causal", "grupo_causal").casefold()
+    causal = _get_normalized(row, "causal").casefold()
+    tipo_tx = _get_normalized(row, "Tipo de transacción", "Tipo de transaccion").casefold()
+
+    if "depósito" in grupo or "retiro" in grupo or "deposit" in tipo_tx or "withdraw" in tipo_tx:
+        return "Banco / Retiro"
+    if "pasarela" in grupo or "payment" in grupo or "gateway" in grupo:
+        return "Pasarela de pago"
+    if "apuesta" in grupo or "bet" in causal:
+        return "Apuesta"
+    if "bonus" in causal or "bono" in causal:
+        return "Bono"
+    if "casino" in grupo or "slot" in grupo:
+        return "Casino"
+    return "Otro"
+
+
+def _collect_transactions(filepath: Path, limit: int = 500) -> list[dict[str, Any]]:
+    """Recolecta las transacciones más recientes para la tabla de detalle."""
+    transactions: list[dict[str, Any]] = []
+    with filepath.open("r", encoding="utf-8", newline="") as source:
+        reader = csv.DictReader(source)
+        for row in reader:
+            usuario = _get_normalized(row, "Usuario", "usuario")
+            if not usuario:
+                continue
+            fecha_raw = _get_normalized(row, "Crear hora", "crear_hora", "created_at")
+            fecha = fecha_raw[:10] if fecha_raw else ""
+            hora = fecha_raw[11:19] if len(fecha_raw) > 11 else ""
+            transactions.append({
+                "usuario": usuario,
+                "fecha": fecha,
+                "hora": hora,
+                "tipo_tx": _get_normalized(row, "Tipo de transacción", "Tipo de transaccion") or "—",
+                "tipologia": _classify_product_type(row),
+                "producto": _get_normalized(row, "producto causal", "producto_causal") or "—",
+                "descripcion": _get_normalized(row, "Descripción", "Descripcion") or "—",
+                "monto": parse_float(_get_normalized(row, "Total", "total")),
+                "referencia": _get_normalized(row, "ID de transacción", "ID de transaccion") or "—",
+                "conexion": _get_normalized(row, "Tipo", "tipo") or "—",
+                "moneda": _get_normalized(row, "Moneda", "moneda") or "USD",
+            })
+    transactions.sort(key=lambda t: t["fecha"] + t["hora"], reverse=True)
+    return transactions[:limit]
+
+
 def generate_reports(filepath: Path) -> dict[str, Path]:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     discipline_paths = {
@@ -854,6 +919,7 @@ def generate_reports(filepath: Path) -> dict[str, Path]:
                     for discipline, values in money.items()
                 },
                 "top_products": top_products,
+                "transactions": _collect_transactions(filepath),
             },
             ensure_ascii=False,
             indent=2,
