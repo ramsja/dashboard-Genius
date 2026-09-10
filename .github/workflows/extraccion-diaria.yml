@@ -12,6 +12,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   extraer:
@@ -91,13 +92,32 @@ jobs:
           EOF
 
       - name: Commit y push
+        id: commit
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add dashboard/data/
           if git diff --cached --quiet; then
             echo 'Sin cambios'
+            echo 'pushed=false' >> "$GITHUB_OUTPUT"
           else
             git commit -m "chore: datos dashboard $(date +%Y-%m-%dT%H:%M)"
             git push
+            echo 'pushed=true' >> "$GITHUB_OUTPUT"
           fi
+
+      # El push anterior usa GITHUB_TOKEN, y los eventos push generados con ese
+      # token NO disparan otros workflows. Sin este despacho explicito el sitio
+      # publicado se queda con los datos del ultimo commit hecho por una persona.
+      - name: Publicar dashboard en GitHub Pages
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -sS --fail-with-body -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/deploy-pages.yml/dispatches" \
+            -d "{\"ref\":\"${GITHUB_REF_NAME}\"}"
+          echo "Deploy de Pages despachado sobre ${GITHUB_REF_NAME}"
