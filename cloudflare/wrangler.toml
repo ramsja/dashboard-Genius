@@ -1,0 +1,23 @@
+# Configuracion del Worker que sirve la API del dashboard.
+#
+# Antes de desplegar hay que crear la base y pegar su id aqui:
+#   npx wrangler d1 create dashboard-genius
+#   npx wrangler d1 execute dashboard-genius --remote --file=cloudflare/schema.sql
+#   npx wrangler secret put TOKEN_INGESTA     # el mismo valor va al secreto D1_TOKEN_INGESTA de GitHub
+#   npx wrangler deploy
+#
+# TOKEN_INGESTA es un SECRETO: no lo pongas en [vars], que queda en texto claro.
+
+name = "dashboard-genius-api"
+main = "worker.js"
+compatibility_date = "2026-09-10"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dashboard-genius"
+database_id = "PEGA_AQUI_EL_ID_QUE_IMPRIME_WRANGLER_D1_CREATE"
+
+[vars]
+# Solo estos origenes pueden leer la API desde el navegador. Si lo dejas vacio
+# responde a cualquiera.
+ORIGENES_PERMITIDOS = "https://ramsja.github.io"

@@ -12,6 +12,10 @@
 -- donde total e ingresos son TEXT; por eso aqui se convierte el texto a numero
 -- en vez de sumarlo directo.
 --
+-- NOTA: el dashboard ahora lee la API del Worker sobre Cloudflare D1
+-- (ver cloudflare/README.md). Este archivo solo aplica si decides volver a
+-- Supabase como base en vivo.
+--
 -- Aplicar pegando este archivo en el editor SQL de Supabase.
 
 create or replace function public.texto_a_numero(valor text)

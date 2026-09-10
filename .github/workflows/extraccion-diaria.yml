@@ -91,6 +91,13 @@ jobs:
           print(f'CSVs eliminados: {removed}')
           EOF
 
+      - name: Subir agregados a Cloudflare D1
+        run: python subir-a-d1.py
+        env:
+          D1_API_URL: ${{ secrets.D1_API_URL }}
+          D1_TOKEN_INGESTA: ${{ secrets.D1_TOKEN_INGESTA }}
+          D1_SAL_ALIAS: ${{ secrets.D1_SAL_ALIAS }}
+
       - name: Commit y push
         id: commit
         run: |

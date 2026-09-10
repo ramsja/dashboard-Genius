@@ -2,15 +2,15 @@
 // Copia este archivo como config.js y edita tus valores. NO subas config.js con datos reales.
 // config.js ya está excluido en .gitignore.
 window.DASHBOARD_CONFIG = {
-  // Snapshot JSON local (se genera con extraccionDatos.py -> reportes/dashboard-data.json).
+  // Snapshot JSON local (lo generan los scripts construir-*.py). Es el respaldo:
+  // si la API no responde, el dashboard sigue funcionando con este archivo.
   snapshotUrl: './data/snapshot.json',
 
-  // Supabase (opcional). Para consultar la vista agregada en vivo, activa enabled,
-  // completa URL y anonKey, y asegúrate de que la vista tenga política de lectura pública.
-  supabase: {
+  // API del Worker sobre Cloudflare D1 (cloudflare/worker.js). Devuelve la misma
+  // forma que snapshot.json. La página no lleva ninguna credencial: el Worker
+  // ejecuta consultas fijas y solo responde agregados.
+  api: {
     enabled: false,
-    url: 'https://TU-PROYECTO.supabase.co',
-    anonKey: 'TU_ANON_KEY',
-    view: 'transaction_discipline_summary',
+    url: 'https://dashboard-genius-api.TU-CUENTA.workers.dev',
   },
 };

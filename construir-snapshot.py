@@ -14,6 +14,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+import guardas
 from extraccionDatos import (
     classify_connection,
     classify_client_status,
@@ -58,9 +59,24 @@ def build_snapshot(filepath: Path) -> dict[str, Any]:
     money: dict[str, dict[str, float]] = {}
     product_counts: dict[str, int] = {}
 
+    seen_transactions: set[str] = set()
+    duplicates = 0
+
     with filepath.open("r", encoding="utf-8-sig", newline="", errors="replace") as fh:
         reader = csv.DictReader(fh)
         for row in reader:
+            # Misma guarda que construir-historico.py: el back office repite
+            # transacciones dentro de un mismo export.
+            transaction_key = get_row_value(
+                row, "ID de transacción", "ID de transaccion", "id_transaccion",
+                "transaction_id",
+            )
+            if transaction_key:
+                if transaction_key in seen_transactions:
+                    duplicates += 1
+                    continue
+                seen_transactions.add(transaction_key)
+
             discipline = classify_discipline(row)
             discipline_counts[discipline] = discipline_counts.get(discipline, 0) + 1
 
@@ -86,6 +102,9 @@ def build_snapshot(filepath: Path) -> dict[str, Any]:
                 product_counts[producto] = product_counts.get(producto, 0) + 1
 
     top_products = sorted(product_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+
+    if duplicates:
+        print(f"  {duplicates:,} fila(s) repetidas por ID de transaccion, descartadas.")
 
     return {
         "version": 2,
@@ -117,6 +136,7 @@ def build_snapshot(filepath: Path) -> dict[str, Any]:
     }
 
 
+
 def main() -> None:
     date_filter = None
     if len(sys.argv) > 1:
@@ -130,6 +150,12 @@ def main() -> None:
 
     print(f"Generando snapshot desde: {csv_path.name}")
     snapshot = build_snapshot(csv_path)
+
+    if not guardas.debe_reemplazar(
+        SNAPSHOT_PATH, snapshot.get('total'),
+        clave_total='total', clave_fecha='generated_at', etiqueta='snapshot',
+    ):
+        return
 
     SNAPSHOT_PATH.parent.mkdir(parents=True, exist_ok=True)
     SNAPSHOT_PATH.write_text(

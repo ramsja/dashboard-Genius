@@ -84,36 +84,49 @@ python construir-historico.py descargas/     # equivalente explícito
 - La extracción diaria (workflow) lo ejecuta tras cada descarga y commitea el JSON junto al snapshot.
 - Para rellenar histórico antiguo: `START_DATE=2026-08-01 END_DATE=2026-08-31 python extraccionDatos.py` y luego `python construir-historico.py` (un solo export de rago, agrupa por día).
 
-## 3) Supabase
+## 3) Base de datos en línea: Cloudflare D1 + Worker
 
-1. Crea un proyecto en Supabase.
-2. Ejecuta el SQL de `supabase/schema.sql`.
-3. Define la política de roles de la app usando un claim JWT `app_role`:
-   - `viewer`: solo lectura
-   - `editor`: inserción y edición
-   - `admin`: gestión completa
+El dashboard funciona sin base: lee los JSON de `dashboard/data/`. La base en
+línea es opcional y sirve para consultar los agregados sin depender de esos
+archivos.
 
-Para que el dashboard público lea la vista `transaction_discipline_summary` en vivo, añade una política `select` para `anon` sobre esa vista (o usa el snapshot JSON estático).
+Se usa D1 (SQLite gestionado) detrás de un Worker. La página **no lleva
+credenciales**: pide datos al Worker, que ejecuta consultas fijas y solo
+devuelve agregados. Eso importa porque el CSV de origen trae teléfono del
+cliente, ID de usuario e IP, y ninguna de esas columnas existe en el esquema;
+los rankings por jugador viajan con un alias HMAC con sal.
+
+Puesta en marcha, secretos y comprobaciones: **`cloudflare/README.md`**.
+
+Si en su lugar prefieres Supabase, el esquema histórico sigue en
+`supabase/schema.sql` y la vista que el dashboard esperaba en
+`supabase/vista-resumen-disciplina.sql`. Ten en cuenta que con una clave
+anónima en la página el control de acceso depende enteramente de las políticas
+RLS del proyecto.
 
 ## 4) Publicación automática (GitHub Actions)
 
 ### GitHub Pages
-El workflow `.github/workflows/deploy-pages.yml` despliega el dashboard en GitHub Pages en cada push a `main`. Deja en el repo estos secretos para activar la lectura de Supabase en el sitio publicado:
-
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
+El workflow `.github/workflows/deploy-pages.yml` despliega el dashboard en GitHub Pages en cada push a `main` que toque `dashboard/**`. Con el secreto `D1_API_URL` genera el `config.js` apuntando al Worker; sin él, el sitio usa el JSON estático.
 
 ### Extracción diaria
-El workflow `.github/workflows/extraccion-diaria.yml` ejecuta la extracción de lunes a viernes a las 05:30 UTC. Necesita los secretos:
+El workflow `.github/workflows/extraccion-diaria.yml` corre según el cron
+`*/30 * * * *` (GitHub espacia los programados, así que en práctica corre menos
+seguido). Necesita los secretos:
 
 - `BO_USERNAME`
 - `BO_PASSWORD`
 - `CAUSAL_PRODUCT_ID`
-- `START_DATE` / `END_DATE` (opcional; si se omiten usa "hoy")
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `D1_API_URL`, `D1_TOKEN_INGESTA`, `D1_SAL_ALIAS` (opcionales; sin ellos no se
+  sube nada a D1 y el paso termina bien)
 
-La ejecución genera el CSV, los reportes, sincroniza Supabase y actualiza y commitea `dashboard/data/snapshot.json`; ese commit dispara el despliegue de Pages automáticamente.
+La ejecución genera el CSV, los reportes y los JSON del dashboard, sube los
+agregados a D1 y commitea `dashboard/data/`.
+
+Ese commit lo hace el bot con `GITHUB_TOKEN`, y **los pushes con ese token no
+disparan otros workflows**: por eso el último paso despacha `deploy-pages`
+explícitamente por API. Sin ese paso el sitio publicado se queda en los datos
+del último commit hecho por una persona.
 
 ## 5) Seguridad
 

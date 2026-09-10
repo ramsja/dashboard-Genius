@@ -17,6 +17,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+import guardas
 from extraccionDatos import (
     classify_client_status,
     classify_connection,
@@ -226,6 +227,15 @@ def main() -> int:
         file_profiles = process_csv(filepath)
         merge_user_profiles(profiles, file_profiles)
         print(f"  {len(file_profiles)} usuario(s) nuevos en este archivo.")
+
+    # Un export recortado dejaria el archivo con menos usuarios de los ya
+    # publicados: 656 -> 300 en la corrida del 2026-09-10T23:02.
+    if not guardas.debe_reemplazar(
+        OUTPUT_PATH, len(profiles),
+        clave_total="total_usuarios", clave_fecha="actualizado",
+        etiqueta="usuarios historicos",
+    ):
+        return 0
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(
