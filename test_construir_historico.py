@@ -13,8 +13,8 @@ _SPEC.loader.exec_module(hist)
 
 def _escribir_csv(path, filas):
     campos = [
-        "Crear hora", "ID de usuario", "Usuario", "Tipo", "Ingresos",
-        "Total", "Comisión", "Billeteras", "Descripción",
+        "Crear hora", "ID de transacción", "ID de usuario", "Usuario", "Tipo",
+        "Ingresos", "Total", "Comisión", "Billeteras", "Descripción",
     ]
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=campos)
@@ -94,3 +94,85 @@ def test_resumen_reimport_does_not_double_games(tmp_path):
     for _ in range(2):
         hist.merge_resumen(resumen, games, tmp_path / "export.csv")
     assert resumen["dias"]["2026-09-03"]["juegos"] == games["2026-09-03"]
+
+
+def test_process_csv_descarta_transacciones_repetidas(tmp_path):
+    """Un export que trae la misma transaccion dos veces no debe duplicar el dia.
+
+    Es el caso observado en produccion: el 2026-09-07 se publico con 85.996
+    transacciones, exactamente 2x las 42.998 de los exports vecinos.
+    """
+    csv_path = tmp_path / "repetidas.csv"
+    fila = {
+        "Crear hora": "2026-09-07 03:00:00", "ID de transacción": "T-1",
+        "ID de usuario": "788", "Usuario": "u1", "Tipo": "Player Online",
+        "Ingresos": "1.00", "Total": "-0.50", "Comisión": "",
+        "Billeteras": "SportBooks", "Descripción": "Apuesta",
+    }
+    otra = dict(fila, **{"ID de transacción": "T-2", "Crear hora": "2026-09-07 04:00:00"})
+    _escribir_csv(csv_path, [fila, dict(fila), otra, dict(otra)])
+
+    dias, _ = hist.process_csv(csv_path)
+
+    assert dias["2026-09-07"]["transacciones"] == 2
+    assert dias["2026-09-07"]["clientes"]["total"] == 1
+
+
+def test_process_csv_sin_columna_de_id_cuenta_todo(tmp_path):
+    """Sin ID no se puede deduplicar: se cuenta todo en vez de descartar datos."""
+    csv_path = tmp_path / "sin-id.csv"
+    _escribir_csv(
+        csv_path,
+        [
+            {"Crear hora": "2026-09-07 03:00:00", "ID de transacción": "",
+             "ID de usuario": "788", "Usuario": "u1", "Tipo": "Player Online",
+             "Ingresos": "1.00", "Total": "-0.50", "Comisión": "",
+             "Billeteras": "SportBooks", "Descripción": "Apuesta"},
+            {"Crear hora": "2026-09-07 03:00:00", "ID de transacción": "",
+             "ID de usuario": "788", "Usuario": "u1", "Tipo": "Player Online",
+             "Ingresos": "1.00", "Total": "-0.50", "Comisión": "",
+             "Billeteras": "SportBooks", "Descripción": "Apuesta"},
+        ],
+    )
+
+    dias, _ = hist.process_csv(csv_path)
+
+    assert dias["2026-09-07"]["transacciones"] == 2
+
+
+def test_merge_no_sustituye_un_dia_por_un_export_mas_corto(tmp_path):
+    """Un export corto no debe borrar un dia ya publicado con mas cobertura.
+
+    Caso real: el 2026-09-05 paso de 73.299 a 36.490 transacciones porque el
+    export siguiente de la misma ventana vino con la mitad de las filas.
+    """
+    historico_path = tmp_path / "historico.json"
+    historico_path.write_text(
+        json.dumps({
+            "version": 1,
+            "actualizado": "",
+            "dias": {
+                "2026-09-05": {"transacciones": 73299, "disciplina": {}, "conexion": {},
+                               "clientes": {}, "money": {}},
+            },
+        }),
+        encoding="utf-8",
+    )
+    hist.HISTORICO_PATH = historico_path
+    data = hist.load_existing()
+
+    aplicados = hist.merge(
+        data,
+        {
+            "2026-09-05": {"transacciones": 36490, "disciplina": {}, "conexion": {},
+                           "clientes": {}, "money": {}},
+            "2026-09-10": {"transacciones": 30975, "disciplina": {}, "conexion": {},
+                           "clientes": {}, "money": {}},
+        },
+        tmp_path / "export-corto.csv",
+    )
+
+    # el dia ya publicado se conserva; el dia en curso si entra
+    assert data["dias"]["2026-09-05"]["transacciones"] == 73299
+    assert data["dias"]["2026-09-10"]["transacciones"] == 30975
+    assert aplicados == 1

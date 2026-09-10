@@ -83,6 +83,17 @@ def day_of_row(row: dict[str, Any]) -> str:
     return value[:10] if len(value) >= 10 else ""
 
 
+def transaction_key_of_row(row: dict[str, Any]) -> str:
+    """Identifica la transaccion: es la clave para no contarla dos veces."""
+    return get_row_value(
+        row,
+        "ID de transacción",
+        "ID de transaccion",
+        "id_transaccion",
+        "transaction_id",
+    )
+
+
 def user_key_of_row(row: dict[str, Any]) -> str:
     """Identifica al cliente de forma estable: ID de usuario o Usuario."""
     return get_row_value(
@@ -146,6 +157,9 @@ def process_csv(filepath: Path) -> tuple[dict[str, dict[str, Any]], dict[str, li
     delimiter = detect_delimiter(filepath)
 
     days: dict[str, dict[str, Any]] = {}
+    seen_transactions: set[str] = set()
+    duplicates = 0
+    without_key = 0
     clients: dict[str, set[str]] = defaultdict(set)
     client_kinds: dict[str, dict[str, set[str]]] = defaultdict(
         lambda: defaultdict(set)
@@ -164,6 +178,18 @@ def process_csv(filepath: Path) -> tuple[dict[str, dict[str, Any]], dict[str, li
             day = day_of_row(row)
             if not day:
                 continue
+
+            # El back office devuelve la misma transaccion mas de una vez en un
+            # mismo export (se observo un dia contado 2x exacto). Sin esta
+            # guarda cada repeticion infla el dia.
+            transaction_key = transaction_key_of_row(row)
+            if transaction_key:
+                if transaction_key in seen_transactions:
+                    duplicates += 1
+                    continue
+                seen_transactions.add(transaction_key)
+            else:
+                without_key += 1
 
             summary = days.setdefault(day, empty_day())
             discipline = classify_discipline(row)
@@ -252,6 +278,15 @@ def process_csv(filepath: Path) -> tuple[dict[str, dict[str, Any]], dict[str, li
         for day in days.keys()
     }
 
+    if duplicates:
+        print(
+            f"  {duplicates:,} fila(s) repetidas por ID de transaccion, descartadas."
+        )
+    if without_key:
+        print(
+            f"  {without_key:,} fila(s) sin ID de transaccion: contadas sin deduplicar."
+        )
+
     return days, game_days
 
 
@@ -280,13 +315,27 @@ def load_resumen() -> dict[str, Any]:
 def merge(
     historico: dict[str, Any], days: dict[str, dict[str, Any]], source: Path
 ) -> int:
-    historico.setdefault("dias", {}).update(days)
+    stored = historico.setdefault("dias", {})
+    applied = 0
+    for day, summary in days.items():
+        previous = stored.get(day, {}).get("transacciones", 0)
+        incoming = summary.get("transacciones", 0)
+        # Dos exports del mismo rango devuelven totales distintos. Un export
+        # corto no debe borrar un dia ya publicado con mas cobertura; es la
+        # misma regla que aplica aplicar-csv-historicos.py a mano.
+        if previous > incoming:
+            print(
+                f"  {day}: se conserva lo publicado ({previous:,} > {incoming:,})."
+            )
+            continue
+        stored[day] = summary
+        applied += 1
     historico["dias"] = dict(sorted(historico["dias"].items()))
     historico["actualizado"] = datetime.now().isoformat(timespec="seconds")
     historico["fuentes"] = sorted(
         set(historico.get("fuentes", [])) | {source.name}
     )
-    return len(days)
+    return applied
 
 
 def merge_resumen(
