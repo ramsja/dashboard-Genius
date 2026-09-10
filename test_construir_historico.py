@@ -44,7 +44,7 @@ def test_process_csv_groups_by_day_and_counts_unique_clients(tmp_path):
         ],
     )
 
-    dias = hist.process_csv(csv_path)
+    dias, _ = hist.process_csv(csv_path)
 
     assert set(dias) == {"2026-09-03", "2026-09-04"}
 
@@ -85,3 +85,12 @@ def test_merges_and_replaces_existing_days(tmp_path):
     final = json.loads(historico_path.read_text(encoding="utf-8"))
     assert list(final["dias"]) == ["2026-09-03", "2026-09-04"]
     assert final["dias"]["2026-09-03"]["transacciones"] == 9
+
+
+def test_resumen_reimport_does_not_double_games(tmp_path):
+    resumen = {"dias": {"2026-09-03": {"juegos": []}}}
+    games = {"2026-09-03": [{"titulo": "Juego", "proveedor": "Proveedor",
+        "categoria": "casino", "jugadas": 3, "apuesta": 2.5}]}
+    for _ in range(2):
+        hist.merge_resumen(resumen, games, tmp_path / "export.csv")
+    assert resumen["dias"]["2026-09-03"]["juegos"] == games["2026-09-03"]

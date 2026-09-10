@@ -298,10 +298,8 @@ def merge_resumen(
 
     for day, game_list in game_days.items():
         day_data = resumen["dias"].setdefault(day, {})
-        by_key: dict[tuple[str, str], dict[str, Any]] = {
-            (g["titulo"], g["proveedor"]): dict(g)
-            for g in day_data.get("juegos", [])
-        }
+        # Cada export reemplaza el día, igual que el historial de transacciones.
+        by_key: dict[tuple[str, str], dict[str, Any]] = {}
 
         for game in game_list:
             key = (game["titulo"], game["proveedor"])
