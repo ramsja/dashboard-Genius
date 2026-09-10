@@ -6,11 +6,11 @@
     {
       snapshotUrl: './data/snapshot.json',
       fallbackSnapshotUrl: './data/snapshot.json',
-      supabase: {
+      // API del Worker sobre Cloudflare D1 (cloudflare/worker.js). Devuelve la
+      // misma forma que snapshot.json, asi que el render es el mismo.
+      api: {
         enabled: false,
         url: '',
-        anonKey: '',
-        view: 'transaction_discipline_summary',
       },
     },
     window.DASHBOARD_CONFIG || {}
@@ -91,61 +91,13 @@
     }
   }
 
-  async function loadFromSupabase() {
-    const cfg = CONFIG.supabase;
-    if (!cfg.enabled || !cfg.url || !cfg.anonKey) return null;
-    const endpoint =
-      cfg.url.replace(/\/$/, '') +
-      '/rest/v1/' + cfg.view +
-      '?select=discipline,client_status,connection,records,total,income';
-    const rows = await fetchJson(endpoint, 20000, {
-      headers: {
-        apikey: cfg.anonKey,
-        Authorization: 'Bearer ' + cfg.anonKey,
-        Accept: 'application/json',
-      },
-    });
-    return buildSnapshotFromRows(rows);
-  }
-
-  function buildSnapshotFromRows(rows) {
-    if (!Array.isArray(rows) || !rows.length) return null;
-    const data = {
-      version: 2,
-      generated_at: new Date().toISOString(),
-      source: 'Supabase REST',
-      total: 0,
-      discipline: { casino: 0, deportes: 0, otros: 0 },
-      connection: { online: 0, retail: 0, desconocido: 0 },
-      status: { activo: 0, inactivo: 0, desconectado: 0, suspendido: 0, otros: 0 },
-      matrix: {},
-      money: {},
-      top_products: [],
-    };
-    DISCIPLINES.forEach((d) => (data.matrix[d] = { online: 0, retail: 0, desconocido: 0, total: 0, status: {} }));
-    rows.forEach((r) => {
-      const discipline = String(r.discipline || 'otros');
-      const status = String(r.client_status || 'otros');
-      const connection = String(r.connection || 'desconocido');
-      const records = Number(r.records || 0);
-      const total = Number(r.total || 0);
-      const income = Number(r.income || 0);
-
-      data.total += records;
-      data.discipline[discipline] = (data.discipline[discipline] || 0) + records;
-      data.connection[connection] = (data.connection[connection] || 0) + records;
-      data.status[status] = (data.status[status] || 0) + records;
-
-      const m = data.matrix[discipline] || (data.matrix[discipline] = { online: 0, retail: 0, desconocido: 0, total: 0, status: {} });
-      m[connection] += records;
-      m.total += records;
-      m.status[status] = (m.status[status] || 0) + records;
-
-      const money = data.money[discipline] || (data.money[discipline] = { income: 0, total: 0, commission: 0 });
-      money.income += income;
-      money.total += total;
-    });
-    return data;
+  async function loadFromApi() {
+    const cfg = CONFIG.api;
+    if (!cfg.enabled || !cfg.url) return null;
+    // El Worker ejecuta consultas fijas sobre D1 y responde agregados. La
+    // pagina no lleva token: el control de acceso vive en el Worker.
+    const datos = await fetchJson(cfg.url.replace(/\/$/, '') + '/api/snapshot', 20000);
+    return datos && datos.total ? datos : null;
   }
 
   async function loadData() {
@@ -154,15 +106,15 @@
     els.errorBox.style.display = 'none';
     try {
       try {
-        const data = await loadFromSupabase();
+        const data = await loadFromApi();
         if (data) {
           state.data = data;
-          setSource('Supabase · en vivo', 'var(--green)');
+          setSource('Cloudflare D1 · en vivo', 'var(--green)');
           els.content.style.display = 'block';
           return render();
         }
       } catch (err) {
-        console.warn('Supabase no disponible, se usa JSON estático:', err);
+        console.warn('API no disponible, se usa JSON estático:', err);
       }
       const fallback = await fetchJson(CONFIG.snapshotUrl, 15000);
       state.data = fallback;

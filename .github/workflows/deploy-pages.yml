@@ -23,27 +23,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Preconfigurar dashboard con Supabase
+      - name: Preconfigurar dashboard con la API de D1
         run: |
-          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_ANON_KEY" ]; then
+          # Solo la URL del Worker entra en la pagina. No hay token ni clave:
+          # el Worker decide que se puede leer.
+          if [ -n "$D1_API_URL" ]; then
             cat > dashboard/config.js <<CONFIG
           window.DASHBOARD_CONFIG = {
             snapshotUrl: './data/snapshot.json',
-            supabase: {
+            api: {
               enabled: true,
-              url: '$SUPABASE_URL',
-              anonKey: '$SUPABASE_ANON_KEY',
-              view: 'transaction_discipline_summary',
+              url: '$D1_API_URL',
             },
           };
           CONFIG
-            echo "config.js generado con Supabase habilitado"
+            echo "config.js generado apuntando a $D1_API_URL"
           else
-            echo "Supabase no configurado; se usa el JSON estatico"
+            echo "D1_API_URL no configurado; el dashboard usa el JSON estatico"
           fi
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          D1_API_URL: ${{ secrets.D1_API_URL }}
 
       - name: Configurar Pages
         uses: actions/configure-pages@v5
