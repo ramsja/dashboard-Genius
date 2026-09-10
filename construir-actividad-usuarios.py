@@ -13,6 +13,7 @@ import sys
 from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
+import guardas
 
 BASE_DIR = Path(__file__).resolve().parent
 DESCARGAS = BASE_DIR / "descargas"
@@ -125,6 +126,15 @@ def main() -> None:
 
     print(f"Analizando actividad de usuarios desde: {csv_path.name}")
     data = analyze_users(csv_path)
+
+    # Mismo riesgo que en el snapshot: con un export recortado el volumen
+    # apostado paso de 203.508 a 29.785 en la corrida del 2026-09-10T23:02.
+    if not guardas.debe_reemplazar(
+        OUTPUT_PATH, data['resumen']['total_usuarios'],
+        clave_total=('resumen', 'total_usuarios'), clave_fecha='generated_at',
+        etiqueta='actividad de usuarios',
+    ):
+        return
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(
