@@ -4401,9 +4401,767 @@
       }
      }
     }
+   },
+   {
+    "archivo": "transacciones_producto__2026-09-06_2026-09-11.csv",
+    "sha256": "88177f6afffed8bbb461dcd461a8103c2a35cdbfd0934c6f0d2713e6011e593f",
+    "filas": 498388,
+    "filas_casino": 478460,
+    "importado_en": "2026-09-11T21:46:38+00:00",
+    "cobertura": {
+     "2026-09": [
+      "2026-09-06 00:00:02",
+      "2026-09-11 15:30:54"
+     ],
+     "2026-08": [
+      "2026-08-13 18:00:00",
+      "2026-08-15 08:15:38"
+     ]
+    },
+    "deltas": {
+     "2026-09": {
+      "Yggdrasil": {
+       "rondas": 1842,
+       "apuesta": 1878.7499999999995,
+       "premios": 2147.5299999999984
+      },
+      "Pragmaticplay": {
+       "rondas": 38729,
+       "apuesta": 16014.460000006084,
+       "premios": 13605.790000000196
+      },
+      "Slots Battle - Entry Fee": {
+       "rondas": 65,
+       "apuesta": 6.649999999999998,
+       "premios": 0.0
+      },
+      "Booming": {
+       "rondas": 13903,
+       "apuesta": 2100.6499999998887,
+       "premios": 2111.7499999999905
+      },
+      "Rubyplay": {
+       "rondas": 24602,
+       "apuesta": 15030.150000004189,
+       "premios": 20249.430000000324
+      },
+      "Platipus": {
+       "rondas": 8703,
+       "apuesta": 2636.3499999998417,
+       "premios": 2199.999999999977
+      },
+      "Kingmidas": {
+       "rondas": 512,
+       "apuesta": 288.19999999999857,
+       "premios": 264.4100000000001
+      },
+      "Amigogaming BCW": {
+       "rondas": 36469,
+       "apuesta": 25951.39999999821,
+       "premios": 24799.44999999971
+      },
+      "Betora": {
+       "rondas": 10626,
+       "apuesta": 2466.7499999997417,
+       "premios": 2131.0899999999883
+      },
+      "In-Out": {
+       "rondas": 3829,
+       "apuesta": 1767.5600000000068,
+       "premios": 1730.0499999999909
+      },
+      "Gamzix": {
+       "rondas": 1301,
+       "apuesta": 864.1000000000114,
+       "premios": 898.2300000000001
+      },
+      "3Oaks": {
+       "rondas": 23677,
+       "apuesta": 6035.249999999722,
+       "premios": 5467.170000000017
+      },
+      "Fazi": {
+       "rondas": 40009,
+       "apuesta": 26908.55000001661,
+       "premios": 27282.74000000048
+      },
+      "Playson": {
+       "rondas": 32965,
+       "apuesta": 11167.100000004582,
+       "premios": 10081.81000000009
+      },
+      "TaDa": {
+       "rondas": 14135,
+       "apuesta": 7881.379999999905,
+       "premios": 7319.389999999981
+      },
+      "Barbarabang": {
+       "rondas": 3344,
+       "apuesta": 1255.4000000000308,
+       "premios": 1442.0299999999982
+      },
+      "Vimplay": {
+       "rondas": 50,
+       "apuesta": 13.299999999999992,
+       "premios": 10.86
+      },
+      "Spinomenal": {
+       "rondas": 8859,
+       "apuesta": 4131.149999999634,
+       "premios": 3547.8799999999896
+      },
+      "PeterAndSons": {
+       "rondas": 722,
+       "apuesta": 509.3000000000042,
+       "premios": 449.67999999999995
+      },
+      "Black Lagoon": {
+       "rondas": 9488,
+       "apuesta": 2219.2599999998315,
+       "premios": 1983.3799999999994
+      },
+      "PopiPlay": {
+       "rondas": 1053,
+       "apuesta": 446.7000000000046,
+       "premios": 251.00999999999968
+      },
+      "Playngo": {
+       "rondas": 5445,
+       "apuesta": 2422.7499999998936,
+       "premios": 3267.6399999999758
+      },
+      "Endorphina": {
+       "rondas": 11929,
+       "apuesta": 3576.5900000001066,
+       "premios": 3075.980000000005
+      },
+      "Smartsoft": {
+       "rondas": 551,
+       "apuesta": 1562.1399999999992,
+       "premios": 1442.8400000000001
+      },
+      "TomHorn": {
+       "rondas": 876,
+       "apuesta": 236.599999999999,
+       "premios": 257.2999999999999
+      },
+      "Kagaming": {
+       "rondas": 1168,
+       "apuesta": 414.12999999999846,
+       "premios": 339.68000000000046
+      },
+      "Spribe": {
+       "rondas": 3862,
+       "apuesta": 4352.0199999999895,
+       "premios": 4081.999999999999
+      },
+      "Onlyplay": {
+       "rondas": 7385,
+       "apuesta": 2365.280000000032,
+       "premios": 2073.8699999999935
+      },
+      "Gameart Withdraw": {
+       "rondas": 2584,
+       "apuesta": 12034.700000000144,
+       "premios": 0.0
+      },
+      "Gameart Deposit": {
+       "rondas": 0,
+       "apuesta": 0.0,
+       "premios": 11589.910000000007
+      },
+      "Apparat": {
+       "rondas": 2655,
+       "apuesta": 1071.1000000000365,
+       "premios": 1499.6299999999967
+      },
+      "1Spin4win": {
+       "rondas": 4504,
+       "apuesta": 831.9899999999933,
+       "premios": 867.099999999998
+      },
+      "BFgames": {
+       "rondas": 3911,
+       "apuesta": 558.5800000000285,
+       "premios": 432.4600000000018
+      },
+      "Evoplay": {
+       "rondas": 8419,
+       "apuesta": 1856.2999999998908,
+       "premios": 1634.2099999999875
+      },
+      "TripleCherry": {
+       "rondas": 323,
+       "apuesta": 276.76000000000107,
+       "premios": 335.62
+      },
+      "Skywind": {
+       "rondas": 6084,
+       "apuesta": 1899.4399999999307,
+       "premios": 1396.0999999999967
+      },
+      "Dreamplay": {
+       "rondas": 2257,
+       "apuesta": 1235.2000000000137,
+       "premios": 0.0
+      },
+      "DreamPlay": {
+       "rondas": 0,
+       "apuesta": 0.0,
+       "premios": 2047.3299999999965
+      },
+      "7777": {
+       "rondas": 597,
+       "apuesta": 492.0000000000009,
+       "premios": 391.03000000000003
+      },
+      "Netgame": {
+       "rondas": 1088,
+       "apuesta": 274.3999999999955,
+       "premios": 235.79999999999984
+      },
+      "Belatra": {
+       "rondas": 501,
+       "apuesta": 444.8999999999968,
+       "premios": 375.3799999999999
+      },
+      "Slotopia": {
+       "rondas": 250,
+       "apuesta": 36.40000000000013,
+       "premios": 27.199999999999996
+      },
+      "Ct Interactive": {
+       "rondas": 164,
+       "apuesta": 57.8,
+       "premios": 79.2
+      },
+      "Esa Gaming": {
+       "rondas": 941,
+       "apuesta": 1166.4199999999998,
+       "premios": 1182.3199999999988
+      },
+      "Spin2Win": {
+       "rondas": 491,
+       "apuesta": 153.81999999999812,
+       "premios": 134.3400000000002
+      },
+      "Thunderkick": {
+       "rondas": 461,
+       "apuesta": 326.4999999999998,
+       "premios": 189.43999999999997
+      },
+      "PopOK": {
+       "rondas": 565,
+       "apuesta": 118.58999999999918,
+       "premios": 69.45000000000003
+      },
+      "Habanero": {
+       "rondas": 2786,
+       "apuesta": 1261.0499999999656,
+       "premios": 1409.7699999999977
+      },
+      "Redtiger": {
+       "rondas": 1362,
+       "apuesta": 510.50000000000085,
+       "premios": 507.56000000000057
+      },
+      "Hacksaw": {
+       "rondas": 2179,
+       "apuesta": 8524.100000000104,
+       "premios": 4598.579999999994
+      },
+      "PGsoft": {
+       "rondas": 7024,
+       "apuesta": 2230.700000000046,
+       "premios": 3644.339999999996
+      },
+      "Netent": {
+       "rondas": 915,
+       "apuesta": 283.3000000000003,
+       "premios": 226.95000000000005
+      },
+      "Helio Gaming": {
+       "rondas": 26,
+       "apuesta": 19.7,
+       "premios": 13.45
+      },
+      "Mojos-Slots": {
+       "rondas": 837,
+       "apuesta": 14401.949999999959,
+       "premios": 13753.410000000014
+      },
+      "BWGaming": {
+       "rondas": 235,
+       "apuesta": 23.500000000000064,
+       "premios": 15.500000000000016
+      },
+      "BGaming": {
+       "rondas": 2963,
+       "apuesta": 1335.9899999999782,
+       "premios": 1182.6299999999942
+      },
+      "Mancala": {
+       "rondas": 924,
+       "apuesta": 1124.450000000006,
+       "premios": 479.51999999999987
+      },
+      "RTG Slots": {
+       "rondas": 2367,
+       "apuesta": 804.6800000000047,
+       "premios": 717.85
+      },
+      "Solidicon": {
+       "rondas": 2320,
+       "apuesta": 2262.0799999999495,
+       "premios": 2097.6400000000085
+      },
+      "Big Time Gaming": {
+       "rondas": 179,
+       "apuesta": 29.199999999999978,
+       "premios": 20.049999999999994
+      },
+      "Slots Battle - Prize": {
+       "rondas": 0,
+       "apuesta": 0.0,
+       "premios": 1.0
+      },
+      "Caleta": {
+       "rondas": 23,
+       "apuesta": 10.199999999999996,
+       "premios": 0.0
+      },
+      "CaletaGaming": {
+       "rondas": 0,
+       "apuesta": 0.0,
+       "premios": 13.3
+      },
+      "Onetouch": {
+       "rondas": 7,
+       "apuesta": 2.1999999999999997,
+       "premios": 0.68
+      },
+      "Redrake": {
+       "rondas": 730,
+       "apuesta": 676.0000000000031,
+       "premios": 0.0
+      },
+      "Aviator Studio": {
+       "rondas": 141,
+       "apuesta": 149.19999999999968,
+       "premios": 131.52999999999997
+      },
+      "Chimeraspin": {
+       "rondas": 27,
+       "apuesta": 8.099999999999998,
+       "premios": 4.1000000000000005
+      },
+      "EAgaming": {
+       "rondas": 335,
+       "apuesta": 120.59999999999891,
+       "premios": 78.79999999999997
+      },
+      "Bigpot": {
+       "rondas": 289,
+       "apuesta": 61.40000000000033,
+       "premios": 62.92000000000001
+      },
+      "RedRake": {
+       "rondas": 0,
+       "apuesta": 0.0,
+       "premios": 504.0499999999999
+      },
+      "Worldmatch": {
+       "rondas": 237,
+       "apuesta": 368.5,
+       "premios": 269.6000000000001
+      },
+      "Betsolutions": {
+       "rondas": 5,
+       "apuesta": 3.8,
+       "premios": 0.6
+      },
+      "TurboGames": {
+       "rondas": 1154,
+       "apuesta": 496.49999999999966,
+       "premios": 482.50000000000006
+      },
+      "Formulaspin": {
+       "rondas": 2,
+       "apuesta": 1.5,
+       "premios": 1.68
+      },
+      "Aviatrix": {
+       "rondas": 114,
+       "apuesta": 155.45999999999995,
+       "premios": 165.12999999999997
+      },
+      "Spinmatic V3": {
+       "rondas": 33,
+       "apuesta": 66.0,
+       "premios": 54.0
+      },
+      "Airdice": {
+       "rondas": 230,
+       "apuesta": 278.8999999999994,
+       "premios": 228.59000000000006
+      },
+      "Abracadabra": {
+       "rondas": 3,
+       "apuesta": 0.33,
+       "premios": 0.19
+      },
+      "Nolimit City": {
+       "rondas": 1655,
+       "apuesta": 2884.6699999999623,
+       "premios": 3569.849999999999
+      },
+      "Espresso": {
+       "rondas": 2,
+       "apuesta": 0.5,
+       "premios": 0.2
+      }
+     },
+     "2026-08": {
+      "Booming": {
+       "rondas": 628,
+       "apuesta": 230.2999999999974,
+       "premios": 215.34000000000003
+      },
+      "Smartsoft": {
+       "rondas": 20,
+       "apuesta": 9.399999999999999,
+       "premios": 12.06
+      },
+      "3Oaks": {
+       "rondas": 1167,
+       "apuesta": 198.5999999999979,
+       "premios": 162.09000000000003
+      },
+      "Fazi": {
+       "rondas": 3794,
+       "apuesta": 747.6599999999868,
+       "premios": 824.6799999999972
+      },
+      "Playson": {
+       "rondas": 1067,
+       "apuesta": 261.399999999994,
+       "premios": 346.7599999999998
+      },
+      "Amigogaming BCW": {
+       "rondas": 2233,
+       "apuesta": 783.349999999995,
+       "premios": 573.6599999999997
+      },
+      "Rubyplay": {
+       "rondas": 870,
+       "apuesta": 347.10000000000383,
+       "premios": 248.36999999999998
+      },
+      "PeterAndSons": {
+       "rondas": 120,
+       "apuesta": 105.5,
+       "premios": 147.04
+      },
+      "Evoplay": {
+       "rondas": 425,
+       "apuesta": 88.20000000000041,
+       "premios": 92.03000000000002
+      },
+      "Hacksaw": {
+       "rondas": 122,
+       "apuesta": 170.99999999999991,
+       "premios": 154.77
+      },
+      "Pragmaticplay": {
+       "rondas": 2770,
+       "apuesta": 761.5800000000174,
+       "premios": 647.2399999999999
+      },
+      "Big Time Gaming": {
+       "rondas": 6,
+       "apuesta": 1.2,
+       "premios": 0.6300000000000001
+      },
+      "Spribe": {
+       "rondas": 231,
+       "apuesta": 283.87,
+       "premios": 258.7799999999999
+      },
+      "Aviatrix": {
+       "rondas": 47,
+       "apuesta": 11.6,
+       "premios": 12.150000000000004
+      },
+      "Endorphina": {
+       "rondas": 1252,
+       "apuesta": 357.4500000000043,
+       "premios": 156.29000000000008
+      },
+      "Netent": {
+       "rondas": 345,
+       "apuesta": 168.39999999999966,
+       "premios": 152.89000000000001
+      },
+      "TripleCherry": {
+       "rondas": 183,
+       "apuesta": 18.29999999999999,
+       "premios": 14.159999999999998
+      },
+      "Spinomenal": {
+       "rondas": 664,
+       "apuesta": 143.11999999999765,
+       "premios": 78.35000000000001
+      },
+      "Playngo": {
+       "rondas": 227,
+       "apuesta": 44.470000000000034,
+       "premios": 78.10000000000001
+      },
+      "Redtiger": {
+       "rondas": 99,
+       "apuesta": 35.89999999999999,
+       "premios": 15.73
+      },
+      "1Spin4win": {
+       "rondas": 629,
+       "apuesta": 297.1300000000022,
+       "premios": 398.72000000000014
+      },
+      "Onlyplay": {
+       "rondas": 263,
+       "apuesta": 64.15,
+       "premios": 98.99
+      },
+      "TaDa": {
+       "rondas": 119,
+       "apuesta": 33.19999999999998,
+       "premios": 16.66
+      },
+      "Platipus": {
+       "rondas": 114,
+       "apuesta": 27.499999999999943,
+       "premios": 69.53
+      },
+      "Bigpot": {
+       "rondas": 3,
+       "apuesta": 0.6000000000000001,
+       "premios": 0.0
+      },
+      "BGaming": {
+       "rondas": 46,
+       "apuesta": 12.100000000000001,
+       "premios": 25.64
+      },
+      "Spinmatic V3": {
+       "rondas": 122,
+       "apuesta": 244.0,
+       "premios": 344.0
+      },
+      "In-Out": {
+       "rondas": 138,
+       "apuesta": 35.74000000000003,
+       "premios": 33.19
+      },
+      "Belatra": {
+       "rondas": 133,
+       "apuesta": 27.399999999999935,
+       "premios": 12.499999999999998
+      },
+      "Solidicon": {
+       "rondas": 4,
+       "apuesta": 9.86,
+       "premios": 5.12
+      },
+      "Gamzix": {
+       "rondas": 48,
+       "apuesta": 13.5,
+       "premios": 10.43
+      },
+      "Gameart Deposit": {
+       "rondas": 0,
+       "apuesta": 0.0,
+       "premios": 573.45
+      },
+      "Gameart Withdraw": {
+       "rondas": 197,
+       "apuesta": 629.4,
+       "premios": 0.0
+      },
+      "Aviator Studio": {
+       "rondas": 22,
+       "apuesta": 4.000000000000001,
+       "premios": 3.0599999999999996
+      },
+      "Vimplay": {
+       "rondas": 12,
+       "apuesta": 6.1000000000000005,
+       "premios": 3.01
+      },
+      "RTG Slots": {
+       "rondas": 26,
+       "apuesta": 1.5300000000000002,
+       "premios": 0.22
+      },
+      "FantasyGoal": {
+       "rondas": 1,
+       "apuesta": 0.5,
+       "premios": 1.64
+      },
+      "Isolutions": {
+       "rondas": 3,
+       "apuesta": 5.0,
+       "premios": 0.0
+      },
+      "Black Lagoon": {
+       "rondas": 2099,
+       "apuesta": 766.700000000031,
+       "premios": 476.71000000000055
+      },
+      "Mancala": {
+       "rondas": 113,
+       "apuesta": 44.0000000000001,
+       "premios": 42.879999999999995
+      },
+      "7777": {
+       "rondas": 9,
+       "apuesta": 15.0,
+       "premios": 8.6
+      },
+      "Caleta": {
+       "rondas": 30,
+       "apuesta": 35.5,
+       "premios": 0.0
+      },
+      "Barbarabang": {
+       "rondas": 273,
+       "apuesta": 54.90000000000032,
+       "premios": 17.9
+      },
+      "Skywind": {
+       "rondas": 186,
+       "apuesta": 28.40000000000002,
+       "premios": 29.22000000000001
+      },
+      "CaletaGaming": {
+       "rondas": 0,
+       "apuesta": 0.0,
+       "premios": 17.4
+      },
+      "BFgames": {
+       "rondas": 614,
+       "apuesta": 113.19999999999922,
+       "premios": 106.39999999999989
+      },
+      "PGsoft": {
+       "rondas": 489,
+       "apuesta": 581.6500000000067,
+       "premios": 655.7999999999997
+      },
+      "Habanero": {
+       "rondas": 300,
+       "apuesta": 100.5500000000002,
+       "premios": 79.16000000000003
+      },
+      "Helio Gaming": {
+       "rondas": 25,
+       "apuesta": 22.5,
+       "premios": 1.5
+      },
+      "PopOK": {
+       "rondas": 317,
+       "apuesta": 41.52000000000009,
+       "premios": 55.849999999999994
+      },
+      "Yggdrasil": {
+       "rondas": 267,
+       "apuesta": 166.00000000000006,
+       "premios": 218.6200000000001
+      },
+      "Heronbyte": {
+       "rondas": 40,
+       "apuesta": 16.000000000000007,
+       "premios": 6.0
+      },
+      "Apparat": {
+       "rondas": 239,
+       "apuesta": 46.000000000000114,
+       "premios": 28.85
+      },
+      "IAGplay": {
+       "rondas": 37,
+       "apuesta": 88.5,
+       "premios": 69.5
+      },
+      "Netgame": {
+       "rondas": 67,
+       "apuesta": 15.799999999999997,
+       "premios": 3.8499999999999988
+      },
+      "TomHorn": {
+       "rondas": 141,
+       "apuesta": 115.00000000000003,
+       "premios": 194.45
+      },
+      "EAgaming": {
+       "rondas": 12,
+       "apuesta": 6.0,
+       "premios": 3.1
+      },
+      "PopiPlay": {
+       "rondas": 34,
+       "apuesta": 29.159999999999993,
+       "premios": 142.5
+      },
+      "Twister Play": {
+       "rondas": 2,
+       "apuesta": 1.0,
+       "premios": 1.3
+      },
+      "Abracadabra": {
+       "rondas": 2,
+       "apuesta": 4.9,
+       "premios": 9.23
+      },
+      "Slotopia": {
+       "rondas": 1,
+       "apuesta": 0.2,
+       "premios": 0.0
+      },
+      "Slots Battle - Entry Fee": {
+       "rondas": 1,
+       "apuesta": 0.05,
+       "premios": 0.0
+      },
+      "Formulaspin": {
+       "rondas": 11,
+       "apuesta": 4.9,
+       "premios": 0.0
+      },
+      "Ct Interactive": {
+       "rondas": 12,
+       "apuesta": 4.8,
+       "premios": 3.48
+      },
+      "Mojos-Slots": {
+       "rondas": 3,
+       "apuesta": 1.2000000000000002,
+       "premios": 1.44
+      },
+      "Spinoro": {
+       "rondas": 8,
+       "apuesta": 1.5999999999999999,
+       "premios": 0.14
+      },
+      "Kagaming": {
+       "rondas": 34,
+       "apuesta": 13.75,
+       "premios": 5.169999999999999
+      }
+     }
+    }
    }
   ],
-  "actualizado": "2026-09-11T19:09:05+00:00",
+  "actualizado": "2026-09-11T21:46:38+00:00",
   "periodos_disponibles": [
    "2026-08",
    "2026-09"
@@ -4412,129 +5170,129 @@
  "acumulado": {
   "2026-08": {
    "3Oaks": {
-    "rondas": 7133,
-    "apuesta": 1192.4,
-    "premios": 1259.8
+    "rondas": 8300,
+    "apuesta": 1391.0,
+    "premios": 1421.89
    },
    "Pragmaticplay": {
-    "rondas": 20655,
-    "apuesta": 7697.97,
-    "premios": 7449.1
+    "rondas": 23425,
+    "apuesta": 8459.55,
+    "premios": 8096.34
    },
    "Amigogaming BCW": {
-    "rondas": 12400,
-    "apuesta": 3978.45,
-    "premios": 3914.38
+    "rondas": 14633,
+    "apuesta": 4761.8,
+    "premios": 4488.04
    },
    "Rubyplay": {
-    "rondas": 10531,
-    "apuesta": 3408.25,
-    "premios": 2642.0
+    "rondas": 11401,
+    "apuesta": 3755.35,
+    "premios": 2890.37
    },
    "Barbarabang": {
-    "rondas": 1572,
-    "apuesta": 709.21,
-    "premios": 367.19
+    "rondas": 1845,
+    "apuesta": 764.11,
+    "premios": 385.09
    },
    "Spribe": {
-    "rondas": 965,
-    "apuesta": 2673.46,
-    "premios": 1398.54
+    "rondas": 1196,
+    "apuesta": 2957.33,
+    "premios": 1657.32
    },
    "Evoplay": {
-    "rondas": 2909,
-    "apuesta": 634.0,
-    "premios": 686.28
+    "rondas": 3334,
+    "apuesta": 722.2,
+    "premios": 778.31
    },
    "BGaming": {
-    "rondas": 860,
-    "apuesta": 356.7,
-    "premios": 292.84
+    "rondas": 906,
+    "apuesta": 368.8,
+    "premios": 318.48
    },
    "Helio Gaming": {
-    "rondas": 37,
-    "apuesta": 12.5,
-    "premios": 3.45
+    "rondas": 62,
+    "apuesta": 35.0,
+    "premios": 4.95
    },
    "BFgames": {
-    "rondas": 3471,
-    "apuesta": 691.55,
-    "premios": 758.3
+    "rondas": 4085,
+    "apuesta": 804.75,
+    "premios": 864.7
    },
    "Playngo": {
-    "rondas": 1819,
-    "apuesta": 533.32,
-    "premios": 731.3
+    "rondas": 2046,
+    "apuesta": 577.79,
+    "premios": 809.4
    },
    "Endorphina": {
-    "rondas": 5773,
-    "apuesta": 1433.55,
-    "premios": 878.58
+    "rondas": 7025,
+    "apuesta": 1791.0,
+    "premios": 1034.87
    },
    "Kagaming": {
-    "rondas": 1192,
-    "apuesta": 270.0,
-    "premios": 244.62
+    "rondas": 1226,
+    "apuesta": 283.75,
+    "premios": 249.79
    },
    "Formulaspin": {
-    "rondas": 476,
-    "apuesta": 151.64,
+    "rondas": 487,
+    "apuesta": 156.54,
     "premios": 110.41
    },
    "EAgaming": {
-    "rondas": 381,
-    "apuesta": 180.5,
-    "premios": 108.88
+    "rondas": 393,
+    "apuesta": 186.5,
+    "premios": 111.98
    },
    "Fazi": {
-    "rondas": 5755,
-    "apuesta": 1553.67,
-    "premios": 1474.67
+    "rondas": 9549,
+    "apuesta": 2301.33,
+    "premios": 2299.35
    },
    "Redtiger": {
-    "rondas": 506,
-    "apuesta": 59.6,
-    "premios": 42.93
+    "rondas": 605,
+    "apuesta": 95.5,
+    "premios": 58.66
    },
    "PGsoft": {
-    "rondas": 1275,
-    "apuesta": 313.19,
-    "premios": 297.7
+    "rondas": 1764,
+    "apuesta": 894.84,
+    "premios": 953.5
    },
    "Skywind": {
-    "rondas": 2211,
-    "apuesta": 452.46,
-    "premios": 426.3
+    "rondas": 2397,
+    "apuesta": 480.86,
+    "premios": 455.52
    },
    "Playson": {
-    "rondas": 4105,
-    "apuesta": 920.6,
-    "premios": 864.72
+    "rondas": 5172,
+    "apuesta": 1182.0,
+    "premios": 1211.48
    },
    "Black Lagoon": {
-    "rondas": 2324,
-    "apuesta": 366.05,
-    "premios": 283.32
+    "rondas": 4423,
+    "apuesta": 1132.75,
+    "premios": 760.03
    },
    "In-Out": {
-    "rondas": 1265,
-    "apuesta": 446.24,
-    "premios": 405.39
+    "rondas": 1403,
+    "apuesta": 481.98,
+    "premios": 438.58
    },
    "Spinomenal": {
-    "rondas": 3744,
-    "apuesta": 977.1,
-    "premios": 777.69
+    "rondas": 4408,
+    "apuesta": 1120.22,
+    "premios": 856.04
    },
    "1Spin4win": {
-    "rondas": 3897,
-    "apuesta": 3906.46,
-    "premios": 3418.42
+    "rondas": 4526,
+    "apuesta": 4203.59,
+    "premios": 3817.14
    },
    "Platipus": {
-    "rondas": 3041,
-    "apuesta": 1058.2,
-    "premios": 1522.99
+    "rondas": 3155,
+    "apuesta": 1085.7,
+    "premios": 1592.52
    },
    "Onetouch": {
     "rondas": 40,
@@ -4542,34 +5300,34 @@
     "premios": 79.56
    },
    "Habanero": {
-    "rondas": 1027,
-    "apuesta": 245.08,
-    "premios": 162.78
+    "rondas": 1327,
+    "apuesta": 345.63,
+    "premios": 241.94
    },
    "Gamzix": {
-    "rondas": 99,
-    "apuesta": 15.1,
-    "premios": 3.55
+    "rondas": 147,
+    "apuesta": 28.6,
+    "premios": 13.98
    },
    "Netgame": {
-    "rondas": 890,
-    "apuesta": 214.98,
-    "premios": 131.22
+    "rondas": 957,
+    "apuesta": 230.78,
+    "premios": 135.07
    },
    "Slotopia": {
-    "rondas": 279,
-    "apuesta": 71.0,
+    "rondas": 280,
+    "apuesta": 71.2,
     "premios": 164.45
    },
    "Onlyplay": {
-    "rondas": 1833,
-    "apuesta": 604.18,
-    "premios": 707.61
+    "rondas": 2096,
+    "apuesta": 668.33,
+    "premios": 806.6
    },
    "RTG Slots": {
-    "rondas": 2226,
-    "apuesta": 829.91,
-    "premios": 1016.47
+    "rondas": 2252,
+    "apuesta": 831.44,
+    "premios": 1016.69
    },
    "Esa Gaming": {
     "rondas": 132,
@@ -4577,34 +5335,34 @@
     "premios": 3.91
    },
    "7777": {
-    "rondas": 299,
-    "apuesta": 138.1,
-    "premios": 110.76
+    "rondas": 308,
+    "apuesta": 153.1,
+    "premios": 119.36
    },
    "Solidicon": {
-    "rondas": 531,
-    "apuesta": 135.4,
-    "premios": 124.53
+    "rondas": 535,
+    "apuesta": 145.26,
+    "premios": 129.65
    },
    "PopiPlay": {
-    "rondas": 134,
-    "apuesta": 35.1,
-    "premios": 64.4
+    "rondas": 168,
+    "apuesta": 64.26,
+    "premios": 206.9
    },
    "Smartsoft": {
-    "rondas": 39,
-    "apuesta": 19.4,
-    "premios": 27.25
+    "rondas": 59,
+    "apuesta": 28.8,
+    "premios": 39.31
    },
    "Booming": {
-    "rondas": 725,
-    "apuesta": 225.96,
-    "premios": 338.81
+    "rondas": 1353,
+    "apuesta": 456.26,
+    "premios": 554.15
    },
    "Spinmatic V3": {
-    "rondas": 9,
-    "apuesta": 8.0,
-    "premios": 12.5
+    "rondas": 131,
+    "apuesta": 252.0,
+    "premios": 356.5
    },
    "Dreamplay": {
     "rondas": 302,
@@ -4617,44 +5375,44 @@
     "premios": 83.72
    },
    "Hacksaw": {
-    "rondas": 157,
-    "apuesta": 80.6,
-    "premios": 35.26
+    "rondas": 279,
+    "apuesta": 251.6,
+    "premios": 190.03
    },
    "Yggdrasil": {
-    "rondas": 809,
-    "apuesta": 393.7,
-    "premios": 447.41
+    "rondas": 1076,
+    "apuesta": 559.7,
+    "premios": 666.03
    },
    "Apparat": {
-    "rondas": 498,
-    "apuesta": 154.03,
-    "premios": 83.82
+    "rondas": 737,
+    "apuesta": 200.03,
+    "premios": 112.67
    },
    "TomHorn": {
-    "rondas": 1183,
-    "apuesta": 820.97,
-    "premios": 576.24
+    "rondas": 1324,
+    "apuesta": 935.97,
+    "premios": 770.69
    },
    "Netent": {
-    "rondas": 836,
-    "apuesta": 214.0,
-    "premios": 203.65
+    "rondas": 1181,
+    "apuesta": 382.4,
+    "premios": 356.54
    },
    "PeterAndSons": {
-    "rondas": 1063,
-    "apuesta": 184.35,
-    "premios": 183.24
+    "rondas": 1183,
+    "apuesta": 289.85,
+    "premios": 330.28
    },
    "Aviatrix": {
-    "rondas": 160,
-    "apuesta": 58.4,
-    "premios": 31.05
+    "rondas": 207,
+    "apuesta": 70.0,
+    "premios": 43.2
    },
    "Spinoro": {
-    "rondas": 52,
-    "apuesta": 59.6,
-    "premios": 31.75
+    "rondas": 60,
+    "apuesta": 61.2,
+    "premios": 31.89
    },
    "Redrake": {
     "rondas": 120,
@@ -4682,8 +5440,8 @@
     "premios": 6.64
    },
    "Slots Battle - Entry Fee": {
-    "rondas": 15,
-    "apuesta": 1.45,
+    "rondas": 16,
+    "apuesta": 1.5,
     "premios": 0.0
    },
    "TurboGames": {
@@ -4697,29 +5455,29 @@
     "premios": 66.17
    },
    "Mancala": {
-    "rondas": 530,
-    "apuesta": 130.5,
-    "premios": 109.28
+    "rondas": 643,
+    "apuesta": 174.5,
+    "premios": 152.16
    },
    "Abracadabra": {
-    "rondas": 6,
-    "apuesta": 7.09,
-    "premios": 5.61
+    "rondas": 8,
+    "apuesta": 11.99,
+    "premios": 14.84
    },
    "Mojos-Slots": {
-    "rondas": 1,
-    "apuesta": 0.03,
-    "premios": 17.0
+    "rondas": 4,
+    "apuesta": 1.23,
+    "premios": 18.44
    },
    "Twister Play": {
-    "rondas": 22,
-    "apuesta": 5.94,
-    "premios": 6.3
+    "rondas": 24,
+    "apuesta": 6.94,
+    "premios": 7.6
    },
    "Vimplay": {
-    "rondas": 20,
-    "apuesta": 10.5,
-    "premios": 2.67
+    "rondas": 32,
+    "apuesta": 16.6,
+    "premios": 5.68
    },
    "Betsolutions": {
     "rondas": 8,
@@ -4732,19 +5490,19 @@
     "premios": 57.25
    },
    "Belatra": {
-    "rondas": 324,
-    "apuesta": 148.82,
-    "premios": 558.61
+    "rondas": 457,
+    "apuesta": 176.22,
+    "premios": 571.11
    },
    "FantasyGoal": {
-    "rondas": 2,
-    "apuesta": 2.2,
-    "premios": 0.0
+    "rondas": 3,
+    "apuesta": 2.7,
+    "premios": 1.64
    },
    "Big Time Gaming": {
-    "rondas": 29,
-    "apuesta": 3.7,
-    "premios": 1.7
+    "rondas": 35,
+    "apuesta": 4.9,
+    "premios": 2.33
    },
    "Kingmidas": {
     "rondas": 28,
@@ -4754,429 +5512,469 @@
    "CaletaGaming": {
     "rondas": 223,
     "apuesta": 69.45,
-    "premios": 20.95
+    "premios": 38.35
    },
    "Ct Interactive": {
-    "rondas": 149,
-    "apuesta": 108.5,
-    "premios": 128.5
+    "rondas": 161,
+    "apuesta": 113.3,
+    "premios": 131.98
    },
    "Aviator Studio": {
-    "rondas": 9,
-    "apuesta": 25.91,
-    "premios": 12.49
+    "rondas": 31,
+    "apuesta": 29.91,
+    "premios": 15.55
    },
    "TripleCherry": {
-    "rondas": 93,
-    "apuesta": 44.4,
-    "premios": 8.53
+    "rondas": 276,
+    "apuesta": 62.7,
+    "premios": 22.69
    },
    "PopOK": {
-    "rondas": 46,
-    "apuesta": 32.98,
-    "premios": 20.0
-   }
-  },
-  "2026-09": {
-   "Booming": {
-    "rondas": 63215,
-    "apuesta": 11410.3,
-    "premios": 11657.58
-   },
-   "Fazi": {
-    "rondas": 168651,
-    "apuesta": 118533.38,
-    "premios": 121441.96
-   },
-   "Mancala": {
-    "rondas": 3382,
-    "apuesta": 3114.15,
-    "premios": 1495.71
-   },
-   "BGaming": {
-    "rondas": 16714,
-    "apuesta": 5959.21,
-    "premios": 5145.67
-   },
-   "Pragmaticplay": {
-    "rondas": 168344,
-    "apuesta": 69369.09,
-    "premios": 60788.28
+    "rondas": 363,
+    "apuesta": 74.5,
+    "premios": 75.85
    },
    "TaDa": {
-    "rondas": 58759,
-    "apuesta": 30757.59,
-    "premios": 28653.27
+    "rondas": 119,
+    "apuesta": 33.2,
+    "premios": 16.66
    },
-   "In-Out": {
-    "rondas": 18072,
-    "apuesta": 8915.81,
-    "premios": 8840.2
-   },
-   "Yggdrasil": {
-    "rondas": 10131,
-    "apuesta": 9360.55,
-    "premios": 11032.94
-   },
-   "Betora": {
-    "rondas": 61154,
-    "apuesta": 12802.25,
-    "premios": 11848.38
-   },
-   "Spinomenal": {
-    "rondas": 43603,
-    "apuesta": 18683.3,
-    "premios": 15974.91
-   },
-   "PopiPlay": {
-    "rondas": 4964,
-    "apuesta": 1523.25,
-    "premios": 697.38
-   },
-   "Playson": {
-    "rondas": 142755,
-    "apuesta": 47647.8,
-    "premios": 42027.93
-   },
-   "Amigogaming BCW": {
-    "rondas": 156026,
-    "apuesta": 108393.25,
-    "premios": 101936.0
-   },
-   "7777": {
-    "rondas": 2939,
-    "apuesta": 3265.1,
-    "premios": 2592.62
-   },
-   "Endorphina": {
-    "rondas": 55974,
-    "apuesta": 21708.6,
-    "premios": 19549.89
-   },
-   "TurboGames": {
-    "rondas": 3646,
-    "apuesta": 1262.3,
-    "premios": 1287.34
-   },
-   "Spribe": {
-    "rondas": 18295,
-    "apuesta": 20340.12,
-    "premios": 19174.49
-   },
-   "3Oaks": {
-    "rondas": 115841,
-    "apuesta": 28903.75,
-    "premios": 27491.08
-   },
-   "Gameart Withdraw": {
-    "rondas": 11516,
-    "apuesta": 51449.5,
+   "Bigpot": {
+    "rondas": 3,
+    "apuesta": 0.6,
     "premios": 0.0
-   },
-   "Apparat": {
-    "rondas": 11955,
-    "apuesta": 4903.1,
-    "premios": 7004.66
-   },
-   "Belatra": {
-    "rondas": 3132,
-    "apuesta": 2207.4,
-    "premios": 2483.27
    },
    "Gameart Deposit": {
     "rondas": 0,
     "apuesta": 0.0,
-    "premios": 51291.21
+    "premios": 573.45
+   },
+   "Gameart Withdraw": {
+    "rondas": 197,
+    "apuesta": 629.4,
+    "premios": 0.0
+   },
+   "Isolutions": {
+    "rondas": 3,
+    "apuesta": 5.0,
+    "premios": 0.0
+   },
+   "Caleta": {
+    "rondas": 30,
+    "apuesta": 35.5,
+    "premios": 0.0
+   },
+   "Heronbyte": {
+    "rondas": 40,
+    "apuesta": 16.0,
+    "premios": 6.0
+   },
+   "IAGplay": {
+    "rondas": 37,
+    "apuesta": 88.5,
+    "premios": 69.5
+   }
+  },
+  "2026-09": {
+   "Booming": {
+    "rondas": 77118,
+    "apuesta": 13510.95,
+    "premios": 13769.33
+   },
+   "Fazi": {
+    "rondas": 208660,
+    "apuesta": 145441.93,
+    "premios": 148724.7
+   },
+   "Mancala": {
+    "rondas": 4306,
+    "apuesta": 4238.6,
+    "premios": 1975.23
+   },
+   "BGaming": {
+    "rondas": 19677,
+    "apuesta": 7295.2,
+    "premios": 6328.3
+   },
+   "Pragmaticplay": {
+    "rondas": 207073,
+    "apuesta": 85383.55,
+    "premios": 74394.07
+   },
+   "TaDa": {
+    "rondas": 72894,
+    "apuesta": 38638.97,
+    "premios": 35972.66
+   },
+   "In-Out": {
+    "rondas": 21901,
+    "apuesta": 10683.37,
+    "premios": 10570.25
+   },
+   "Yggdrasil": {
+    "rondas": 11973,
+    "apuesta": 11239.3,
+    "premios": 13180.47
+   },
+   "Betora": {
+    "rondas": 71780,
+    "apuesta": 15269.0,
+    "premios": 13979.47
+   },
+   "Spinomenal": {
+    "rondas": 52462,
+    "apuesta": 22814.45,
+    "premios": 19522.79
+   },
+   "PopiPlay": {
+    "rondas": 6017,
+    "apuesta": 1969.95,
+    "premios": 948.39
+   },
+   "Playson": {
+    "rondas": 175720,
+    "apuesta": 58814.9,
+    "premios": 52109.74
+   },
+   "Amigogaming BCW": {
+    "rondas": 192495,
+    "apuesta": 134344.65,
+    "premios": 126735.45
+   },
+   "7777": {
+    "rondas": 3536,
+    "apuesta": 3757.1,
+    "premios": 2983.65
+   },
+   "Endorphina": {
+    "rondas": 67903,
+    "apuesta": 25285.19,
+    "premios": 22625.87
+   },
+   "TurboGames": {
+    "rondas": 4800,
+    "apuesta": 1758.8,
+    "premios": 1769.84
+   },
+   "Spribe": {
+    "rondas": 22157,
+    "apuesta": 24692.14,
+    "premios": 23256.49
+   },
+   "3Oaks": {
+    "rondas": 139518,
+    "apuesta": 34939.0,
+    "premios": 32958.25
+   },
+   "Gameart Withdraw": {
+    "rondas": 14100,
+    "apuesta": 63484.2,
+    "premios": 0.0
+   },
+   "Apparat": {
+    "rondas": 14610,
+    "apuesta": 5974.2,
+    "premios": 8504.29
+   },
+   "Belatra": {
+    "rondas": 3633,
+    "apuesta": 2652.3,
+    "premios": 2858.65
+   },
+   "Gameart Deposit": {
+    "rondas": 0,
+    "apuesta": 0.0,
+    "premios": 62881.12
    },
    "Solidicon": {
-    "rondas": 12171,
-    "apuesta": 12969.08,
-    "premios": 12157.11
+    "rondas": 14491,
+    "apuesta": 15231.16,
+    "premios": 14254.75
    },
    "Platipus": {
-    "rondas": 40654,
-    "apuesta": 11350.85,
-    "premios": 9520.84
+    "rondas": 49357,
+    "apuesta": 13987.2,
+    "premios": 11720.84
    },
    "Rubyplay": {
-    "rondas": 111054,
-    "apuesta": 73317.5,
-    "premios": 98646.05
+    "rondas": 135656,
+    "apuesta": 88347.65,
+    "premios": 118895.48
    },
    "Evoplay": {
-    "rondas": 39794,
-    "apuesta": 8428.0,
-    "premios": 7637.88
+    "rondas": 48213,
+    "apuesta": 10284.3,
+    "premios": 9272.09
    },
    "BFgames": {
-    "rondas": 16926,
-    "apuesta": 2423.87,
-    "premios": 1809.15
+    "rondas": 20837,
+    "apuesta": 2982.45,
+    "premios": 2241.61
    },
    "Barbarabang": {
-    "rondas": 18705,
-    "apuesta": 6772.3,
-    "premios": 7726.32
+    "rondas": 22049,
+    "apuesta": 8027.7,
+    "premios": 9168.35
    },
    "Kagaming": {
-    "rondas": 5203,
-    "apuesta": 2008.37,
-    "premios": 1680.11
+    "rondas": 6371,
+    "apuesta": 2422.5,
+    "premios": 2019.79
    },
    "Playngo": {
-    "rondas": 25427,
-    "apuesta": 12323.46,
-    "premios": 12932.14
+    "rondas": 30872,
+    "apuesta": 14746.21,
+    "premios": 16199.78
    },
    "1Spin4win": {
-    "rondas": 17666,
-    "apuesta": 5376.64,
-    "premios": 4046.89
+    "rondas": 22170,
+    "apuesta": 6208.63,
+    "premios": 4913.99
    },
    "Slots Battle - Entry Fee": {
-    "rondas": 291,
-    "apuesta": 31.6,
+    "rondas": 356,
+    "apuesta": 38.25,
     "premios": 0.0
    },
    "Hacksaw": {
-    "rondas": 8448,
-    "apuesta": 15622.9,
-    "premios": 14433.24
+    "rondas": 10627,
+    "apuesta": 24147.0,
+    "premios": 19031.82
    },
    "Skywind": {
-    "rondas": 31796,
-    "apuesta": 9160.84,
-    "premios": 6863.57
+    "rondas": 37880,
+    "apuesta": 11060.28,
+    "premios": 8259.67
    },
    "Netgame": {
-    "rondas": 4418,
-    "apuesta": 1095.6,
-    "premios": 1165.16
+    "rondas": 5506,
+    "apuesta": 1370.0,
+    "premios": 1400.96
    },
    "RTG Slots": {
-    "rondas": 9026,
-    "apuesta": 2995.21,
-    "premios": 2575.97
+    "rondas": 11393,
+    "apuesta": 3799.89,
+    "premios": 3293.82
    },
    "PGsoft": {
-    "rondas": 25463,
-    "apuesta": 6420.45,
-    "premios": 11228.32
+    "rondas": 32487,
+    "apuesta": 8651.15,
+    "premios": 14872.66
    },
    "Redtiger": {
-    "rondas": 7249,
-    "apuesta": 2287.2,
-    "premios": 2438.13
+    "rondas": 8611,
+    "apuesta": 2797.7,
+    "premios": 2945.69
    },
    "Habanero": {
-    "rondas": 13725,
-    "apuesta": 6199.7,
-    "premios": 6371.47
+    "rondas": 16511,
+    "apuesta": 7460.75,
+    "premios": 7781.24
    },
    "Thunderkick": {
-    "rondas": 1943,
-    "apuesta": 1394.2,
-    "premios": 782.66
+    "rondas": 2404,
+    "apuesta": 1720.7,
+    "premios": 972.1
    },
    "Gamzix": {
-    "rondas": 7770,
-    "apuesta": 4846.9,
-    "premios": 4789.77
+    "rondas": 9071,
+    "apuesta": 5711.0,
+    "premios": 5688.0
    },
    "Dreamplay": {
-    "rondas": 10649,
-    "apuesta": 5945.6,
+    "rondas": 12906,
+    "apuesta": 7180.8,
     "premios": 0.0
    },
    "DreamPlay": {
     "rondas": 0,
     "apuesta": 0.0,
-    "premios": 9477.26
+    "premios": 11524.59
    },
    "Black Lagoon": {
-    "rondas": 51043,
-    "apuesta": 9397.09,
-    "premios": 7949.03
+    "rondas": 60531,
+    "apuesta": 11616.35,
+    "premios": 9932.41
    },
    "Onlyplay": {
-    "rondas": 27542,
-    "apuesta": 8421.62,
-    "premios": 7571.07
+    "rondas": 34927,
+    "apuesta": 10786.9,
+    "premios": 9644.94
    },
    "Esa Gaming": {
-    "rondas": 2961,
-    "apuesta": 4343.6,
-    "premios": 4397.88
+    "rondas": 3902,
+    "apuesta": 5510.02,
+    "premios": 5580.2
    },
    "Netent": {
-    "rondas": 1917,
-    "apuesta": 625.85,
-    "premios": 444.45
+    "rondas": 2832,
+    "apuesta": 909.15,
+    "premios": 671.4
    },
    "PeterAndSons": {
-    "rondas": 2850,
-    "apuesta": 2009.0,
-    "premios": 1821.29
+    "rondas": 3572,
+    "apuesta": 2518.3,
+    "premios": 2270.97
    },
    "Kingmidas": {
-    "rondas": 2340,
-    "apuesta": 779.2,
-    "premios": 800.32
+    "rondas": 2852,
+    "apuesta": 1067.4,
+    "premios": 1064.73
    },
    "Aviatrix": {
-    "rondas": 650,
-    "apuesta": 784.31,
-    "premios": 811.98
+    "rondas": 764,
+    "apuesta": 939.77,
+    "premios": 977.11
    },
    "Smartsoft": {
-    "rondas": 3011,
-    "apuesta": 7465.59,
-    "premios": 7205.01
+    "rondas": 3562,
+    "apuesta": 9027.73,
+    "premios": 8647.85
    },
    "Spin2Win": {
-    "rondas": 2378,
-    "apuesta": 746.66,
-    "premios": 628.76
+    "rondas": 2869,
+    "apuesta": 900.48,
+    "premios": 763.1
    },
    "TomHorn": {
-    "rondas": 3630,
-    "apuesta": 977.2,
-    "premios": 1118.85
+    "rondas": 4506,
+    "apuesta": 1213.8,
+    "premios": 1376.15
    },
    "PopOK": {
-    "rondas": 2597,
-    "apuesta": 493.05,
-    "premios": 275.95
+    "rondas": 3162,
+    "apuesta": 611.64,
+    "premios": 345.4
    },
    "Mojos-Slots": {
-    "rondas": 1815,
-    "apuesta": 22937.75,
-    "premios": 19605.03
+    "rondas": 2652,
+    "apuesta": 37339.7,
+    "premios": 33358.44
    },
    "Airdice": {
-    "rondas": 1346,
-    "apuesta": 1872.95,
-    "premios": 1758.75
+    "rondas": 1576,
+    "apuesta": 2151.85,
+    "premios": 1987.34
    },
    "Aviator Studio": {
-    "rondas": 624,
-    "apuesta": 659.4,
-    "premios": 574.83
+    "rondas": 765,
+    "apuesta": 808.6,
+    "premios": 706.36
    },
    "Ct Interactive": {
-    "rondas": 851,
-    "apuesta": 274.4,
-    "premios": 376.32
+    "rondas": 1015,
+    "apuesta": 332.2,
+    "premios": 455.52
    },
    "Slotopia": {
-    "rondas": 993,
-    "apuesta": 147.6,
-    "premios": 100.2
+    "rondas": 1243,
+    "apuesta": 184.0,
+    "premios": 127.4
    },
    "Betsolutions": {
-    "rondas": 37,
-    "apuesta": 25.4,
-    "premios": 2.65
+    "rondas": 42,
+    "apuesta": 29.2,
+    "premios": 3.25
    },
    "BWGaming": {
-    "rondas": 1890,
-    "apuesta": 565.6,
-    "premios": 365.35
+    "rondas": 2125,
+    "apuesta": 589.1,
+    "premios": 380.85
    },
    "Bigpot": {
-    "rondas": 893,
-    "apuesta": 196.6,
-    "premios": 140.04
+    "rondas": 1182,
+    "apuesta": 258.0,
+    "premios": 202.96
    },
    "Worldmatch": {
-    "rondas": 1040,
-    "apuesta": 1474.8,
-    "premios": 1071.18
+    "rondas": 1277,
+    "apuesta": 1843.3,
+    "premios": 1340.78
    },
    "Vimplay": {
-    "rondas": 203,
-    "apuesta": 56.2,
-    "premios": 50.37
+    "rondas": 253,
+    "apuesta": 69.5,
+    "premios": 61.23
    },
    "TripleCherry": {
-    "rondas": 1502,
-    "apuesta": 1143.5,
-    "premios": 1622.16
+    "rondas": 1825,
+    "apuesta": 1420.26,
+    "premios": 1957.78
    },
    "Helio Gaming": {
-    "rondas": 93,
-    "apuesta": 72.3,
-    "premios": 45.95
+    "rondas": 119,
+    "apuesta": 92.0,
+    "premios": 59.4
    },
    "Big Time Gaming": {
-    "rondas": 474,
-    "apuesta": 81.9,
-    "premios": 54.62
+    "rondas": 653,
+    "apuesta": 111.1,
+    "premios": 74.67
    },
    "Slots Battle - Prize": {
     "rondas": 0,
     "apuesta": 0.0,
-    "premios": 3.0
+    "premios": 4.0
    },
    "Caleta": {
-    "rondas": 93,
-    "apuesta": 37.0,
+    "rondas": 116,
+    "apuesta": 47.2,
     "premios": 0.0
    },
    "CaletaGaming": {
     "rondas": 0,
     "apuesta": 0.0,
-    "premios": 74.2
+    "premios": 87.5
    },
    "Onetouch": {
-    "rondas": 36,
-    "apuesta": 9.6,
-    "premios": 2.5
+    "rondas": 43,
+    "apuesta": 11.8,
+    "premios": 3.18
    },
    "Redrake": {
-    "rondas": 2003,
-    "apuesta": 1740.7,
+    "rondas": 2733,
+    "apuesta": 2416.7,
     "premios": 0.0
    },
    "Chimeraspin": {
-    "rondas": 113,
-    "apuesta": 33.9,
-    "premios": 16.6
+    "rondas": 140,
+    "apuesta": 42.0,
+    "premios": 20.7
    },
    "EAgaming": {
-    "rondas": 1383,
-    "apuesta": 469.6,
-    "premios": 278.7
+    "rondas": 1718,
+    "apuesta": 590.2,
+    "premios": 357.5
    },
    "RedRake": {
     "rondas": 0,
     "apuesta": 0.0,
-    "premios": 1347.57
+    "premios": 1851.62
    },
    "Formulaspin": {
-    "rondas": 10,
-    "apuesta": 7.5,
-    "premios": 6.68
+    "rondas": 12,
+    "apuesta": 9.0,
+    "premios": 8.36
    },
    "Spinmatic V3": {
-    "rondas": 147,
-    "apuesta": 294.0,
-    "premios": 264.0
+    "rondas": 180,
+    "apuesta": 360.0,
+    "premios": 318.0
    },
    "Nolimit City": {
-    "rondas": 2368,
-    "apuesta": 5605.1,
-    "premios": 4003.12
+    "rondas": 4023,
+    "apuesta": 8489.77,
+    "premios": 7572.97
    },
    "Abracadabra": {
-    "rondas": 14,
-    "apuesta": 1.54,
-    "premios": 0.76
+    "rondas": 17,
+    "apuesta": 1.87,
+    "premios": 0.95
    },
    "Espresso": {
-    "rondas": 6,
-    "apuesta": 1.5,
-    "premios": 0.0
+    "rondas": 8,
+    "apuesta": 2.0,
+    "premios": 0.2
    }
   }
  },
@@ -5184,347 +5982,365 @@
   "2026-08": {
    "meta": {
     "fuente": "importar-perp-casino.py (export manual del backoffice)",
-    "generado": "2026-09-11T19:09:05+00:00",
+    "generado": "2026-09-11T21:46:38+00:00",
     "periodo": "2026-08",
     "errores": 0,
     "cobertura": [
      "2026-08-01 00:00:02",
-     "2026-08-04 14:10:08"
+     "2026-08-15 08:15:38"
     ]
    },
-   "total_rondas": 113785,
+   "total_rondas": 137301,
    "por_proveedor": [
     {
      "provider_id": null,
      "proveedor": "Pragmaticplay",
-     "rondas": 20655,
-     "apuesta": 7697.97,
-     "premios": 7449.1,
-     "ggr": 248.87,
-     "rtp": 96.77
+     "rondas": 23425,
+     "apuesta": 8459.55,
+     "premios": 8096.34,
+     "ggr": 363.21,
+     "rtp": 95.71
     },
     {
      "provider_id": null,
      "proveedor": "Amigogaming BCW",
-     "rondas": 12400,
-     "apuesta": 3978.45,
-     "premios": 3914.38,
-     "ggr": 64.07,
-     "rtp": 98.39
+     "rondas": 14633,
+     "apuesta": 4761.8,
+     "premios": 4488.04,
+     "ggr": 273.76,
+     "rtp": 94.25
     },
     {
      "provider_id": null,
      "proveedor": "Rubyplay",
-     "rondas": 10531,
-     "apuesta": 3408.25,
-     "premios": 2642.0,
-     "ggr": 766.25,
-     "rtp": 77.52
+     "rondas": 11401,
+     "apuesta": 3755.35,
+     "premios": 2890.37,
+     "ggr": 864.98,
+     "rtp": 76.97
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Fazi",
+     "rondas": 9549,
+     "apuesta": 2301.33,
+     "premios": 2299.35,
+     "ggr": 1.98,
+     "rtp": 99.91
     },
     {
      "provider_id": null,
      "proveedor": "3Oaks",
-     "rondas": 7133,
-     "apuesta": 1192.4,
-     "premios": 1259.8,
-     "ggr": -67.4,
+     "rondas": 8300,
+     "apuesta": 1391.0,
+     "premios": 1421.89,
+     "ggr": -30.89,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Endorphina",
-     "rondas": 5773,
-     "apuesta": 1433.55,
-     "premios": 878.58,
-     "ggr": 554.97,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Fazi",
-     "rondas": 5755,
-     "apuesta": 1553.67,
-     "premios": 1474.67,
-     "ggr": 79.0,
+     "rondas": 7025,
+     "apuesta": 1791.0,
+     "premios": 1034.87,
+     "ggr": 756.13,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Playson",
-     "rondas": 4105,
-     "apuesta": 920.6,
-     "premios": 864.72,
-     "ggr": 55.88,
+     "rondas": 5172,
+     "apuesta": 1182.0,
+     "premios": 1211.48,
+     "ggr": -29.48,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "1Spin4win",
-     "rondas": 3897,
-     "apuesta": 3906.46,
-     "premios": 3418.42,
-     "ggr": 488.04,
-     "rtp": 87.51
+     "rondas": 4526,
+     "apuesta": 4203.59,
+     "premios": 3817.14,
+     "ggr": 386.45,
+     "rtp": 90.81
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Black Lagoon",
+     "rondas": 4423,
+     "apuesta": 1132.75,
+     "premios": 760.03,
+     "ggr": 372.72,
+     "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Spinomenal",
-     "rondas": 3744,
-     "apuesta": 977.1,
-     "premios": 777.69,
-     "ggr": 199.41,
+     "rondas": 4408,
+     "apuesta": 1120.22,
+     "premios": 856.04,
+     "ggr": 264.18,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "BFgames",
-     "rondas": 3471,
-     "apuesta": 691.55,
-     "premios": 758.3,
-     "ggr": -66.75,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Platipus",
-     "rondas": 3041,
-     "apuesta": 1058.2,
-     "premios": 1522.99,
-     "ggr": -464.79,
+     "rondas": 4085,
+     "apuesta": 804.75,
+     "premios": 864.7,
+     "ggr": -59.95,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Evoplay",
-     "rondas": 2909,
-     "apuesta": 634.0,
-     "premios": 686.28,
-     "ggr": -52.28,
+     "rondas": 3334,
+     "apuesta": 722.2,
+     "premios": 778.31,
+     "ggr": -56.11,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "Black Lagoon",
-     "rondas": 2324,
-     "apuesta": 366.05,
-     "premios": 283.32,
-     "ggr": 82.73,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "RTG Slots",
-     "rondas": 2226,
-     "apuesta": 829.91,
-     "premios": 1016.47,
-     "ggr": -186.56,
+     "proveedor": "Platipus",
+     "rondas": 3155,
+     "apuesta": 1085.7,
+     "premios": 1592.52,
+     "ggr": -506.82,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Skywind",
-     "rondas": 2211,
-     "apuesta": 452.46,
-     "premios": 426.3,
-     "ggr": 26.16,
+     "rondas": 2397,
+     "apuesta": 480.86,
+     "premios": 455.52,
+     "ggr": 25.34,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "RTG Slots",
+     "rondas": 2252,
+     "apuesta": 831.44,
+     "premios": 1016.69,
+     "ggr": -185.25,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Onlyplay",
-     "rondas": 1833,
-     "apuesta": 604.18,
-     "premios": 707.61,
-     "ggr": -103.43,
+     "rondas": 2096,
+     "apuesta": 668.33,
+     "premios": 806.6,
+     "ggr": -138.27,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Playngo",
-     "rondas": 1819,
-     "apuesta": 533.32,
-     "premios": 731.3,
-     "ggr": -197.98,
+     "rondas": 2046,
+     "apuesta": 577.79,
+     "premios": 809.4,
+     "ggr": -231.61,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Barbarabang",
-     "rondas": 1572,
-     "apuesta": 709.21,
-     "premios": 367.19,
-     "ggr": 342.02,
+     "rondas": 1845,
+     "apuesta": 764.11,
+     "premios": 385.09,
+     "ggr": 379.02,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "PGsoft",
-     "rondas": 1275,
-     "apuesta": 313.19,
-     "premios": 297.7,
-     "ggr": 15.49,
+     "rondas": 1764,
+     "apuesta": 894.84,
+     "premios": 953.5,
+     "ggr": -58.66,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "In-Out",
-     "rondas": 1265,
-     "apuesta": 446.24,
-     "premios": 405.39,
-     "ggr": 40.85,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Kagaming",
-     "rondas": 1192,
-     "apuesta": 270.0,
-     "premios": 244.62,
-     "ggr": 25.38,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "TomHorn",
-     "rondas": 1183,
-     "apuesta": 820.97,
-     "premios": 576.24,
-     "ggr": 244.73,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "PeterAndSons",
-     "rondas": 1063,
-     "apuesta": 184.35,
-     "premios": 183.24,
-     "ggr": 1.11,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Habanero",
-     "rondas": 1027,
-     "apuesta": 245.08,
-     "premios": 162.78,
-     "ggr": 82.3,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Spribe",
-     "rondas": 965,
-     "apuesta": 2673.46,
-     "premios": 1398.54,
-     "ggr": 1274.92,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Netgame",
-     "rondas": 890,
-     "apuesta": 214.98,
-     "premios": 131.22,
-     "ggr": 83.76,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "BGaming",
-     "rondas": 860,
-     "apuesta": 356.7,
-     "premios": 292.84,
-     "ggr": 63.86,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Netent",
-     "rondas": 836,
-     "apuesta": 214.0,
-     "premios": 203.65,
-     "ggr": 10.35,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Yggdrasil",
-     "rondas": 809,
-     "apuesta": 393.7,
-     "premios": 447.41,
-     "ggr": -53.71,
+     "rondas": 1403,
+     "apuesta": 481.98,
+     "premios": 438.58,
+     "ggr": 43.4,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Booming",
-     "rondas": 725,
-     "apuesta": 225.96,
-     "premios": 338.81,
-     "ggr": -112.85,
+     "rondas": 1353,
+     "apuesta": 456.26,
+     "premios": 554.15,
+     "ggr": -97.89,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "Solidicon",
-     "rondas": 531,
-     "apuesta": 135.4,
-     "premios": 124.53,
-     "ggr": 10.87,
+     "proveedor": "Habanero",
+     "rondas": 1327,
+     "apuesta": 345.63,
+     "premios": 241.94,
+     "ggr": 103.69,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "Mancala",
-     "rondas": 530,
-     "apuesta": 130.5,
-     "premios": 109.28,
-     "ggr": 21.22,
+     "proveedor": "TomHorn",
+     "rondas": 1324,
+     "apuesta": 935.97,
+     "premios": 770.69,
+     "ggr": 165.28,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "Redtiger",
-     "rondas": 506,
-     "apuesta": 59.6,
-     "premios": 42.93,
-     "ggr": 16.67,
+     "proveedor": "Kagaming",
+     "rondas": 1226,
+     "apuesta": 283.75,
+     "premios": 249.79,
+     "ggr": 33.96,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Spribe",
+     "rondas": 1196,
+     "apuesta": 2957.33,
+     "premios": 1657.32,
+     "ggr": 1300.01,
+     "rtp": 56.04
+    },
+    {
+     "provider_id": null,
+     "proveedor": "PeterAndSons",
+     "rondas": 1183,
+     "apuesta": 289.85,
+     "premios": 330.28,
+     "ggr": -40.43,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Netent",
+     "rondas": 1181,
+     "apuesta": 382.4,
+     "premios": 356.54,
+     "ggr": 25.86,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Yggdrasil",
+     "rondas": 1076,
+     "apuesta": 559.7,
+     "premios": 666.03,
+     "ggr": -106.33,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Netgame",
+     "rondas": 957,
+     "apuesta": 230.78,
+     "premios": 135.07,
+     "ggr": 95.71,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "BGaming",
+     "rondas": 906,
+     "apuesta": 368.8,
+     "premios": 318.48,
+     "ggr": 50.32,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Apparat",
-     "rondas": 498,
-     "apuesta": 154.03,
-     "premios": 83.82,
-     "ggr": 70.21,
+     "rondas": 737,
+     "apuesta": 200.03,
+     "premios": 112.67,
+     "ggr": 87.36,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Mancala",
+     "rondas": 643,
+     "apuesta": 174.5,
+     "premios": 152.16,
+     "ggr": 22.34,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Redtiger",
+     "rondas": 605,
+     "apuesta": 95.5,
+     "premios": 58.66,
+     "ggr": 36.84,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Solidicon",
+     "rondas": 535,
+     "apuesta": 145.26,
+     "premios": 129.65,
+     "ggr": 15.61,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Formulaspin",
-     "rondas": 476,
-     "apuesta": 151.64,
+     "rondas": 487,
+     "apuesta": 156.54,
      "premios": 110.41,
-     "ggr": 41.23,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "EAgaming",
-     "rondas": 381,
-     "apuesta": 180.5,
-     "premios": 108.88,
-     "ggr": 71.62,
+     "ggr": 46.13,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Belatra",
-     "rondas": 324,
-     "apuesta": 148.82,
-     "premios": 558.61,
-     "ggr": -409.79,
+     "rondas": 457,
+     "apuesta": 176.22,
+     "premios": 571.11,
+     "ggr": -394.89,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "EAgaming",
+     "rondas": 393,
+     "apuesta": 186.5,
+     "premios": 111.98,
+     "ggr": 74.52,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "PopOK",
+     "rondas": 363,
+     "apuesta": 74.5,
+     "premios": 75.85,
+     "ggr": -1.35,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "7777",
+     "rondas": 308,
+     "apuesta": 153.1,
+     "premios": 119.36,
+     "ggr": 33.74,
      "rtp": null
     },
     {
@@ -5538,20 +6354,29 @@
     },
     {
      "provider_id": null,
-     "proveedor": "7777",
-     "rondas": 299,
-     "apuesta": 138.1,
-     "premios": 110.76,
-     "ggr": 27.34,
+     "proveedor": "Slotopia",
+     "rondas": 280,
+     "apuesta": 71.2,
+     "premios": 164.45,
+     "ggr": -93.25,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "Slotopia",
+     "proveedor": "Hacksaw",
      "rondas": 279,
-     "apuesta": 71.0,
-     "premios": 164.45,
-     "ggr": -93.45,
+     "apuesta": 251.6,
+     "premios": 190.03,
+     "ggr": 61.57,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "TripleCherry",
+     "rondas": 276,
+     "apuesta": 62.7,
+     "premios": 22.69,
+     "ggr": 40.01,
      "rtp": null
     },
     {
@@ -5559,8 +6384,26 @@
      "proveedor": "CaletaGaming",
      "rondas": 223,
      "apuesta": 69.45,
-     "premios": 20.95,
-     "ggr": 48.5,
+     "premios": 38.35,
+     "ggr": 31.1,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Aviatrix",
+     "rondas": 207,
+     "apuesta": 70.0,
+     "premios": 43.2,
+     "ggr": 26.8,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Gameart Withdraw",
+     "rondas": 197,
+     "apuesta": 629.4,
+     "premios": 0.0,
+     "ggr": 629.4,
      "rtp": null
     },
     {
@@ -5574,38 +6417,29 @@
     },
     {
      "provider_id": null,
-     "proveedor": "Aviatrix",
-     "rondas": 160,
-     "apuesta": 58.4,
-     "premios": 31.05,
-     "ggr": 27.35,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Hacksaw",
-     "rondas": 157,
-     "apuesta": 80.6,
-     "premios": 35.26,
-     "ggr": 45.34,
+     "proveedor": "PopiPlay",
+     "rondas": 168,
+     "apuesta": 64.26,
+     "premios": 206.9,
+     "ggr": -142.64,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Ct Interactive",
-     "rondas": 149,
-     "apuesta": 108.5,
-     "premios": 128.5,
-     "ggr": -20.0,
+     "rondas": 161,
+     "apuesta": 113.3,
+     "premios": 131.98,
+     "ggr": -18.68,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "PopiPlay",
-     "rondas": 134,
-     "apuesta": 35.1,
-     "premios": 64.4,
-     "ggr": -29.3,
+     "proveedor": "Gamzix",
+     "rondas": 147,
+     "apuesta": 28.6,
+     "premios": 13.98,
+     "ggr": 14.62,
      "rtp": null
     },
     {
@@ -5615,6 +6449,15 @@
      "apuesta": 13.72,
      "premios": 3.91,
      "ggr": 9.81,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Spinmatic V3",
+     "rondas": 131,
+     "apuesta": 252.0,
+     "premios": 356.5,
+     "ggr": -104.5,
      "rtp": null
     },
     {
@@ -5637,20 +6480,11 @@
     },
     {
      "provider_id": null,
-     "proveedor": "Gamzix",
-     "rondas": 99,
-     "apuesta": 15.1,
-     "premios": 3.55,
-     "ggr": 11.55,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "TripleCherry",
-     "rondas": 93,
-     "apuesta": 44.4,
-     "premios": 8.53,
-     "ggr": 35.87,
+     "proveedor": "TaDa",
+     "rondas": 119,
+     "apuesta": 33.2,
+     "premios": 16.66,
+     "ggr": 16.54,
      "rtp": null
     },
     {
@@ -5682,20 +6516,29 @@
     },
     {
      "provider_id": null,
-     "proveedor": "Spinoro",
-     "rondas": 52,
-     "apuesta": 59.6,
-     "premios": 31.75,
-     "ggr": 27.85,
+     "proveedor": "Helio Gaming",
+     "rondas": 62,
+     "apuesta": 35.0,
+     "premios": 4.95,
+     "ggr": 30.05,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "PopOK",
-     "rondas": 46,
-     "apuesta": 32.98,
-     "premios": 20.0,
-     "ggr": 12.98,
+     "proveedor": "Spinoro",
+     "rondas": 60,
+     "apuesta": 61.2,
+     "premios": 31.89,
+     "ggr": 29.31,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Smartsoft",
+     "rondas": 59,
+     "apuesta": 28.8,
+     "premios": 39.31,
+     "ggr": -10.51,
      "rtp": null
     },
     {
@@ -5709,29 +6552,56 @@
     },
     {
      "provider_id": null,
-     "proveedor": "Smartsoft",
-     "rondas": 39,
-     "apuesta": 19.4,
-     "premios": 27.25,
-     "ggr": -7.85,
+     "proveedor": "Heronbyte",
+     "rondas": 40,
+     "apuesta": 16.0,
+     "premios": 6.0,
+     "ggr": 10.0,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "Helio Gaming",
+     "proveedor": "IAGplay",
      "rondas": 37,
-     "apuesta": 12.5,
-     "premios": 3.45,
-     "ggr": 9.05,
+     "apuesta": 88.5,
+     "premios": 69.5,
+     "ggr": 19.0,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Big Time Gaming",
-     "rondas": 29,
-     "apuesta": 3.7,
-     "premios": 1.7,
-     "ggr": 2.0,
+     "rondas": 35,
+     "apuesta": 4.9,
+     "premios": 2.33,
+     "ggr": 2.57,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Vimplay",
+     "rondas": 32,
+     "apuesta": 16.6,
+     "premios": 5.68,
+     "ggr": 10.92,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Aviator Studio",
+     "rondas": 31,
+     "apuesta": 29.91,
+     "premios": 15.55,
+     "ggr": 14.36,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Caleta",
+     "rondas": 30,
+     "apuesta": 35.5,
+     "premios": 0.0,
+     "ggr": 35.5,
      "rtp": null
     },
     {
@@ -5746,28 +6616,19 @@
     {
      "provider_id": null,
      "proveedor": "Twister Play",
-     "rondas": 22,
-     "apuesta": 5.94,
-     "premios": 6.3,
-     "ggr": -0.36,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Vimplay",
-     "rondas": 20,
-     "apuesta": 10.5,
-     "premios": 2.67,
-     "ggr": 7.83,
+     "rondas": 24,
+     "apuesta": 6.94,
+     "premios": 7.6,
+     "ggr": -0.66,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Slots Battle - Entry Fee",
-     "rondas": 15,
-     "apuesta": 1.45,
+     "rondas": 16,
+     "apuesta": 1.5,
      "premios": 0.0,
-     "ggr": 1.45,
+     "ggr": 1.5,
      "rtp": null
     },
     {
@@ -5781,20 +6642,11 @@
     },
     {
      "provider_id": null,
-     "proveedor": "Spinmatic V3",
-     "rondas": 9,
-     "apuesta": 8.0,
-     "premios": 12.5,
-     "ggr": -4.5,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Aviator Studio",
-     "rondas": 9,
-     "apuesta": 25.91,
-     "premios": 12.49,
-     "ggr": 13.42,
+     "proveedor": "Abracadabra",
+     "rondas": 8,
+     "apuesta": 11.99,
+     "premios": 14.84,
+     "ggr": -2.85,
      "rtp": null
     },
     {
@@ -5808,29 +6660,38 @@
     },
     {
      "provider_id": null,
-     "proveedor": "Abracadabra",
-     "rondas": 6,
-     "apuesta": 7.09,
-     "premios": 5.61,
-     "ggr": 1.48,
+     "proveedor": "Mojos-Slots",
+     "rondas": 4,
+     "apuesta": 1.23,
+     "premios": 18.44,
+     "ggr": -17.21,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "FantasyGoal",
-     "rondas": 2,
-     "apuesta": 2.2,
-     "premios": 0.0,
-     "ggr": 2.2,
+     "rondas": 3,
+     "apuesta": 2.7,
+     "premios": 1.64,
+     "ggr": 1.06,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "Mojos-Slots",
-     "rondas": 1,
-     "apuesta": 0.03,
-     "premios": 17.0,
-     "ggr": -16.97,
+     "proveedor": "Bigpot",
+     "rondas": 3,
+     "apuesta": 0.6,
+     "premios": 0.0,
+     "ggr": 0.6,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Isolutions",
+     "rondas": 3,
+     "apuesta": 5.0,
+     "premios": 0.0,
+     "ggr": 5.0,
      "rtp": null
     },
     {
@@ -5850,695 +6711,704 @@
      "premios": 16.94,
      "ggr": -16.94,
      "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Gameart Deposit",
+     "rondas": 0,
+     "apuesta": 0.0,
+     "premios": 573.45,
+     "ggr": -573.45,
+     "rtp": null
     }
    ]
   },
   "2026-09": {
    "meta": {
     "fuente": "importar-perp-casino.py (export manual del backoffice)",
-    "generado": "2026-09-11T19:09:05+00:00",
+    "generado": "2026-09-11T21:46:38+00:00",
     "periodo": "2026-09",
     "errores": 0,
     "cobertura": [
      "2026-09-05 00:00:02",
-     "2026-09-11 12:55:26"
+     "2026-09-11 15:30:54"
     ]
    },
-   "total_rondas": 1666299,
+   "total_rondas": 2037297,
    "por_proveedor": [
     {
      "provider_id": null,
      "proveedor": "Fazi",
-     "rondas": 168651,
-     "apuesta": 118533.38,
-     "premios": 121441.96,
-     "ggr": -2908.58,
-     "rtp": 102.45
+     "rondas": 208660,
+     "apuesta": 145441.93,
+     "premios": 148724.7,
+     "ggr": -3282.77,
+     "rtp": 102.26
     },
     {
      "provider_id": null,
      "proveedor": "Pragmaticplay",
-     "rondas": 168344,
-     "apuesta": 69369.09,
-     "premios": 60788.28,
-     "ggr": 8580.81,
-     "rtp": 87.63
+     "rondas": 207073,
+     "apuesta": 85383.55,
+     "premios": 74394.07,
+     "ggr": 10989.48,
+     "rtp": 87.13
     },
     {
      "provider_id": null,
      "proveedor": "Amigogaming BCW",
-     "rondas": 156026,
-     "apuesta": 108393.25,
-     "premios": 101936.0,
-     "ggr": 6457.25,
-     "rtp": 94.04
+     "rondas": 192495,
+     "apuesta": 134344.65,
+     "premios": 126735.45,
+     "ggr": 7609.2,
+     "rtp": 94.34
     },
     {
      "provider_id": null,
      "proveedor": "Playson",
-     "rondas": 142755,
-     "apuesta": 47647.8,
-     "premios": 42027.93,
-     "ggr": 5619.87,
-     "rtp": 88.21
+     "rondas": 175720,
+     "apuesta": 58814.9,
+     "premios": 52109.74,
+     "ggr": 6705.16,
+     "rtp": 88.6
     },
     {
      "provider_id": null,
      "proveedor": "3Oaks",
-     "rondas": 115841,
-     "apuesta": 28903.75,
-     "premios": 27491.08,
-     "ggr": 1412.67,
-     "rtp": 95.11
+     "rondas": 139518,
+     "apuesta": 34939.0,
+     "premios": 32958.25,
+     "ggr": 1980.75,
+     "rtp": 94.33
     },
     {
      "provider_id": null,
      "proveedor": "Rubyplay",
-     "rondas": 111054,
-     "apuesta": 73317.5,
-     "premios": 98646.05,
-     "ggr": -25328.55,
-     "rtp": 134.55
+     "rondas": 135656,
+     "apuesta": 88347.65,
+     "premios": 118895.48,
+     "ggr": -30547.83,
+     "rtp": 134.58
     },
     {
      "provider_id": null,
      "proveedor": "Booming",
-     "rondas": 63215,
-     "apuesta": 11410.3,
-     "premios": 11657.58,
-     "ggr": -247.28,
-     "rtp": 102.17
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Betora",
-     "rondas": 61154,
-     "apuesta": 12802.25,
-     "premios": 11848.38,
-     "ggr": 953.87,
-     "rtp": 92.55
+     "rondas": 77118,
+     "apuesta": 13510.95,
+     "premios": 13769.33,
+     "ggr": -258.38,
+     "rtp": 101.91
     },
     {
      "provider_id": null,
      "proveedor": "TaDa",
-     "rondas": 58759,
-     "apuesta": 30757.59,
-     "premios": 28653.27,
-     "ggr": 2104.32,
-     "rtp": 93.16
+     "rondas": 72894,
+     "apuesta": 38638.97,
+     "premios": 35972.66,
+     "ggr": 2666.31,
+     "rtp": 93.1
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Betora",
+     "rondas": 71780,
+     "apuesta": 15269.0,
+     "premios": 13979.47,
+     "ggr": 1289.53,
+     "rtp": 91.55
     },
     {
      "provider_id": null,
      "proveedor": "Endorphina",
-     "rondas": 55974,
-     "apuesta": 21708.6,
-     "premios": 19549.89,
-     "ggr": 2158.71,
-     "rtp": 90.06
+     "rondas": 67903,
+     "apuesta": 25285.19,
+     "premios": 22625.87,
+     "ggr": 2659.32,
+     "rtp": 89.48
     },
     {
      "provider_id": null,
      "proveedor": "Black Lagoon",
-     "rondas": 51043,
-     "apuesta": 9397.09,
-     "premios": 7949.03,
-     "ggr": 1448.06,
-     "rtp": 84.59
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Spinomenal",
-     "rondas": 43603,
-     "apuesta": 18683.3,
-     "premios": 15974.91,
-     "ggr": 2708.39,
+     "rondas": 60531,
+     "apuesta": 11616.35,
+     "premios": 9932.41,
+     "ggr": 1683.94,
      "rtp": 85.5
     },
     {
      "provider_id": null,
+     "proveedor": "Spinomenal",
+     "rondas": 52462,
+     "apuesta": 22814.45,
+     "premios": 19522.79,
+     "ggr": 3291.66,
+     "rtp": 85.57
+    },
+    {
+     "provider_id": null,
      "proveedor": "Platipus",
-     "rondas": 40654,
-     "apuesta": 11350.85,
-     "premios": 9520.84,
-     "ggr": 1830.01,
-     "rtp": 83.88
+     "rondas": 49357,
+     "apuesta": 13987.2,
+     "premios": 11720.84,
+     "ggr": 2266.36,
+     "rtp": 83.8
     },
     {
      "provider_id": null,
      "proveedor": "Evoplay",
-     "rondas": 39794,
-     "apuesta": 8428.0,
-     "premios": 7637.88,
-     "ggr": 790.12,
-     "rtp": 90.63
+     "rondas": 48213,
+     "apuesta": 10284.3,
+     "premios": 9272.09,
+     "ggr": 1012.21,
+     "rtp": 90.16
     },
     {
      "provider_id": null,
      "proveedor": "Skywind",
-     "rondas": 31796,
-     "apuesta": 9160.84,
-     "premios": 6863.57,
-     "ggr": 2297.27,
-     "rtp": 74.92
+     "rondas": 37880,
+     "apuesta": 11060.28,
+     "premios": 8259.67,
+     "ggr": 2800.61,
+     "rtp": 74.68
     },
     {
      "provider_id": null,
      "proveedor": "Onlyplay",
-     "rondas": 27542,
-     "apuesta": 8421.62,
-     "premios": 7571.07,
-     "ggr": 850.55,
-     "rtp": 89.9
+     "rondas": 34927,
+     "apuesta": 10786.9,
+     "premios": 9644.94,
+     "ggr": 1141.96,
+     "rtp": 89.41
     },
     {
      "provider_id": null,
      "proveedor": "PGsoft",
-     "rondas": 25463,
-     "apuesta": 6420.45,
-     "premios": 11228.32,
-     "ggr": -4807.87,
-     "rtp": 174.88
+     "rondas": 32487,
+     "apuesta": 8651.15,
+     "premios": 14872.66,
+     "ggr": -6221.51,
+     "rtp": 171.92
     },
     {
      "provider_id": null,
      "proveedor": "Playngo",
-     "rondas": 25427,
-     "apuesta": 12323.46,
-     "premios": 12932.14,
-     "ggr": -608.68,
-     "rtp": 104.94
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Barbarabang",
-     "rondas": 18705,
-     "apuesta": 6772.3,
-     "premios": 7726.32,
-     "ggr": -954.02,
-     "rtp": 114.09
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Spribe",
-     "rondas": 18295,
-     "apuesta": 20340.12,
-     "premios": 19174.49,
-     "ggr": 1165.63,
-     "rtp": 94.27
-    },
-    {
-     "provider_id": null,
-     "proveedor": "In-Out",
-     "rondas": 18072,
-     "apuesta": 8915.81,
-     "premios": 8840.2,
-     "ggr": 75.61,
-     "rtp": 99.15
+     "rondas": 30872,
+     "apuesta": 14746.21,
+     "premios": 16199.78,
+     "ggr": -1453.57,
+     "rtp": 109.86
     },
     {
      "provider_id": null,
      "proveedor": "1Spin4win",
-     "rondas": 17666,
-     "apuesta": 5376.64,
-     "premios": 4046.89,
-     "ggr": 1329.75,
-     "rtp": 75.27
+     "rondas": 22170,
+     "apuesta": 6208.63,
+     "premios": 4913.99,
+     "ggr": 1294.64,
+     "rtp": 79.15
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Spribe",
+     "rondas": 22157,
+     "apuesta": 24692.14,
+     "premios": 23256.49,
+     "ggr": 1435.65,
+     "rtp": 94.19
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Barbarabang",
+     "rondas": 22049,
+     "apuesta": 8027.7,
+     "premios": 9168.35,
+     "ggr": -1140.65,
+     "rtp": 114.21
+    },
+    {
+     "provider_id": null,
+     "proveedor": "In-Out",
+     "rondas": 21901,
+     "apuesta": 10683.37,
+     "premios": 10570.25,
+     "ggr": 113.12,
+     "rtp": 98.94
     },
     {
      "provider_id": null,
      "proveedor": "BFgames",
-     "rondas": 16926,
-     "apuesta": 2423.87,
-     "premios": 1809.15,
-     "ggr": 614.72,
-     "rtp": 74.64
+     "rondas": 20837,
+     "apuesta": 2982.45,
+     "premios": 2241.61,
+     "ggr": 740.84,
+     "rtp": 75.16
     },
     {
      "provider_id": null,
      "proveedor": "BGaming",
-     "rondas": 16714,
-     "apuesta": 5959.21,
-     "premios": 5145.67,
-     "ggr": 813.54,
-     "rtp": 86.35
+     "rondas": 19677,
+     "apuesta": 7295.2,
+     "premios": 6328.3,
+     "ggr": 966.9,
+     "rtp": 86.75
     },
     {
      "provider_id": null,
      "proveedor": "Habanero",
-     "rondas": 13725,
-     "apuesta": 6199.7,
-     "premios": 6371.47,
-     "ggr": -171.77,
-     "rtp": 102.77
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Solidicon",
-     "rondas": 12171,
-     "apuesta": 12969.08,
-     "premios": 12157.11,
-     "ggr": 811.97,
-     "rtp": 93.74
+     "rondas": 16511,
+     "apuesta": 7460.75,
+     "premios": 7781.24,
+     "ggr": -320.49,
+     "rtp": 104.3
     },
     {
      "provider_id": null,
      "proveedor": "Apparat",
-     "rondas": 11955,
-     "apuesta": 4903.1,
-     "premios": 7004.66,
-     "ggr": -2101.56,
-     "rtp": 142.86
+     "rondas": 14610,
+     "apuesta": 5974.2,
+     "premios": 8504.29,
+     "ggr": -2530.09,
+     "rtp": 142.35
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Solidicon",
+     "rondas": 14491,
+     "apuesta": 15231.16,
+     "premios": 14254.75,
+     "ggr": 976.41,
+     "rtp": 93.59
     },
     {
      "provider_id": null,
      "proveedor": "Gameart Withdraw",
-     "rondas": 11516,
-     "apuesta": 51449.5,
+     "rondas": 14100,
+     "apuesta": 63484.2,
      "premios": 0.0,
-     "ggr": 51449.5,
+     "ggr": 63484.2,
      "rtp": 0.0
     },
     {
      "provider_id": null,
      "proveedor": "Dreamplay",
-     "rondas": 10649,
-     "apuesta": 5945.6,
+     "rondas": 12906,
+     "apuesta": 7180.8,
      "premios": 0.0,
-     "ggr": 5945.6,
+     "ggr": 7180.8,
      "rtp": 0.0
     },
     {
      "provider_id": null,
      "proveedor": "Yggdrasil",
-     "rondas": 10131,
-     "apuesta": 9360.55,
-     "premios": 11032.94,
-     "ggr": -1672.39,
-     "rtp": 117.87
+     "rondas": 11973,
+     "apuesta": 11239.3,
+     "premios": 13180.47,
+     "ggr": -1941.17,
+     "rtp": 117.27
     },
     {
      "provider_id": null,
      "proveedor": "RTG Slots",
-     "rondas": 9026,
-     "apuesta": 2995.21,
-     "premios": 2575.97,
-     "ggr": 419.24,
-     "rtp": 86.0
+     "rondas": 11393,
+     "apuesta": 3799.89,
+     "premios": 3293.82,
+     "ggr": 506.07,
+     "rtp": 86.68
     },
     {
      "provider_id": null,
      "proveedor": "Hacksaw",
-     "rondas": 8448,
-     "apuesta": 15622.9,
-     "premios": 14433.24,
-     "ggr": 1189.66,
-     "rtp": 92.39
+     "rondas": 10627,
+     "apuesta": 24147.0,
+     "premios": 19031.82,
+     "ggr": 5115.18,
+     "rtp": 78.82
     },
     {
      "provider_id": null,
      "proveedor": "Gamzix",
-     "rondas": 7770,
-     "apuesta": 4846.9,
-     "premios": 4789.77,
-     "ggr": 57.13,
-     "rtp": 98.82
+     "rondas": 9071,
+     "apuesta": 5711.0,
+     "premios": 5688.0,
+     "ggr": 23.0,
+     "rtp": 99.6
     },
     {
      "provider_id": null,
      "proveedor": "Redtiger",
-     "rondas": 7249,
-     "apuesta": 2287.2,
-     "premios": 2438.13,
-     "ggr": -150.93,
-     "rtp": 106.6
+     "rondas": 8611,
+     "apuesta": 2797.7,
+     "premios": 2945.69,
+     "ggr": -147.99,
+     "rtp": 105.29
     },
     {
      "provider_id": null,
      "proveedor": "Kagaming",
-     "rondas": 5203,
-     "apuesta": 2008.37,
-     "premios": 1680.11,
-     "ggr": 328.26,
-     "rtp": 83.66
+     "rondas": 6371,
+     "apuesta": 2422.5,
+     "premios": 2019.79,
+     "ggr": 402.71,
+     "rtp": 83.38
     },
     {
      "provider_id": null,
      "proveedor": "PopiPlay",
-     "rondas": 4964,
-     "apuesta": 1523.25,
-     "premios": 697.38,
-     "ggr": 825.87,
+     "rondas": 6017,
+     "apuesta": 1969.95,
+     "premios": 948.39,
+     "ggr": 1021.56,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Netgame",
-     "rondas": 4418,
-     "apuesta": 1095.6,
-     "premios": 1165.16,
-     "ggr": -69.56,
+     "rondas": 5506,
+     "apuesta": 1370.0,
+     "premios": 1400.96,
+     "ggr": -30.96,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "TurboGames",
-     "rondas": 3646,
-     "apuesta": 1262.3,
-     "premios": 1287.34,
-     "ggr": -25.04,
+     "rondas": 4800,
+     "apuesta": 1758.8,
+     "premios": 1769.84,
+     "ggr": -11.04,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "TomHorn",
-     "rondas": 3630,
-     "apuesta": 977.2,
-     "premios": 1118.85,
-     "ggr": -141.65,
+     "rondas": 4506,
+     "apuesta": 1213.8,
+     "premios": 1376.15,
+     "ggr": -162.35,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Mancala",
-     "rondas": 3382,
-     "apuesta": 3114.15,
-     "premios": 1495.71,
-     "ggr": 1618.44,
-     "rtp": 48.03
+     "rondas": 4306,
+     "apuesta": 4238.6,
+     "premios": 1975.23,
+     "ggr": 2263.37,
+     "rtp": 46.6
     },
     {
      "provider_id": null,
-     "proveedor": "Belatra",
-     "rondas": 3132,
-     "apuesta": 2207.4,
-     "premios": 2483.27,
-     "ggr": -275.87,
-     "rtp": 112.5
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Smartsoft",
-     "rondas": 3011,
-     "apuesta": 7465.59,
-     "premios": 7205.01,
-     "ggr": 260.58,
-     "rtp": 96.51
+     "proveedor": "Nolimit City",
+     "rondas": 4023,
+     "apuesta": 8489.77,
+     "premios": 7572.97,
+     "ggr": 916.8,
+     "rtp": 89.2
     },
     {
      "provider_id": null,
      "proveedor": "Esa Gaming",
-     "rondas": 2961,
-     "apuesta": 4343.6,
-     "premios": 4397.88,
-     "ggr": -54.28,
-     "rtp": 101.25
+     "rondas": 3902,
+     "apuesta": 5510.02,
+     "premios": 5580.2,
+     "ggr": -70.18,
+     "rtp": 101.27
     },
     {
      "provider_id": null,
-     "proveedor": "7777",
-     "rondas": 2939,
-     "apuesta": 3265.1,
-     "premios": 2592.62,
-     "ggr": 672.48,
-     "rtp": 79.4
+     "proveedor": "Belatra",
+     "rondas": 3633,
+     "apuesta": 2652.3,
+     "premios": 2858.65,
+     "ggr": -206.35,
+     "rtp": 107.78
     },
     {
      "provider_id": null,
      "proveedor": "PeterAndSons",
-     "rondas": 2850,
-     "apuesta": 2009.0,
-     "premios": 1821.29,
-     "ggr": 187.71,
-     "rtp": 90.66
+     "rondas": 3572,
+     "apuesta": 2518.3,
+     "premios": 2270.97,
+     "ggr": 247.33,
+     "rtp": 90.18
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Smartsoft",
+     "rondas": 3562,
+     "apuesta": 9027.73,
+     "premios": 8647.85,
+     "ggr": 379.88,
+     "rtp": 95.79
+    },
+    {
+     "provider_id": null,
+     "proveedor": "7777",
+     "rondas": 3536,
+     "apuesta": 3757.1,
+     "premios": 2983.65,
+     "ggr": 773.45,
+     "rtp": 79.41
     },
     {
      "provider_id": null,
      "proveedor": "PopOK",
-     "rondas": 2597,
-     "apuesta": 493.05,
-     "premios": 275.95,
-     "ggr": 217.1,
+     "rondas": 3162,
+     "apuesta": 611.64,
+     "premios": 345.4,
+     "ggr": 266.24,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Spin2Win",
-     "rondas": 2378,
-     "apuesta": 746.66,
-     "premios": 628.76,
-     "ggr": 117.9,
+     "rondas": 2869,
+     "apuesta": 900.48,
+     "premios": 763.1,
+     "ggr": 137.38,
      "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Nolimit City",
-     "rondas": 2368,
-     "apuesta": 5605.1,
-     "premios": 4003.12,
-     "ggr": 1601.98,
-     "rtp": 71.42
     },
     {
      "provider_id": null,
      "proveedor": "Kingmidas",
-     "rondas": 2340,
-     "apuesta": 779.2,
-     "premios": 800.32,
-     "ggr": -21.12,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Redrake",
-     "rondas": 2003,
-     "apuesta": 1740.7,
-     "premios": 0.0,
-     "ggr": 1740.7,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Thunderkick",
-     "rondas": 1943,
-     "apuesta": 1394.2,
-     "premios": 782.66,
-     "ggr": 611.54,
+     "rondas": 2852,
+     "apuesta": 1067.4,
+     "premios": 1064.73,
+     "ggr": 2.67,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Netent",
-     "rondas": 1917,
-     "apuesta": 625.85,
-     "premios": 444.45,
-     "ggr": 181.4,
+     "rondas": 2832,
+     "apuesta": 909.15,
+     "premios": 671.4,
+     "ggr": 237.75,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Redrake",
+     "rondas": 2733,
+     "apuesta": 2416.7,
+     "premios": 0.0,
+     "ggr": 2416.7,
+     "rtp": 0.0
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Mojos-Slots",
+     "rondas": 2652,
+     "apuesta": 37339.7,
+     "premios": 33358.44,
+     "ggr": 3981.26,
+     "rtp": 89.34
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Thunderkick",
+     "rondas": 2404,
+     "apuesta": 1720.7,
+     "premios": 972.1,
+     "ggr": 748.6,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "BWGaming",
-     "rondas": 1890,
-     "apuesta": 565.6,
-     "premios": 365.35,
-     "ggr": 200.25,
+     "rondas": 2125,
+     "apuesta": 589.1,
+     "premios": 380.85,
+     "ggr": 208.25,
      "rtp": null
     },
     {
      "provider_id": null,
-     "proveedor": "Mojos-Slots",
-     "rondas": 1815,
-     "apuesta": 22937.75,
-     "premios": 19605.03,
-     "ggr": 3332.72,
-     "rtp": 85.47
-    },
-    {
-     "provider_id": null,
      "proveedor": "TripleCherry",
-     "rondas": 1502,
-     "apuesta": 1143.5,
-     "premios": 1622.16,
-     "ggr": -478.66,
+     "rondas": 1825,
+     "apuesta": 1420.26,
+     "premios": 1957.78,
+     "ggr": -537.52,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "EAgaming",
-     "rondas": 1383,
-     "apuesta": 469.6,
-     "premios": 278.7,
-     "ggr": 190.9,
+     "rondas": 1718,
+     "apuesta": 590.2,
+     "premios": 357.5,
+     "ggr": 232.7,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Airdice",
-     "rondas": 1346,
-     "apuesta": 1872.95,
-     "premios": 1758.75,
-     "ggr": 114.2,
-     "rtp": null
+     "rondas": 1576,
+     "apuesta": 2151.85,
+     "premios": 1987.34,
+     "ggr": 164.51,
+     "rtp": 92.35
     },
     {
      "provider_id": null,
      "proveedor": "Worldmatch",
-     "rondas": 1040,
-     "apuesta": 1474.8,
-     "premios": 1071.18,
-     "ggr": 403.62,
+     "rondas": 1277,
+     "apuesta": 1843.3,
+     "premios": 1340.78,
+     "ggr": 502.52,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Slotopia",
-     "rondas": 993,
-     "apuesta": 147.6,
-     "premios": 100.2,
-     "ggr": 47.4,
+     "rondas": 1243,
+     "apuesta": 184.0,
+     "premios": 127.4,
+     "ggr": 56.6,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Bigpot",
-     "rondas": 893,
-     "apuesta": 196.6,
-     "premios": 140.04,
-     "ggr": 56.56,
+     "rondas": 1182,
+     "apuesta": 258.0,
+     "premios": 202.96,
+     "ggr": 55.04,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Ct Interactive",
-     "rondas": 851,
-     "apuesta": 274.4,
-     "premios": 376.32,
-     "ggr": -101.92,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Aviatrix",
-     "rondas": 650,
-     "apuesta": 784.31,
-     "premios": 811.98,
-     "ggr": -27.67,
+     "rondas": 1015,
+     "apuesta": 332.2,
+     "premios": 455.52,
+     "ggr": -123.32,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Aviator Studio",
-     "rondas": 624,
-     "apuesta": 659.4,
-     "premios": 574.83,
-     "ggr": 84.57,
+     "rondas": 765,
+     "apuesta": 808.6,
+     "premios": 706.36,
+     "ggr": 102.24,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Aviatrix",
+     "rondas": 764,
+     "apuesta": 939.77,
+     "premios": 977.11,
+     "ggr": -37.34,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Big Time Gaming",
-     "rondas": 474,
-     "apuesta": 81.9,
-     "premios": 54.62,
-     "ggr": 27.28,
+     "rondas": 653,
+     "apuesta": 111.1,
+     "premios": 74.67,
+     "ggr": 36.43,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Slots Battle - Entry Fee",
-     "rondas": 291,
-     "apuesta": 31.6,
+     "rondas": 356,
+     "apuesta": 38.25,
      "premios": 0.0,
-     "ggr": 31.6,
+     "ggr": 38.25,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Vimplay",
-     "rondas": 203,
-     "apuesta": 56.2,
-     "premios": 50.37,
-     "ggr": 5.83,
+     "rondas": 253,
+     "apuesta": 69.5,
+     "premios": 61.23,
+     "ggr": 8.27,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Spinmatic V3",
-     "rondas": 147,
-     "apuesta": 294.0,
-     "premios": 264.0,
-     "ggr": 30.0,
+     "rondas": 180,
+     "apuesta": 360.0,
+     "premios": 318.0,
+     "ggr": 42.0,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Chimeraspin",
-     "rondas": 113,
-     "apuesta": 33.9,
-     "premios": 16.6,
-     "ggr": 17.3,
+     "rondas": 140,
+     "apuesta": 42.0,
+     "premios": 20.7,
+     "ggr": 21.3,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Helio Gaming",
-     "rondas": 93,
-     "apuesta": 72.3,
-     "premios": 45.95,
-     "ggr": 26.35,
+     "rondas": 119,
+     "apuesta": 92.0,
+     "premios": 59.4,
+     "ggr": 32.6,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Caleta",
-     "rondas": 93,
-     "apuesta": 37.0,
+     "rondas": 116,
+     "apuesta": 47.2,
      "premios": 0.0,
-     "ggr": 37.0,
-     "rtp": null
-    },
-    {
-     "provider_id": null,
-     "proveedor": "Betsolutions",
-     "rondas": 37,
-     "apuesta": 25.4,
-     "premios": 2.65,
-     "ggr": 22.75,
+     "ggr": 47.2,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Onetouch",
-     "rondas": 36,
-     "apuesta": 9.6,
-     "premios": 2.5,
-     "ggr": 7.1,
+     "rondas": 43,
+     "apuesta": 11.8,
+     "premios": 3.18,
+     "ggr": 8.62,
+     "rtp": null
+    },
+    {
+     "provider_id": null,
+     "proveedor": "Betsolutions",
+     "rondas": 42,
+     "apuesta": 29.2,
+     "premios": 3.25,
+     "ggr": 25.95,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Abracadabra",
-     "rondas": 14,
-     "apuesta": 1.54,
-     "premios": 0.76,
-     "ggr": 0.78,
+     "rondas": 17,
+     "apuesta": 1.87,
+     "premios": 0.95,
+     "ggr": 0.92,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Formulaspin",
-     "rondas": 10,
-     "apuesta": 7.5,
-     "premios": 6.68,
-     "ggr": 0.82,
+     "rondas": 12,
+     "apuesta": 9.0,
+     "premios": 8.36,
+     "ggr": 0.64,
      "rtp": null
     },
     {
      "provider_id": null,
      "proveedor": "Espresso",
-     "rondas": 6,
-     "apuesta": 1.5,
-     "premios": 0.0,
-     "ggr": 1.5,
+     "rondas": 8,
+     "apuesta": 2.0,
+     "premios": 0.2,
+     "ggr": 1.8,
      "rtp": null
     },
     {
@@ -6546,8 +7416,8 @@
      "proveedor": "Gameart Deposit",
      "rondas": 0,
      "apuesta": 0.0,
-     "premios": 51291.21,
-     "ggr": -51291.21,
+     "premios": 62881.12,
+     "ggr": -62881.12,
      "rtp": null
     },
     {
@@ -6555,8 +7425,8 @@
      "proveedor": "DreamPlay",
      "rondas": 0,
      "apuesta": 0.0,
-     "premios": 9477.26,
-     "ggr": -9477.26,
+     "premios": 11524.59,
+     "ggr": -11524.59,
      "rtp": null
     },
     {
@@ -6564,8 +7434,8 @@
      "proveedor": "Slots Battle - Prize",
      "rondas": 0,
      "apuesta": 0.0,
-     "premios": 3.0,
-     "ggr": -3.0,
+     "premios": 4.0,
+     "ggr": -4.0,
      "rtp": null
     },
     {
@@ -6573,8 +7443,8 @@
      "proveedor": "CaletaGaming",
      "rondas": 0,
      "apuesta": 0.0,
-     "premios": 74.2,
-     "ggr": -74.2,
+     "premios": 87.5,
+     "ggr": -87.5,
      "rtp": null
     },
     {
@@ -6582,8 +7452,8 @@
      "proveedor": "RedRake",
      "rondas": 0,
      "apuesta": 0.0,
-     "premios": 1347.57,
-     "ggr": -1347.57,
+     "premios": 1851.62,
+     "ggr": -1851.62,
      "rtp": null
     }
    ]
