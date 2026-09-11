@@ -1,6 +1,6 @@
 {
  "version": 1,
- "actualizado": "2026-09-10T23:33:05",
+ "actualizado": "2026-09-11T01:29:57",
  "dias": {
   "2026-08-01": {
    "transacciones": 46649,
@@ -815,6 +815,7 @@
   "transacciones_producto__2026-09-05_2026-09-05.csv",
   "transacciones_producto__2026-09-05_2026-09-10.csv",
   "transacciones_producto__2026-09-06_2026-09-06.csv",
+  "transacciones_producto__2026-09-06_2026-09-11.csv",
   "transacciones_producto__2026-09-07_2026-09-07.csv",
   "transacciones_producto__2026-09-08_2026-09-08.csv",
   "transacciones_producto__2026-09-09_2026-09-09.csv"
