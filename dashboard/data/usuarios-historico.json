@@ -1,6 +1,6 @@
 {
  "version": "1.0",
- "actualizado": "2026-09-12T15:03:21",
+ "actualizado": "2026-09-12T17:52:09",
  "dias_disponibles": [
   "2026-09-07",
   "2026-09-08",
@@ -9,7 +9,7 @@
   "2026-09-11",
   "2026-09-12"
  ],
- "total_usuarios": 709,
+ "total_usuarios": 715,
  "usuarios": {
   "788388293": {
    "usuario": "50362065090",
@@ -198,9 +198,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 127,
-   "apuesta_total": 1580.04,
-   "ganancia_neta": 22.02,
+   "transacciones": 134,
+   "apuesta_total": 1628.0,
+   "ganancia_neta": -1.24,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 20,
@@ -228,9 +228,9 @@
      "ganancia": 15.41
     },
     "2026-09-12": {
-     "transacciones": 6,
-     "apuesta": 47.85,
-     "ganancia": 7.85
+     "transacciones": 13,
+     "apuesta": 95.81,
+     "ganancia": -15.41
     }
    }
   },
@@ -242,9 +242,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 4487,
-   "apuesta_total": 2493.29,
-   "ganancia_neta": 2.43,
+   "transacciones": 4553,
+   "apuesta_total": 2500.92,
+   "ganancia_neta": 0.06,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 1867,
@@ -272,9 +272,9 @@
      "ganancia": 49.92
     },
     "2026-09-12": {
-     "transacciones": 679,
-     "apuesta": 496.51,
-     "ganancia": -47.55
+     "transacciones": 745,
+     "apuesta": 504.14,
+     "ganancia": -49.92
     }
    }
   },
@@ -395,11 +395,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-10",
-   "dias_activos": 4,
-   "transacciones": 4235,
-   "apuesta_total": 5859.05,
-   "ganancia_neta": -1.25,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 4822,
+   "apuesta_total": 6210.4,
+   "ganancia_neta": 28.5,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 2033,
@@ -420,6 +420,11 @@
      "transacciones": 620,
      "apuesta": 573.95,
      "ganancia": 0.05
+    },
+    "2026-09-12": {
+     "transacciones": 587,
+     "apuesta": 351.35,
+     "ganancia": 29.75
     }
    }
   },
@@ -431,9 +436,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 120,
-   "apuesta_total": 558.65,
-   "ganancia_neta": -1.43,
+   "transacciones": 124,
+   "apuesta_total": 569.83,
+   "ganancia_neta": -5.25,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 16,
@@ -455,15 +460,15 @@
      "apuesta": 92.23,
      "ganancia": -0.91
     },
+    "2026-09-12": {
+     "transacciones": 14,
+     "apuesta": 44.46,
+     "ganancia": 1.98
+    },
     "2026-09-11": {
      "transacciones": 5,
      "apuesta": 26.7,
      "ganancia": -3.3
-    },
-    "2026-09-12": {
-     "transacciones": 10,
-     "apuesta": 33.28,
-     "ganancia": 5.8
     }
    }
   },
@@ -475,9 +480,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 322,
-   "apuesta_total": 602.88,
-   "ganancia_neta": -25.0,
+   "transacciones": 349,
+   "apuesta_total": 638.48,
+   "ganancia_neta": -34.5,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 54,
@@ -505,9 +510,9 @@
      "ganancia": -3.35
     },
     "2026-09-12": {
-     "transacciones": 11,
-     "apuesta": 12.4,
-     "ganancia": -7.0
+     "transacciones": 38,
+     "apuesta": 48.0,
+     "ganancia": -16.5
     }
    }
   },
@@ -519,8 +524,8 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 1600,
-   "apuesta_total": 20547.2,
+   "transacciones": 1715,
+   "apuesta_total": 21636.2,
    "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-07": {
@@ -549,8 +554,8 @@
      "ganancia": 0.25
     },
     "2026-09-12": {
-     "transacciones": 16,
-     "apuesta": 75.25,
+     "transacciones": 131,
+     "apuesta": 1164.25,
      "ganancia": -0.25
     }
    }
@@ -563,9 +568,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 121,
-   "apuesta_total": 1017.89,
-   "ganancia_neta": 7.29,
+   "transacciones": 123,
+   "apuesta_total": 1025.64,
+   "ganancia_neta": -0.46,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 18,
@@ -593,9 +598,9 @@
      "ganancia": -20.0
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 12.75,
-     "ganancia": 2.75
+     "transacciones": 4,
+     "apuesta": 20.5,
+     "ganancia": -5.0
     }
    }
   },
@@ -718,9 +723,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 25,
-   "apuesta_total": 69.87,
-   "ganancia_neta": 7.87,
+   "transacciones": 27,
+   "apuesta_total": 73.87,
+   "ganancia_neta": 3.87,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 6,
@@ -748,9 +753,9 @@
      "ganancia": 9.65
     },
     "2026-09-12": {
-     "transacciones": 3,
-     "apuesta": 5.0,
-     "ganancia": -5.0
+     "transacciones": 5,
+     "apuesta": 9.0,
+     "ganancia": -9.0
     }
    }
   },
@@ -963,11 +968,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 23,
-   "apuesta_total": 29.58,
-   "ganancia_neta": 1.5,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 24,
+   "apuesta_total": 30.08,
+   "ganancia_neta": 1.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 6,
@@ -988,6 +993,11 @@
      "transacciones": 8,
      "apuesta": 5.15,
      "ganancia": -5.15
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 0.5,
+     "ganancia": -0.5
     }
    }
   },
@@ -999,9 +1009,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 76,
-   "apuesta_total": 1255.6,
-   "ganancia_neta": -11.0,
+   "transacciones": 79,
+   "apuesta_total": 1347.7,
+   "ganancia_neta": 24.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 15,
@@ -1029,9 +1039,9 @@
      "ganancia": -62.41
     },
     "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 60.0,
-     "ganancia": 0.0
+     "transacciones": 7,
+     "apuesta": 152.1,
+     "ganancia": 35.0
     }
    }
   },
@@ -1043,9 +1053,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 3196,
-   "apuesta_total": 6945.37,
-   "ganancia_neta": -424.03,
+   "transacciones": 3273,
+   "apuesta_total": 7097.4,
+   "ganancia_neta": -446.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 19,
@@ -1073,9 +1083,9 @@
      "ganancia": -12.45
     },
     "2026-09-12": {
-     "transacciones": 442,
-     "apuesta": 1146.84,
-     "ganancia": -55.16
+     "transacciones": 519,
+     "apuesta": 1298.87,
+     "ganancia": -77.13
     }
    }
   },
@@ -1085,10 +1095,10 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 780,
-   "apuesta_total": 364.48,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 783,
+   "apuesta_total": 374.48,
    "ganancia_neta": -0.0,
    "por_dia": {
     "2026-09-07": {
@@ -1109,6 +1119,11 @@
     "2026-09-11": {
      "transacciones": 12,
      "apuesta": 26.54,
+     "ganancia": 0.0
+    },
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 10.0,
      "ganancia": 0.0
     }
    }
@@ -1138,11 +1153,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 466,
-   "apuesta_total": 1412.98,
-   "ganancia_neta": -62.64,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 472,
+   "apuesta_total": 1450.98,
+   "ganancia_neta": -60.64,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 198,
@@ -1168,6 +1183,11 @@
      "transacciones": 17,
      "apuesta": 70.18,
      "ganancia": -25.38
+    },
+    "2026-09-12": {
+     "transacciones": 6,
+     "apuesta": 38.0,
+     "ganancia": 2.0
     }
    }
   },
@@ -1274,10 +1294,10 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 6245,
-   "apuesta_total": 2058.11,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 6373,
+   "apuesta_total": 2081.31,
    "ganancia_neta": -68.55,
    "por_dia": {
     "2026-09-07": {
@@ -1303,6 +1323,11 @@
     "2026-09-11": {
      "transacciones": 526,
      "apuesta": 146.0,
+     "ganancia": 0.0
+    },
+    "2026-09-12": {
+     "transacciones": 128,
+     "apuesta": 23.2,
      "ganancia": -0.0
     }
    }
@@ -1315,9 +1340,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 1409,
-   "apuesta_total": 3253.37,
-   "ganancia_neta": 36.69,
+   "transacciones": 1416,
+   "apuesta_total": 3456.81,
+   "ganancia_neta": 0.13,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 1013,
@@ -1345,9 +1370,9 @@
      "ganancia": -10.17
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 25.0,
-     "ganancia": -25.0
+     "transacciones": 8,
+     "apuesta": 228.44,
+     "ganancia": -61.56
     }
    }
   },
@@ -1357,11 +1382,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 13,
-   "apuesta_total": 45.02,
-   "ganancia_neta": 8.3,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 69,
+   "apuesta_total": 52.62,
+   "ganancia_neta": 6.3,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 1,
@@ -1387,6 +1412,11 @@
      "transacciones": 2,
      "apuesta": 3.52,
      "ganancia": -3.52
+    },
+    "2026-09-12": {
+     "transacciones": 56,
+     "apuesta": 7.6,
+     "ganancia": -2.0
     }
    }
   },
@@ -1396,16 +1426,21 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-07",
-   "dias_activos": 1,
-   "transacciones": 8,
-   "apuesta_total": 463.49,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 10,
+   "apuesta_total": 473.49,
    "ganancia_neta": -0.01,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 8,
      "apuesta": 463.49,
      "ganancia": -0.01
+    },
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 10.0,
+     "ganancia": 0.0
     }
    }
   },
@@ -1415,10 +1450,10 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 112,
-   "apuesta_total": 2655.59,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 115,
+   "apuesta_total": 2725.59,
    "ganancia_neta": -0.21,
    "por_dia": {
     "2026-09-07": {
@@ -1444,6 +1479,11 @@
     "2026-09-11": {
      "transacciones": 9,
      "apuesta": 190.0,
+     "ganancia": 0.0
+    },
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 70.0,
      "ganancia": 0.0
     }
    }
@@ -1553,9 +1593,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 28,
-   "apuesta_total": 16.98,
-   "ganancia_neta": 2.5,
+   "transacciones": 31,
+   "apuesta_total": 18.48,
+   "ganancia_neta": 1.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 6,
@@ -1577,15 +1617,15 @@
      "apuesta": 1.79,
      "ganancia": -0.21
     },
+    "2026-09-12": {
+     "transacciones": 4,
+     "apuesta": 1.99,
+     "ganancia": -1.99
+    },
     "2026-09-09": {
      "transacciones": 2,
      "apuesta": 1.28,
      "ganancia": 0.28
-    },
-    "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 0.49,
-     "ganancia": -0.49
     }
    }
   },
@@ -1616,15 +1656,15 @@
      "apuesta": 384.76,
      "ganancia": -119.68
     },
-    "2026-09-11": {
-     "transacciones": 4,
-     "apuesta": 111.88,
-     "ganancia": -42.8
-    },
     "2026-09-12": {
      "transacciones": 2,
      "apuesta": 80.0,
      "ganancia": -80.0
+    },
+    "2026-09-11": {
+     "transacciones": 4,
+     "apuesta": 111.88,
+     "ganancia": -42.8
     },
     "2026-09-09": {
      "transacciones": 2,
@@ -2041,7 +2081,7 @@
     "2026-09-11": {
      "transacciones": 168,
      "apuesta": 92.4,
-     "ganancia": -0.0
+     "ganancia": 0.0
     }
    }
   },
@@ -2060,7 +2100,7 @@
     "2026-09-07": {
      "transacciones": 205,
      "apuesta": 78.6,
-     "ganancia": -0.0
+     "ganancia": 0.0
     },
     "2026-09-09": {
      "transacciones": 688,
@@ -2143,11 +2183,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 14735,
-   "apuesta_total": 17511.28,
-   "ganancia_neta": -0.02,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 15035,
+   "apuesta_total": 17793.86,
+   "ganancia_neta": 59.96,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 3599,
@@ -2173,6 +2213,11 @@
      "transacciones": 3937,
      "apuesta": 3546.19,
      "ganancia": -0.01
+    },
+    "2026-09-12": {
+     "transacciones": 300,
+     "apuesta": 282.58,
+     "ganancia": 59.98
     }
    }
   },
@@ -2318,16 +2363,21 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-07",
-   "dias_activos": 1,
-   "transacciones": 4,
-   "apuesta_total": 16.75,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 6,
+   "apuesta_total": 36.75,
    "ganancia_neta": -10.01,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 4,
      "apuesta": 16.75,
      "ganancia": -10.01
+    },
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 20.0,
+     "ganancia": 0.0
     }
    }
   },
@@ -2339,9 +2389,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 27,
-   "apuesta_total": 101.26,
-   "ganancia_neta": 2.5,
+   "transacciones": 28,
+   "apuesta_total": 103.76,
+   "ganancia_neta": -0.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 2,
@@ -2364,9 +2414,9 @@
      "ganancia": -17.0
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 7.5,
-     "ganancia": 2.5
+     "transacciones": 3,
+     "apuesta": 10.0,
+     "ganancia": 0.0
     },
     "2026-09-08": {
      "transacciones": 1,
@@ -2381,11 +2431,11 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 82,
-   "apuesta_total": 19.13,
-   "ganancia_neta": -3.97,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 113,
+   "apuesta_total": 23.87,
+   "ganancia_neta": -8.33,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 7,
@@ -2411,6 +2461,11 @@
      "transacciones": 2,
      "apuesta": 0.35,
      "ganancia": -0.35
+    },
+    "2026-09-12": {
+     "transacciones": 31,
+     "apuesta": 4.74,
+     "ganancia": -4.36
     }
    }
   },
@@ -2477,11 +2532,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 48,
-   "apuesta_total": 21885.47,
-   "ganancia_neta": -194.53,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 50,
+   "apuesta_total": 22515.47,
+   "ganancia_neta": -824.53,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 11,
@@ -2507,6 +2562,11 @@
      "transacciones": 7,
      "apuesta": 2679.0,
      "ganancia": -61.0
+    },
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 630.0,
+     "ganancia": -630.0
     }
    }
   },
@@ -2537,9 +2597,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 42,
-   "apuesta_total": 129.18,
-   "ganancia_neta": -14.16,
+   "transacciones": 44,
+   "apuesta_total": 133.44,
+   "ganancia_neta": -13.16,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 4,
@@ -2567,9 +2627,9 @@
      "ganancia": -1.01
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 3.0,
-     "ganancia": -3.0
+     "transacciones": 4,
+     "apuesta": 7.26,
+     "ganancia": -2.0
     }
    }
   },
@@ -2581,9 +2641,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 4,
-   "transacciones": 40,
-   "apuesta_total": 802.47,
-   "ganancia_neta": 45.97,
+   "transacciones": 43,
+   "apuesta_total": 827.47,
+   "ganancia_neta": 20.97,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 12,
@@ -2601,9 +2661,9 @@
      "ganancia": -167.15
     },
     "2026-09-12": {
-     "transacciones": 7,
-     "apuesta": 65.0,
-     "ganancia": -65.0
+     "transacciones": 10,
+     "apuesta": 90.0,
+     "ganancia": -90.0
     }
    }
   },
@@ -2615,8 +2675,8 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 177,
-   "apuesta_total": 390.04,
+   "transacciones": 179,
+   "apuesta_total": 392.48,
    "ganancia_neta": -32.98,
    "por_dia": {
     "2026-09-07": {
@@ -2645,8 +2705,8 @@
      "ganancia": -2.61
     },
     "2026-09-12": {
-     "transacciones": 6,
-     "apuesta": 6.9,
+     "transacciones": 8,
+     "apuesta": 9.34,
      "ganancia": -6.9
     }
    }
@@ -2740,11 +2800,11 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 79,
-   "apuesta_total": 1542.11,
-   "ganancia_neta": -23.51,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 84,
+   "apuesta_total": 1596.51,
+   "ganancia_neta": -13.11,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 18,
@@ -2770,6 +2830,11 @@
      "transacciones": 18,
      "apuesta": 254.86,
      "ganancia": -0.04
+    },
+    "2026-09-12": {
+     "transacciones": 5,
+     "apuesta": 54.4,
+     "ganancia": 10.4
     }
    }
   },
@@ -3115,11 +3180,11 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 995,
-   "apuesta_total": 709.22,
-   "ganancia_neta": 2.92,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 996,
+   "apuesta_total": 710.22,
+   "ganancia_neta": 1.92,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 8,
@@ -3140,6 +3205,11 @@
      "transacciones": 3,
      "apuesta": 7.1,
      "ganancia": 2.9
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 1.0,
+     "ganancia": -1.0
     }
    }
   },
@@ -3195,9 +3265,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 188,
-   "apuesta_total": 6363.26,
-   "ganancia_neta": 300.0,
+   "transacciones": 200,
+   "apuesta_total": 6702.26,
+   "ganancia_neta": 220.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 33,
@@ -3225,9 +3295,9 @@
      "ganancia": -740.0
     },
     "2026-09-12": {
-     "transacciones": 11,
-     "apuesta": 269.2,
-     "ganancia": -110.0
+     "transacciones": 23,
+     "apuesta": 608.2,
+     "ganancia": -190.0
     }
    }
   },
@@ -3239,9 +3309,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 54,
-   "apuesta_total": 524.25,
-   "ganancia_neta": -71.75,
+   "transacciones": 56,
+   "apuesta_total": 590.01,
+   "ganancia_neta": -5.99,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 9,
@@ -3269,9 +3339,9 @@
      "ganancia": -75.96
     },
     "2026-09-12": {
-     "transacciones": 5,
-     "apuesta": 62.0,
-     "ganancia": -62.0
+     "transacciones": 7,
+     "apuesta": 127.76,
+     "ganancia": 3.76
     }
    }
   },
@@ -3378,11 +3448,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 43,
-   "apuesta_total": 85.46,
-   "ganancia_neta": -11.96,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 44,
+   "apuesta_total": 90.46,
+   "ganancia_neta": -6.96,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 20,
@@ -3403,6 +3473,11 @@
      "transacciones": 5,
      "apuesta": 5.0,
      "ganancia": -5.0
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 5.0,
+     "ganancia": 5.0
     },
     "2026-09-08": {
      "transacciones": 5,
@@ -3457,9 +3532,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 123,
-   "apuesta_total": 962.78,
-   "ganancia_neta": 40.0,
+   "transacciones": 128,
+   "apuesta_total": 1249.22,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 16,
@@ -3487,9 +3562,9 @@
      "ganancia": 10.0
     },
     "2026-09-12": {
-     "transacciones": 6,
-     "apuesta": 72.34,
-     "ganancia": 30.0
+     "transacciones": 11,
+     "apuesta": 358.78,
+     "ganancia": -10.0
     }
    }
   },
@@ -3499,11 +3574,11 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 20,
-   "apuesta_total": 229.24,
-   "ganancia_neta": 121.8,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 23,
+   "apuesta_total": 258.24,
+   "ganancia_neta": 92.8,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 2,
@@ -3525,6 +3600,11 @@
      "apuesta": 82.26,
      "ganancia": 35.0
     },
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 29.0,
+     "ganancia": -29.0
+    },
     "2026-09-10": {
      "transacciones": 2,
      "apuesta": 6.0,
@@ -3542,12 +3622,12 @@
    "dias_activos": 1,
    "transacciones": 377,
    "apuesta_total": 260.0,
-   "ganancia_neta": -0.0,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 377,
      "apuesta": 260.0,
-     "ganancia": -0.0
+     "ganancia": 0.0
     }
    }
   },
@@ -3777,9 +3857,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 1323,
-   "apuesta_total": 607.98,
-   "ganancia_neta": 2.02,
+   "transacciones": 1650,
+   "apuesta_total": 658.13,
+   "ganancia_neta": -0.03,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 286,
@@ -3802,9 +3882,9 @@
      "ganancia": -0.01
     },
     "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 7.98,
-     "ganancia": 2.02
+     "transacciones": 331,
+     "apuesta": 58.13,
+     "ganancia": -0.03
     }
    }
   },
@@ -3937,9 +4017,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 26,
-   "apuesta_total": 60.47,
-   "ganancia_neta": -1.25,
+   "transacciones": 29,
+   "apuesta_total": 68.59,
+   "ganancia_neta": -0.65,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 2,
@@ -3961,15 +4041,15 @@
      "apuesta": 16.86,
      "ganancia": -1.0
     },
+    "2026-09-12": {
+     "transacciones": 8,
+     "apuesta": 21.52,
+     "ganancia": -4.0
+    },
     "2026-09-11": {
      "transacciones": 2,
      "apuesta": 11.0,
      "ganancia": 9.0
-    },
-    "2026-09-12": {
-     "transacciones": 5,
-     "apuesta": 13.4,
-     "ganancia": -4.6
     }
    }
   },
@@ -3998,11 +4078,11 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 57,
-   "apuesta_total": 263.86,
-   "ganancia_neta": 17.86,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 58,
+   "apuesta_total": 268.86,
+   "ganancia_neta": 12.86,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 5,
@@ -4028,6 +4108,11 @@
      "transacciones": 12,
      "apuesta": 66.84,
      "ganancia": 9.84
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 5.0,
+     "ganancia": -5.0
     }
    }
   },
@@ -4248,9 +4333,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 77,
-   "apuesta_total": 617.58,
-   "ganancia_neta": -17.22,
+   "transacciones": 80,
+   "apuesta_total": 661.38,
+   "ganancia_neta": -9.42,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 8,
@@ -4278,9 +4363,9 @@
      "ganancia": -11.3
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 33.0,
-     "ganancia": 13.0
+     "transacciones": 5,
+     "apuesta": 76.8,
+     "ganancia": 20.8
     }
    }
   },
@@ -4331,9 +4416,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 28,
-   "apuesta_total": 26.42,
-   "ganancia_neta": 2.02,
+   "transacciones": 30,
+   "apuesta_total": 28.42,
+   "ganancia_neta": 0.02,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 17,
@@ -4350,15 +4435,15 @@
      "apuesta": 6.0,
      "ganancia": 0.0
     },
-    "2026-09-09": {
+    "2026-09-12": {
      "transacciones": 3,
      "apuesta": 4.0,
      "ganancia": 0.0
     },
-    "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 2.0,
-     "ganancia": 2.0
+    "2026-09-09": {
+     "transacciones": 3,
+     "apuesta": 4.0,
+     "ganancia": 0.0
     }
    }
   },
@@ -4370,9 +4455,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 35,
-   "apuesta_total": 79.42,
-   "ganancia_neta": -12.28,
+   "transacciones": 37,
+   "apuesta_total": 81.42,
+   "ganancia_neta": -14.28,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 6,
@@ -4400,9 +4485,9 @@
      "ganancia": -14.08
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 2.0,
-     "ganancia": -2.0
+     "transacciones": 4,
+     "apuesta": 4.0,
+     "ganancia": -4.0
     }
    }
   },
@@ -4470,7 +4555,7 @@
     "2026-09-11": {
      "transacciones": 338,
      "apuesta": 1242.2,
-     "ganancia": -0.0
+     "ganancia": 0.0
     }
    }
   },
@@ -4482,9 +4567,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 41,
-   "apuesta_total": 3275.05,
-   "ganancia_neta": -44.95,
+   "transacciones": 45,
+   "apuesta_total": 3838.05,
+   "ganancia_neta": 118.05,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 3,
@@ -4512,9 +4597,9 @@
      "ganancia": -3.77
     },
     "2026-09-12": {
-     "transacciones": 5,
-     "apuesta": 473.92,
-     "ganancia": -326.08
+     "transacciones": 9,
+     "apuesta": 1036.92,
+     "ganancia": -163.08
     }
    }
   },
@@ -4608,9 +4693,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 53,
-   "apuesta_total": 181.04,
-   "ganancia_neta": 3.5,
+   "transacciones": 54,
+   "apuesta_total": 183.04,
+   "ganancia_neta": 1.5,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 8,
@@ -4638,9 +4723,9 @@
      "ganancia": -11.11
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 4.12,
-     "ganancia": -4.12
+     "transacciones": 3,
+     "apuesta": 6.12,
+     "ganancia": -6.12
     }
    }
   },
@@ -4652,9 +4737,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 28,
-   "apuesta_total": 448.3,
-   "ganancia_neta": 15.0,
+   "transacciones": 29,
+   "apuesta_total": 488.5,
+   "ganancia_neta": 55.2,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 1,
@@ -4682,9 +4767,9 @@
      "ganancia": -40.9
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 10.0,
-     "ganancia": -10.0
+     "transacciones": 2,
+     "apuesta": 50.2,
+     "ganancia": 30.2
     }
    }
   },
@@ -4715,8 +4800,8 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 39,
-   "apuesta_total": 5132.15,
+   "transacciones": 42,
+   "apuesta_total": 5627.45,
    "ganancia_neta": 241.37,
    "por_dia": {
     "2026-09-07": {
@@ -4745,8 +4830,8 @@
      "ganancia": -164.1
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 250.0,
+     "transacciones": 5,
+     "apuesta": 745.3,
      "ganancia": -250.0
     }
    }
@@ -5031,9 +5116,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 11,
-   "apuesta_total": 83.39,
-   "ganancia_neta": -8.99,
+   "transacciones": 13,
+   "apuesta_total": 93.39,
+   "ganancia_neta": -18.99,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 2,
@@ -5061,9 +5146,9 @@
      "ganancia": 25.0
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 5.0,
-     "ganancia": -5.0
+     "transacciones": 3,
+     "apuesta": 15.0,
+     "ganancia": -15.0
     }
    }
   },
@@ -5166,9 +5251,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 41,
-   "apuesta_total": 3946.46,
-   "ganancia_neta": 2.0,
+   "transacciones": 46,
+   "apuesta_total": 4414.46,
+   "ganancia_neta": -0.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 1,
@@ -5196,9 +5281,9 @@
      "ganancia": 0.0
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 202.0,
-     "ganancia": 2.0
+     "transacciones": 7,
+     "apuesta": 670.0,
+     "ganancia": 0.0
     }
    }
   },
@@ -5340,9 +5425,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 86,
-   "apuesta_total": 11.71,
-   "ganancia_neta": 0.81,
+   "transacciones": 91,
+   "apuesta_total": 12.34,
+   "ganancia_neta": 0.84,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 10,
@@ -5370,9 +5455,9 @@
      "ganancia": -0.03
     },
     "2026-09-12": {
-     "transacciones": 3,
-     "apuesta": 0.3,
-     "ganancia": -0.3
+     "transacciones": 8,
+     "apuesta": 0.93,
+     "ganancia": -0.27
     }
    }
   },
@@ -5458,11 +5543,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-10",
-   "dias_activos": 3,
-   "transacciones": 4,
-   "apuesta_total": 5.2,
-   "ganancia_neta": -0.8,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 4,
+   "transacciones": 8,
+   "apuesta_total": 34.2,
+   "ganancia_neta": 20.2,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 1,
@@ -5478,6 +5563,11 @@
      "transacciones": 1,
      "apuesta": 1.0,
      "ganancia": -1.0
+    },
+    "2026-09-12": {
+     "transacciones": 4,
+     "apuesta": 29.0,
+     "ganancia": 21.0
     }
    }
   },
@@ -5663,9 +5753,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 24,
-   "apuesta_total": 256.47,
-   "ganancia_neta": 1.51,
+   "transacciones": 25,
+   "apuesta_total": 257.98,
+   "ganancia_neta": -0.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 6,
@@ -5682,15 +5772,15 @@
      "apuesta": 93.5,
      "ganancia": -0.0
     },
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 3.46,
+     "ganancia": -0.44
+    },
     "2026-09-11": {
      "transacciones": 4,
      "apuesta": 120.44,
      "ganancia": 0.44
-    },
-    "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 1.95,
-     "ganancia": 1.07
     }
    }
   },
@@ -5702,8 +5792,8 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 15,
-   "apuesta_total": 98.44,
+   "transacciones": 17,
+   "apuesta_total": 108.44,
    "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-07": {
@@ -5727,8 +5817,8 @@
      "ganancia": 0.0
     },
     "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 20.0,
+     "transacciones": 6,
+     "apuesta": 30.0,
      "ganancia": 0.0
     }
    }
@@ -5775,9 +5865,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 3,
-   "transacciones": 15,
-   "apuesta_total": 23.68,
-   "ganancia_neta": 0.28,
+   "transacciones": 17,
+   "apuesta_total": 45.2,
+   "ganancia_neta": 21.8,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 1,
@@ -5790,9 +5880,9 @@
      "ganancia": 3.28
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 5.0,
-     "ganancia": -5.0
+     "transacciones": 3,
+     "apuesta": 26.52,
+     "ganancia": 16.52
     }
    }
   },
@@ -5893,11 +5983,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-10",
-   "dias_activos": 4,
-   "transacciones": 33,
-   "apuesta_total": 27.25,
-   "ganancia_neta": -2.75,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 36,
+   "apuesta_total": 34.25,
+   "ganancia_neta": 0.25,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 6,
@@ -5918,6 +6008,11 @@
      "transacciones": 8,
      "apuesta": 10.0,
      "ganancia": 0.0
+    },
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 7.0,
+     "ganancia": 3.0
     }
    }
   },
@@ -6392,9 +6487,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 50,
-   "apuesta_total": 485.12,
-   "ganancia_neta": -35.0,
+   "transacciones": 51,
+   "apuesta_total": 490.12,
+   "ganancia_neta": -40.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 10,
@@ -6422,9 +6517,9 @@
      "ganancia": 22.5
     },
     "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 17.5,
-     "ganancia": -17.5
+     "transacciones": 5,
+     "apuesta": 22.5,
+     "ganancia": -22.5
     }
    }
   },
@@ -6436,9 +6531,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 34,
-   "apuesta_total": 143.95,
-   "ganancia_neta": -19.93,
+   "transacciones": 37,
+   "apuesta_total": 151.95,
+   "ganancia_neta": -27.93,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 5,
@@ -6466,9 +6561,9 @@
      "ganancia": 4.18
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 4.0,
-     "ganancia": -4.0
+     "transacciones": 5,
+     "apuesta": 12.0,
+     "ganancia": -12.0
     }
    }
   },
@@ -6677,11 +6772,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 39,
-   "apuesta_total": 178.4,
-   "ganancia_neta": 1.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 40,
+   "apuesta_total": 179.4,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 3,
@@ -6707,6 +6802,11 @@
      "transacciones": 1,
      "apuesta": 2.0,
      "ganancia": -2.0
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 1.0,
+     "ganancia": -1.0
     }
    }
   },
@@ -6880,11 +6980,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 48,
-   "apuesta_total": 152.61,
-   "ganancia_neta": -7.79,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 49,
+   "apuesta_total": 154.49,
+   "ganancia_neta": -5.91,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 13,
@@ -6910,6 +7010,11 @@
      "transacciones": 9,
      "apuesta": 25.33,
      "ganancia": -15.67
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 1.88,
+     "ganancia": 1.88
     }
    }
   },
@@ -6986,11 +7091,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 22,
-   "apuesta_total": 261.74,
-   "ganancia_neta": -0.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 41,
+   "apuesta_total": 360.95,
+   "ganancia_neta": 0.01,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 2,
@@ -7016,6 +7121,11 @@
      "transacciones": 4,
      "apuesta": 34.88,
      "ganancia": -34.88
+    },
+    "2026-09-12": {
+     "transacciones": 19,
+     "apuesta": 99.21,
+     "ganancia": 0.01
     }
    }
   },
@@ -7049,11 +7159,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 9,
-   "apuesta_total": 52.57,
-   "ganancia_neta": 2.75,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 10,
+   "apuesta_total": 55.32,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 1,
@@ -7064,6 +7174,11 @@
      "transacciones": 5,
      "apuesta": 36.43,
      "ganancia": 0.61
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 2.75,
+     "ganancia": -2.75
     },
     "2026-09-08": {
      "transacciones": 2,
@@ -7085,9 +7200,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 1549,
-   "apuesta_total": 39705.26,
-   "ganancia_neta": 700.06,
+   "transacciones": 1898,
+   "apuesta_total": 49185.76,
+   "ganancia_neta": 201.56,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 64,
@@ -7110,9 +7225,9 @@
      "ganancia": 307.94
     },
     "2026-09-12": {
-     "transacciones": 722,
-     "apuesta": 18500.09,
-     "ganancia": 392.09
+     "transacciones": 1071,
+     "apuesta": 27980.59,
+     "ganancia": -106.41
     }
    }
   },
@@ -7303,9 +7418,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 185,
-   "apuesta_total": 26846.21,
-   "ganancia_neta": 12099.91,
+   "transacciones": 189,
+   "apuesta_total": 27046.21,
+   "ganancia_neta": 11899.91,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 60,
@@ -7333,9 +7448,9 @@
      "ganancia": 3637.1
     },
     "2026-09-12": {
-     "transacciones": 44,
-     "apuesta": 379.9,
-     "ganancia": -352.1
+     "transacciones": 48,
+     "apuesta": 579.9,
+     "ganancia": -552.1
     }
    }
   },
@@ -7386,9 +7501,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 3,
-   "transacciones": 18,
-   "apuesta_total": 26.3,
-   "ganancia_neta": 1.7,
+   "transacciones": 25,
+   "apuesta_total": 38.05,
+   "ganancia_neta": -0.05,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 6,
@@ -7401,9 +7516,9 @@
      "ganancia": 0.0
     },
     "2026-09-12": {
-     "transacciones": 6,
-     "apuesta": 10.25,
-     "ganancia": 1.75
+     "transacciones": 13,
+     "apuesta": 22.0,
+     "ganancia": 0.0
     }
    }
   },
@@ -7415,9 +7530,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 416,
-   "apuesta_total": 362.88,
-   "ganancia_neta": 12.0,
+   "transacciones": 424,
+   "apuesta_total": 368.1,
+   "ganancia_neta": 9.5,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 33,
@@ -7445,9 +7560,9 @@
      "ganancia": -0.93
     },
     "2026-09-12": {
-     "transacciones": 53,
-     "apuesta": 37.55,
-     "ganancia": -5.07
+     "transacciones": 61,
+     "apuesta": 42.77,
+     "ganancia": -7.57
     }
    }
   },
@@ -7522,9 +7637,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 28,
-   "apuesta_total": 70.35,
-   "ganancia_neta": 9.99,
+   "transacciones": 29,
+   "apuesta_total": 72.35,
+   "ganancia_neta": 7.99,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 5,
@@ -7552,9 +7667,9 @@
      "ganancia": -1.5
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 1.5,
-     "ganancia": -1.5
+     "transacciones": 2,
+     "apuesta": 3.5,
+     "ganancia": -3.5
     }
    }
   },
@@ -7564,11 +7679,11 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 55,
-   "apuesta_total": 68.0,
-   "ganancia_neta": -0.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 60,
+   "apuesta_total": 74.25,
+   "ganancia_neta": 3.75,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 15,
@@ -7594,6 +7709,11 @@
      "transacciones": 10,
      "apuesta": 10.0,
      "ganancia": 0.0
+    },
+    "2026-09-12": {
+     "transacciones": 5,
+     "apuesta": 6.25,
+     "ganancia": 3.75
     }
    }
   },
@@ -7605,9 +7725,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 52,
-   "apuesta_total": 571.52,
-   "ganancia_neta": -10.0,
+   "transacciones": 54,
+   "apuesta_total": 592.05,
+   "ganancia_neta": -29.47,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 8,
@@ -7635,9 +7755,9 @@
      "ganancia": 10.08
     },
     "2026-09-12": {
-     "transacciones": 3,
-     "apuesta": 32.6,
-     "ganancia": -32.6
+     "transacciones": 5,
+     "apuesta": 53.13,
+     "ganancia": -52.07
     }
    }
   },
@@ -7649,9 +7769,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 64,
-   "apuesta_total": 212.65,
-   "ganancia_neta": -0.01,
+   "transacciones": 66,
+   "apuesta_total": 224.56,
+   "ganancia_neta": 11.9,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 9,
@@ -7679,9 +7799,9 @@
      "ganancia": 0.03
     },
     "2026-09-12": {
-     "transacciones": 5,
-     "apuesta": 16.45,
-     "ganancia": -10.05
+     "transacciones": 7,
+     "apuesta": 28.36,
+     "ganancia": 1.86
     }
    }
   },
@@ -7727,9 +7847,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 4,
-   "transacciones": 2793,
-   "apuesta_total": 1315.09,
-   "ganancia_neta": 12.13,
+   "transacciones": 4352,
+   "apuesta_total": 1713.4,
+   "ganancia_neta": 0.04,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 651,
@@ -7747,9 +7867,9 @@
      "ganancia": -6.76
     },
     "2026-09-12": {
-     "transacciones": 484,
-     "apuesta": 193.67,
-     "ganancia": 12.07
+     "transacciones": 2043,
+     "apuesta": 591.98,
+     "ganancia": -0.02
     }
    }
   },
@@ -8079,9 +8199,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 5794,
-   "apuesta_total": 2666.52,
-   "ganancia_neta": 8.02,
+   "transacciones": 6274,
+   "apuesta_total": 2924.82,
+   "ganancia_neta": 7.02,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 855,
@@ -8109,9 +8229,9 @@
      "ganancia": -0.46
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 8.0,
-     "ganancia": 8.0
+     "transacciones": 481,
+     "apuesta": 266.3,
+     "ganancia": 7.0
     }
    }
   },
@@ -8384,9 +8504,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 79,
-   "apuesta_total": 1540.94,
-   "ganancia_neta": 15.0,
+   "transacciones": 83,
+   "apuesta_total": 1647.36,
+   "ganancia_neta": 105.0,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 14,
@@ -8414,9 +8534,9 @@
      "ganancia": -24.58
     },
     "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 37.41,
-     "ganancia": -37.41
+     "transacciones": 8,
+     "apuesta": 143.83,
+     "ganancia": 52.59
     }
    }
   },
@@ -8491,15 +8611,15 @@
      "apuesta": 370.34,
      "ganancia": -6.96
     },
-    "2026-09-11": {
-     "transacciones": 352,
-     "apuesta": 138.03,
-     "ganancia": 10.13
-    },
     "2026-09-12": {
      "transacciones": 114,
      "apuesta": 35.49,
      "ganancia": -0.11
+    },
+    "2026-09-11": {
+     "transacciones": 352,
+     "apuesta": 138.03,
+     "ganancia": 10.13
     }
    }
   },
@@ -8726,11 +8846,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-10",
-   "dias_activos": 3,
-   "transacciones": 10580,
-   "apuesta_total": 990.92,
-   "ganancia_neta": -37.44,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 4,
+   "transacciones": 12697,
+   "apuesta_total": 1196.62,
+   "ganancia_neta": -27.54,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 5,
@@ -8746,6 +8866,11 @@
      "transacciones": 4764,
      "apuesta": 387.63,
      "ganancia": 0.01
+    },
+    "2026-09-12": {
+     "transacciones": 2117,
+     "apuesta": 205.7,
+     "ganancia": 9.9
     }
    }
   },
@@ -8810,9 +8935,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 48,
-   "apuesta_total": 2594.92,
-   "ganancia_neta": -0.0,
+   "transacciones": 50,
+   "apuesta_total": 2894.92,
+   "ganancia_neta": 100.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 14,
@@ -8835,9 +8960,9 @@
      "ganancia": -22.8
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 14.0,
-     "ganancia": 0.0
+     "transacciones": 4,
+     "apuesta": 314.0,
+     "ganancia": 100.0
     }
    }
   },
@@ -9026,11 +9151,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-10",
-   "dias_activos": 4,
-   "transacciones": 6,
-   "apuesta_total": 12.7,
-   "ganancia_neta": 6.7,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 8,
+   "apuesta_total": 14.7,
+   "ganancia_neta": 4.7,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 1,
@@ -9046,6 +9171,11 @@
      "transacciones": 2,
      "apuesta": 4.84,
      "ganancia": 2.84
+    },
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 2.0,
+     "ganancia": -2.0
     },
     "2026-09-08": {
      "transacciones": 1,
@@ -9125,9 +9255,9 @@
    "primer_dia": "2026-09-08",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 15635,
-   "apuesta_total": 1756.91,
-   "ganancia_neta": 13.81,
+   "transacciones": 18007,
+   "apuesta_total": 2099.56,
+   "ganancia_neta": 9.76,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 5596,
@@ -9150,9 +9280,9 @@
      "ganancia": 13.04
     },
     "2026-09-12": {
-     "transacciones": 1518,
-     "apuesta": 331.64,
-     "ganancia": 0.78
+     "transacciones": 3890,
+     "apuesta": 674.29,
+     "ganancia": -3.27
     }
    }
   },
@@ -9162,11 +9292,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-08",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 31,
-   "apuesta_total": 286.79,
-   "ganancia_neta": 52.89,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 32,
+   "apuesta_total": 296.79,
+   "ganancia_neta": 42.89,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 9,
@@ -9187,6 +9317,11 @@
      "transacciones": 6,
      "apuesta": 78.2,
      "ganancia": 24.2
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 10.0,
+     "ganancia": -10.0
     }
    }
   },
@@ -9198,9 +9333,9 @@
    "primer_dia": "2026-09-08",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 25,
-   "apuesta_total": 120.38,
-   "ganancia_neta": 3.9,
+   "transacciones": 26,
+   "apuesta_total": 129.57,
+   "ganancia_neta": 13.09,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 5,
@@ -9223,9 +9358,9 @@
      "ganancia": 5.7
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 1.7,
-     "ganancia": -1.7
+     "transacciones": 2,
+     "apuesta": 10.89,
+     "ganancia": 7.49
     }
    }
   },
@@ -9343,9 +9478,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 71,
-   "apuesta_total": 236.54,
-   "ganancia_neta": 66.14,
+   "transacciones": 72,
+   "apuesta_total": 242.54,
+   "ganancia_neta": 60.14,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 9,
@@ -9367,15 +9502,15 @@
      "apuesta": 73.14,
      "ganancia": 21.14
     },
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 11.0,
+     "ganancia": -11.0
+    },
     "2026-09-09": {
      "transacciones": 1,
      "apuesta": 63.63,
      "ganancia": 63.63
-    },
-    "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 5.0,
-     "ganancia": -5.0
     }
    }
   },
@@ -9430,9 +9565,9 @@
    "primer_dia": "2026-09-08",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 779,
-   "apuesta_total": 1264.11,
-   "ganancia_neta": 0.35,
+   "transacciones": 783,
+   "apuesta_total": 1266.96,
+   "ganancia_neta": -0.0,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 198,
@@ -9455,9 +9590,9 @@
      "ganancia": 0.02
     },
     "2026-09-12": {
-     "transacciones": 37,
-     "apuesta": 20.84,
-     "ganancia": -3.44
+     "transacciones": 41,
+     "apuesta": 23.69,
+     "ganancia": -3.79
     }
    }
   },
@@ -9520,11 +9655,11 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-08",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 12,
-   "apuesta_total": 5.59,
-   "ganancia_neta": 0.35,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 13,
+   "apuesta_total": 6.19,
+   "ganancia_neta": -0.25,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 3,
@@ -9545,6 +9680,11 @@
      "transacciones": 2,
      "apuesta": 0.61,
      "ganancia": -0.61
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 0.6,
+     "ganancia": -0.6
     }
    }
   },
@@ -10227,9 +10367,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 17,
-   "apuesta_total": 84.3,
-   "ganancia_neta": 5.82,
+   "transacciones": 18,
+   "apuesta_total": 89.3,
+   "ganancia_neta": 10.82,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 5,
@@ -10242,9 +10382,9 @@
      "ganancia": 3.5
     },
     "2026-09-12": {
-     "transacciones": 5,
-     "apuesta": 26.33,
-     "ganancia": 0.29
+     "transacciones": 6,
+     "apuesta": 31.33,
+     "ganancia": 5.29
     },
     "2026-09-07": {
      "transacciones": 3,
@@ -10740,9 +10880,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 26,
-   "apuesta_total": 332.1,
-   "ganancia_neta": -0.0,
+   "transacciones": 83,
+   "apuesta_total": 497.15,
+   "ganancia_neta": 110.65,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 2,
@@ -10765,9 +10905,9 @@
      "ganancia": -15.0
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 15.0,
-     "ganancia": -15.0
+     "transacciones": 59,
+     "apuesta": 180.05,
+     "ganancia": 95.65
     }
    }
   },
@@ -10839,7 +10979,7 @@
    "dias_activos": 4,
    "transacciones": 2232,
    "apuesta_total": 877.7,
-   "ganancia_neta": 0.0,
+   "ganancia_neta": -0.0,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 607,
@@ -10888,11 +11028,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 19,
-   "apuesta_total": 30.14,
-   "ganancia_neta": -0.14,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 22,
+   "apuesta_total": 37.14,
+   "ganancia_neta": 2.86,
    "por_dia": {
     "2026-09-07": {
      "transacciones": 4,
@@ -10918,6 +11058,11 @@
      "transacciones": 2,
      "apuesta": 2.0,
      "ganancia": -2.0
+    },
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 7.0,
+     "ganancia": 3.0
     }
    }
   },
@@ -11110,11 +11255,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-08",
-   "ultimo_dia": "2026-09-09",
-   "dias_activos": 2,
-   "transacciones": 4,
-   "apuesta_total": 31.3,
-   "ganancia_neta": 1.3,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 3,
+   "transacciones": 8,
+   "apuesta_total": 84.85,
+   "ganancia_neta": 14.85,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 2,
@@ -11125,6 +11270,11 @@
      "transacciones": 2,
      "apuesta": 21.3,
      "ganancia": 11.3
+    },
+    "2026-09-12": {
+     "transacciones": 4,
+     "apuesta": 53.55,
+     "ganancia": 13.55
     }
    }
   },
@@ -11234,10 +11384,10 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-08",
-   "ultimo_dia": "2026-09-09",
-   "dias_activos": 2,
-   "transacciones": 31,
-   "apuesta_total": 74.14,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 3,
+   "transacciones": 34,
+   "apuesta_total": 94.14,
    "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-08": {
@@ -11249,6 +11399,11 @@
      "transacciones": 12,
      "apuesta": 20.09,
      "ganancia": -20.09
+    },
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 20.0,
+     "ganancia": 0.0
     }
    }
   },
@@ -11258,11 +11413,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 14,
-   "apuesta_total": 87.06,
-   "ganancia_neta": 0.5,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 15,
+   "apuesta_total": 89.06,
+   "ganancia_neta": -1.5,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 4,
@@ -11283,6 +11438,11 @@
      "transacciones": 2,
      "apuesta": 4.39,
      "ganancia": -4.39
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 2.0,
+     "ganancia": -2.0
     },
     "2026-09-07": {
      "transacciones": 1,
@@ -11321,11 +11481,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-08",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 19,
-   "apuesta_total": 45.24,
-   "ganancia_neta": 3.7,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 20,
+   "apuesta_total": 46.24,
+   "ganancia_neta": 2.7,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 6,
@@ -11346,6 +11506,11 @@
      "transacciones": 1,
      "apuesta": 1.3,
      "ganancia": -1.3
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 1.0,
+     "ganancia": -1.0
     }
    }
   },
@@ -11713,9 +11878,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 22,
-   "apuesta_total": 175.55,
-   "ganancia_neta": 15.47,
+   "transacciones": 26,
+   "apuesta_total": 201.54,
+   "ganancia_neta": 19.38,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 2,
@@ -11738,9 +11903,9 @@
      "ganancia": -9.56
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 10.0,
-     "ganancia": -10.0
+     "transacciones": 6,
+     "apuesta": 35.99,
+     "ganancia": -6.09
     },
     "2026-09-07": {
      "transacciones": 1,
@@ -11908,11 +12073,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 28,
-   "apuesta_total": 279.35,
-   "ganancia_neta": -40.79,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 30,
+   "apuesta_total": 318.29,
+   "ganancia_neta": -1.85,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 2,
@@ -11933,6 +12098,11 @@
      "transacciones": 3,
      "apuesta": 44.2,
      "ganancia": 20.2
+    },
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 38.94,
+     "ganancia": 38.94
     },
     "2026-09-07": {
      "transacciones": 3,
@@ -11973,9 +12143,9 @@
    "primer_dia": "2026-09-08",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 3,
-   "transacciones": 5,
-   "apuesta_total": 67.79,
-   "ganancia_neta": 19.79,
+   "transacciones": 6,
+   "apuesta_total": 82.79,
+   "ganancia_neta": 4.79,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 2,
@@ -11988,9 +12158,9 @@
      "ganancia": 19.99
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 6.0,
-     "ganancia": -6.0
+     "transacciones": 2,
+     "apuesta": 21.0,
+     "ganancia": -21.0
     }
    }
   },
@@ -12070,9 +12240,9 @@
    "primer_dia": "2026-09-08",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 4,
-   "transacciones": 12,
-   "apuesta_total": 38.74,
-   "ganancia_neta": -19.5,
+   "transacciones": 13,
+   "apuesta_total": 41.58,
+   "ganancia_neta": -16.66,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 1,
@@ -12090,9 +12260,9 @@
      "ganancia": -15.84
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 2.16,
-     "ganancia": -2.16
+     "transacciones": 3,
+     "apuesta": 5.0,
+     "ganancia": 0.68
     }
    }
   },
@@ -12278,14 +12448,19 @@
    "primer_dia": "2026-09-08",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 4,
-   "transacciones": 8,
-   "apuesta_total": 47.13,
-   "ganancia_neta": 7.13,
+   "transacciones": 9,
+   "apuesta_total": 52.13,
+   "ganancia_neta": 2.13,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 3,
      "apuesta": 15.95,
      "ganancia": 5.95
+    },
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 10.0,
+     "ganancia": -10.0
     },
     "2026-09-09": {
      "transacciones": 2,
@@ -12296,11 +12471,6 @@
      "transacciones": 2,
      "apuesta": 5.73,
      "ganancia": -4.27
-    },
-    "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 5.0,
-     "ganancia": -5.0
     }
    }
   },
@@ -12341,9 +12511,9 @@
    "primer_dia": "2026-09-08",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 59,
-   "apuesta_total": 319.26,
-   "ganancia_neta": 15.0,
+   "transacciones": 65,
+   "apuesta_total": 353.76,
+   "ganancia_neta": 5.0,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 8,
@@ -12366,9 +12536,9 @@
      "ganancia": -22.46
     },
     "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 23.04,
-     "ganancia": 2.46
+     "transacciones": 10,
+     "apuesta": 57.54,
+     "ganancia": -7.54
     }
    }
   },
@@ -12789,11 +12959,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 456,
-   "apuesta_total": 1744.85,
-   "ganancia_neta": 533.25,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 459,
+   "apuesta_total": 1762.85,
+   "ganancia_neta": 515.25,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 318,
@@ -12809,6 +12979,11 @@
      "transacciones": 6,
      "apuesta": 328.11,
      "ganancia": 128.11
+    },
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 18.0,
+     "ganancia": -18.0
     },
     "2026-09-07": {
      "transacciones": 1,
@@ -12997,11 +13172,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 26,
-   "apuesta_total": 588.8,
-   "ganancia_neta": -115.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 30,
+   "apuesta_total": 592.8,
+   "ganancia_neta": -119.0,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 7,
@@ -13017,6 +13192,11 @@
      "transacciones": 9,
      "apuesta": 21.91,
      "ganancia": -21.91
+    },
+    "2026-09-12": {
+     "transacciones": 4,
+     "apuesta": 4.0,
+     "ganancia": -4.0
     },
     "2026-09-07": {
      "transacciones": 6,
@@ -13060,11 +13240,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-08",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 748,
-   "apuesta_total": 133.46,
-   "ganancia_neta": 28.16,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 914,
+   "apuesta_total": 144.08,
+   "ganancia_neta": 27.38,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 211,
@@ -13085,6 +13265,11 @@
      "transacciones": 159,
      "apuesta": 11.4,
      "ganancia": -2.2
+    },
+    "2026-09-12": {
+     "transacciones": 166,
+     "apuesta": 10.62,
+     "ganancia": -0.78
     }
    }
   },
@@ -13142,7 +13327,7 @@
     "2026-09-10": {
      "transacciones": 141,
      "apuesta": 62.0,
-     "ganancia": 0.0
+     "ganancia": -0.0
     }
    }
   },
@@ -13259,9 +13444,9 @@
    "primer_dia": "2026-09-09",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 4,
-   "transacciones": 14,
-   "apuesta_total": 92.92,
-   "ganancia_neta": 32.42,
+   "transacciones": 16,
+   "apuesta_total": 98.02,
+   "ganancia_neta": 30.0,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 4,
@@ -13279,9 +13464,9 @@
      "ganancia": 22.42
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 5.0,
-     "ganancia": -5.0
+     "transacciones": 3,
+     "apuesta": 10.1,
+     "ganancia": -7.42
     }
    }
   },
@@ -13317,9 +13502,9 @@
    "primer_dia": "2026-09-08",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 5,
-   "transacciones": 53,
-   "apuesta_total": 204.8,
-   "ganancia_neta": 10.0,
+   "transacciones": 56,
+   "apuesta_total": 222.08,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 17,
@@ -13342,9 +13527,9 @@
      "ganancia": -10.39
     },
     "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 10.0,
-     "ganancia": -10.0
+     "transacciones": 7,
+     "apuesta": 27.28,
+     "ganancia": -20.0
     }
    }
   },
@@ -13476,9 +13661,9 @@
    "primer_dia": "2026-09-09",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 2,
-   "transacciones": 10,
-   "apuesta_total": 52.99,
-   "ganancia_neta": -3.01,
+   "transacciones": 11,
+   "apuesta_total": 55.99,
+   "ganancia_neta": -0.01,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 8,
@@ -13486,9 +13671,9 @@
      "ganancia": 2.99
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 6.0,
-     "ganancia": -6.0
+     "transacciones": 3,
+     "apuesta": 9.0,
+     "ganancia": -3.0
     }
    }
   },
@@ -13580,11 +13765,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-08",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 16,
-   "apuesta_total": 39.28,
-   "ganancia_neta": 5.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 17,
+   "apuesta_total": 41.28,
+   "ganancia_neta": 3.0,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 4,
@@ -13605,6 +13790,11 @@
      "transacciones": 2,
      "apuesta": 6.0,
      "ganancia": 4.0
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 2.0,
+     "ganancia": -2.0
     }
    }
   },
@@ -13821,11 +14011,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-08",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 3,
-   "transacciones": 669,
-   "apuesta_total": 326.11,
-   "ganancia_neta": 0.01,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 4,
+   "transacciones": 1048,
+   "apuesta_total": 440.09,
+   "ganancia_neta": -0.01,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 62,
@@ -13841,6 +14031,11 @@
      "transacciones": 153,
      "apuesta": 91.41,
      "ganancia": 0.01
+    },
+    "2026-09-12": {
+     "transacciones": 379,
+     "apuesta": 113.98,
+     "ganancia": -0.02
     }
    }
   },
@@ -14027,7 +14222,7 @@
    "dias_activos": 3,
    "transacciones": 539,
    "apuesta_total": 289.0,
-   "ganancia_neta": -0.0,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-08": {
      "transacciones": 90,
@@ -14304,9 +14499,9 @@
    "primer_dia": "2026-09-09",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 2,
-   "transacciones": 1198,
-   "apuesta_total": 500.17,
-   "ganancia_neta": 6.51,
+   "transacciones": 2091,
+   "apuesta_total": 983.07,
+   "ganancia_neta": -2.59,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 166,
@@ -14314,9 +14509,9 @@
      "ganancia": -2.67
     },
     "2026-09-12": {
-     "transacciones": 1032,
-     "apuesta": 221.28,
-     "ganancia": 9.18
+     "transacciones": 1925,
+     "apuesta": 704.18,
+     "ganancia": 0.08
     }
    }
   },
@@ -14326,11 +14521,11 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-09",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 2,
-   "transacciones": 7,
-   "apuesta_total": 16.5,
-   "ganancia_neta": 3.5,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 3,
+   "transacciones": 9,
+   "apuesta_total": 20.0,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 5,
@@ -14341,6 +14536,11 @@
      "transacciones": 2,
      "apuesta": 6.5,
      "ganancia": 3.5
+    },
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 3.5,
+     "ganancia": -3.5
     }
    }
   },
@@ -14475,11 +14675,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-09",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 2,
-   "transacciones": 5,
-   "apuesta_total": 24.94,
-   "ganancia_neta": 2.94,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 3,
+   "transacciones": 6,
+   "apuesta_total": 26.88,
+   "ganancia_neta": 1.0,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 2,
@@ -14490,6 +14690,11 @@
      "transacciones": 3,
      "apuesta": 11.94,
      "ganancia": -0.06
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 1.94,
+     "ganancia": -1.94
     }
    }
   },
@@ -14700,16 +14905,21 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-09",
-   "ultimo_dia": "2026-09-09",
-   "dias_activos": 1,
-   "transacciones": 1772,
-   "apuesta_total": 1458.26,
-   "ganancia_neta": 0.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 1773,
+   "apuesta_total": 1508.26,
+   "ganancia_neta": 50.0,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 1772,
      "apuesta": 1458.26,
      "ganancia": 0.0
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 50.0,
+     "ganancia": 50.0
     }
    }
   },
@@ -14719,10 +14929,10 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 5,
-   "transacciones": 15,
-   "apuesta_total": 2119.94,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 6,
+   "transacciones": 19,
+   "apuesta_total": 2179.94,
    "ganancia_neta": -540.08,
    "por_dia": {
     "2026-09-09": {
@@ -14737,6 +14947,11 @@
     },
     "2026-09-11": {
      "transacciones": 2,
+     "apuesta": 60.0,
+     "ganancia": 0.0
+    },
+    "2026-09-12": {
+     "transacciones": 4,
      "apuesta": 60.0,
      "ganancia": 0.0
     },
@@ -14789,8 +15004,8 @@
    "primer_dia": "2026-09-09",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 4,
-   "transacciones": 23,
-   "apuesta_total": 7237.76,
+   "transacciones": 33,
+   "apuesta_total": 9437.76,
    "ganancia_neta": -0.76,
    "por_dia": {
     "2026-09-09": {
@@ -14809,8 +15024,8 @@
      "ganancia": -7.3
     },
     "2026-09-12": {
-     "transacciones": 6,
-     "apuesta": 1600.1,
+     "transacciones": 16,
+     "apuesta": 3800.1,
      "ganancia": -0.1
     }
    }
@@ -14857,9 +15072,9 @@
    "primer_dia": "2026-09-07",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 6,
-   "transacciones": 11,
-   "apuesta_total": 40.3,
-   "ganancia_neta": 8.0,
+   "transacciones": 12,
+   "apuesta_total": 45.3,
+   "ganancia_neta": 3.0,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 4,
@@ -14887,9 +15102,9 @@
      "ganancia": 5.2
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 4.0,
-     "ganancia": -4.0
+     "transacciones": 2,
+     "apuesta": 9.0,
+     "ganancia": -9.0
     }
    }
   },
@@ -14928,11 +15143,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-09",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 3,
-   "transacciones": 6,
-   "apuesta_total": 36.84,
-   "ganancia_neta": -10.08,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 4,
+   "transacciones": 7,
+   "apuesta_total": 43.51,
+   "ganancia_neta": -3.41,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 4,
@@ -14943,6 +15158,11 @@
      "transacciones": 1,
      "apuesta": 3.0,
      "ganancia": -3.0
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 6.67,
+     "ganancia": 6.67
     },
     "2026-09-11": {
      "transacciones": 1,
@@ -15412,10 +15632,10 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-09",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 3,
-   "transacciones": 5967,
-   "apuesta_total": 1101.8,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 4,
+   "transacciones": 6137,
+   "apuesta_total": 1131.2,
    "ganancia_neta": -0.0,
    "por_dia": {
     "2026-09-09": {
@@ -15432,6 +15652,11 @@
      "transacciones": 2847,
      "apuesta": 507.5,
      "ganancia": -9.5
+    },
+    "2026-09-12": {
+     "transacciones": 170,
+     "apuesta": 29.4,
+     "ganancia": -0.0
     }
    }
   },
@@ -15494,16 +15719,21 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-09",
-   "ultimo_dia": "2026-09-09",
-   "dias_activos": 1,
-   "transacciones": 169,
-   "apuesta_total": 83.37,
-   "ganancia_neta": -0.03,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 525,
+   "apuesta_total": 206.21,
+   "ganancia_neta": 0.01,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 169,
      "apuesta": 83.37,
      "ganancia": -0.03
+    },
+    "2026-09-12": {
+     "transacciones": 356,
+     "apuesta": 122.84,
+     "ganancia": 0.04
     }
    }
   },
@@ -15575,11 +15805,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-09",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 3,
-   "transacciones": 2712,
-   "apuesta_total": 2094.51,
-   "ganancia_neta": 0.21,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 4,
+   "transacciones": 2883,
+   "apuesta_total": 2169.55,
+   "ganancia_neta": 0.05,
    "por_dia": {
     "2026-09-09": {
      "transacciones": 1491,
@@ -15595,6 +15825,11 @@
      "transacciones": 380,
      "apuesta": 239.28,
      "ganancia": -0.12
+    },
+    "2026-09-12": {
+     "transacciones": 171,
+     "apuesta": 75.04,
+     "ganancia": -0.16
     }
    }
   },
@@ -15821,9 +16056,9 @@
    "primer_dia": "2026-09-09",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 3,
-   "transacciones": 1576,
-   "apuesta_total": 405.0,
-   "ganancia_neta": -0.02,
+   "transacciones": 1578,
+   "apuesta_total": 525.53,
+   "ganancia_neta": -0.01,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 787,
@@ -15836,9 +16071,9 @@
      "ganancia": 14.11
     },
     "2026-09-12": {
-     "transacciones": 3,
-     "apuesta": 40.0,
-     "ganancia": 0.0
+     "transacciones": 5,
+     "apuesta": 160.53,
+     "ganancia": 0.01
     }
    }
   },
@@ -16163,16 +16398,21 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-10",
-   "ultimo_dia": "2026-09-10",
-   "dias_activos": 1,
-   "transacciones": 2,
-   "apuesta_total": 7.0,
-   "ganancia_neta": 3.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 3,
+   "apuesta_total": 7.5,
+   "ganancia_neta": 2.5,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 2,
      "apuesta": 7.0,
      "ganancia": 3.0
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 0.5,
+     "ganancia": -0.5
     }
    }
   },
@@ -16244,11 +16484,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 4,
-   "transacciones": 14,
-   "apuesta_total": 41.6,
-   "ganancia_neta": 0.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 5,
+   "transacciones": 18,
+   "apuesta_total": 55.6,
+   "ganancia_neta": 2.0,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 5,
@@ -16259,6 +16499,11 @@
      "transacciones": 5,
      "apuesta": 16.0,
      "ganancia": -2.0
+    },
+    "2026-09-12": {
+     "transacciones": 4,
+     "apuesta": 14.0,
+     "ganancia": 2.0
     },
     "2026-09-07": {
      "transacciones": 3,
@@ -16347,9 +16592,9 @@
    "primer_dia": "2026-09-10",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 3,
-   "transacciones": 22,
-   "apuesta_total": 2699.41,
-   "ganancia_neta": 335.41,
+   "transacciones": 25,
+   "apuesta_total": 2864.41,
+   "ganancia_neta": 170.41,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 7,
@@ -16362,9 +16607,9 @@
      "ganancia": -181.95
     },
     "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 265.0,
-     "ganancia": -265.0
+     "transacciones": 7,
+     "apuesta": 430.0,
+     "ganancia": -430.0
     }
    }
   },
@@ -16538,15 +16783,15 @@
      "apuesta": 130.86,
      "ganancia": 0.16
     },
-    "2026-09-11": {
-     "transacciones": 1460,
-     "apuesta": 2302.8,
-     "ganancia": 21.8
-    },
     "2026-09-12": {
      "transacciones": 812,
      "apuesta": 282.89,
      "ganancia": -1.71
+    },
+    "2026-09-11": {
+     "transacciones": 1460,
+     "apuesta": 2302.8,
+     "ganancia": 21.8
     }
    }
   },
@@ -16575,16 +16820,21 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-10",
-   "ultimo_dia": "2026-09-10",
-   "dias_activos": 1,
-   "transacciones": 929,
-   "apuesta_total": 311.19,
-   "ganancia_neta": -0.07,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 1058,
+   "apuesta_total": 358.02,
+   "ganancia_neta": -0.04,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 929,
      "apuesta": 311.19,
      "ganancia": -0.07
+    },
+    "2026-09-12": {
+     "transacciones": 129,
+     "apuesta": 46.83,
+     "ganancia": 0.03
     }
    }
   },
@@ -16715,9 +16965,9 @@
    "primer_dia": "2026-09-10",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 3,
-   "transacciones": 200,
-   "apuesta_total": 363.6,
-   "ganancia_neta": 18.04,
+   "transacciones": 205,
+   "apuesta_total": 427.6,
+   "ganancia_neta": 25.04,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 181,
@@ -16730,9 +16980,9 @@
      "ganancia": -68.0
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 2.0,
-     "ganancia": -2.0
+     "transacciones": 7,
+     "apuesta": 66.0,
+     "ganancia": 5.0
     }
    }
   },
@@ -16847,16 +17097,21 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-10",
-   "ultimo_dia": "2026-09-10",
-   "dias_activos": 1,
-   "transacciones": 83,
-   "apuesta_total": 51.13,
-   "ganancia_neta": 0.03,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 131,
+   "apuesta_total": 84.09,
+   "ganancia_neta": 0.99,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 83,
      "apuesta": 51.13,
      "ganancia": 0.03
+    },
+    "2026-09-12": {
+     "transacciones": 48,
+     "apuesta": 32.96,
+     "ganancia": 0.96
     }
    }
   },
@@ -16887,9 +17142,9 @@
    "primer_dia": "2026-09-10",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 3,
-   "transacciones": 19,
-   "apuesta_total": 165.77,
-   "ganancia_neta": 3.23,
+   "transacciones": 21,
+   "apuesta_total": 178.03,
+   "ganancia_neta": 5.49,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 4,
@@ -16902,9 +17157,9 @@
      "ganancia": -14.06
     },
     "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 11.5,
-     "ganancia": 1.82
+     "transacciones": 4,
+     "apuesta": 23.76,
+     "ganancia": 4.08
     }
    }
   },
@@ -17033,10 +17288,10 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-10",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 2,
-   "transacciones": 192,
-   "apuesta_total": 361.53,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 3,
+   "transacciones": 194,
+   "apuesta_total": 381.53,
    "ganancia_neta": 0.03,
    "por_dia": {
     "2026-09-11": {
@@ -17047,6 +17302,11 @@
     "2026-09-10": {
      "transacciones": 5,
      "apuesta": 12.0,
+     "ganancia": 0.0
+    },
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 20.0,
      "ganancia": 0.0
     }
    }
@@ -17104,12 +17364,12 @@
    "dias_activos": 1,
    "transacciones": 3,
    "apuesta_total": 23.2,
-   "ganancia_neta": -0.0,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 3,
      "apuesta": 23.2,
-     "ganancia": -0.0
+     "ganancia": 0.0
     }
    }
   },
@@ -17549,15 +17809,20 @@
    "canal": "retail",
    "estado_actual": "inactivo",
    "primer_dia": "2026-09-10",
-   "ultimo_dia": "2026-09-10",
-   "dias_activos": 1,
-   "transacciones": 196,
-   "apuesta_total": 65.54,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 287,
+   "apuesta_total": 109.94,
    "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 196,
      "apuesta": 65.54,
+     "ganancia": 0.0
+    },
+    "2026-09-12": {
+     "transacciones": 91,
+     "apuesta": 44.4,
      "ganancia": 0.0
     }
    }
@@ -17665,9 +17930,9 @@
    "primer_dia": "2026-09-10",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 3,
-   "transacciones": 2509,
-   "apuesta_total": 502.71,
-   "ganancia_neta": 1.51,
+   "transacciones": 2535,
+   "apuesta_total": 505.22,
+   "ganancia_neta": 0.02,
    "por_dia": {
     "2026-09-11": {
      "transacciones": 835,
@@ -17680,9 +17945,9 @@
      "ganancia": 0.05
     },
     "2026-09-12": {
-     "transacciones": 1384,
-     "apuesta": 318.26,
-     "ganancia": 1.46
+     "transacciones": 1410,
+     "apuesta": 320.77,
+     "ganancia": -0.03
     }
    }
   },
@@ -17797,11 +18062,11 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-10",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 2,
-   "transacciones": 24,
-   "apuesta_total": 152.86,
-   "ganancia_neta": -0.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 3,
+   "transacciones": 36,
+   "apuesta_total": 250.98,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-10": {
      "transacciones": 9,
@@ -17812,6 +18077,11 @@
      "transacciones": 15,
      "apuesta": 102.86,
      "ganancia": -0.0
+    },
+    "2026-09-12": {
+     "transacciones": 12,
+     "apuesta": 98.12,
+     "ganancia": 0.0
     }
    }
   },
@@ -17823,9 +18093,9 @@
    "primer_dia": "2026-09-11",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 2,
-   "transacciones": 24,
-   "apuesta_total": 71.08,
-   "ganancia_neta": 36.0,
+   "transacciones": 26,
+   "apuesta_total": 72.58,
+   "ganancia_neta": 34.5,
    "por_dia": {
     "2026-09-11": {
      "transacciones": 23,
@@ -17833,9 +18103,9 @@
      "ganancia": 37.0
     },
     "2026-09-12": {
-     "transacciones": 1,
-     "apuesta": 1.0,
-     "ganancia": -1.0
+     "transacciones": 3,
+     "apuesta": 2.5,
+     "ganancia": -2.5
     }
    }
   },
@@ -17998,16 +18268,21 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 1,
-   "transacciones": 1,
-   "apuesta_total": 250.0,
-   "ganancia_neta": 250.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 2,
+   "apuesta_total": 300.0,
+   "ganancia_neta": 200.0,
    "por_dia": {
     "2026-09-11": {
      "transacciones": 1,
      "apuesta": 250.0,
      "ganancia": 250.0
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 50.0,
+     "ganancia": -50.0
     }
    }
   },
@@ -18019,9 +18294,9 @@
    "primer_dia": "2026-09-11",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 2,
-   "transacciones": 23,
-   "apuesta_total": 25.54,
-   "ganancia_neta": 9.02,
+   "transacciones": 116,
+   "apuesta_total": 34.27,
+   "ganancia_neta": 9.59,
    "por_dia": {
     "2026-09-11": {
      "transacciones": 3,
@@ -18029,9 +18304,9 @@
      "ganancia": 12.05
     },
     "2026-09-12": {
-     "transacciones": 20,
-     "apuesta": 4.09,
-     "ganancia": -3.03
+     "transacciones": 113,
+     "apuesta": 12.82,
+     "ganancia": -2.46
     }
    }
   },
@@ -18110,9 +18385,9 @@
    "primer_dia": "2026-09-11",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 2,
-   "transacciones": 9,
-   "apuesta_total": 78.85,
-   "ganancia_neta": 18.85,
+   "transacciones": 19,
+   "apuesta_total": 120.6,
+   "ganancia_neta": 14.6,
    "por_dia": {
     "2026-09-11": {
      "transacciones": 5,
@@ -18120,9 +18395,9 @@
      "ganancia": 22.35
     },
     "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 36.5,
-     "ganancia": -3.5
+     "transacciones": 14,
+     "apuesta": 78.25,
+     "ganancia": -7.75
     }
    }
   },
@@ -18246,16 +18521,21 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 1,
-   "transacciones": 12,
-   "apuesta_total": 60.0,
-   "ganancia_neta": 40.0,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 16,
+   "apuesta_total": 100.0,
+   "ganancia_neta": 0.0,
    "por_dia": {
     "2026-09-11": {
      "transacciones": 12,
      "apuesta": 60.0,
      "ganancia": 40.0
+    },
+    "2026-09-12": {
+     "transacciones": 4,
+     "apuesta": 40.0,
+     "ganancia": -40.0
     }
    }
   },
@@ -18267,9 +18547,9 @@
    "primer_dia": "2026-09-11",
    "ultimo_dia": "2026-09-12",
    "dias_activos": 2,
-   "transacciones": 1046,
-   "apuesta_total": 125.22,
-   "ganancia_neta": 8.78,
+   "transacciones": 1556,
+   "apuesta_total": 171.84,
+   "ganancia_neta": -0.0,
    "por_dia": {
     "2026-09-11": {
      "transacciones": 665,
@@ -18277,9 +18557,9 @@
      "ganancia": 4.0
     },
     "2026-09-12": {
-     "transacciones": 381,
-     "apuesta": 54.74,
-     "ganancia": 4.78
+     "transacciones": 891,
+     "apuesta": 101.36,
+     "ganancia": -4.0
     }
    }
   },
@@ -18340,22 +18620,260 @@
     }
    }
   },
-  "788695103": {
-   "usuario": "50372135438",
+  "788242064": {
+   "usuario": "50373820608",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 125,
+   "apuesta_total": 32.3,
+   "ganancia_neta": 0.0,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 125,
+     "apuesta": 32.3,
+     "ganancia": 0.0
+    }
+   }
+  },
+  "788596382": {
+   "usuario": "50361615501",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 566,
+   "apuesta_total": 341.02,
+   "ganancia_neta": 0.02,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 566,
+     "apuesta": 341.02,
+     "ganancia": 0.02
+    }
+   }
+  },
+  "788350679": {
+   "usuario": "50371772804",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 1455,
+   "apuesta_total": 1219.13,
+   "ganancia_neta": 0.13,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 1455,
+     "apuesta": 1219.13,
+     "ganancia": 0.13
+    }
+   }
+  },
+  "788644745": {
+   "usuario": "50372166200",
+   "tipo": "Player Retail",
+   "canal": "retail",
+   "estado_actual": "inactivo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 6,
+   "apuesta_total": 90.0,
+   "ganancia_neta": 60.0,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 6,
+     "apuesta": 90.0,
+     "ganancia": 60.0
+    }
+   }
+  },
+  "788695193": {
+   "usuario": "50364407902",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-11",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 12,
+   "apuesta_total": 50.0,
+   "ganancia_neta": 0.0,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 7,
+     "apuesta": 17.5,
+     "ganancia": -17.5
+    },
+    "2026-09-11": {
+     "transacciones": 5,
+     "apuesta": 32.5,
+     "ganancia": 17.5
+    }
+   }
+  },
+  "788488952": {
+   "usuario": "50368334524",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 2,
+   "apuesta_total": 3.0,
+   "ganancia_neta": -3.0,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 2,
+     "apuesta": 3.0,
+     "ganancia": -3.0
+    }
+   }
+  },
+  "788260040": {
+   "usuario": "50377471816",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 372,
+   "apuesta_total": 333.4,
+   "ganancia_neta": -42.8,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 372,
+     "apuesta": 333.4,
+     "ganancia": -42.8
+    }
+   }
+  },
+  "788693750": {
+   "usuario": "50378981728",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 3,
+   "apuesta_total": 60.0,
+   "ganancia_neta": 40.0,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 60.0,
+     "ganancia": 40.0
+    }
+   }
+  },
+  "788643380": {
+   "usuario": "50379316566",
+   "tipo": "Player Retail",
+   "canal": "retail",
+   "estado_actual": "inactivo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 4,
+   "apuesta_total": 12.0,
+   "ganancia_neta": 0.0,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 4,
+     "apuesta": 12.0,
+     "ganancia": 0.0
+    }
+   }
+  },
+  "787910201": {
+   "usuario": "50361517418",
+   "tipo": "Player Retail",
+   "canal": "retail",
+   "estado_actual": "inactivo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 100,
+   "apuesta_total": 6.62,
+   "ganancia_neta": -0.24,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 100,
+     "apuesta": 6.62,
+     "ganancia": -0.24
+    }
+   }
+  },
+  "788674496": {
+   "usuario": "50376711027",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-11",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 792,
+   "apuesta_total": 274.2,
+   "ganancia_neta": 0.0,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 451,
+     "apuesta": 167.25,
+     "ganancia": -0.05
+    },
+    "2026-09-11": {
+     "transacciones": 341,
+     "apuesta": 106.95,
+     "ganancia": 0.05
+    }
+   }
+  },
+  "788019551": {
+   "usuario": "50361035266",
    "tipo": "Player Online",
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-11",
    "ultimo_dia": "2026-09-11",
    "dias_activos": 1,
-   "transacciones": 4,
-   "apuesta_total": 24.0,
-   "ganancia_neta": 6.0,
+   "transacciones": 128,
+   "apuesta_total": 58.86,
+   "ganancia_neta": 20.06,
    "por_dia": {
     "2026-09-11": {
-     "transacciones": 4,
-     "apuesta": 24.0,
-     "ganancia": 6.0
+     "transacciones": 128,
+     "apuesta": 58.86,
+     "ganancia": 20.06
+    }
+   }
+  },
+  "788691851": {
+   "usuario": "50370094156",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-11",
+   "ultimo_dia": "2026-09-11",
+   "dias_activos": 1,
+   "transacciones": 50,
+   "apuesta_total": 36.57,
+   "ganancia_neta": 20.17,
+   "por_dia": {
+    "2026-09-11": {
+     "transacciones": 50,
+     "apuesta": 36.57,
+     "ganancia": 20.17
     }
    }
   },
@@ -18375,6 +18893,49 @@
      "transacciones": 132,
      "apuesta": 551.02,
      "ganancia": 0.02
+    }
+   }
+  },
+  "788685383": {
+   "usuario": "50374626855",
+   "tipo": "Player Retail",
+   "canal": "retail",
+   "estado_actual": "inactivo",
+   "primer_dia": "2026-09-11",
+   "ultimo_dia": "2026-09-11",
+   "dias_activos": 1,
+   "transacciones": 4,
+   "apuesta_total": 15.9,
+   "ganancia_neta": 9.9,
+   "por_dia": {
+    "2026-09-11": {
+     "transacciones": 4,
+     "apuesta": 15.9,
+     "ganancia": 9.9
+    }
+   }
+  },
+  "787936973": {
+   "usuario": "50379009336",
+   "tipo": "Player Retail",
+   "canal": "retail",
+   "estado_actual": "inactivo",
+   "primer_dia": "2026-09-09",
+   "ultimo_dia": "2026-09-11",
+   "dias_activos": 2,
+   "transacciones": 4,
+   "apuesta_total": 30.0,
+   "ganancia_neta": 0.0,
+   "por_dia": {
+    "2026-09-11": {
+     "transacciones": 2,
+     "apuesta": 10.0,
+     "ganancia": 0.0
+    },
+    "2026-09-09": {
+     "transacciones": 2,
+     "apuesta": 20.0,
+     "ganancia": 0.0
     }
    }
   },
@@ -18435,173 +18996,6 @@
     }
    }
   },
-  "788019551": {
-   "usuario": "50361035266",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 1,
-   "transacciones": 128,
-   "apuesta_total": 58.86,
-   "ganancia_neta": 20.06,
-   "por_dia": {
-    "2026-09-11": {
-     "transacciones": 128,
-     "apuesta": 58.86,
-     "ganancia": 20.06
-    }
-   }
-  },
-  "787936973": {
-   "usuario": "50379009336",
-   "tipo": "Player Retail",
-   "canal": "retail",
-   "estado_actual": "inactivo",
-   "primer_dia": "2026-09-09",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 2,
-   "transacciones": 4,
-   "apuesta_total": 30.0,
-   "ganancia_neta": 0.0,
-   "por_dia": {
-    "2026-09-11": {
-     "transacciones": 2,
-     "apuesta": 10.0,
-     "ganancia": 0.0
-    },
-    "2026-09-09": {
-     "transacciones": 2,
-     "apuesta": 20.0,
-     "ganancia": 0.0
-    }
-   }
-  },
-  "788691851": {
-   "usuario": "50370094156",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 1,
-   "transacciones": 50,
-   "apuesta_total": 36.57,
-   "ganancia_neta": 20.17,
-   "por_dia": {
-    "2026-09-11": {
-     "transacciones": 50,
-     "apuesta": 36.57,
-     "ganancia": 20.17
-    }
-   }
-  },
-  "788685383": {
-   "usuario": "50374626855",
-   "tipo": "Player Retail",
-   "canal": "retail",
-   "estado_actual": "inactivo",
-   "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 1,
-   "transacciones": 4,
-   "apuesta_total": 15.9,
-   "ganancia_neta": 9.9,
-   "por_dia": {
-    "2026-09-11": {
-     "transacciones": 4,
-     "apuesta": 15.9,
-     "ganancia": 9.9
-    }
-   }
-  },
-  "788674496": {
-   "usuario": "50376711027",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 2,
-   "transacciones": 578,
-   "apuesta_total": 194.95,
-   "ganancia_neta": 0.05,
-   "por_dia": {
-    "2026-09-11": {
-     "transacciones": 341,
-     "apuesta": 106.95,
-     "ganancia": 0.05
-    },
-    "2026-09-12": {
-     "transacciones": 237,
-     "apuesta": 88.0,
-     "ganancia": -0.0
-    }
-   }
-  },
-  "787910201": {
-   "usuario": "50361517418",
-   "tipo": "Player Retail",
-   "canal": "retail",
-   "estado_actual": "inactivo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 100,
-   "apuesta_total": 6.62,
-   "ganancia_neta": -0.24,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 100,
-     "apuesta": 6.62,
-     "ganancia": -0.24
-    }
-   }
-  },
-  "788475119": {
-   "usuario": "50378540010",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 1,
-   "transacciones": 1165,
-   "apuesta_total": 599.79,
-   "ganancia_neta": 0.09,
-   "por_dia": {
-    "2026-09-11": {
-     "transacciones": 1165,
-     "apuesta": 599.79,
-     "ganancia": 0.09
-    }
-   }
-  },
-  "788695193": {
-   "usuario": "50364407902",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 2,
-   "transacciones": 10,
-   "apuesta_total": 46.5,
-   "ganancia_neta": 3.5,
-   "por_dia": {
-    "2026-09-11": {
-     "transacciones": 5,
-     "apuesta": 32.5,
-     "ganancia": 17.5
-    },
-    "2026-09-12": {
-     "transacciones": 5,
-     "apuesta": 14.0,
-     "ganancia": -14.0
-    }
-   }
-  },
   "788691716": {
    "usuario": "50370428028",
    "tipo": "Player Online",
@@ -18627,225 +19021,40 @@
    "canal": "online",
    "estado_actual": "activo",
    "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 1,
-   "transacciones": 2,
-   "apuesta_total": 5.5,
-   "ganancia_neta": 4.5,
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 3,
+   "apuesta_total": 6.0,
+   "ganancia_neta": 4.0,
    "por_dia": {
     "2026-09-11": {
      "transacciones": 2,
      "apuesta": 5.5,
      "ganancia": 4.5
+    },
+    "2026-09-12": {
+     "transacciones": 1,
+     "apuesta": 0.5,
+     "ganancia": -0.5
     }
    }
   },
-  "788242064": {
-   "usuario": "50373820608",
+  "788475119": {
+   "usuario": "50378540010",
    "tipo": "Player Online",
    "canal": "online",
    "estado_actual": "activo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
+   "primer_dia": "2026-09-11",
+   "ultimo_dia": "2026-09-11",
    "dias_activos": 1,
-   "transacciones": 125,
-   "apuesta_total": 32.3,
-   "ganancia_neta": -0.0,
+   "transacciones": 1165,
+   "apuesta_total": 599.79,
+   "ganancia_neta": 0.09,
    "por_dia": {
-    "2026-09-12": {
-     "transacciones": 125,
-     "apuesta": 32.3,
-     "ganancia": -0.0
-    }
-   }
-  },
-  "788219303": {
-   "usuario": "50374531120",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 2,
-   "apuesta_total": 7.0,
-   "ganancia_neta": 3.0,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 7.0,
-     "ganancia": 3.0
-    }
-   }
-  },
-  "788260040": {
-   "usuario": "50377471816",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 372,
-   "apuesta_total": 333.4,
-   "ganancia_neta": -42.8,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 372,
-     "apuesta": 333.4,
-     "ganancia": -42.8
-    }
-   }
-  },
-  "788596382": {
-   "usuario": "50361615501",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 566,
-   "apuesta_total": 341.02,
-   "ganancia_neta": 0.02,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 566,
-     "apuesta": 341.02,
-     "ganancia": 0.02
-    }
-   }
-  },
-  "788350679": {
-   "usuario": "50371772804",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 1455,
-   "apuesta_total": 1219.13,
-   "ganancia_neta": 0.13,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 1455,
-     "apuesta": 1219.13,
-     "ganancia": 0.13
-    }
-   }
-  },
-  "788693750": {
-   "usuario": "50378981728",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 3,
-   "apuesta_total": 60.0,
-   "ganancia_neta": 40.0,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 3,
-     "apuesta": 60.0,
-     "ganancia": 40.0
-    }
-   }
-  },
-  "788644745": {
-   "usuario": "50372166200",
-   "tipo": "Player Retail",
-   "canal": "retail",
-   "estado_actual": "inactivo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 5,
-   "apuesta_total": 84.5,
-   "ganancia_neta": 65.5,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 5,
-     "apuesta": 84.5,
-     "ganancia": 65.5
-    }
-   }
-  },
-  "788488952": {
-   "usuario": "50368334524",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 2,
-   "apuesta_total": 3.0,
-   "ganancia_neta": -3.0,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 3.0,
-     "ganancia": -3.0
-    }
-   }
-  },
-  "788643380": {
-   "usuario": "50379316566",
-   "tipo": "Player Retail",
-   "canal": "retail",
-   "estado_actual": "inactivo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 4,
-   "apuesta_total": 12.0,
-   "ganancia_neta": 0.0,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 4,
-     "apuesta": 12.0,
-     "ganancia": 0.0
-    }
-   }
-  },
-  "788537234": {
-   "usuario": "50379907474",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 113,
-   "apuesta_total": 39.0,
-   "ganancia_neta": 8.1,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 113,
-     "apuesta": 39.0,
-     "ganancia": 8.1
-    }
-   }
-  },
-  "788692898": {
-   "usuario": "50372054143",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-12",
-   "ultimo_dia": "2026-09-12",
-   "dias_activos": 1,
-   "transacciones": 2,
-   "apuesta_total": 20.0,
-   "ganancia_neta": 0.0,
-   "por_dia": {
-    "2026-09-12": {
-     "transacciones": 2,
-     "apuesta": 20.0,
-     "ganancia": 0.0
+    "2026-09-11": {
+     "transacciones": 1165,
+     "apuesta": 599.79,
+     "ganancia": 0.09
     }
    }
   },
@@ -18868,136 +19077,198 @@
     }
    }
   },
-  "787841819": {
-   "usuario": "50378647797",
+  "788692898": {
+   "usuario": "50372054143",
    "tipo": "Player Online",
    "canal": "online",
    "estado_actual": "activo",
-   "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-07",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
    "dias_activos": 1,
-   "transacciones": 1,
-   "apuesta_total": 2.63,
-   "ganancia_neta": 2.63,
+   "transacciones": 3,
+   "apuesta_total": 60.0,
+   "ganancia_neta": 40.0,
    "por_dia": {
-    "2026-09-07": {
-     "transacciones": 1,
-     "apuesta": 2.63,
-     "ganancia": 2.63
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 60.0,
+     "ganancia": 40.0
     }
    }
   },
-  "788665988": {
-   "usuario": "50371935576",
+  "788695103": {
+   "usuario": "50372135438",
    "tipo": "Player Online",
    "canal": "online",
    "estado_actual": "activo",
-   "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-07",
-   "dias_activos": 1,
-   "transacciones": 1,
-   "apuesta_total": 2.8,
-   "ganancia_neta": 2.8,
+   "primer_dia": "2026-09-11",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 2,
+   "transacciones": 5,
+   "apuesta_total": 27.0,
+   "ganancia_neta": 3.0,
    "por_dia": {
-    "2026-09-07": {
+    "2026-09-11": {
+     "transacciones": 4,
+     "apuesta": 24.0,
+     "ganancia": 6.0
+    },
+    "2026-09-12": {
      "transacciones": 1,
-     "apuesta": 2.8,
-     "ganancia": 2.8
+     "apuesta": 3.0,
+     "ganancia": -3.0
     }
    }
   },
-  "788668142": {
-   "usuario": "50378079892",
+  "788219303": {
+   "usuario": "50374531120",
    "tipo": "Player Online",
    "canal": "online",
    "estado_actual": "activo",
-   "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-07",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
    "dias_activos": 1,
-   "transacciones": 1,
-   "apuesta_total": 3.72,
+   "transacciones": 3,
+   "apuesta_total": 8.0,
+   "ganancia_neta": 2.0,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 8.0,
+     "ganancia": 2.0
+    }
+   }
+  },
+  "788537234": {
+   "usuario": "50379907474",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 476,
+   "apuesta_total": 785.92,
+   "ganancia_neta": 0.02,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 476,
+     "apuesta": 785.92,
+     "ganancia": 0.02
+    }
+   }
+  },
+  "788193923": {
+   "usuario": "50363044250",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 385,
+   "apuesta_total": 57.32,
    "ganancia_neta": 3.72,
    "por_dia": {
-    "2026-09-07": {
-     "transacciones": 1,
-     "apuesta": 3.72,
+    "2026-09-12": {
+     "transacciones": 385,
+     "apuesta": 57.32,
      "ganancia": 3.72
     }
    }
   },
-  "788158529": {
-   "usuario": "50370686054",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-07",
+  "787790903": {
+   "usuario": "50370999612",
+   "tipo": "Player Retail",
+   "canal": "retail",
+   "estado_actual": "inactivo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
    "dias_activos": 1,
-   "transacciones": 2,
-   "apuesta_total": 10.8,
-   "ganancia_neta": 0.0,
+   "transacciones": 61,
+   "apuesta_total": 12.93,
+   "ganancia_neta": -0.01,
    "por_dia": {
-    "2026-09-07": {
-     "transacciones": 2,
-     "apuesta": 10.8,
-     "ganancia": 0.0
+    "2026-09-12": {
+     "transacciones": 61,
+     "apuesta": 12.93,
+     "ganancia": -0.01
     }
    }
   },
-  "788585315": {
-   "usuario": "50360146082",
+  "788240468": {
+   "usuario": "50369959109",
    "tipo": "Player Online",
    "canal": "online",
    "estado_actual": "activo",
-   "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-07",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
    "dias_activos": 1,
-   "transacciones": 1,
-   "apuesta_total": 0.02,
-   "ganancia_neta": -0.02,
+   "transacciones": 3,
+   "apuesta_total": 55.0,
+   "ganancia_neta": 45.0,
    "por_dia": {
-    "2026-09-07": {
-     "transacciones": 1,
-     "apuesta": 0.02,
-     "ganancia": -0.02
+    "2026-09-12": {
+     "transacciones": 3,
+     "apuesta": 55.0,
+     "ganancia": 45.0
     }
    }
   },
-  "788576945": {
-   "usuario": "50372729950",
+  "788362106": {
+   "usuario": "50372945681",
    "tipo": "Player Online",
    "canal": "online",
    "estado_actual": "activo",
-   "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-07",
-   "dias_activos": 1,
-   "transacciones": 1,
-   "apuesta_total": 0.4,
-   "ganancia_neta": -0.4,
-   "por_dia": {
-    "2026-09-07": {
-     "transacciones": 1,
-     "apuesta": 0.4,
-     "ganancia": -0.4
-    }
-   }
-  },
-  "788190098": {
-   "usuario": "50361354840",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-07",
-   "ultimo_dia": "2026-09-07",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
    "dias_activos": 1,
    "transacciones": 4,
-   "apuesta_total": 1.0,
-   "ganancia_neta": -1.0,
+   "apuesta_total": 225.66,
+   "ganancia_neta": 175.66,
    "por_dia": {
-    "2026-09-07": {
+    "2026-09-12": {
      "transacciones": 4,
-     "apuesta": 1.0,
-     "ganancia": -1.0
+     "apuesta": 225.66,
+     "ganancia": 175.66
+    }
+   }
+  },
+  "788406926": {
+   "usuario": "50371316208",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 129,
+   "apuesta_total": 20.17,
+   "ganancia_neta": 0.09,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 129,
+     "apuesta": 20.17,
+     "ganancia": 0.09
+    }
+   }
+  },
+  "788590181": {
+   "usuario": "50363086501",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-12",
+   "ultimo_dia": "2026-09-12",
+   "dias_activos": 1,
+   "transacciones": 18,
+   "apuesta_total": 28.25,
+   "ganancia_neta": 21.75,
+   "por_dia": {
+    "2026-09-12": {
+     "transacciones": 18,
+     "apuesta": 28.25,
+     "ganancia": 21.75
     }
    }
   },
@@ -19039,6 +19310,44 @@
     }
    }
   },
+  "788576945": {
+   "usuario": "50372729950",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-07",
+   "ultimo_dia": "2026-09-07",
+   "dias_activos": 1,
+   "transacciones": 1,
+   "apuesta_total": 0.4,
+   "ganancia_neta": -0.4,
+   "por_dia": {
+    "2026-09-07": {
+     "transacciones": 1,
+     "apuesta": 0.4,
+     "ganancia": -0.4
+    }
+   }
+  },
+  "788190098": {
+   "usuario": "50361354840",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-07",
+   "ultimo_dia": "2026-09-07",
+   "dias_activos": 1,
+   "transacciones": 4,
+   "apuesta_total": 1.0,
+   "ganancia_neta": -1.0,
+   "por_dia": {
+    "2026-09-07": {
+     "transacciones": 4,
+     "apuesta": 1.0,
+     "ganancia": -1.0
+    }
+   }
+  },
   "788201651": {
    "usuario": "50370988317",
    "tipo": "Player Online",
@@ -19055,6 +19364,101 @@
      "transacciones": 1,
      "apuesta": 1.0,
      "ganancia": -1.0
+    }
+   }
+  },
+  "788158529": {
+   "usuario": "50370686054",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-07",
+   "ultimo_dia": "2026-09-07",
+   "dias_activos": 1,
+   "transacciones": 2,
+   "apuesta_total": 10.8,
+   "ganancia_neta": 0.0,
+   "por_dia": {
+    "2026-09-07": {
+     "transacciones": 2,
+     "apuesta": 10.8,
+     "ganancia": 0.0
+    }
+   }
+  },
+  "788585315": {
+   "usuario": "50360146082",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-07",
+   "ultimo_dia": "2026-09-07",
+   "dias_activos": 1,
+   "transacciones": 1,
+   "apuesta_total": 0.02,
+   "ganancia_neta": -0.02,
+   "por_dia": {
+    "2026-09-07": {
+     "transacciones": 1,
+     "apuesta": 0.02,
+     "ganancia": -0.02
+    }
+   }
+  },
+  "788665988": {
+   "usuario": "50371935576",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-07",
+   "ultimo_dia": "2026-09-07",
+   "dias_activos": 1,
+   "transacciones": 1,
+   "apuesta_total": 2.8,
+   "ganancia_neta": 2.8,
+   "por_dia": {
+    "2026-09-07": {
+     "transacciones": 1,
+     "apuesta": 2.8,
+     "ganancia": 2.8
+    }
+   }
+  },
+  "787841819": {
+   "usuario": "50378647797",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-07",
+   "ultimo_dia": "2026-09-07",
+   "dias_activos": 1,
+   "transacciones": 1,
+   "apuesta_total": 2.63,
+   "ganancia_neta": 2.63,
+   "por_dia": {
+    "2026-09-07": {
+     "transacciones": 1,
+     "apuesta": 2.63,
+     "ganancia": 2.63
+    }
+   }
+  },
+  "788668142": {
+   "usuario": "50378079892",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-07",
+   "ultimo_dia": "2026-09-07",
+   "dias_activos": 1,
+   "transacciones": 1,
+   "apuesta_total": 3.72,
+   "ganancia_neta": 3.72,
+   "por_dia": {
+    "2026-09-07": {
+     "transacciones": 1,
+     "apuesta": 3.72,
+     "ganancia": 3.72
     }
    }
   },
@@ -19336,34 +19740,15 @@
    "apuesta_total": 24.0,
    "ganancia_neta": 0.0,
    "por_dia": {
-    "2026-09-11": {
-     "transacciones": 1,
-     "apuesta": 12.0,
-     "ganancia": -12.0
-    },
     "2026-09-10": {
      "transacciones": 1,
      "apuesta": 12.0,
      "ganancia": 12.0
-    }
-   }
-  },
-  "788693066": {
-   "usuario": "50379711369",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 1,
-   "transacciones": 1,
-   "apuesta_total": 11.3,
-   "ganancia_neta": 11.3,
-   "por_dia": {
+    },
     "2026-09-11": {
      "transacciones": 1,
-     "apuesta": 11.3,
-     "ganancia": 11.3
+     "apuesta": 12.0,
+     "ganancia": -12.0
     }
    }
   },
@@ -19386,6 +19771,25 @@
     }
    }
   },
+  "788693066": {
+   "usuario": "50379711369",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-11",
+   "ultimo_dia": "2026-09-11",
+   "dias_activos": 1,
+   "transacciones": 1,
+   "apuesta_total": 11.3,
+   "ganancia_neta": 11.3,
+   "por_dia": {
+    "2026-09-11": {
+     "transacciones": 1,
+     "apuesta": 11.3,
+     "ganancia": 11.3
+    }
+   }
+  },
   "788225528": {
    "usuario": "50370620937",
    "tipo": "Player Online",
@@ -19402,25 +19806,6 @@
      "transacciones": 1,
      "apuesta": 0.04,
      "ganancia": -0.04
-    }
-   }
-  },
-  "788661212": {
-   "usuario": "50375690092",
-   "tipo": "Player Online",
-   "canal": "online",
-   "estado_actual": "activo",
-   "primer_dia": "2026-09-11",
-   "ultimo_dia": "2026-09-11",
-   "dias_activos": 1,
-   "transacciones": 1,
-   "apuesta_total": 5.0,
-   "ganancia_neta": -5.0,
-   "por_dia": {
-    "2026-09-11": {
-     "transacciones": 1,
-     "apuesta": 5.0,
-     "ganancia": -5.0
     }
    }
   },
@@ -19459,6 +19844,25 @@
      "transacciones": 1,
      "apuesta": 15.3,
      "ganancia": 15.3
+    }
+   }
+  },
+  "788661212": {
+   "usuario": "50375690092",
+   "tipo": "Player Online",
+   "canal": "online",
+   "estado_actual": "activo",
+   "primer_dia": "2026-09-11",
+   "ultimo_dia": "2026-09-11",
+   "dias_activos": 1,
+   "transacciones": 1,
+   "apuesta_total": 5.0,
+   "ganancia_neta": -5.0,
+   "por_dia": {
+    "2026-09-11": {
+     "transacciones": 1,
+     "apuesta": 5.0,
+     "ganancia": -5.0
     }
    }
   }
