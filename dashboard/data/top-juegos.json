@@ -1,6 +1,6 @@
 {
  "version": "1.0",
- "actualizado": "2026-09-14T05:53:16",
+ "actualizado": "2026-09-14T11:42:41",
  "periodos_disponibles": [
   "2026-08",
   "2026-09"
@@ -18,15 +18,15 @@
     "titulo": "Voltage Blitz Rapid",
     "proveedor": "Rubyplay",
     "categoria": "casino",
-    "jugadas": 9239,
-    "apuesta": 3691.35
+    "jugadas": 9473,
+    "apuesta": 3749.05
    },
    {
     "titulo": "Platipus",
     "proveedor": "Platipus",
     "categoria": "casino",
-    "jugadas": 9191,
-    "apuesta": 5178.48
+    "jugadas": 9449,
+    "apuesta": 5275.53
    },
    {
     "titulo": "Joker`s Jewels Hot",
@@ -81,8 +81,8 @@
     "titulo": "4 Super Clover Pots",
     "proveedor": "3Oaks",
     "categoria": "casino",
-    "jugadas": 5367,
-    "apuesta": 3165.22
+    "jugadas": 5381,
+    "apuesta": 3187.52
    },
    {
     "titulo": "Lucky Streak 3",
@@ -137,8 +137,15 @@
     "titulo": "Live Casino",
     "proveedor": "Pragmaticplay",
     "categoria": "casino",
-    "jugadas": 3691,
-    "apuesta": 90940.22
+    "jugadas": 3761,
+    "apuesta": 93962.22
+   },
+   {
+    "titulo": "Fishinator",
+    "proveedor": "Solidicon",
+    "categoria": "casino",
+    "jugadas": 3667,
+    "apuesta": 1180.93
    },
    {
     "titulo": "Wild Hot 40 Free Spins",
@@ -155,11 +162,11 @@
     "apuesta": 1799.99
    },
    {
-    "titulo": "Fishinator",
-    "proveedor": "Solidicon",
+    "titulo": "Live casino",
+    "proveedor": "Evolution",
     "categoria": "casino",
-    "jugadas": 3391,
-    "apuesta": 1133.9
+    "jugadas": 3357,
+    "apuesta": 52290.28
    },
    {
     "titulo": "Fortune Garuda 1000",
@@ -172,15 +179,8 @@
     "titulo": "Olympus Rivals",
     "proveedor": "Amigogaming BCW",
     "categoria": "casino",
-    "jugadas": 3154,
-    "apuesta": 3577.15
-   },
-   {
-    "titulo": "Live casino",
-    "proveedor": "Evolution",
-    "categoria": "casino",
-    "jugadas": 3150,
-    "apuesta": 46330.03
+    "jugadas": 3155,
+    "apuesta": 3578.15
    },
    {
     "titulo": "Wealth Bells 40",
@@ -188,6 +188,20 @@
     "categoria": "casino",
     "jugadas": 3077,
     "apuesta": 849.8
+   },
+   {
+    "titulo": "3 Super Hot Teapots",
+    "proveedor": "3Oaks",
+    "categoria": "casino",
+    "jugadas": 2957,
+    "apuesta": 827.09
+   },
+   {
+    "titulo": "Regal Coins Hold and Win",
+    "proveedor": "Booming",
+    "categoria": "casino",
+    "jugadas": 2915,
+    "apuesta": 1340.5
    },
    {
     "titulo": "Very Hot 5",
@@ -204,25 +218,18 @@
     "apuesta": 903.85
    },
    {
-    "titulo": "3 Super Hot Teapots",
-    "proveedor": "3Oaks",
+    "titulo": "4 Supercharged Clovers: Hold and Win",
+    "proveedor": "Playson",
     "categoria": "casino",
-    "jugadas": 2784,
-    "apuesta": 769.1
-   },
-   {
-    "titulo": "Regal Coins Hold and Win",
-    "proveedor": "Booming",
-    "categoria": "casino",
-    "jugadas": 2718,
-    "apuesta": 1290.4
+    "jugadas": 2776,
+    "apuesta": 732.6
    },
    {
     "titulo": "Fruity Win 40",
     "proveedor": "Fazi",
     "categoria": "casino",
-    "jugadas": 2693,
-    "apuesta": 1513.36
+    "jugadas": 2717,
+    "apuesta": 1517.68
    },
    {
     "titulo": "Voltage Blitz Heat Rush",
@@ -237,13 +244,6 @@
     "categoria": "casino",
     "jugadas": 2614,
     "apuesta": 2773.42
-   },
-   {
-    "titulo": "4 Supercharged Clovers: Hold and Win",
-    "proveedor": "Playson",
-    "categoria": "casino",
-    "jugadas": 2463,
-    "apuesta": 685.75
    },
    {
     "titulo": "Baseball",
@@ -291,8 +291,15 @@
     "titulo": "1000 Olympus Rivals",
     "proveedor": "Amigogaming BCW",
     "categoria": "casino",
-    "jugadas": 2061,
-    "apuesta": 3348.0
+    "jugadas": 2077,
+    "apuesta": 3440.0
+   },
+   {
+    "titulo": "4 Chili Pots: Hold and Win",
+    "proveedor": "Playson",
+    "categoria": "casino",
+    "jugadas": 2053,
+    "apuesta": 629.14
    },
    {
     "titulo": "Super Joker",
@@ -302,18 +309,18 @@
     "apuesta": 730.78
    },
    {
-    "titulo": "4 Chili Pots: Hold and Win",
-    "proveedor": "Playson",
-    "categoria": "casino",
-    "jugadas": 1980,
-    "apuesta": 620.83
-   },
-   {
     "titulo": "Hot Fortune Wheel",
     "proveedor": "Mojos-Slots",
     "categoria": "casino",
     "jugadas": 1976,
     "apuesta": 28559.67
+   },
+   {
+    "titulo": "Moon Girls",
+    "proveedor": "Amigogaming BCW",
+    "categoria": "casino",
+    "jugadas": 1972,
+    "apuesta": 2754.1
    },
    {
     "titulo": "Fortune Balloons",
@@ -337,11 +344,11 @@
     "apuesta": 508.22
    },
    {
-    "titulo": "Moon Girls",
-    "proveedor": "Amigogaming BCW",
+    "titulo": "Pirate Queen 9999",
+    "proveedor": "TaDa",
     "categoria": "casino",
-    "jugadas": 1858,
-    "apuesta": 2684.0
+    "jugadas": 1869,
+    "apuesta": 2135.9
    },
    {
     "titulo": "Cloud Piggies",
@@ -386,11 +393,18 @@
     "apuesta": 673.26
    },
    {
-    "titulo": "Pirate Queen 9999",
-    "proveedor": "TaDa",
+    "titulo": "5 Candy Eggs",
+    "proveedor": "Amigogaming BCW",
+    "categoria": "casino",
+    "jugadas": 1669,
+    "apuesta": 3047.5
+   },
+   {
+    "titulo": "Hat-Trick Spin",
+    "proveedor": "Mancala",
     "categoria": "casino",
     "jugadas": 1657,
-    "apuesta": 1997.8
+    "apuesta": 2669.2
    },
    {
     "titulo": "5 Fruit Invaders",
@@ -400,11 +414,18 @@
     "apuesta": 660.45
    },
    {
+    "titulo": "Eye of the Storm",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 1598,
+    "apuesta": 265.9
+   },
+   {
     "titulo": "Thunder Coins XXL: Multicoin",
     "proveedor": "Playson",
     "categoria": "casino",
-    "jugadas": 1572,
-    "apuesta": 607.5
+    "jugadas": 1573,
+    "apuesta": 607.6
    },
    {
     "titulo": "The Great Chicken Escape",
@@ -419,6 +440,13 @@
     "categoria": "casino",
     "jugadas": 1567,
     "apuesta": 448.3
+   },
+   {
+    "titulo": "1001 Fruit Wishes",
+    "proveedor": "Amigogaming BCW",
+    "categoria": "casino",
+    "jugadas": 1554,
+    "apuesta": 1355.75
    },
    {
     "titulo": "Dazzling Crown",
@@ -461,13 +489,6 @@
     "categoria": "casino",
     "jugadas": 1450,
     "apuesta": 455.61
-   },
-   {
-    "titulo": "Hat-Trick Spin",
-    "proveedor": "Mancala",
-    "categoria": "casino",
-    "jugadas": 1406,
-    "apuesta": 2516.4
    },
    {
     "titulo": "Chests of Cai Shen 2",
@@ -554,13 +575,6 @@
     "apuesta": 1025.6
    },
    {
-    "titulo": "5 Candy Eggs",
-    "proveedor": "Amigogaming BCW",
-    "categoria": "casino",
-    "jugadas": 1262,
-    "apuesta": 2566.0
-   },
-   {
     "titulo": "Fox Gold Rush",
     "proveedor": "Onlyplay",
     "categoria": "casino",
@@ -631,18 +645,18 @@
     "apuesta": 454.5
    },
    {
-    "titulo": "1001 Fruit Wishes",
-    "proveedor": "Amigogaming BCW",
-    "categoria": "casino",
-    "jugadas": 1122,
-    "apuesta": 1025.8
-   },
-   {
     "titulo": "Coin Strike XXL: Multicoin",
     "proveedor": "Playson",
     "categoria": "casino",
     "jugadas": 1114,
     "apuesta": 364.8
+   },
+   {
+    "titulo": "Fruit Shop",
+    "proveedor": "Netent",
+    "categoria": "casino",
+    "jugadas": 1113,
+    "apuesta": 410.2
    },
    {
     "titulo": "Eternal Diamonds",
@@ -750,6 +764,13 @@
     "apuesta": 768.9
    },
    {
+    "titulo": "Fruit Shop Megaways",
+    "proveedor": "Netent",
+    "categoria": "casino",
+    "jugadas": 968,
+    "apuesta": 536.65
+   },
+   {
     "titulo": "Mayan Cache",
     "proveedor": "Rubyplay",
     "categoria": "casino",
@@ -788,8 +809,15 @@
     "titulo": "Aviator Studio",
     "proveedor": "Aviator Studio",
     "categoria": "casino",
-    "jugadas": 867,
-    "apuesta": 1415.03
+    "jugadas": 876,
+    "apuesta": 1430.1
+   },
+   {
+    "titulo": "Fortune Garuda 500",
+    "proveedor": "TaDa",
+    "categoria": "casino",
+    "jugadas": 862,
+    "apuesta": 440.64
    },
    {
     "titulo": "Wild Bounty Showdown",
@@ -797,13 +825,6 @@
     "categoria": "casino",
     "jugadas": 856,
     "apuesta": 184.12
-   },
-   {
-    "titulo": "Eye of the Storm",
-    "proveedor": "Pragmaticplay",
-    "categoria": "casino",
-    "jugadas": 855,
-    "apuesta": 148.35
    },
    {
     "titulo": "Gods of Sand",
@@ -825,6 +846,13 @@
     "categoria": "casino",
     "jugadas": 829,
     "apuesta": 316.2
+   },
+   {
+    "titulo": "Lucky Drums 88",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 828,
+    "apuesta": 605.9
    },
    {
     "titulo": "A Big Cherry",
@@ -897,18 +925,18 @@
     "apuesta": 1270.15
    },
    {
-    "titulo": "Fortune Garuda 500",
-    "proveedor": "TaDa",
-    "categoria": "casino",
-    "jugadas": 774,
-    "apuesta": 391.62
-   },
-   {
     "titulo": "5 Lions Dance",
     "proveedor": "Pragmaticplay",
     "categoria": "casino",
     "jugadas": 766,
     "apuesta": 280.18
+   },
+   {
+    "titulo": "Prosperity Lanterns",
+    "proveedor": "PGsoft",
+    "categoria": "casino",
+    "jugadas": 755,
+    "apuesta": 337.24
    },
    {
     "titulo": "The Luxe",
@@ -1009,13 +1037,6 @@
     "apuesta": 184.9
    },
    {
-    "titulo": "Prosperity Lanterns",
-    "proveedor": "PGsoft",
-    "categoria": "casino",
-    "jugadas": 661,
-    "apuesta": 303.12
-   },
-   {
     "titulo": "Fortune Vault Force 5",
     "proveedor": "EAgaming",
     "categoria": "casino",
@@ -1042,13 +1063,6 @@
     "categoria": "casino",
     "jugadas": 623,
     "apuesta": 326.05
-   },
-   {
-    "titulo": "Fruit Shop",
-    "proveedor": "Netent",
-    "categoria": "casino",
-    "jugadas": 619,
-    "apuesta": 245.8
    },
    {
     "titulo": "Flight Mode",
@@ -1170,6 +1184,13 @@
     "apuesta": 307.02
    },
    {
+    "titulo": "Fruit Shop Grand Re-Opening",
+    "proveedor": "Netent",
+    "categoria": "casino",
+    "jugadas": 532,
+    "apuesta": 283.98
+   },
+   {
     "titulo": "Zeus Blitz Power Strike",
     "proveedor": "Gameart Withdraw (121)",
     "categoria": "casino",
@@ -1203,6 +1224,20 @@
     "categoria": "casino",
     "jugadas": 507,
     "apuesta": 100.11
+   },
+   {
+    "titulo": "3 Super Volcanoes",
+    "proveedor": "Evoplay",
+    "categoria": "casino",
+    "jugadas": 498,
+    "apuesta": 180.02
+   },
+   {
+    "titulo": "4 Fortune Clovers",
+    "proveedor": "3Oaks",
+    "categoria": "casino",
+    "jugadas": 495,
+    "apuesta": 158.64
    },
    {
     "titulo": "3 Royal Joker",
@@ -1324,18 +1359,18 @@
     "apuesta": 762.4
    },
    {
+    "titulo": "Voltage Blitz Zeus Up",
+    "proveedor": "Rubyplay",
+    "categoria": "casino",
+    "jugadas": 442,
+    "apuesta": 156.1
+   },
+   {
     "titulo": "Mahjong Dragon Ways",
     "proveedor": "Kingmidas",
     "categoria": "casino",
     "jugadas": 442,
     "apuesta": 119.35
-   },
-   {
-    "titulo": "3 Super Volcanoes",
-    "proveedor": "Evoplay",
-    "categoria": "casino",
-    "jugadas": 441,
-    "apuesta": 159.44
    },
    {
     "titulo": "Burning Classics 5000",
@@ -1387,18 +1422,18 @@
     "apuesta": 312.05
    },
    {
-    "titulo": "Voltage Blitz Zeus Up",
-    "proveedor": "Rubyplay",
-    "categoria": "casino",
-    "jugadas": 416,
-    "apuesta": 139.7
-   },
-   {
     "titulo": "3 Spirit Volcanoes",
     "proveedor": "Amigogaming BCW",
     "categoria": "casino",
     "jugadas": 414,
     "apuesta": 315.85
+   },
+   {
+    "titulo": "Coin Strike XXL: Hold and Win",
+    "proveedor": "Playson",
+    "categoria": "casino",
+    "jugadas": 410,
+    "apuesta": 135.9
    },
    {
     "titulo": "Clover Boost Hold and Win",
@@ -1436,6 +1471,13 @@
     "apuesta": 153.71
    },
    {
+    "titulo": "Fruit Shop Frenzy",
+    "proveedor": "Netent",
+    "categoria": "casino",
+    "jugadas": 393,
+    "apuesta": 354.14
+   },
+   {
     "titulo": "Mega Mummy - Hold & Hit 3x3",
     "proveedor": "Spinomenal",
     "categoria": "casino",
@@ -1448,6 +1490,13 @@
     "categoria": "casino",
     "jugadas": 393,
     "apuesta": 66.3
+   },
+   {
+    "titulo": "Spaceman",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 386,
+    "apuesta": 569.98
    },
    {
     "titulo": "Diamond Explosion 7s SE",
@@ -1492,11 +1541,11 @@
     "apuesta": 267.92
    },
    {
-    "titulo": "Coin Strike XXL: Hold and Win",
-    "proveedor": "Playson",
+    "titulo": "Blue Roulette",
+    "proveedor": "Skywind Live",
     "categoria": "casino",
-    "jugadas": 372,
-    "apuesta": 127.3
+    "jugadas": 370,
+    "apuesta": 32460.0
    },
    {
     "titulo": "Fortune Bags",
@@ -1546,6 +1595,13 @@
     "categoria": "casino",
     "jugadas": 352,
     "apuesta": 159.65
+   },
+   {
+    "titulo": "Coin Strike 2: Hold and Win",
+    "proveedor": "Playson",
+    "categoria": "casino",
+    "jugadas": 348,
+    "apuesta": 397.1
    },
    {
     "titulo": "Adventurer Shop",
@@ -1618,13 +1674,6 @@
     "apuesta": 263.4
    },
    {
-    "titulo": "Spaceman",
-    "proveedor": "Pragmaticplay",
-    "categoria": "casino",
-    "jugadas": 338,
-    "apuesta": 495.35
-   },
-   {
     "titulo": "Cash Patrol",
     "proveedor": "Pragmaticplay",
     "categoria": "casino",
@@ -1644,13 +1693,6 @@
     "categoria": "casino",
     "jugadas": 336,
     "apuesta": 92.82
-   },
-   {
-    "titulo": "Lucky Drums 88",
-    "proveedor": "Pragmaticplay",
-    "categoria": "casino",
-    "jugadas": 332,
-    "apuesta": 315.42
    },
    {
     "titulo": "Gates of Olympus",
@@ -1856,13 +1898,6 @@
     "apuesta": 51.94
    },
    {
-    "titulo": "Fruit Shop Megaways",
-    "proveedor": "Netent",
-    "categoria": "casino",
-    "jugadas": 276,
-    "apuesta": 149.93
-   },
-   {
     "titulo": "Joker`s Clash",
     "proveedor": "In-Out",
     "categoria": "casino",
@@ -1952,13 +1987,6 @@
     "categoria": "casino",
     "jugadas": 254,
     "apuesta": 83.7
-   },
-   {
-    "titulo": "Coin Strike 2: Hold and Win",
-    "proveedor": "Playson",
-    "categoria": "casino",
-    "jugadas": 252,
-    "apuesta": 134.5
    },
    {
     "titulo": "Wild Moose Bonanza",
@@ -2227,11 +2255,25 @@
     "apuesta": 147.19
    },
    {
+    "titulo": "Mad Hit Ho Ho Hot Pudding",
+    "proveedor": "Rubyplay",
+    "categoria": "casino",
+    "jugadas": 202,
+    "apuesta": 55.8
+   },
+   {
     "titulo": "Chicken Road",
     "proveedor": "In-Out",
     "categoria": "casino",
     "jugadas": 199,
     "apuesta": 175.54
+   },
+   {
+    "titulo": "12 Zodiacs",
+    "proveedor": "Habanero",
+    "categoria": "casino",
+    "jugadas": 199,
+    "apuesta": 97.2
    },
    {
     "titulo": "Thunder Tiger",
@@ -2274,6 +2316,13 @@
     "categoria": "casino",
     "jugadas": 196,
     "apuesta": 92.36
+   },
+   {
+    "titulo": "Aviatrix",
+    "proveedor": "Aviatrix",
+    "categoria": "casino",
+    "jugadas": 195,
+    "apuesta": 379.81
    },
    {
     "titulo": "Voltage Blitz Egypt",
@@ -2360,13 +2409,6 @@
     "apuesta": 47.3
    },
    {
-    "titulo": "Aviatrix",
-    "proveedor": "Aviatrix",
-    "categoria": "casino",
-    "jugadas": 185,
-    "apuesta": 378.04
-   },
-   {
     "titulo": "3 Jewel Crowns",
     "proveedor": "3Oaks",
     "categoria": "casino",
@@ -2421,13 +2463,6 @@
     "categoria": "casino",
     "jugadas": 179,
     "apuesta": 55.88
-   },
-   {
-    "titulo": "4 Fortune Clovers",
-    "proveedor": "3Oaks",
-    "categoria": "casino",
-    "jugadas": 178,
-    "apuesta": 74.86
    },
    {
     "titulo": "Fire Hot 5",
@@ -2997,11 +3032,25 @@
     "apuesta": 68.6
    },
    {
+    "titulo": "Clover Gold",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 123,
+    "apuesta": 49.4
+   },
+   {
     "titulo": "MooFO",
     "proveedor": "Endorphina",
     "categoria": "casino",
     "jugadas": 123,
     "apuesta": 36.25
+   },
+   {
+    "titulo": "Epic Coins",
+    "proveedor": "Amigogaming BCW",
+    "categoria": "casino",
+    "jugadas": 122,
+    "apuesta": 24.9
    },
    {
     "titulo": "Book of Hidden Tombs",
@@ -3368,6 +3417,13 @@
     "apuesta": 266.16
    },
    {
+    "titulo": "Football Champions BB",
+    "proveedor": "Barbarabang",
+    "categoria": "casino",
+    "jugadas": 92,
+    "apuesta": 38.71
+   },
+   {
     "titulo": "Jackpot Joker",
     "proveedor": "TaDa",
     "categoria": "casino",
@@ -3513,13 +3569,6 @@
     "categoria": "casino",
     "jugadas": 87,
     "apuesta": 60.4
-   },
-   {
-    "titulo": "Football Champions BB",
-    "proveedor": "Barbarabang",
-    "categoria": "casino",
-    "jugadas": 87,
-    "apuesta": 38.01
    },
    {
     "titulo": "Big Bucks Deluxe",
@@ -3732,6 +3781,13 @@
     "apuesta": 17.4
    },
    {
+    "titulo": "Crash Fireworks",
+    "proveedor": "TaDa",
+    "categoria": "casino",
+    "jugadas": 75,
+    "apuesta": 95.08
+   },
+   {
     "titulo": "Better Barn House Bonanza",
     "proveedor": "Pragmaticplay",
     "categoria": "casino",
@@ -3739,18 +3795,18 @@
     "apuesta": 35.79
    },
    {
-    "titulo": "Epic Coins",
-    "proveedor": "Amigogaming BCW",
-    "categoria": "casino",
-    "jugadas": 75,
-    "apuesta": 15.75
-   },
-   {
     "titulo": "40 Sparkling Crown",
     "proveedor": "TaDa",
     "categoria": "casino",
     "jugadas": 74,
     "apuesta": 99.75
+   },
+   {
+    "titulo": "Wild West Duels",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 74,
+    "apuesta": 16.71
    },
    {
     "titulo": "Fortune Tarta",
@@ -3961,6 +4017,13 @@
     "categoria": "casino",
     "jugadas": 67,
     "apuesta": 13.24
+   },
+   {
+    "titulo": "Space Y",
+    "proveedor": "Vimplay",
+    "categoria": "casino",
+    "jugadas": 67,
+    "apuesta": 12.95
    },
    {
     "titulo": "Very Hot 40 Extreme Booster",
@@ -4712,6 +4775,13 @@
     "apuesta": 8.6
    },
    {
+    "titulo": "Magic Clovers",
+    "proveedor": "3Oaks",
+    "categoria": "casino",
+    "jugadas": 43,
+    "apuesta": 7.05
+   },
+   {
     "titulo": "High Flyer",
     "proveedor": "Pragmaticplay",
     "categoria": "casino",
@@ -5062,13 +5132,6 @@
     "apuesta": 9.4
    },
    {
-    "titulo": "Space Y",
-    "proveedor": "Vimplay",
-    "categoria": "casino",
-    "jugadas": 37,
-    "apuesta": 9.15
-   },
-   {
     "titulo": "Sweet Sugar",
     "proveedor": "Evoplay",
     "categoria": "casino",
@@ -5081,13 +5144,6 @@
     "categoria": "casino",
     "jugadas": 37,
     "apuesta": 4.0
-   },
-   {
-    "titulo": "Crash Fireworks",
-    "proveedor": "TaDa",
-    "categoria": "casino",
-    "jugadas": 36,
-    "apuesta": 21.01
    },
    {
     "titulo": "Genie Mega Reels",
@@ -6868,6 +6924,13 @@
     "apuesta": 13.0
    },
    {
+    "titulo": "Frog Dash 10000",
+    "proveedor": "TaDa",
+    "categoria": "casino",
+    "jugadas": 11,
+    "apuesta": 8.52
+   },
+   {
     "titulo": "3 Street Sevens",
     "proveedor": "TomHorn",
     "categoria": "casino",
@@ -7106,13 +7169,6 @@
     "apuesta": 1.47
    },
    {
-    "titulo": "Magic Clovers",
-    "proveedor": "3Oaks",
-    "categoria": "casino",
-    "jugadas": 9,
-    "apuesta": 0.9
-   },
-   {
     "titulo": "Prosperity Blessing",
     "proveedor": "Rubyplay",
     "categoria": "casino",
@@ -7160,13 +7216,6 @@
     "categoria": "casino",
     "jugadas": 8,
     "apuesta": 7.7
-   },
-   {
-    "titulo": "Frog Dash 10000",
-    "proveedor": "TaDa",
-    "categoria": "casino",
-    "jugadas": 8,
-    "apuesta": 6.53
    },
    {
     "titulo": "Golden Empire 1000",
@@ -7307,6 +7356,13 @@
     "categoria": "casino",
     "jugadas": 6,
     "apuesta": 1658.26
+   },
+   {
+    "titulo": "Candy Rush",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 6,
+    "apuesta": 79.75
    },
    {
     "titulo": "Pirate`s Parrot",
@@ -7545,13 +7601,6 @@
     "categoria": "deportes",
     "jugadas": 4,
     "apuesta": 160.0
-   },
-   {
-    "titulo": "Candy Rush",
-    "proveedor": "Pragmaticplay",
-    "categoria": "casino",
-    "jugadas": 4,
-    "apuesta": 48.16
    },
    {
     "titulo": "Boxing",
@@ -7909,6 +7958,13 @@
     "categoria": "casino",
     "jugadas": 2,
     "apuesta": 0.5
+   },
+   {
+    "titulo": "Aviamasters 2",
+    "proveedor": "BGaming",
+    "categoria": "casino",
+    "jugadas": 2,
+    "apuesta": 0.4
    },
    {
     "titulo": "Coin UP: Lightning",
@@ -9386,15 +9442,15 @@
     "titulo": "Live Casino",
     "proveedor": "Pragmaticplay",
     "categoria": "casino",
-    "jugadas": 3691,
-    "apuesta": 90940.22
+    "jugadas": 3761,
+    "apuesta": 93962.22
    },
    {
     "titulo": "Live casino",
     "proveedor": "Evolution",
     "categoria": "casino",
-    "jugadas": 3150,
-    "apuesta": 46330.03
+    "jugadas": 3357,
+    "apuesta": 52290.28
    },
    {
     "titulo": "Baseball",
@@ -9402,6 +9458,13 @@
     "categoria": "deportes",
     "jugadas": 2343,
     "apuesta": 36572.24
+   },
+   {
+    "titulo": "Blue Roulette",
+    "proveedor": "Skywind Live",
+    "categoria": "casino",
+    "jugadas": 370,
+    "apuesta": 32460.0
    },
    {
     "titulo": "Soccer",
@@ -9477,8 +9540,8 @@
     "titulo": "Platipus",
     "proveedor": "Platipus",
     "categoria": "casino",
-    "jugadas": 9191,
-    "apuesta": 5178.48
+    "jugadas": 9449,
+    "apuesta": 5275.53
    },
    {
     "titulo": "Prosperity Fortune Tree",
@@ -9488,18 +9551,18 @@
     "apuesta": 4527.02
    },
    {
+    "titulo": "Voltage Blitz Rapid",
+    "proveedor": "Rubyplay",
+    "categoria": "casino",
+    "jugadas": 9473,
+    "apuesta": 3749.05
+   },
+   {
     "titulo": "Nine To Five",
     "proveedor": "Nolimit City",
     "categoria": "casino",
     "jugadas": 958,
     "apuesta": 3713.05
-   },
-   {
-    "titulo": "Voltage Blitz Rapid",
-    "proveedor": "Rubyplay",
-    "categoria": "casino",
-    "jugadas": 9239,
-    "apuesta": 3691.35
    },
    {
     "titulo": "Triple Beasts of Fortune",
@@ -9512,8 +9575,8 @@
     "titulo": "Olympus Rivals",
     "proveedor": "Amigogaming BCW",
     "categoria": "casino",
-    "jugadas": 3154,
-    "apuesta": 3577.15
+    "jugadas": 3155,
+    "apuesta": 3578.15
    },
    {
     "titulo": "Navigator",
@@ -9526,8 +9589,8 @@
     "titulo": "1000 Olympus Rivals",
     "proveedor": "Amigogaming BCW",
     "categoria": "casino",
-    "jugadas": 2061,
-    "apuesta": 3348.0
+    "jugadas": 2077,
+    "apuesta": 3440.0
    },
    {
     "titulo": "3 Big Barrels Buffalo",
@@ -9540,8 +9603,15 @@
     "titulo": "4 Super Clover Pots",
     "proveedor": "3Oaks",
     "categoria": "casino",
-    "jugadas": 5367,
-    "apuesta": 3165.22
+    "jugadas": 5381,
+    "apuesta": 3187.52
+   },
+   {
+    "titulo": "5 Candy Eggs",
+    "proveedor": "Amigogaming BCW",
+    "categoria": "casino",
+    "jugadas": 1669,
+    "apuesta": 3047.5
    },
    {
     "titulo": "Aviator",
@@ -9554,8 +9624,15 @@
     "titulo": "Moon Girls",
     "proveedor": "Amigogaming BCW",
     "categoria": "casino",
-    "jugadas": 1858,
-    "apuesta": 2684.0
+    "jugadas": 1972,
+    "apuesta": 2754.1
+   },
+   {
+    "titulo": "Hat-Trick Spin",
+    "proveedor": "Mancala",
+    "categoria": "casino",
+    "jugadas": 1657,
+    "apuesta": 2669.2
    },
    {
     "titulo": "Hot Hot Fruit",
@@ -9563,13 +9640,6 @@
     "categoria": "casino",
     "jugadas": 4749,
     "apuesta": 2576.25
-   },
-   {
-    "titulo": "5 Candy Eggs",
-    "proveedor": "Amigogaming BCW",
-    "categoria": "casino",
-    "jugadas": 1262,
-    "apuesta": 2566.0
    },
    {
     "titulo": "Chili XXX",
@@ -9584,13 +9654,6 @@
     "categoria": "deportes",
     "jugadas": 23,
     "apuesta": 2526.45
-   },
-   {
-    "titulo": "Hat-Trick Spin",
-    "proveedor": "Mancala",
-    "categoria": "casino",
-    "jugadas": 1406,
-    "apuesta": 2516.4
    },
    {
     "titulo": "Hot to Burn",
@@ -9624,8 +9687,8 @@
     "titulo": "Pirate Queen 9999",
     "proveedor": "TaDa",
     "categoria": "casino",
-    "jugadas": 1657,
-    "apuesta": 1997.8
+    "jugadas": 1869,
+    "apuesta": 2135.9
    },
    {
     "titulo": "Casino Island",
@@ -9705,18 +9768,18 @@
     "apuesta": 1523.09
    },
    {
+    "titulo": "Fruity Win 40",
+    "proveedor": "Fazi",
+    "categoria": "casino",
+    "jugadas": 2717,
+    "apuesta": 1517.68
+   },
+   {
     "titulo": "Joker`s Jewels Hot",
     "proveedor": "Pragmaticplay",
     "categoria": "casino",
     "jugadas": 9067,
     "apuesta": 1514.95
-   },
-   {
-    "titulo": "Fruity Win 40",
-    "proveedor": "Fazi",
-    "categoria": "casino",
-    "jugadas": 2693,
-    "apuesta": 1513.36
    },
    {
     "titulo": "1000 Moon Girls",
@@ -9729,8 +9792,8 @@
     "titulo": "Aviator Studio",
     "proveedor": "Aviator Studio",
     "categoria": "casino",
-    "jugadas": 867,
-    "apuesta": 1415.03
+    "jugadas": 876,
+    "apuesta": 1430.1
    },
    {
     "titulo": "Wild Skullz",
@@ -9740,11 +9803,18 @@
     "apuesta": 1403.4
    },
    {
+    "titulo": "1001 Fruit Wishes",
+    "proveedor": "Amigogaming BCW",
+    "categoria": "casino",
+    "jugadas": 1554,
+    "apuesta": 1355.75
+   },
+   {
     "titulo": "Regal Coins Hold and Win",
     "proveedor": "Booming",
     "categoria": "casino",
-    "jugadas": 2718,
-    "apuesta": 1290.4
+    "jugadas": 2915,
+    "apuesta": 1340.5
    },
    {
     "titulo": "Gates of Olympus Super Scatter",
@@ -9775,6 +9845,13 @@
     "apuesta": 1215.21
    },
    {
+    "titulo": "Fishinator",
+    "proveedor": "Solidicon",
+    "categoria": "casino",
+    "jugadas": 3667,
+    "apuesta": 1180.93
+   },
+   {
     "titulo": "Triple Jewel of Egypt",
     "proveedor": "Redrake",
     "categoria": "casino",
@@ -9803,13 +9880,6 @@
     "apuesta": 1144.89
    },
    {
-    "titulo": "Fishinator",
-    "proveedor": "Solidicon",
-    "categoria": "casino",
-    "jugadas": 3391,
-    "apuesta": 1133.9
-   },
-   {
     "titulo": "3 Piggies of Bank",
     "proveedor": "Yggdrasil",
     "categoria": "casino",
@@ -9822,13 +9892,6 @@
     "categoria": "casino",
     "jugadas": 2153,
     "apuesta": 1033.97
-   },
-   {
-    "titulo": "1001 Fruit Wishes",
-    "proveedor": "Amigogaming BCW",
-    "categoria": "casino",
-    "jugadas": 1122,
-    "apuesta": 1025.8
    },
    {
     "titulo": "Chests of Cai Shen",
@@ -9971,6 +10034,13 @@
     "apuesta": 828.97
    },
    {
+    "titulo": "3 Super Hot Teapots",
+    "proveedor": "3Oaks",
+    "categoria": "casino",
+    "jugadas": 2957,
+    "apuesta": 827.09
+   },
+   {
     "titulo": "3 Thunder Coins: Hold and Win",
     "proveedor": "Playson",
     "categoria": "casino",
@@ -9992,13 +10062,6 @@
     "apuesta": 772.03
    },
    {
-    "titulo": "3 Super Hot Teapots",
-    "proveedor": "3Oaks",
-    "categoria": "casino",
-    "jugadas": 2784,
-    "apuesta": 769.1
-   },
-   {
     "titulo": "Joker`s Jewels Wild",
     "proveedor": "Pragmaticplay",
     "categoria": "casino",
@@ -10011,6 +10074,13 @@
     "categoria": "casino",
     "jugadas": 448,
     "apuesta": 762.4
+   },
+   {
+    "titulo": "4 Supercharged Clovers: Hold and Win",
+    "proveedor": "Playson",
+    "categoria": "casino",
+    "jugadas": 2776,
+    "apuesta": 732.6
    },
    {
     "titulo": "Super Joker",
@@ -10032,13 +10102,6 @@
     "categoria": "casino",
     "jugadas": 7554,
     "apuesta": 694.5
-   },
-   {
-    "titulo": "4 Supercharged Clovers: Hold and Win",
-    "proveedor": "Playson",
-    "categoria": "casino",
-    "jugadas": 2463,
-    "apuesta": 685.75
    },
    {
     "titulo": "Triumph Of The 3 Gods",
@@ -10100,8 +10163,8 @@
     "titulo": "4 Chili Pots: Hold and Win",
     "proveedor": "Playson",
     "categoria": "casino",
-    "jugadas": 1980,
-    "apuesta": 620.83
+    "jugadas": 2053,
+    "apuesta": 629.14
    },
    {
     "titulo": "Infernal Trinity GO Guaranteed",
@@ -10121,8 +10184,15 @@
     "titulo": "Thunder Coins XXL: Multicoin",
     "proveedor": "Playson",
     "categoria": "casino",
-    "jugadas": 1572,
-    "apuesta": 607.5
+    "jugadas": 1573,
+    "apuesta": 607.6
+   },
+   {
+    "titulo": "Lucky Drums 88",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 828,
+    "apuesta": 605.9
    },
    {
     "titulo": "transaction_desc_1841",
@@ -10167,6 +10237,13 @@
     "apuesta": 576.2
    },
    {
+    "titulo": "Spaceman",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 386,
+    "apuesta": 569.98
+   },
+   {
     "titulo": "3 Fuego Chillies",
     "proveedor": "Spinomenal",
     "categoria": "casino",
@@ -10200,6 +10277,13 @@
     "categoria": "casino",
     "jugadas": 1152,
     "apuesta": 546.4
+   },
+   {
+    "titulo": "Fruit Shop Megaways",
+    "proveedor": "Netent",
+    "categoria": "casino",
+    "jugadas": 968,
+    "apuesta": 536.65
    },
    {
     "titulo": "Dazzling Crown",
@@ -10249,13 +10333,6 @@
     "categoria": "casino",
     "jugadas": 386,
     "apuesta": 502.35
-   },
-   {
-    "titulo": "Spaceman",
-    "proveedor": "Pragmaticplay",
-    "categoria": "casino",
-    "jugadas": 338,
-    "apuesta": 495.35
    },
    {
     "titulo": "Dyna`Mike BoosterBelt",
@@ -10377,6 +10454,13 @@
     "apuesta": 447.15
    },
    {
+    "titulo": "Fortune Garuda 500",
+    "proveedor": "TaDa",
+    "categoria": "casino",
+    "jugadas": 862,
+    "apuesta": 440.64
+   },
+   {
     "titulo": "Fruit Fusion Wilds",
     "proveedor": "TaDa",
     "categoria": "casino",
@@ -10447,6 +10531,13 @@
     "apuesta": 411.28
    },
    {
+    "titulo": "Fruit Shop",
+    "proveedor": "Netent",
+    "categoria": "casino",
+    "jugadas": 1113,
+    "apuesta": 410.2
+   },
+   {
     "titulo": "Magma Gold",
     "proveedor": "DreamPlay",
     "categoria": "casino",
@@ -10468,18 +10559,18 @@
     "apuesta": 406.06
    },
    {
+    "titulo": "Coin Strike 2: Hold and Win",
+    "proveedor": "Playson",
+    "categoria": "casino",
+    "jugadas": 348,
+    "apuesta": 397.1
+   },
+   {
     "titulo": "Go Gold",
     "proveedor": "Skywind",
     "categoria": "casino",
     "jugadas": 624,
     "apuesta": 392.2
-   },
-   {
-    "titulo": "Fortune Garuda 500",
-    "proveedor": "TaDa",
-    "categoria": "casino",
-    "jugadas": 774,
-    "apuesta": 391.62
    },
    {
     "titulo": "Ra vs Osiris",
@@ -10489,18 +10580,18 @@
     "apuesta": 381.77
    },
    {
+    "titulo": "Aviatrix",
+    "proveedor": "Aviatrix",
+    "categoria": "casino",
+    "jugadas": 195,
+    "apuesta": 379.81
+   },
+   {
     "titulo": "3x5 Royal Piggy: Hold The Spin",
     "proveedor": "Gamzix",
     "categoria": "casino",
     "jugadas": 378,
     "apuesta": 379.4
-   },
-   {
-    "titulo": "Aviatrix",
-    "proveedor": "Aviatrix",
-    "categoria": "casino",
-    "jugadas": 185,
-    "apuesta": 378.04
    },
    {
     "titulo": "Gates of Olympus POP",
@@ -10573,6 +10664,13 @@
     "apuesta": 355.8
    },
    {
+    "titulo": "Fruit Shop Frenzy",
+    "proveedor": "Netent",
+    "categoria": "casino",
+    "jugadas": 393,
+    "apuesta": 354.14
+   },
+   {
     "titulo": "Bavarian Riches 3",
     "proveedor": "Spinomenal",
     "categoria": "casino",
@@ -10599,6 +10697,13 @@
     "categoria": "casino",
     "jugadas": 71,
     "apuesta": 345.4
+   },
+   {
+    "titulo": "Prosperity Lanterns",
+    "proveedor": "PGsoft",
+    "categoria": "casino",
+    "jugadas": 755,
+    "apuesta": 337.24
    },
    {
     "titulo": "Super Chili",
@@ -10692,13 +10797,6 @@
     "apuesta": 315.8
    },
    {
-    "titulo": "Lucky Drums 88",
-    "proveedor": "Pragmaticplay",
-    "categoria": "casino",
-    "jugadas": 332,
-    "apuesta": 315.42
-   },
-   {
     "titulo": "Burning Spins 243",
     "proveedor": "1Spin4win",
     "categoria": "casino",
@@ -10718,13 +10816,6 @@
     "categoria": "casino",
     "jugadas": 533,
     "apuesta": 307.02
-   },
-   {
-    "titulo": "Prosperity Lanterns",
-    "proveedor": "PGsoft",
-    "categoria": "casino",
-    "jugadas": 661,
-    "apuesta": 303.12
    },
    {
     "titulo": "Age Of Rome",
@@ -10760,6 +10851,13 @@
     "categoria": "casino",
     "jugadas": 318,
     "apuesta": 284.46
+   },
+   {
+    "titulo": "Fruit Shop Grand Re-Opening",
+    "proveedor": "Netent",
+    "categoria": "casino",
+    "jugadas": 532,
+    "apuesta": 283.98
    },
    {
     "titulo": "5 Lions Dance",
@@ -10825,6 +10923,13 @@
     "apuesta": 266.16
    },
    {
+    "titulo": "Eye of the Storm",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 1598,
+    "apuesta": 265.9
+   },
+   {
     "titulo": "Hades Power",
     "proveedor": "Amigogaming BCW",
     "categoria": "casino",
@@ -10886,13 +10991,6 @@
     "categoria": "casino",
     "jugadas": 300,
     "apuesta": 246.75
-   },
-   {
-    "titulo": "Fruit Shop",
-    "proveedor": "Netent",
-    "categoria": "casino",
-    "jugadas": 619,
-    "apuesta": 245.8
    },
    {
     "titulo": "Live casino",
@@ -11175,6 +11273,13 @@
     "apuesta": 180.94
    },
    {
+    "titulo": "3 Super Volcanoes",
+    "proveedor": "Evoplay",
+    "categoria": "casino",
+    "jugadas": 498,
+    "apuesta": 180.02
+   },
+   {
     "titulo": "Tornado Power: Hold and Win",
     "proveedor": "Playson",
     "categoria": "casino",
@@ -11315,18 +11420,18 @@
     "apuesta": 159.45
    },
    {
-    "titulo": "3 Super Volcanoes",
-    "proveedor": "Evoplay",
-    "categoria": "casino",
-    "jugadas": 441,
-    "apuesta": 159.44
-   },
-   {
     "titulo": "Alpha Eagle",
     "proveedor": "Hacksaw",
     "categoria": "casino",
     "jugadas": 62,
     "apuesta": 158.98
+   },
+   {
+    "titulo": "4 Fortune Clovers",
+    "proveedor": "3Oaks",
+    "categoria": "casino",
+    "jugadas": 495,
+    "apuesta": 158.64
    },
    {
     "titulo": "4 Wolf Drums",
@@ -11341,6 +11446,13 @@
     "categoria": "casino",
     "jugadas": 356,
     "apuesta": 157.32
+   },
+   {
+    "titulo": "Voltage Blitz Zeus Up",
+    "proveedor": "Rubyplay",
+    "categoria": "casino",
+    "jugadas": 442,
+    "apuesta": 156.1
    },
    {
     "titulo": "Sugar Teddy x1000",
@@ -11390,20 +11502,6 @@
     "categoria": "casino",
     "jugadas": 128,
     "apuesta": 150.44
-   },
-   {
-    "titulo": "Fruit Shop Megaways",
-    "proveedor": "Netent",
-    "categoria": "casino",
-    "jugadas": 276,
-    "apuesta": 149.93
-   },
-   {
-    "titulo": "Eye of the Storm",
-    "proveedor": "Pragmaticplay",
-    "categoria": "casino",
-    "jugadas": 855,
-    "apuesta": 148.35
    },
    {
     "titulo": "October Hot 40",
@@ -11490,13 +11588,6 @@
     "apuesta": 139.9
    },
    {
-    "titulo": "Voltage Blitz Zeus Up",
-    "proveedor": "Rubyplay",
-    "categoria": "casino",
-    "jugadas": 416,
-    "apuesta": 139.7
-   },
-   {
     "titulo": "2026 Hit Slot",
     "proveedor": "Endorphina",
     "categoria": "casino",
@@ -11525,6 +11616,13 @@
     "apuesta": 136.1
    },
    {
+    "titulo": "Coin Strike XXL: Hold and Win",
+    "proveedor": "Playson",
+    "categoria": "casino",
+    "jugadas": 410,
+    "apuesta": 135.9
+   },
+   {
     "titulo": "3 Crowned Pots",
     "proveedor": "Onlyplay",
     "categoria": "casino",
@@ -11537,13 +11635,6 @@
     "categoria": "casino",
     "jugadas": 146,
     "apuesta": 135.0
-   },
-   {
-    "titulo": "Coin Strike 2: Hold and Win",
-    "proveedor": "Playson",
-    "categoria": "casino",
-    "jugadas": 252,
-    "apuesta": 134.5
    },
    {
     "titulo": "Fortune Bags",
@@ -11628,13 +11719,6 @@
     "categoria": "casino",
     "jugadas": 126,
     "apuesta": 127.6
-   },
-   {
-    "titulo": "Coin Strike XXL: Hold and Win",
-    "proveedor": "Playson",
-    "categoria": "casino",
-    "jugadas": 372,
-    "apuesta": 127.3
    },
    {
     "titulo": "Coin Of The Nile",
@@ -11903,6 +11987,13 @@
     "apuesta": 97.3
    },
    {
+    "titulo": "12 Zodiacs",
+    "proveedor": "Habanero",
+    "categoria": "casino",
+    "jugadas": 199,
+    "apuesta": 97.2
+   },
+   {
     "titulo": "Rocket Eruption: Triple Blast",
     "proveedor": "BGaming",
     "categoria": "casino",
@@ -11915,6 +12006,13 @@
     "categoria": "casino",
     "jugadas": 94,
     "apuesta": 96.0
+   },
+   {
+    "titulo": "Crash Fireworks",
+    "proveedor": "TaDa",
+    "categoria": "casino",
+    "jugadas": 75,
+    "apuesta": 95.08
    },
    {
     "titulo": "Lucha Heroes",
@@ -12204,6 +12302,13 @@
     "apuesta": 79.89
    },
    {
+    "titulo": "Candy Rush",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 6,
+    "apuesta": 79.75
+   },
+   {
     "titulo": "Purple Diamond",
     "proveedor": "3Oaks",
     "categoria": "casino",
@@ -12244,13 +12349,6 @@
     "categoria": "casino",
     "jugadas": 172,
     "apuesta": 77.14
-   },
-   {
-    "titulo": "4 Fortune Clovers",
-    "proveedor": "3Oaks",
-    "categoria": "casino",
-    "jugadas": 178,
-    "apuesta": 74.86
    },
    {
     "titulo": "Regal Fruits 1000",
@@ -12624,6 +12722,13 @@
     "apuesta": 55.88
    },
    {
+    "titulo": "Mad Hit Ho Ho Hot Pudding",
+    "proveedor": "Rubyplay",
+    "categoria": "casino",
+    "jugadas": 202,
+    "apuesta": 55.8
+   },
+   {
     "titulo": "Fortune Horse",
     "proveedor": "PGsoft",
     "categoria": "casino",
@@ -12813,6 +12918,13 @@
     "apuesta": 49.51
    },
    {
+    "titulo": "Clover Gold",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 123,
+    "apuesta": 49.4
+   },
+   {
     "titulo": "Burning Classics",
     "proveedor": "Booming",
     "categoria": "casino",
@@ -12853,13 +12965,6 @@
     "categoria": "casino",
     "jugadas": 189,
     "apuesta": 48.3
-   },
-   {
-    "titulo": "Candy Rush",
-    "proveedor": "Pragmaticplay",
-    "categoria": "casino",
-    "jugadas": 4,
-    "apuesta": 48.16
    },
    {
     "titulo": "Golden Reel Fishing: Black Sea",
@@ -13121,6 +13226,13 @@
     "apuesta": 39.0
    },
    {
+    "titulo": "Football Champions BB",
+    "proveedor": "Barbarabang",
+    "categoria": "casino",
+    "jugadas": 92,
+    "apuesta": 38.71
+   },
+   {
     "titulo": "3 Gold Seeker",
     "proveedor": "TaDa",
     "categoria": "casino",
@@ -13140,13 +13252,6 @@
     "categoria": "casino",
     "jugadas": 155,
     "apuesta": 38.08
-   },
-   {
-    "titulo": "Football Champions BB",
-    "proveedor": "Barbarabang",
-    "categoria": "casino",
-    "jugadas": 87,
-    "apuesta": 38.01
    },
    {
     "titulo": "3 Rich Chickens",
@@ -13688,6 +13793,13 @@
     "apuesta": 24.96
    },
    {
+    "titulo": "Epic Coins",
+    "proveedor": "Amigogaming BCW",
+    "categoria": "casino",
+    "jugadas": 122,
+    "apuesta": 24.9
+   },
+   {
     "titulo": "Elephant Splash",
     "proveedor": "Amigogaming BCW",
     "categoria": "casino",
@@ -13896,13 +14008,6 @@
     "categoria": "casino",
     "jugadas": 96,
     "apuesta": 21.05
-   },
-   {
-    "titulo": "Crash Fireworks",
-    "proveedor": "TaDa",
-    "categoria": "casino",
-    "jugadas": 36,
-    "apuesta": 21.01
    },
    {
     "titulo": "Buffalo Power: Hold and Win",
@@ -14304,6 +14409,13 @@
     "apuesta": 16.8
    },
    {
+    "titulo": "Wild West Duels",
+    "proveedor": "Pragmaticplay",
+    "categoria": "casino",
+    "jugadas": 74,
+    "apuesta": 16.71
+   },
+   {
     "titulo": "Triple Tigers",
     "proveedor": "Pragmaticplay",
     "categoria": "casino",
@@ -14365,13 +14477,6 @@
     "categoria": "casino",
     "jugadas": 51,
     "apuesta": 16.02
-   },
-   {
-    "titulo": "Epic Coins",
-    "proveedor": "Amigogaming BCW",
-    "categoria": "casino",
-    "jugadas": 75,
-    "apuesta": 15.75
    },
    {
     "titulo": "Voodoo Coins",
@@ -14610,6 +14715,13 @@
     "categoria": "casino",
     "jugadas": 11,
     "apuesta": 13.0
+   },
+   {
+    "titulo": "Space Y",
+    "proveedor": "Vimplay",
+    "categoria": "casino",
+    "jugadas": 67,
+    "apuesta": 12.95
    },
    {
     "titulo": "Mad Hit Devil",
@@ -15004,13 +15116,6 @@
     "apuesta": 9.2
    },
    {
-    "titulo": "Space Y",
-    "proveedor": "Vimplay",
-    "categoria": "casino",
-    "jugadas": 37,
-    "apuesta": 9.15
-   },
-   {
     "titulo": "Turbo Keno",
     "proveedor": "TurboGames",
     "categoria": "casino",
@@ -15051,6 +15156,13 @@
     "categoria": "casino",
     "jugadas": 43,
     "apuesta": 8.6
+   },
+   {
+    "titulo": "Frog Dash 10000",
+    "proveedor": "TaDa",
+    "categoria": "casino",
+    "jugadas": 11,
+    "apuesta": 8.52
    },
    {
     "titulo": "Coins`n Diamonds Fortune",
@@ -15242,6 +15354,13 @@
     "apuesta": 7.08
    },
    {
+    "titulo": "Magic Clovers",
+    "proveedor": "3Oaks",
+    "categoria": "casino",
+    "jugadas": 43,
+    "apuesta": 7.05
+   },
+   {
     "titulo": "Coins`n Fruits 243",
     "proveedor": "1Spin4win",
     "categoria": "casino",
@@ -15324,13 +15443,6 @@
     "categoria": "casino",
     "jugadas": 17,
     "apuesta": 6.6
-   },
-   {
-    "titulo": "Frog Dash 10000",
-    "proveedor": "TaDa",
-    "categoria": "casino",
-    "jugadas": 8,
-    "apuesta": 6.53
    },
    {
     "titulo": "Legacy of Undead Dragon ABYSSWAYS",
@@ -17062,13 +17174,6 @@
     "apuesta": 0.92
    },
    {
-    "titulo": "Magic Clovers",
-    "proveedor": "3Oaks",
-    "categoria": "casino",
-    "jugadas": 9,
-    "apuesta": 0.9
-   },
-   {
     "titulo": "Lucky Band Hold And Win",
     "proveedor": "1Spin4win",
     "categoria": "casino",
@@ -17269,6 +17374,13 @@
     "proveedor": "Spinomenal",
     "categoria": "casino",
     "jugadas": 4,
+    "apuesta": 0.4
+   },
+   {
+    "titulo": "Aviamasters 2",
+    "proveedor": "BGaming",
+    "categoria": "casino",
+    "jugadas": 2,
     "apuesta": 0.4
    },
    {
@@ -21661,15 +21773,15 @@
      "titulo": "Voltage Blitz Rapid",
      "proveedor": "Rubyplay",
      "categoria": "casino",
-     "jugadas": 9239,
-     "apuesta": 3691.35
+     "jugadas": 9473,
+     "apuesta": 3749.05
     },
     {
      "titulo": "Platipus",
      "proveedor": "Platipus",
      "categoria": "casino",
-     "jugadas": 9191,
-     "apuesta": 5178.48
+     "jugadas": 9449,
+     "apuesta": 5275.53
     },
     {
      "titulo": "Joker`s Jewels Hot",
@@ -21717,8 +21829,8 @@
      "titulo": "4 Super Clover Pots",
      "proveedor": "3Oaks",
      "categoria": "casino",
-     "jugadas": 5367,
-     "apuesta": 3165.22
+     "jugadas": 5381,
+     "apuesta": 3187.52
     },
     {
      "titulo": "Lucky Streak 3",
@@ -21773,8 +21885,15 @@
      "titulo": "Live Casino",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
-     "jugadas": 3691,
-     "apuesta": 90940.22
+     "jugadas": 3761,
+     "apuesta": 93962.22
+    },
+    {
+     "titulo": "Fishinator",
+     "proveedor": "Solidicon",
+     "categoria": "casino",
+     "jugadas": 3667,
+     "apuesta": 1180.93
     },
     {
      "titulo": "Wild Hot 40 Free Spins",
@@ -21791,11 +21910,11 @@
      "apuesta": 1799.99
     },
     {
-     "titulo": "Fishinator",
-     "proveedor": "Solidicon",
+     "titulo": "Live casino",
+     "proveedor": "Evolution",
      "categoria": "casino",
-     "jugadas": 3391,
-     "apuesta": 1133.9
+     "jugadas": 3357,
+     "apuesta": 52290.28
     },
     {
      "titulo": "Fortune Garuda 1000",
@@ -21808,15 +21927,8 @@
      "titulo": "Olympus Rivals",
      "proveedor": "Amigogaming BCW",
      "categoria": "casino",
-     "jugadas": 3154,
-     "apuesta": 3577.15
-    },
-    {
-     "titulo": "Live casino",
-     "proveedor": "Evolution",
-     "categoria": "casino",
-     "jugadas": 3150,
-     "apuesta": 46330.03
+     "jugadas": 3155,
+     "apuesta": 3578.15
     },
     {
      "titulo": "Wealth Bells 40",
@@ -21824,6 +21936,20 @@
      "categoria": "casino",
      "jugadas": 3077,
      "apuesta": 849.8
+    },
+    {
+     "titulo": "3 Super Hot Teapots",
+     "proveedor": "3Oaks",
+     "categoria": "casino",
+     "jugadas": 2957,
+     "apuesta": 827.09
+    },
+    {
+     "titulo": "Regal Coins Hold and Win",
+     "proveedor": "Booming",
+     "categoria": "casino",
+     "jugadas": 2915,
+     "apuesta": 1340.5
     },
     {
      "titulo": "Very Hot 5",
@@ -21840,25 +21966,18 @@
      "apuesta": 903.85
     },
     {
-     "titulo": "3 Super Hot Teapots",
-     "proveedor": "3Oaks",
+     "titulo": "4 Supercharged Clovers: Hold and Win",
+     "proveedor": "Playson",
      "categoria": "casino",
-     "jugadas": 2784,
-     "apuesta": 769.1
-    },
-    {
-     "titulo": "Regal Coins Hold and Win",
-     "proveedor": "Booming",
-     "categoria": "casino",
-     "jugadas": 2718,
-     "apuesta": 1290.4
+     "jugadas": 2776,
+     "apuesta": 732.6
     },
     {
      "titulo": "Fruity Win 40",
      "proveedor": "Fazi",
      "categoria": "casino",
-     "jugadas": 2693,
-     "apuesta": 1513.36
+     "jugadas": 2717,
+     "apuesta": 1517.68
     },
     {
      "titulo": "Voltage Blitz Heat Rush",
@@ -21873,13 +21992,6 @@
      "categoria": "casino",
      "jugadas": 2614,
      "apuesta": 2773.42
-    },
-    {
-     "titulo": "4 Supercharged Clovers: Hold and Win",
-     "proveedor": "Playson",
-     "categoria": "casino",
-     "jugadas": 2463,
-     "apuesta": 685.75
     },
     {
      "titulo": "Triple Jewel of Egypt",
@@ -21920,8 +22032,15 @@
      "titulo": "1000 Olympus Rivals",
      "proveedor": "Amigogaming BCW",
      "categoria": "casino",
-     "jugadas": 2061,
-     "apuesta": 3348.0
+     "jugadas": 2077,
+     "apuesta": 3440.0
+    },
+    {
+     "titulo": "4 Chili Pots: Hold and Win",
+     "proveedor": "Playson",
+     "categoria": "casino",
+     "jugadas": 2053,
+     "apuesta": 629.14
     },
     {
      "titulo": "Super Joker",
@@ -21931,18 +22050,18 @@
      "apuesta": 730.78
     },
     {
-     "titulo": "4 Chili Pots: Hold and Win",
-     "proveedor": "Playson",
-     "categoria": "casino",
-     "jugadas": 1980,
-     "apuesta": 620.83
-    },
-    {
      "titulo": "Hot Fortune Wheel",
      "proveedor": "Mojos-Slots",
      "categoria": "casino",
      "jugadas": 1976,
      "apuesta": 28559.67
+    },
+    {
+     "titulo": "Moon Girls",
+     "proveedor": "Amigogaming BCW",
+     "categoria": "casino",
+     "jugadas": 1972,
+     "apuesta": 2754.1
     },
     {
      "titulo": "Fortune Balloons",
@@ -21966,11 +22085,11 @@
      "apuesta": 508.22
     },
     {
-     "titulo": "Moon Girls",
-     "proveedor": "Amigogaming BCW",
+     "titulo": "Pirate Queen 9999",
+     "proveedor": "TaDa",
      "categoria": "casino",
-     "jugadas": 1858,
-     "apuesta": 2684.0
+     "jugadas": 1869,
+     "apuesta": 2135.9
     },
     {
      "titulo": "Cloud Piggies",
@@ -22015,11 +22134,18 @@
      "apuesta": 673.26
     },
     {
-     "titulo": "Pirate Queen 9999",
-     "proveedor": "TaDa",
+     "titulo": "5 Candy Eggs",
+     "proveedor": "Amigogaming BCW",
+     "categoria": "casino",
+     "jugadas": 1669,
+     "apuesta": 3047.5
+    },
+    {
+     "titulo": "Hat-Trick Spin",
+     "proveedor": "Mancala",
      "categoria": "casino",
      "jugadas": 1657,
-     "apuesta": 1997.8
+     "apuesta": 2669.2
     },
     {
      "titulo": "5 Fruit Invaders",
@@ -22029,11 +22155,18 @@
      "apuesta": 660.45
     },
     {
+     "titulo": "Eye of the Storm",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 1598,
+     "apuesta": 265.9
+    },
+    {
      "titulo": "Thunder Coins XXL: Multicoin",
      "proveedor": "Playson",
      "categoria": "casino",
-     "jugadas": 1572,
-     "apuesta": 607.5
+     "jugadas": 1573,
+     "apuesta": 607.6
     },
     {
      "titulo": "The Great Chicken Escape",
@@ -22048,6 +22181,13 @@
      "categoria": "casino",
      "jugadas": 1567,
      "apuesta": 448.3
+    },
+    {
+     "titulo": "1001 Fruit Wishes",
+     "proveedor": "Amigogaming BCW",
+     "categoria": "casino",
+     "jugadas": 1554,
+     "apuesta": 1355.75
     },
     {
      "titulo": "Dazzling Crown",
@@ -22090,13 +22230,6 @@
      "categoria": "casino",
      "jugadas": 1450,
      "apuesta": 455.61
-    },
-    {
-     "titulo": "Hat-Trick Spin",
-     "proveedor": "Mancala",
-     "categoria": "casino",
-     "jugadas": 1406,
-     "apuesta": 2516.4
     },
     {
      "titulo": "Chests of Cai Shen 2",
@@ -22183,13 +22316,6 @@
      "apuesta": 1025.6
     },
     {
-     "titulo": "5 Candy Eggs",
-     "proveedor": "Amigogaming BCW",
-     "categoria": "casino",
-     "jugadas": 1262,
-     "apuesta": 2566.0
-    },
-    {
      "titulo": "Fox Gold Rush",
      "proveedor": "Onlyplay",
      "categoria": "casino",
@@ -22260,18 +22386,18 @@
      "apuesta": 454.5
     },
     {
-     "titulo": "1001 Fruit Wishes",
-     "proveedor": "Amigogaming BCW",
-     "categoria": "casino",
-     "jugadas": 1122,
-     "apuesta": 1025.8
-    },
-    {
      "titulo": "Coin Strike XXL: Multicoin",
      "proveedor": "Playson",
      "categoria": "casino",
      "jugadas": 1114,
      "apuesta": 364.8
+    },
+    {
+     "titulo": "Fruit Shop",
+     "proveedor": "Netent",
+     "categoria": "casino",
+     "jugadas": 1113,
+     "apuesta": 410.2
     },
     {
      "titulo": "Eternal Diamonds",
@@ -22379,6 +22505,13 @@
      "apuesta": 768.9
     },
     {
+     "titulo": "Fruit Shop Megaways",
+     "proveedor": "Netent",
+     "categoria": "casino",
+     "jugadas": 968,
+     "apuesta": 536.65
+    },
+    {
      "titulo": "Mayan Cache",
      "proveedor": "Rubyplay",
      "categoria": "casino",
@@ -22424,8 +22557,15 @@
      "titulo": "Aviator Studio",
      "proveedor": "Aviator Studio",
      "categoria": "casino",
-     "jugadas": 867,
-     "apuesta": 1415.03
+     "jugadas": 876,
+     "apuesta": 1430.1
+    },
+    {
+     "titulo": "Fortune Garuda 500",
+     "proveedor": "TaDa",
+     "categoria": "casino",
+     "jugadas": 862,
+     "apuesta": 440.64
     },
     {
      "titulo": "Wild Bounty Showdown",
@@ -22433,13 +22573,6 @@
      "categoria": "casino",
      "jugadas": 856,
      "apuesta": 184.12
-    },
-    {
-     "titulo": "Eye of the Storm",
-     "proveedor": "Pragmaticplay",
-     "categoria": "casino",
-     "jugadas": 855,
-     "apuesta": 148.35
     },
     {
      "titulo": "Gods of Sand",
@@ -22461,6 +22594,13 @@
      "categoria": "casino",
      "jugadas": 829,
      "apuesta": 316.2
+    },
+    {
+     "titulo": "Lucky Drums 88",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 828,
+     "apuesta": 605.9
     },
     {
      "titulo": "A Big Cherry",
@@ -22533,18 +22673,18 @@
      "apuesta": 1270.15
     },
     {
-     "titulo": "Fortune Garuda 500",
-     "proveedor": "TaDa",
-     "categoria": "casino",
-     "jugadas": 774,
-     "apuesta": 391.62
-    },
-    {
      "titulo": "5 Lions Dance",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
      "jugadas": 766,
      "apuesta": 280.18
+    },
+    {
+     "titulo": "Prosperity Lanterns",
+     "proveedor": "PGsoft",
+     "categoria": "casino",
+     "jugadas": 755,
+     "apuesta": 337.24
     },
     {
      "titulo": "The Luxe",
@@ -22645,13 +22785,6 @@
      "apuesta": 184.9
     },
     {
-     "titulo": "Prosperity Lanterns",
-     "proveedor": "PGsoft",
-     "categoria": "casino",
-     "jugadas": 661,
-     "apuesta": 303.12
-    },
-    {
      "titulo": "Fortune Vault Force 5",
      "proveedor": "EAgaming",
      "categoria": "casino",
@@ -22678,13 +22811,6 @@
      "categoria": "casino",
      "jugadas": 623,
      "apuesta": 326.05
-    },
-    {
-     "titulo": "Fruit Shop",
-     "proveedor": "Netent",
-     "categoria": "casino",
-     "jugadas": 619,
-     "apuesta": 245.8
     },
     {
      "titulo": "Flight Mode",
@@ -22799,6 +22925,13 @@
      "apuesta": 307.02
     },
     {
+     "titulo": "Fruit Shop Grand Re-Opening",
+     "proveedor": "Netent",
+     "categoria": "casino",
+     "jugadas": 532,
+     "apuesta": 283.98
+    },
+    {
      "titulo": "Zeus Blitz Power Strike",
      "proveedor": "Gameart Withdraw (121)",
      "categoria": "casino",
@@ -22832,6 +22965,20 @@
      "categoria": "casino",
      "jugadas": 507,
      "apuesta": 100.11
+    },
+    {
+     "titulo": "3 Super Volcanoes",
+     "proveedor": "Evoplay",
+     "categoria": "casino",
+     "jugadas": 498,
+     "apuesta": 180.02
+    },
+    {
+     "titulo": "4 Fortune Clovers",
+     "proveedor": "3Oaks",
+     "categoria": "casino",
+     "jugadas": 495,
+     "apuesta": 158.64
     },
     {
      "titulo": "3 Royal Joker",
@@ -22953,18 +23100,18 @@
      "apuesta": 762.4
     },
     {
+     "titulo": "Voltage Blitz Zeus Up",
+     "proveedor": "Rubyplay",
+     "categoria": "casino",
+     "jugadas": 442,
+     "apuesta": 156.1
+    },
+    {
      "titulo": "Mahjong Dragon Ways",
      "proveedor": "Kingmidas",
      "categoria": "casino",
      "jugadas": 442,
      "apuesta": 119.35
-    },
-    {
-     "titulo": "3 Super Volcanoes",
-     "proveedor": "Evoplay",
-     "categoria": "casino",
-     "jugadas": 441,
-     "apuesta": 159.44
     },
     {
      "titulo": "Burning Classics 5000",
@@ -23009,18 +23156,18 @@
      "apuesta": 312.05
     },
     {
-     "titulo": "Voltage Blitz Zeus Up",
-     "proveedor": "Rubyplay",
-     "categoria": "casino",
-     "jugadas": 416,
-     "apuesta": 139.7
-    },
-    {
      "titulo": "3 Spirit Volcanoes",
      "proveedor": "Amigogaming BCW",
      "categoria": "casino",
      "jugadas": 414,
      "apuesta": 315.85
+    },
+    {
+     "titulo": "Coin Strike XXL: Hold and Win",
+     "proveedor": "Playson",
+     "categoria": "casino",
+     "jugadas": 410,
+     "apuesta": 135.9
     },
     {
      "titulo": "Clover Boost Hold and Win",
@@ -23058,6 +23205,13 @@
      "apuesta": 153.71
     },
     {
+     "titulo": "Fruit Shop Frenzy",
+     "proveedor": "Netent",
+     "categoria": "casino",
+     "jugadas": 393,
+     "apuesta": 354.14
+    },
+    {
      "titulo": "Mega Mummy - Hold & Hit 3x3",
      "proveedor": "Spinomenal",
      "categoria": "casino",
@@ -23070,6 +23224,13 @@
      "categoria": "casino",
      "jugadas": 393,
      "apuesta": 66.3
+    },
+    {
+     "titulo": "Spaceman",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 386,
+     "apuesta": 569.98
     },
     {
      "titulo": "Diamond Explosion 7s SE",
@@ -23114,11 +23275,11 @@
      "apuesta": 267.92
     },
     {
-     "titulo": "Coin Strike XXL: Hold and Win",
-     "proveedor": "Playson",
+     "titulo": "Blue Roulette",
+     "proveedor": "Skywind Live",
      "categoria": "casino",
-     "jugadas": 372,
-     "apuesta": 127.3
+     "jugadas": 370,
+     "apuesta": 32460.0
     },
     {
      "titulo": "Fortune Bags",
@@ -23168,6 +23329,13 @@
      "categoria": "casino",
      "jugadas": 352,
      "apuesta": 159.65
+    },
+    {
+     "titulo": "Coin Strike 2: Hold and Win",
+     "proveedor": "Playson",
+     "categoria": "casino",
+     "jugadas": 348,
+     "apuesta": 397.1
     },
     {
      "titulo": "Adventurer Shop",
@@ -23240,13 +23408,6 @@
      "apuesta": 263.4
     },
     {
-     "titulo": "Spaceman",
-     "proveedor": "Pragmaticplay",
-     "categoria": "casino",
-     "jugadas": 338,
-     "apuesta": 495.35
-    },
-    {
      "titulo": "Cash Patrol",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
@@ -23266,13 +23427,6 @@
      "categoria": "casino",
      "jugadas": 336,
      "apuesta": 92.82
-    },
-    {
-     "titulo": "Lucky Drums 88",
-     "proveedor": "Pragmaticplay",
-     "categoria": "casino",
-     "jugadas": 332,
-     "apuesta": 315.42
     },
     {
      "titulo": "Gates of Olympus",
@@ -23478,13 +23632,6 @@
      "apuesta": 51.94
     },
     {
-     "titulo": "Fruit Shop Megaways",
-     "proveedor": "Netent",
-     "categoria": "casino",
-     "jugadas": 276,
-     "apuesta": 149.93
-    },
-    {
      "titulo": "Joker`s Clash",
      "proveedor": "In-Out",
      "categoria": "casino",
@@ -23574,13 +23721,6 @@
      "categoria": "casino",
      "jugadas": 254,
      "apuesta": 83.7
-    },
-    {
-     "titulo": "Coin Strike 2: Hold and Win",
-     "proveedor": "Playson",
-     "categoria": "casino",
-     "jugadas": 252,
-     "apuesta": 134.5
     },
     {
      "titulo": "Wild Moose Bonanza",
@@ -23849,11 +23989,25 @@
      "apuesta": 147.19
     },
     {
+     "titulo": "Mad Hit Ho Ho Hot Pudding",
+     "proveedor": "Rubyplay",
+     "categoria": "casino",
+     "jugadas": 202,
+     "apuesta": 55.8
+    },
+    {
      "titulo": "Chicken Road",
      "proveedor": "In-Out",
      "categoria": "casino",
      "jugadas": 199,
      "apuesta": 175.54
+    },
+    {
+     "titulo": "12 Zodiacs",
+     "proveedor": "Habanero",
+     "categoria": "casino",
+     "jugadas": 199,
+     "apuesta": 97.2
     },
     {
      "titulo": "Thunder Tiger",
@@ -23896,6 +24050,13 @@
      "categoria": "casino",
      "jugadas": 196,
      "apuesta": 92.36
+    },
+    {
+     "titulo": "Aviatrix",
+     "proveedor": "Aviatrix",
+     "categoria": "casino",
+     "jugadas": 195,
+     "apuesta": 379.81
     },
     {
      "titulo": "Voltage Blitz Egypt",
@@ -23982,13 +24143,6 @@
      "apuesta": 47.3
     },
     {
-     "titulo": "Aviatrix",
-     "proveedor": "Aviatrix",
-     "categoria": "casino",
-     "jugadas": 185,
-     "apuesta": 378.04
-    },
-    {
      "titulo": "3 Jewel Crowns",
      "proveedor": "3Oaks",
      "categoria": "casino",
@@ -24043,13 +24197,6 @@
      "categoria": "casino",
      "jugadas": 179,
      "apuesta": 55.88
-    },
-    {
-     "titulo": "4 Fortune Clovers",
-     "proveedor": "3Oaks",
-     "categoria": "casino",
-     "jugadas": 178,
-     "apuesta": 74.86
     },
     {
      "titulo": "Fire Hot 5",
@@ -24619,11 +24766,25 @@
      "apuesta": 68.6
     },
     {
+     "titulo": "Clover Gold",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 123,
+     "apuesta": 49.4
+    },
+    {
      "titulo": "MooFO",
      "proveedor": "Endorphina",
      "categoria": "casino",
      "jugadas": 123,
      "apuesta": 36.25
+    },
+    {
+     "titulo": "Epic Coins",
+     "proveedor": "Amigogaming BCW",
+     "categoria": "casino",
+     "jugadas": 122,
+     "apuesta": 24.9
     },
     {
      "titulo": "Book of Hidden Tombs",
@@ -24997,6 +25158,13 @@
      "apuesta": 266.16
     },
     {
+     "titulo": "Football Champions BB",
+     "proveedor": "Barbarabang",
+     "categoria": "casino",
+     "jugadas": 92,
+     "apuesta": 38.71
+    },
+    {
      "titulo": "Jackpot Joker",
      "proveedor": "TaDa",
      "categoria": "casino",
@@ -25142,13 +25310,6 @@
      "categoria": "casino",
      "jugadas": 87,
      "apuesta": 60.4
-    },
-    {
-     "titulo": "Football Champions BB",
-     "proveedor": "Barbarabang",
-     "categoria": "casino",
-     "jugadas": 87,
-     "apuesta": 38.01
     },
     {
      "titulo": "Big Bucks Deluxe",
@@ -25354,6 +25515,13 @@
      "apuesta": 17.4
     },
     {
+     "titulo": "Crash Fireworks",
+     "proveedor": "TaDa",
+     "categoria": "casino",
+     "jugadas": 75,
+     "apuesta": 95.08
+    },
+    {
      "titulo": "Better Barn House Bonanza",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
@@ -25361,18 +25529,18 @@
      "apuesta": 35.79
     },
     {
-     "titulo": "Epic Coins",
-     "proveedor": "Amigogaming BCW",
-     "categoria": "casino",
-     "jugadas": 75,
-     "apuesta": 15.75
-    },
-    {
      "titulo": "40 Sparkling Crown",
      "proveedor": "TaDa",
      "categoria": "casino",
      "jugadas": 74,
      "apuesta": 99.75
+    },
+    {
+     "titulo": "Wild West Duels",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 74,
+     "apuesta": 16.71
     },
     {
      "titulo": "Fortune Tarta",
@@ -25583,6 +25751,13 @@
      "categoria": "casino",
      "jugadas": 67,
      "apuesta": 13.24
+    },
+    {
+     "titulo": "Space Y",
+     "proveedor": "Vimplay",
+     "categoria": "casino",
+     "jugadas": 67,
+     "apuesta": 12.95
     },
     {
      "titulo": "Very Hot 40 Extreme Booster",
@@ -26334,6 +26509,13 @@
      "apuesta": 8.6
     },
     {
+     "titulo": "Magic Clovers",
+     "proveedor": "3Oaks",
+     "categoria": "casino",
+     "jugadas": 43,
+     "apuesta": 7.05
+    },
+    {
      "titulo": "High Flyer",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
@@ -26677,13 +26859,6 @@
      "apuesta": 9.4
     },
     {
-     "titulo": "Space Y",
-     "proveedor": "Vimplay",
-     "categoria": "casino",
-     "jugadas": 37,
-     "apuesta": 9.15
-    },
-    {
      "titulo": "Sweet Sugar",
      "proveedor": "Evoplay",
      "categoria": "casino",
@@ -26696,13 +26871,6 @@
      "categoria": "casino",
      "jugadas": 37,
      "apuesta": 4.0
-    },
-    {
-     "titulo": "Crash Fireworks",
-     "proveedor": "TaDa",
-     "categoria": "casino",
-     "jugadas": 36,
-     "apuesta": 21.01
     },
     {
      "titulo": "Genie Mega Reels",
@@ -28469,6 +28637,13 @@
      "apuesta": 13.0
     },
     {
+     "titulo": "Frog Dash 10000",
+     "proveedor": "TaDa",
+     "categoria": "casino",
+     "jugadas": 11,
+     "apuesta": 8.52
+    },
+    {
      "titulo": "3 Street Sevens",
      "proveedor": "TomHorn",
      "categoria": "casino",
@@ -28700,13 +28875,6 @@
      "apuesta": 1.47
     },
     {
-     "titulo": "Magic Clovers",
-     "proveedor": "3Oaks",
-     "categoria": "casino",
-     "jugadas": 9,
-     "apuesta": 0.9
-    },
-    {
      "titulo": "Prosperity Blessing",
      "proveedor": "Rubyplay",
      "categoria": "casino",
@@ -28754,13 +28922,6 @@
      "categoria": "casino",
      "jugadas": 8,
      "apuesta": 7.7
-    },
-    {
-     "titulo": "Frog Dash 10000",
-     "proveedor": "TaDa",
-     "categoria": "casino",
-     "jugadas": 8,
-     "apuesta": 6.53
     },
     {
      "titulo": "Golden Empire 1000",
@@ -28901,6 +29062,13 @@
      "categoria": "casino",
      "jugadas": 6,
      "apuesta": 1658.26
+    },
+    {
+     "titulo": "Candy Rush",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 6,
+     "apuesta": 79.75
     },
     {
      "titulo": "Pirate`s Parrot",
@@ -29111,13 +29279,6 @@
      "categoria": "casino",
      "jugadas": 5,
      "apuesta": 0.05
-    },
-    {
-     "titulo": "Candy Rush",
-     "proveedor": "Pragmaticplay",
-     "categoria": "casino",
-     "jugadas": 4,
-     "apuesta": 48.16
     },
     {
      "titulo": "Wings of Pegasus",
@@ -29468,6 +29629,13 @@
      "categoria": "casino",
      "jugadas": 2,
      "apuesta": 0.5
+    },
+    {
+     "titulo": "Aviamasters 2",
+     "proveedor": "BGaming",
+     "categoria": "casino",
+     "jugadas": 2,
+     "apuesta": 0.4
     },
     {
      "titulo": "Coin UP: Lightning",
@@ -31029,15 +31197,22 @@
      "titulo": "Live Casino",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
-     "jugadas": 3691,
-     "apuesta": 90940.22
+     "jugadas": 3761,
+     "apuesta": 93962.22
     },
     {
      "titulo": "Live casino",
      "proveedor": "Evolution",
      "categoria": "casino",
-     "jugadas": 3150,
-     "apuesta": 46330.03
+     "jugadas": 3357,
+     "apuesta": 52290.28
+    },
+    {
+     "titulo": "Blue Roulette",
+     "proveedor": "Skywind Live",
+     "categoria": "casino",
+     "jugadas": 370,
+     "apuesta": 32460.0
     },
     {
      "titulo": "Hot Fortune Wheel",
@@ -31099,8 +31274,8 @@
      "titulo": "Platipus",
      "proveedor": "Platipus",
      "categoria": "casino",
-     "jugadas": 9191,
-     "apuesta": 5178.48
+     "jugadas": 9449,
+     "apuesta": 5275.53
     },
     {
      "titulo": "Prosperity Fortune Tree",
@@ -31110,18 +31285,18 @@
      "apuesta": 4527.02
     },
     {
+     "titulo": "Voltage Blitz Rapid",
+     "proveedor": "Rubyplay",
+     "categoria": "casino",
+     "jugadas": 9473,
+     "apuesta": 3749.05
+    },
+    {
      "titulo": "Nine To Five",
      "proveedor": "Nolimit City",
      "categoria": "casino",
      "jugadas": 958,
      "apuesta": 3713.05
-    },
-    {
-     "titulo": "Voltage Blitz Rapid",
-     "proveedor": "Rubyplay",
-     "categoria": "casino",
-     "jugadas": 9239,
-     "apuesta": 3691.35
     },
     {
      "titulo": "Triple Beasts of Fortune",
@@ -31134,8 +31309,8 @@
      "titulo": "Olympus Rivals",
      "proveedor": "Amigogaming BCW",
      "categoria": "casino",
-     "jugadas": 3154,
-     "apuesta": 3577.15
+     "jugadas": 3155,
+     "apuesta": 3578.15
     },
     {
      "titulo": "Navigator",
@@ -31148,8 +31323,8 @@
      "titulo": "1000 Olympus Rivals",
      "proveedor": "Amigogaming BCW",
      "categoria": "casino",
-     "jugadas": 2061,
-     "apuesta": 3348.0
+     "jugadas": 2077,
+     "apuesta": 3440.0
     },
     {
      "titulo": "3 Big Barrels Buffalo",
@@ -31162,8 +31337,15 @@
      "titulo": "4 Super Clover Pots",
      "proveedor": "3Oaks",
      "categoria": "casino",
-     "jugadas": 5367,
-     "apuesta": 3165.22
+     "jugadas": 5381,
+     "apuesta": 3187.52
+    },
+    {
+     "titulo": "5 Candy Eggs",
+     "proveedor": "Amigogaming BCW",
+     "categoria": "casino",
+     "jugadas": 1669,
+     "apuesta": 3047.5
     },
     {
      "titulo": "Aviator",
@@ -31176,8 +31358,15 @@
      "titulo": "Moon Girls",
      "proveedor": "Amigogaming BCW",
      "categoria": "casino",
-     "jugadas": 1858,
-     "apuesta": 2684.0
+     "jugadas": 1972,
+     "apuesta": 2754.1
+    },
+    {
+     "titulo": "Hat-Trick Spin",
+     "proveedor": "Mancala",
+     "categoria": "casino",
+     "jugadas": 1657,
+     "apuesta": 2669.2
     },
     {
      "titulo": "Hot Hot Fruit",
@@ -31187,25 +31376,11 @@
      "apuesta": 2576.25
     },
     {
-     "titulo": "5 Candy Eggs",
-     "proveedor": "Amigogaming BCW",
-     "categoria": "casino",
-     "jugadas": 1262,
-     "apuesta": 2566.0
-    },
-    {
      "titulo": "Chili XXX",
      "proveedor": "Amigogaming BCW",
      "categoria": "casino",
      "jugadas": 1789,
      "apuesta": 2535.2
-    },
-    {
-     "titulo": "Hat-Trick Spin",
-     "proveedor": "Mancala",
-     "categoria": "casino",
-     "jugadas": 1406,
-     "apuesta": 2516.4
     },
     {
      "titulo": "Hot to Burn",
@@ -31239,8 +31414,8 @@
      "titulo": "Pirate Queen 9999",
      "proveedor": "TaDa",
      "categoria": "casino",
-     "jugadas": 1657,
-     "apuesta": 1997.8
+     "jugadas": 1869,
+     "apuesta": 2135.9
     },
     {
      "titulo": "Casino Island",
@@ -31327,18 +31502,18 @@
      "apuesta": 1523.09
     },
     {
+     "titulo": "Fruity Win 40",
+     "proveedor": "Fazi",
+     "categoria": "casino",
+     "jugadas": 2717,
+     "apuesta": 1517.68
+    },
+    {
      "titulo": "Joker`s Jewels Hot",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
      "jugadas": 9067,
      "apuesta": 1514.95
-    },
-    {
-     "titulo": "Fruity Win 40",
-     "proveedor": "Fazi",
-     "categoria": "casino",
-     "jugadas": 2693,
-     "apuesta": 1513.36
     },
     {
      "titulo": "1000 Moon Girls",
@@ -31351,8 +31526,8 @@
      "titulo": "Aviator Studio",
      "proveedor": "Aviator Studio",
      "categoria": "casino",
-     "jugadas": 867,
-     "apuesta": 1415.03
+     "jugadas": 876,
+     "apuesta": 1430.1
     },
     {
      "titulo": "Wild Skullz",
@@ -31362,11 +31537,18 @@
      "apuesta": 1403.4
     },
     {
+     "titulo": "1001 Fruit Wishes",
+     "proveedor": "Amigogaming BCW",
+     "categoria": "casino",
+     "jugadas": 1554,
+     "apuesta": 1355.75
+    },
+    {
      "titulo": "Regal Coins Hold and Win",
      "proveedor": "Booming",
      "categoria": "casino",
-     "jugadas": 2718,
-     "apuesta": 1290.4
+     "jugadas": 2915,
+     "apuesta": 1340.5
     },
     {
      "titulo": "Gates of Olympus Super Scatter",
@@ -31397,6 +31579,13 @@
      "apuesta": 1215.21
     },
     {
+     "titulo": "Fishinator",
+     "proveedor": "Solidicon",
+     "categoria": "casino",
+     "jugadas": 3667,
+     "apuesta": 1180.93
+    },
+    {
      "titulo": "Triple Jewel of Egypt",
      "proveedor": "Redrake",
      "categoria": "casino",
@@ -31425,13 +31614,6 @@
      "apuesta": 1144.89
     },
     {
-     "titulo": "Fishinator",
-     "proveedor": "Solidicon",
-     "categoria": "casino",
-     "jugadas": 3391,
-     "apuesta": 1133.9
-    },
-    {
      "titulo": "3 Piggies of Bank",
      "proveedor": "Yggdrasil",
      "categoria": "casino",
@@ -31444,13 +31626,6 @@
      "categoria": "casino",
      "jugadas": 2153,
      "apuesta": 1033.97
-    },
-    {
-     "titulo": "1001 Fruit Wishes",
-     "proveedor": "Amigogaming BCW",
-     "categoria": "casino",
-     "jugadas": 1122,
-     "apuesta": 1025.8
     },
     {
      "titulo": "Chests of Cai Shen",
@@ -31593,6 +31768,13 @@
      "apuesta": 828.97
     },
     {
+     "titulo": "3 Super Hot Teapots",
+     "proveedor": "3Oaks",
+     "categoria": "casino",
+     "jugadas": 2957,
+     "apuesta": 827.09
+    },
+    {
      "titulo": "3 Thunder Coins: Hold and Win",
      "proveedor": "Playson",
      "categoria": "casino",
@@ -31614,13 +31796,6 @@
      "apuesta": 772.03
     },
     {
-     "titulo": "3 Super Hot Teapots",
-     "proveedor": "3Oaks",
-     "categoria": "casino",
-     "jugadas": 2784,
-     "apuesta": 769.1
-    },
-    {
      "titulo": "Joker`s Jewels Wild",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
@@ -31633,6 +31808,13 @@
      "categoria": "casino",
      "jugadas": 448,
      "apuesta": 762.4
+    },
+    {
+     "titulo": "4 Supercharged Clovers: Hold and Win",
+     "proveedor": "Playson",
+     "categoria": "casino",
+     "jugadas": 2776,
+     "apuesta": 732.6
     },
     {
      "titulo": "Super Joker",
@@ -31654,13 +31836,6 @@
      "categoria": "casino",
      "jugadas": 7554,
      "apuesta": 694.5
-    },
-    {
-     "titulo": "4 Supercharged Clovers: Hold and Win",
-     "proveedor": "Playson",
-     "categoria": "casino",
-     "jugadas": 2463,
-     "apuesta": 685.75
     },
     {
      "titulo": "Triumph Of The 3 Gods",
@@ -31722,8 +31897,8 @@
      "titulo": "4 Chili Pots: Hold and Win",
      "proveedor": "Playson",
      "categoria": "casino",
-     "jugadas": 1980,
-     "apuesta": 620.83
+     "jugadas": 2053,
+     "apuesta": 629.14
     },
     {
      "titulo": "Infernal Trinity GO Guaranteed",
@@ -31743,8 +31918,15 @@
      "titulo": "Thunder Coins XXL: Multicoin",
      "proveedor": "Playson",
      "categoria": "casino",
-     "jugadas": 1572,
-     "apuesta": 607.5
+     "jugadas": 1573,
+     "apuesta": 607.6
+    },
+    {
+     "titulo": "Lucky Drums 88",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 828,
+     "apuesta": 605.9
     },
     {
      "titulo": "transaction_desc_1841",
@@ -31789,6 +31971,13 @@
      "apuesta": 576.2
     },
     {
+     "titulo": "Spaceman",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 386,
+     "apuesta": 569.98
+    },
+    {
      "titulo": "3 Fuego Chillies",
      "proveedor": "Spinomenal",
      "categoria": "casino",
@@ -31815,6 +32004,13 @@
      "categoria": "casino",
      "jugadas": 1152,
      "apuesta": 546.4
+    },
+    {
+     "titulo": "Fruit Shop Megaways",
+     "proveedor": "Netent",
+     "categoria": "casino",
+     "jugadas": 968,
+     "apuesta": 536.65
     },
     {
      "titulo": "Dazzling Crown",
@@ -31864,13 +32060,6 @@
      "categoria": "casino",
      "jugadas": 386,
      "apuesta": 502.35
-    },
-    {
-     "titulo": "Spaceman",
-     "proveedor": "Pragmaticplay",
-     "categoria": "casino",
-     "jugadas": 338,
-     "apuesta": 495.35
     },
     {
      "titulo": "Dyna`Mike BoosterBelt",
@@ -31992,6 +32181,13 @@
      "apuesta": 447.15
     },
     {
+     "titulo": "Fortune Garuda 500",
+     "proveedor": "TaDa",
+     "categoria": "casino",
+     "jugadas": 862,
+     "apuesta": 440.64
+    },
+    {
      "titulo": "Fruit Fusion Wilds",
      "proveedor": "TaDa",
      "categoria": "casino",
@@ -32062,6 +32258,13 @@
      "apuesta": 411.28
     },
     {
+     "titulo": "Fruit Shop",
+     "proveedor": "Netent",
+     "categoria": "casino",
+     "jugadas": 1113,
+     "apuesta": 410.2
+    },
+    {
      "titulo": "Magma Gold",
      "proveedor": "DreamPlay",
      "categoria": "casino",
@@ -32083,6 +32286,13 @@
      "apuesta": 406.06
     },
     {
+     "titulo": "Coin Strike 2: Hold and Win",
+     "proveedor": "Playson",
+     "categoria": "casino",
+     "jugadas": 348,
+     "apuesta": 397.1
+    },
+    {
      "titulo": "Basketball",
      "proveedor": "Deportes",
      "categoria": "deportes",
@@ -32097,13 +32307,6 @@
      "apuesta": 392.2
     },
     {
-     "titulo": "Fortune Garuda 500",
-     "proveedor": "TaDa",
-     "categoria": "casino",
-     "jugadas": 774,
-     "apuesta": 391.62
-    },
-    {
      "titulo": "Ra vs Osiris",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
@@ -32111,18 +32314,18 @@
      "apuesta": 381.77
     },
     {
+     "titulo": "Aviatrix",
+     "proveedor": "Aviatrix",
+     "categoria": "casino",
+     "jugadas": 195,
+     "apuesta": 379.81
+    },
+    {
      "titulo": "3x5 Royal Piggy: Hold The Spin",
      "proveedor": "Gamzix",
      "categoria": "casino",
      "jugadas": 378,
      "apuesta": 379.4
-    },
-    {
-     "titulo": "Aviatrix",
-     "proveedor": "Aviatrix",
-     "categoria": "casino",
-     "jugadas": 185,
-     "apuesta": 378.04
     },
     {
      "titulo": "Gates of Olympus POP",
@@ -32188,6 +32391,13 @@
      "apuesta": 355.8
     },
     {
+     "titulo": "Fruit Shop Frenzy",
+     "proveedor": "Netent",
+     "categoria": "casino",
+     "jugadas": 393,
+     "apuesta": 354.14
+    },
+    {
      "titulo": "Bavarian Riches 3",
      "proveedor": "Spinomenal",
      "categoria": "casino",
@@ -32214,6 +32424,13 @@
      "categoria": "casino",
      "jugadas": 71,
      "apuesta": 345.4
+    },
+    {
+     "titulo": "Prosperity Lanterns",
+     "proveedor": "PGsoft",
+     "categoria": "casino",
+     "jugadas": 755,
+     "apuesta": 337.24
     },
     {
      "titulo": "Super Chili",
@@ -32307,13 +32524,6 @@
      "apuesta": 315.8
     },
     {
-     "titulo": "Lucky Drums 88",
-     "proveedor": "Pragmaticplay",
-     "categoria": "casino",
-     "jugadas": 332,
-     "apuesta": 315.42
-    },
-    {
      "titulo": "Burning Spins 243",
      "proveedor": "1Spin4win",
      "categoria": "casino",
@@ -32333,13 +32543,6 @@
      "categoria": "casino",
      "jugadas": 533,
      "apuesta": 307.02
-    },
-    {
-     "titulo": "Prosperity Lanterns",
-     "proveedor": "PGsoft",
-     "categoria": "casino",
-     "jugadas": 661,
-     "apuesta": 303.12
     },
     {
      "titulo": "Age Of Rome",
@@ -32375,6 +32578,13 @@
      "categoria": "casino",
      "jugadas": 318,
      "apuesta": 284.46
+    },
+    {
+     "titulo": "Fruit Shop Grand Re-Opening",
+     "proveedor": "Netent",
+     "categoria": "casino",
+     "jugadas": 532,
+     "apuesta": 283.98
     },
     {
      "titulo": "5 Lions Dance",
@@ -32440,6 +32650,13 @@
      "apuesta": 266.16
     },
     {
+     "titulo": "Eye of the Storm",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 1598,
+     "apuesta": 265.9
+    },
+    {
      "titulo": "Hades Power",
      "proveedor": "Amigogaming BCW",
      "categoria": "casino",
@@ -32501,13 +32718,6 @@
      "categoria": "casino",
      "jugadas": 300,
      "apuesta": 246.75
-    },
-    {
-     "titulo": "Fruit Shop",
-     "proveedor": "Netent",
-     "categoria": "casino",
-     "jugadas": 619,
-     "apuesta": 245.8
     },
     {
      "titulo": "Live casino",
@@ -32776,6 +32986,13 @@
      "apuesta": 182.4
     },
     {
+     "titulo": "3 Super Volcanoes",
+     "proveedor": "Evoplay",
+     "categoria": "casino",
+     "jugadas": 498,
+     "apuesta": 180.02
+    },
+    {
      "titulo": "Tornado Power: Hold and Win",
      "proveedor": "Playson",
      "categoria": "casino",
@@ -32895,18 +33112,18 @@
      "apuesta": 159.45
     },
     {
-     "titulo": "3 Super Volcanoes",
-     "proveedor": "Evoplay",
-     "categoria": "casino",
-     "jugadas": 441,
-     "apuesta": 159.44
-    },
-    {
      "titulo": "Alpha Eagle",
      "proveedor": "Hacksaw",
      "categoria": "casino",
      "jugadas": 62,
      "apuesta": 158.98
+    },
+    {
+     "titulo": "4 Fortune Clovers",
+     "proveedor": "3Oaks",
+     "categoria": "casino",
+     "jugadas": 495,
+     "apuesta": 158.64
     },
     {
      "titulo": "4 Wolf Drums",
@@ -32921,6 +33138,13 @@
      "categoria": "casino",
      "jugadas": 356,
      "apuesta": 157.32
+    },
+    {
+     "titulo": "Voltage Blitz Zeus Up",
+     "proveedor": "Rubyplay",
+     "categoria": "casino",
+     "jugadas": 442,
+     "apuesta": 156.1
     },
     {
      "titulo": "Sugar Teddy x1000",
@@ -32970,20 +33194,6 @@
      "categoria": "casino",
      "jugadas": 128,
      "apuesta": 150.44
-    },
-    {
-     "titulo": "Fruit Shop Megaways",
-     "proveedor": "Netent",
-     "categoria": "casino",
-     "jugadas": 276,
-     "apuesta": 149.93
-    },
-    {
-     "titulo": "Eye of the Storm",
-     "proveedor": "Pragmaticplay",
-     "categoria": "casino",
-     "jugadas": 855,
-     "apuesta": 148.35
     },
     {
      "titulo": "October Hot 40",
@@ -33070,13 +33280,6 @@
      "apuesta": 139.9
     },
     {
-     "titulo": "Voltage Blitz Zeus Up",
-     "proveedor": "Rubyplay",
-     "categoria": "casino",
-     "jugadas": 416,
-     "apuesta": 139.7
-    },
-    {
      "titulo": "2026 Hit Slot",
      "proveedor": "Endorphina",
      "categoria": "casino",
@@ -33105,6 +33308,13 @@
      "apuesta": 136.1
     },
     {
+     "titulo": "Coin Strike XXL: Hold and Win",
+     "proveedor": "Playson",
+     "categoria": "casino",
+     "jugadas": 410,
+     "apuesta": 135.9
+    },
+    {
      "titulo": "3 Crowned Pots",
      "proveedor": "Onlyplay",
      "categoria": "casino",
@@ -33117,13 +33327,6 @@
      "categoria": "casino",
      "jugadas": 146,
      "apuesta": 135.0
-    },
-    {
-     "titulo": "Coin Strike 2: Hold and Win",
-     "proveedor": "Playson",
-     "categoria": "casino",
-     "jugadas": 252,
-     "apuesta": 134.5
     },
     {
      "titulo": "Fortune Bags",
@@ -33208,13 +33411,6 @@
      "categoria": "casino",
      "jugadas": 126,
      "apuesta": 127.6
-    },
-    {
-     "titulo": "Coin Strike XXL: Hold and Win",
-     "proveedor": "Playson",
-     "categoria": "casino",
-     "jugadas": 372,
-     "apuesta": 127.3
     },
     {
      "titulo": "Coin Of The Nile",
@@ -33483,6 +33679,13 @@
      "apuesta": 97.3
     },
     {
+     "titulo": "12 Zodiacs",
+     "proveedor": "Habanero",
+     "categoria": "casino",
+     "jugadas": 199,
+     "apuesta": 97.2
+    },
+    {
      "titulo": "Rocket Eruption: Triple Blast",
      "proveedor": "BGaming",
      "categoria": "casino",
@@ -33495,6 +33698,13 @@
      "categoria": "casino",
      "jugadas": 94,
      "apuesta": 96.0
+    },
+    {
+     "titulo": "Crash Fireworks",
+     "proveedor": "TaDa",
+     "categoria": "casino",
+     "jugadas": 75,
+     "apuesta": 95.08
     },
     {
      "titulo": "Lucha Heroes",
@@ -33784,6 +33994,13 @@
      "apuesta": 79.89
     },
     {
+     "titulo": "Candy Rush",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 6,
+     "apuesta": 79.75
+    },
+    {
      "titulo": "Purple Diamond",
      "proveedor": "3Oaks",
      "categoria": "casino",
@@ -33824,13 +34041,6 @@
      "categoria": "casino",
      "jugadas": 172,
      "apuesta": 77.14
-    },
-    {
-     "titulo": "4 Fortune Clovers",
-     "proveedor": "3Oaks",
-     "categoria": "casino",
-     "jugadas": 178,
-     "apuesta": 74.86
     },
     {
      "titulo": "Regal Fruits 1000",
@@ -34204,6 +34414,13 @@
      "apuesta": 55.88
     },
     {
+     "titulo": "Mad Hit Ho Ho Hot Pudding",
+     "proveedor": "Rubyplay",
+     "categoria": "casino",
+     "jugadas": 202,
+     "apuesta": 55.8
+    },
+    {
      "titulo": "Fortune Horse",
      "proveedor": "PGsoft",
      "categoria": "casino",
@@ -34393,6 +34610,13 @@
      "apuesta": 49.51
     },
     {
+     "titulo": "Clover Gold",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 123,
+     "apuesta": 49.4
+    },
+    {
      "titulo": "Burning Classics",
      "proveedor": "Booming",
      "categoria": "casino",
@@ -34433,13 +34657,6 @@
      "categoria": "casino",
      "jugadas": 189,
      "apuesta": 48.3
-    },
-    {
-     "titulo": "Candy Rush",
-     "proveedor": "Pragmaticplay",
-     "categoria": "casino",
-     "jugadas": 4,
-     "apuesta": 48.16
     },
     {
      "titulo": "Golden Reel Fishing: Black Sea",
@@ -34701,6 +34918,13 @@
      "apuesta": 39.0
     },
     {
+     "titulo": "Football Champions BB",
+     "proveedor": "Barbarabang",
+     "categoria": "casino",
+     "jugadas": 92,
+     "apuesta": 38.71
+    },
+    {
      "titulo": "3 Gold Seeker",
      "proveedor": "TaDa",
      "categoria": "casino",
@@ -34720,13 +34944,6 @@
      "categoria": "casino",
      "jugadas": 155,
      "apuesta": 38.08
-    },
-    {
-     "titulo": "Football Champions BB",
-     "proveedor": "Barbarabang",
-     "categoria": "casino",
-     "jugadas": 87,
-     "apuesta": 38.01
     },
     {
      "titulo": "3 Rich Chickens",
@@ -35254,6 +35471,13 @@
      "apuesta": 24.96
     },
     {
+     "titulo": "Epic Coins",
+     "proveedor": "Amigogaming BCW",
+     "categoria": "casino",
+     "jugadas": 122,
+     "apuesta": 24.9
+    },
+    {
      "titulo": "Elephant Splash",
      "proveedor": "Amigogaming BCW",
      "categoria": "casino",
@@ -35462,13 +35686,6 @@
      "categoria": "casino",
      "jugadas": 96,
      "apuesta": 21.05
-    },
-    {
-     "titulo": "Crash Fireworks",
-     "proveedor": "TaDa",
-     "categoria": "casino",
-     "jugadas": 36,
-     "apuesta": 21.01
     },
     {
      "titulo": "Buffalo Power: Hold and Win",
@@ -35863,6 +36080,13 @@
      "apuesta": 16.8
     },
     {
+     "titulo": "Wild West Duels",
+     "proveedor": "Pragmaticplay",
+     "categoria": "casino",
+     "jugadas": 74,
+     "apuesta": 16.71
+    },
+    {
      "titulo": "Triple Tigers",
      "proveedor": "Pragmaticplay",
      "categoria": "casino",
@@ -35924,13 +36148,6 @@
      "categoria": "casino",
      "jugadas": 51,
      "apuesta": 16.02
-    },
-    {
-     "titulo": "Epic Coins",
-     "proveedor": "Amigogaming BCW",
-     "categoria": "casino",
-     "jugadas": 75,
-     "apuesta": 15.75
     },
     {
      "titulo": "Voodoo Coins",
@@ -36169,6 +36386,13 @@
      "categoria": "casino",
      "jugadas": 11,
      "apuesta": 13.0
+    },
+    {
+     "titulo": "Space Y",
+     "proveedor": "Vimplay",
+     "categoria": "casino",
+     "jugadas": 67,
+     "apuesta": 12.95
     },
     {
      "titulo": "Mad Hit Devil",
@@ -36563,13 +36787,6 @@
      "apuesta": 9.2
     },
     {
-     "titulo": "Space Y",
-     "proveedor": "Vimplay",
-     "categoria": "casino",
-     "jugadas": 37,
-     "apuesta": 9.15
-    },
-    {
      "titulo": "Turbo Keno",
      "proveedor": "TurboGames",
      "categoria": "casino",
@@ -36610,6 +36827,13 @@
      "categoria": "casino",
      "jugadas": 43,
      "apuesta": 8.6
+    },
+    {
+     "titulo": "Frog Dash 10000",
+     "proveedor": "TaDa",
+     "categoria": "casino",
+     "jugadas": 11,
+     "apuesta": 8.52
     },
     {
      "titulo": "Coins`n Diamonds Fortune",
@@ -36801,6 +37025,13 @@
      "apuesta": 7.08
     },
     {
+     "titulo": "Magic Clovers",
+     "proveedor": "3Oaks",
+     "categoria": "casino",
+     "jugadas": 43,
+     "apuesta": 7.05
+    },
+    {
      "titulo": "Coins`n Fruits 243",
      "proveedor": "1Spin4win",
      "categoria": "casino",
@@ -36883,13 +37114,6 @@
      "categoria": "casino",
      "jugadas": 17,
      "apuesta": 6.6
-    },
-    {
-     "titulo": "Frog Dash 10000",
-     "proveedor": "TaDa",
-     "categoria": "casino",
-     "jugadas": 8,
-     "apuesta": 6.53
     },
     {
      "titulo": "Legacy of Undead Dragon ABYSSWAYS",
@@ -38614,13 +38838,6 @@
      "apuesta": 0.92
     },
     {
-     "titulo": "Magic Clovers",
-     "proveedor": "3Oaks",
-     "categoria": "casino",
-     "jugadas": 9,
-     "apuesta": 0.9
-    },
-    {
      "titulo": "Lucky Band Hold And Win",
      "proveedor": "1Spin4win",
      "categoria": "casino",
@@ -38821,6 +39038,13 @@
      "proveedor": "Spinomenal",
      "categoria": "casino",
      "jugadas": 4,
+     "apuesta": 0.4
+    },
+    {
+     "titulo": "Aviamasters 2",
+     "proveedor": "BGaming",
+     "categoria": "casino",
+     "jugadas": 2,
      "apuesta": 0.4
     },
     {
