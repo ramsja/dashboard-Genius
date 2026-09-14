@@ -119,11 +119,15 @@ python exportar-desembolsos.py --watch --intervalo 15
   - Variables `DESEMBOLSO_PRODUCTOS` y `DESEMBOLSO_TERMINOS` (coma-separadas)
     amplían la detección sin tocar el código.
 
-- **En vivo desde el navegador (visor):** `visor_transacciones.py` expone
+- **En vivo desde el navegador (visor):** tanto `visor_actual.py` (el que abre
+  `abrir_visor_transacciones.bat`) como `visor_transacciones.py` exponen
   `/api/desembolsos` (vista previa JSON con conteo y monto total) y
   `/api/desembolsos.xlsx` (descarga del Excel al vuelo, respetando los filtros
   de búsqueda/fecha de la interfaz). El botón **«Desembolsos (Excel)»** del
   visor descarga el archivo con nombre `desembolsos_AAAAMMDD_HHMM.xlsx`.
+  Con el visor en marcha, el enlace de descarga en tiempo real es
+  `http://127.0.0.1:8765/api/desembolsos.xlsx` (puerto configurable con
+  `VISOR_PORT`).
 
 - **Dependencia:** requiere `openpyxl` (`python -m pip install openpyxl`).
 - El Excel contiene datos personales; `reportes/*.xlsx` está en `.gitignore` y
