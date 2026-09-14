@@ -70,6 +70,19 @@ jobs:
               print('Sin reportes/dashboard-data.json; se mantiene el snapshot actual')
           EOF
 
+      # Publica el resumen agregado en PostgreSQL para que Looker Studio lo
+      # consulte. Si no hay secreto DATABASE_URL, se omite sin romper el job.
+      - name: Publicar resumen para Looker Studio
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo 'Sin DATABASE_URL; se omite la publicacion para Looker'
+            exit 0
+          fi
+          python -m pip install "psycopg[binary]"
+          python dashboard/publicar-looker.py --una-vez
+
       - name: Limpiar CSVs viejos (mantener ultimos 5 dias)
         run: |
           python - <<'EOF'

@@ -140,6 +140,73 @@ python dashboard/publicar-looker.py --simular
 
 Pruebas: `python -m pytest test_publicar_looker.py`.
 
+### Conectar Looker Studio paso a paso
+
+Looker Studio se conecta por el **conector nativo de PostgreSQL**, así que sirve
+cualquier base accesible desde internet. Si ya usas Supabase en este proyecto, esa misma
+base vale y no hace falta contratar nada más.
+
+**1. Consigue la cadena de conexión.** En Supabase: *Project Settings → Database →
+Connection string → URI*. Tiene esta forma:
+
+```
+postgresql://postgres.<ref>:<clave>@aws-0-<region>.pooler.supabase.com:5432/postgres
+```
+
+**2. Crea las tablas** ejecutando el publicador una vez:
+
+```bash
+DATABASE_URL='postgresql://...' python dashboard/publicar-looker.py --una-vez
+```
+
+**3. Crea las vistas y el usuario de solo lectura.** Abre `supabase/looker-vistas.sql`,
+cambia `CLAVE_LARGA_AQUI` por una contraseña propia y ejecútalo (en Supabase: *SQL
+Editor → pegar → Run*). Esto crea las vistas `*_actual` y el rol `looker_lector`, que
+**solo puede leer las tablas `looker_*`**: no llega a `transaction_records` ni puede
+escribir nada.
+
+**4. Automatiza la actualización.** Guarda la cadena de conexión como secreto
+`DATABASE_URL` del repositorio (*Settings → Secrets and variables → Actions*). El
+workflow `extraccion-diaria.yml` publicará el resumen en cada ejecución; si el secreto no
+existe, ese paso se salta sin romper nada.
+
+**5. Conecta Looker Studio.** En <https://lookerstudio.google.com> → *Crear → Fuente de
+datos → PostgreSQL*, y rellena:
+
+| Campo | Valor |
+| --- | --- |
+| Host | `aws-0-<region>.pooler.supabase.com` (sin `https://` ni el puerto) |
+| Port | `5432` |
+| Database | `postgres` |
+| Username | `looker_lector` |
+| Password | la que pusiste en el paso 3 |
+| Enable SSL | **activado** |
+
+Luego *Custom query* o *Table*, y elige la vista según el gráfico.
+
+### Qué vista usar en cada gráfico
+
+> ⚠️ **No conectes las tablas `looker_kpis`, `looker_matriz`, `looker_rankings`… en
+> crudo.** Guardan una foto por snapshot, así que Looker sumaría todas y los totales
+> saldrían multiplicados (con dos snapshots, 418.980 transacciones se convierten en
+> 837.960). Usa siempre las vistas `*_actual`.
+
+| Quieres… | Usa |
+| --- | --- |
+| Tarjetas de KPI (transacciones, ingresos, usuarios) | `looker_cabecera` o `looker_kpis_actual` |
+| KPIs agrupados por módulo | `looker_modulos_actual` |
+| Tarta o barras online/retail por disciplina | `looker_matriz_actual` |
+| Ingresos y resultado por disciplina | `looker_dinero_actual` |
+| Top de productos | `looker_productos_actual` |
+| Rankings de jugadores (anonimizados) | `looker_rankings_actual` |
+| **Serie temporal por día** (transacciones, clientes, ingresos) | `looker_historico_dia` |
+| Evolución de un indicador entre snapshots | `looker_kpis_serie` |
+| Top de juegos por periodo | `looker_juegos` |
+| Tickets por deporte, con estados en columnas | `looker_tickets_actual` |
+
+Las cuatro últimas ya traen una fila por clave natural (día, periodo, deporte), así que se
+pueden conectar directamente.
+
 ## 4) Publicación automática (GitHub Actions)
 
 ### GitHub Pages
@@ -192,6 +259,7 @@ La ejecución genera el CSV, los reportes, sincroniza Supabase y actualiza y com
 ├── descargas/             # CSVs descargados (gitignored)
 ├── reportes/              # reportes generados (gitignored)
 ├── supabase/schema.sql
+├── supabase/looker-vistas.sql
 ├── .github/workflows/
 │   ├── deploy-pages.yml
 │   └── extraccion-diaria.yml
