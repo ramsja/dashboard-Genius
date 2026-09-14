@@ -97,25 +97,48 @@ Para que el dashboard público lea la vista `transaction_discipline_summary` en 
 
 ## 3b) Looker Studio (PostgreSQL)
 
-`dashboard/publicar-looker.py` publica en PostgreSQL el **resumen no identificable** del
-snapshot para que Looker Studio consulte el origen directamente. No replica cupones ni
-jugadores: solo indicadores, alertas agregadas, distribución de exposición, rankings
-anonimizados (`Jugador ****1234`, solo los últimos cuatro dígitos) y eventos deportivos.
+`dashboard/publicar-looker.py` publica en PostgreSQL el **resumen no identificable** de los
+JSON de `dashboard/data/`, para que Looker Studio consulte el origen directamente en lugar
+de leer los ficheros del sitio estático. Lee `snapshot.json`, `historico.json`,
+`actividad-usuarios.json`, `usuarios-historico.json`, `top-juegos.json` y
+`desglose-tickets.json`; si falta alguno, omite solo esa parte.
 
-- **Tablas** (se crean solas con `CREATE TABLE IF NOT EXISTS`): `looker_kpis`,
-  `looker_exposicion_tipo`, `looker_alertas_severidad`, `looker_alertas_tipologia`,
-  `looker_rankings`, `looker_eventos` y `looker_resumen_modulos`. Todas llevan la columna
-  `generado` (el `generated_at` del snapshot) en la clave primaria, así que cada snapshot
-  deja una fila por indicador y las reejecuciones no duplican (`ON CONFLICT DO NOTHING`).
-- **Requisitos:** `DATABASE_URL` en el entorno y `python -m pip install "psycopg[binary]"`.
-  Si falta cualquiera de los dos, el publicador no escribe nada y no rompe el resto del
-  flujo (la imagen anterior sigue funcionando sin esta capa).
-- **Uso:** se ejecuta en segundo plano y revisa `dashboard/data/snapshot.json` cada 30 s;
-  publica solo cuando cambia `generated_at`.
+**Nunca** publica el detalle de `snapshot.transactions`, ni teléfonos, nombres, correos,
+IPs o referencias de transacción. En los rankings el jugador aparece anonimizado a los
+últimos cuatro dígitos de su **ID interno** (`Jugador ****5518`), y la posición forma parte
+de la clave para que dos jugadores con los mismos cuatro dígitos no se pisen.
+
+### Tablas
+
+Se crean solas con `CREATE TABLE IF NOT EXISTS`, en dos familias:
+
+| Familia | Tablas | Clave y comportamiento |
+| --- | --- | --- |
+| **Serie de snapshots** | `looker_kpis`, `looker_resumen_modulos`, `looker_matriz`, `looker_dinero_disciplina`, `looker_estados_cliente`, `looker_productos`, `looker_rankings` | Llevan `generado` (el `generated_at` del snapshot) en la clave primaria: cada ejecución deja su propia foto y se ve la evolución en el tiempo. Reejecutar sobre el mismo snapshot no duplica (`ON CONFLICT DO NOTHING`). |
+| **Estado por clave natural** | `looker_historico_dia` (por `dia`), `looker_juegos` (por periodo/ranking/posición), `looker_tickets_deporte` y `looker_tickets_estado` (por periodo/deporte) | Se reemplazan con `UPSERT`, igual que hace `construir-historico.py`: la serie diaria queda limpia y la base no crece sin control. |
+
+`looker_rankings.ganado_usd` y `neto_usd` admiten `NULL` porque no todos los orígenes los
+calculan; se dejan vacíos en vez de a cero para no falsear los totales en Looker. El neto
+va siempre desde la óptica del jugador (negativo cuando pierde).
+
+### Requisitos y uso
+
+`DATABASE_URL` en el entorno y `python -m pip install "psycopg[binary]"`. Si falta
+cualquiera de los dos, el publicador no escribe nada y no rompe el resto del flujo (la
+imagen anterior sigue funcionando sin esta capa).
 
 ```bash
+# Bucle: revisa el snapshot cada 30 s y publica solo cuando cambia generated_at
 DATABASE_URL=postgresql://usuario:clave@host:5432/base python dashboard/publicar-looker.py
+
+# Una sola pasada (para encadenarlo tras la extracción diaria)
+DATABASE_URL=... python dashboard/publicar-looker.py --una-vez
+
+# Sin base: solo muestra cuántas filas se publicarían de cada tabla
+python dashboard/publicar-looker.py --simular
 ```
+
+Pruebas: `python -m pytest test_publicar_looker.py`.
 
 ## 4) Publicación automática (GitHub Actions)
 
@@ -156,6 +179,7 @@ La ejecución genera el CSV, los reportes, sincroniza Supabase y actualiza y com
 ├── construir-historico.py
 ├── test_extraccionDatos.py
 ├── test_construir_historico.py
+├── test_publicar_looker.py
 ├── dashboard/
 │   ├── index.html
 │   ├── app.js
