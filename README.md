@@ -95,6 +95,28 @@ python construir-historico.py descargas/     # equivalente explícito
 
 Para que el dashboard público lea la vista `transaction_discipline_summary` en vivo, añade una política `select` para `anon` sobre esa vista (o usa el snapshot JSON estático).
 
+## 3b) Looker Studio (PostgreSQL)
+
+`dashboard/publicar-looker.py` publica en PostgreSQL el **resumen no identificable** del
+snapshot para que Looker Studio consulte el origen directamente. No replica cupones ni
+jugadores: solo indicadores, alertas agregadas, distribución de exposición, rankings
+anonimizados (`Jugador ****1234`, solo los últimos cuatro dígitos) y eventos deportivos.
+
+- **Tablas** (se crean solas con `CREATE TABLE IF NOT EXISTS`): `looker_kpis`,
+  `looker_exposicion_tipo`, `looker_alertas_severidad`, `looker_alertas_tipologia`,
+  `looker_rankings`, `looker_eventos` y `looker_resumen_modulos`. Todas llevan la columna
+  `generado` (el `generated_at` del snapshot) en la clave primaria, así que cada snapshot
+  deja una fila por indicador y las reejecuciones no duplican (`ON CONFLICT DO NOTHING`).
+- **Requisitos:** `DATABASE_URL` en el entorno y `python -m pip install "psycopg[binary]"`.
+  Si falta cualquiera de los dos, el publicador no escribe nada y no rompe el resto del
+  flujo (la imagen anterior sigue funcionando sin esta capa).
+- **Uso:** se ejecuta en segundo plano y revisa `dashboard/data/snapshot.json` cada 30 s;
+  publica solo cuando cambia `generated_at`.
+
+```bash
+DATABASE_URL=postgresql://usuario:clave@host:5432/base python dashboard/publicar-looker.py
+```
+
 ## 4) Publicación automática (GitHub Actions)
 
 ### GitHub Pages
@@ -142,6 +164,7 @@ La ejecución genera el CSV, los reportes, sincroniza Supabase y actualiza y com
 │   ├── config.example.js
 │   ├── data/snapshot.json
 │   ├── data/historico.json
+│   └── publicar-looker.py
 ├── descargas/             # CSVs descargados (gitignored)
 ├── reportes/              # reportes generados (gitignored)
 ├── supabase/schema.sql

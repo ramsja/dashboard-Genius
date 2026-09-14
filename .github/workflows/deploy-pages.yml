@@ -45,6 +45,9 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
+      - name: Excluir scripts de servidor del sitio publicado
+        run: rm -f dashboard/*.py
+
       - name: Configurar Pages
         uses: actions/configure-pages@v5
 
