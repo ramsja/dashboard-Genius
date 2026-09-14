@@ -11,6 +11,7 @@ reportes/*.csv
 reportes/*.json
 reportes/*.sql
 reportes/*.txt
+reportes/*.xlsx
 !reportes/.gitkeep
 !reportes/README.txt
 # Configuración local del dashboard (contiene credenciales)
@@ -21,6 +22,7 @@ dashboard/config.js
 # Datos descargados del back office (información personal de clientes)
 descargas/*.csv
 descargas/*.zip
+descargas/*.xlsx
 !descargas/.gitkeep
 
 # Bases de datos y registros de ejecución locales

@@ -84,6 +84,51 @@ python construir-historico.py descargas/     # equivalente explícito
 - La extracción diaria (workflow) lo ejecuta tras cada descarga y commitea el JSON junto al snapshot.
 - Para rellenar histórico antiguo: `START_DATE=2026-08-01 END_DATE=2026-08-31 python extraccionDatos.py` y luego `python construir-historico.py` (un solo export de rago, agrupa por día).
 
+## 2d) Desembolsos (retiros) en Excel — en tiempo real
+
+Sección para el equipo de riesgos/finanzas: exporta a **Excel** únicamente las
+**solicitudes de desembolso (retiros)** del módulo de transacciones, con cada
+dato del movimiento **enriquecido con la ficha del cliente** mapeada desde
+`dashboard/data/usuarios-historico.json` (y `actividad-usuarios.json`).
+
+> ⚠️ Nomenclatura del Back Office: la columna `Tipo de transacción` usa
+> `Withdraw`/`Deposit` también para el flujo de casino (apuesta/ganancia). Por
+> eso un **retiro real** se detecta por el *producto de caja* (Payments, Banco,
+> …) o por términos explícitos de retiro en grupo/causal, **no** por el
+> `Withdraw` del casino.
+
+- **Script:** `exportar-desembolsos.py` — lee el CSV más reciente de
+  `descargas/` (o el que se le pase), filtra los desembolsos, los enriquece y
+  genera `reportes/desembolsos.xlsx` con 3 hojas: **Desembolsos** (detalle,
+  una fila por solicitud + datos del cliente), **Por usuario** (agregado) y
+  **Resumen** (KPIs por canal, estado y producto).
+
+```bash
+python exportar-desembolsos.py                     # CSV más reciente de descargas/
+python exportar-desembolsos.py ruta/al.csv         # un CSV concreto
+python exportar-desembolsos.py -o reportes/retiros.xlsx
+python exportar-desembolsos.py --modo amplio       # + términos de retiro en cualquier producto
+python exportar-desembolsos.py --watch             # tiempo real: regenera cuando cambia el CSV
+python exportar-desembolsos.py --watch --intervalo 15
+```
+
+  - `--modo pagos` (defecto): sólo retiros de caja (el desembolso real).
+  - `--modo amplio`: además, cualquier fila con términos de retiro (retiro,
+    payout, cashout, reintegro, desembolso…) en grupo/causal/descripción.
+  - `--modo withdraw`: todo `Withdraw` en crudo (incluye apuestas; diagnóstico).
+  - Variables `DESEMBOLSO_PRODUCTOS` y `DESEMBOLSO_TERMINOS` (coma-separadas)
+    amplían la detección sin tocar el código.
+
+- **En vivo desde el navegador (visor):** `visor_transacciones.py` expone
+  `/api/desembolsos` (vista previa JSON con conteo y monto total) y
+  `/api/desembolsos.xlsx` (descarga del Excel al vuelo, respetando los filtros
+  de búsqueda/fecha de la interfaz). El botón **«Desembolsos (Excel)»** del
+  visor descarga el archivo con nombre `desembolsos_AAAAMMDD_HHMM.xlsx`.
+
+- **Dependencia:** requiere `openpyxl` (`python -m pip install openpyxl`).
+- El Excel contiene datos personales; `reportes/*.xlsx` está en `.gitignore` y
+  **no** debe subirse al repositorio.
+
 ## 3) Supabase
 
 1. Crea un proyecto en Supabase.
@@ -132,8 +177,11 @@ La ejecución genera el CSV, los reportes, sincroniza Supabase y actualiza y com
 ├── extraccionDatos.py
 ├── extraccion-tickets-deporte.py
 ├── construir-historico.py
+├── exportar-desembolsos.py       # Excel de retiros/desembolsos + ficha de cliente
+├── visor_transacciones.py        # visor local con /api/desembolsos(.xlsx)
 ├── test_extraccionDatos.py
 ├── test_construir_historico.py
+├── test_exportar_desembolsos.py
 ├── dashboard/
 │   ├── index.html
 │   ├── app.js

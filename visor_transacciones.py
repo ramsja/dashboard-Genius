@@ -21,6 +21,18 @@ try:
 except ImportError:
     Workbook = None
 
+# Módulo de desembolsos (nombre con guion -> carga dinámica).
+try:
+    import importlib.util as _ilu
+
+    _spec = _ilu.spec_from_file_location(
+        "exportar_desembolsos", BASE_DIR / "exportar-desembolsos.py"
+    )
+    desembolsos_mod = _ilu.module_from_spec(_spec)  # type: ignore[arg-type]
+    _spec.loader.exec_module(desembolsos_mod)  # type: ignore[union-attr]
+except Exception:  # noqa: BLE001 - si falta el módulo, el endpoint lo reporta
+    desembolsos_mod = None
+
 
 def csv_paths() -> list[Path]:
     ordered = [
@@ -200,6 +212,61 @@ def export_excel(params: dict[str, list[str]]) -> bytes:
     return output.getvalue()
 
 
+def _desembolsos_registros(params: dict[str, list[str]]) -> tuple[list, Path, str]:
+    """Filtra el CSV a solicitudes de desembolso, enriquecidas con el JSON de usuarios."""
+    if desembolsos_mod is None:
+        raise RuntimeError("Módulo de desembolsos no disponible (exportar-desembolsos.py)")
+    search = params.get("search", [""])[0].strip()
+    start = params.get("start", [""])[0].strip()
+    end = params.get("end", [""])[0].strip()
+    modo = params.get("modo", ["pagos"])[0].strip() or "pagos"
+    path = main_csv()
+
+    # Reutiliza el mismo header/columnas para aplicar los filtros de la UI.
+    with open_csv(path) as handle:
+        header = next(csv.reader(handle), [])
+
+    def extra(row: dict) -> bool:
+        values = [row.get(col, "") for col in header]
+        return match_row(header, values, search, start, end)
+
+    productos, terminos = desembolsos_mod._config_extra()
+    perfiles = desembolsos_mod.cargar_usuarios()
+    registros = list(desembolsos_mod.iter_desembolsos(
+        path, perfiles, modo, productos, terminos, extra_filter=extra
+    ))
+    return registros, path, modo
+
+
+def export_desembolsos(params: dict[str, list[str]]) -> bytes:
+    registros, path, modo = _desembolsos_registros(params)
+    book = desembolsos_mod.construir_libro(registros, path, modo)
+    output = io.BytesIO()
+    book.save(output)
+    return output.getvalue()
+
+
+def desembolsos_preview(params: dict[str, list[str]]) -> dict[str, object]:
+    registros, path, modo = _desembolsos_registros(params)
+    cols = desembolsos_mod.columnas_detalle()
+    total_monto = 0.0
+    for r in registros:
+        try:
+            total_monto += abs(float(desembolsos_mod.parse_money(r.get("Monto solicitado", 0))))
+        except Exception:
+            pass
+    usuarios = {r.get("_uid") or r.get("Usuario") for r in registros}
+    return {
+        "columns": cols,
+        "rows": [[r.get(c, "") for c in cols] for r in registros[:200]],
+        "count": len(registros),
+        "usuarios": len([u for u in usuarios if u]),
+        "monto_total": round(total_monto, 2),
+        "modo": modo,
+        "file": str(path),
+    }
+
+
 class Handler(BaseHTTPRequestHandler):
     def send_cors(self) -> None:
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -245,6 +312,18 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_response(200)
                 self.send_header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 self.send_header("Content-Disposition", "attachment; filename=transacciones_filtradas.xlsx")
+                self.send_header("Content-Length", str(len(body)))
+                self.send_cors()
+                self.end_headers()
+                self.wfile.write(body)
+            elif parsed.path == "/api/desembolsos":
+                self.send_json(desembolsos_preview(params))
+            elif parsed.path == "/api/desembolsos.xlsx":
+                body = export_desembolsos(params)
+                stamp = datetime.now().strftime("%Y%m%d_%H%M")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                self.send_header("Content-Disposition", f"attachment; filename=desembolsos_{stamp}.xlsx")
                 self.send_header("Content-Length", str(len(body)))
                 self.send_cors()
                 self.end_headers()
