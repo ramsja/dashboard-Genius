@@ -124,3 +124,64 @@ GRANT SELECT ON
   looker_dinero_actual, looker_estados_actual, looker_productos_actual,
   looker_rankings_actual, looker_kpis_serie, looker_cabecera, looker_tickets_actual
 TO looker_lector;
+
+-- ---------------------------------------------------------------------------
+-- 6) Blindaje en Supabase.
+--
+--    Supabase publica por su API REST todo lo que tenga permisos para los
+--    roles `anon` y `authenticated` en el esquema public, y deja privilegios
+--    por defecto que se los conceden a cualquier tabla nueva.  La anon key
+--    viaja dentro de dashboard/config.js, que es publico en GitHub Pages: sin
+--    esto, los KPIs y los rankings quedarian accesibles para cualquiera que
+--    abriera el dashboard.
+--
+--    Se revocan esos permisos y se activa RLS como segunda barrera, por si
+--    alguien vuelve a conceder un GRANT mas adelante.  El publicador sigue
+--    escribiendo sin problema: se conecta como propietario de las tablas y el
+--    propietario no pasa por RLS.
+--
+--    En un PostgreSQL que no sea Supabase estos roles no existen y el bloque
+--    se salta solo.
+-- ---------------------------------------------------------------------------
+
+DO $$
+DECLARE
+  objeto text;
+  publicos text[] := ARRAY['anon', 'authenticated'];
+  rol text;
+BEGIN
+  FOREACH rol IN ARRAY publicos LOOP
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = rol) THEN
+      FOR objeto IN
+        SELECT c.relname FROM pg_class c
+        JOIN pg_namespace n ON n.oid = c.relnamespace
+        WHERE n.nspname = 'public' AND c.relname LIKE 'looker\_%'
+          AND c.relkind IN ('r', 'v')
+      LOOP
+        EXECUTE format('REVOKE ALL ON public.%I FROM %I', objeto, rol);
+      END LOOP;
+      RAISE NOTICE 'Permisos revocados a %', rol;
+    END IF;
+  END LOOP;
+END
+$$;
+
+-- RLS sin politica abierta: nadie lee las tablas salvo el propietario (que las
+-- escribe) y looker_lector (por la politica de abajo).
+DO $$
+DECLARE
+  tabla text;
+BEGIN
+  FOR tabla IN
+    SELECT c.relname FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE n.nspname = 'public' AND c.relname LIKE 'looker\_%' AND c.relkind = 'r'
+  LOOP
+    EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', tabla);
+    EXECUTE format('DROP POLICY IF EXISTS looker_lector_lee ON public.%I', tabla);
+    EXECUTE format(
+      'CREATE POLICY looker_lector_lee ON public.%I FOR SELECT TO looker_lector USING (true)',
+      tabla);
+  END LOOP;
+END
+$$;
