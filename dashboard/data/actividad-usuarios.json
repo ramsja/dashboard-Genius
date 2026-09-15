@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-09-15T08:33:28",
+  "generated_at": "2026-09-15T13:59:35",
   "source": "/home/runner/work/dashboard-Genius/dashboard-Genius/descargas/transacciones_producto__2026-09-10_2026-09-15.csv",
   "top_apostadores": [
     {
@@ -11,9 +11,9 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-15 01:47:03",
       "productos": [
-        "Payments",
         "Casino Live",
-        "Casino"
+        "Casino",
+        "Payments"
       ]
     },
     {
@@ -24,21 +24,34 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 16:28:44",
       "productos": [
-        "Payments",
         "Casino Live",
-        "Casino"
+        "Casino",
+        "Payments"
       ]
     },
     {
       "usuario": "50360173808",
       "id_usuario": "788350034",
-      "total_apostado": 17672.95,
-      "transacciones": 7192,
+      "total_apostado": 17673.07,
+      "transacciones": 7196,
       "tipo": "Player Online",
-      "ultima_actividad": "2026-09-15 00:55:29",
+      "ultima_actividad": "2026-09-15 05:43:49",
       "productos": [
-        "Payments",
-        "Casino"
+        "Casino",
+        "Payments"
+      ]
+    },
+    {
+      "usuario": "50368261613",
+      "id_usuario": "788683877",
+      "total_apostado": 13085.65,
+      "transacciones": 818,
+      "tipo": "Player Online",
+      "ultima_actividad": "2026-09-15 04:15:43",
+      "productos": [
+        "Casino Live",
+        "Casino",
+        "Payments"
       ]
     },
     {
@@ -49,8 +62,8 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-11 00:35:44",
       "productos": [
-        "Payments",
-        "Casino"
+        "Casino",
+        "Payments"
       ]
     },
     {
@@ -61,8 +74,20 @@
       "tipo": "Player Retail",
       "ultima_actividad": "2026-09-14 18:42:11",
       "productos": [
-        "Payments",
-        "Casino"
+        "Casino",
+        "Payments"
+      ]
+    },
+    {
+      "usuario": "50379851359",
+      "id_usuario": "788443151",
+      "total_apostado": 9499.4,
+      "transacciones": 5717,
+      "tipo": "Player Online",
+      "ultima_actividad": "2026-09-15 06:31:04",
+      "productos": [
+        "Casino",
+        "Payments"
       ]
     },
     {
@@ -73,34 +98,9 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 18:19:31",
       "productos": [
+        "Deporte",
         "Miscellaneous",
-        "Payments",
-        "Deporte"
-      ]
-    },
-    {
-      "usuario": "50368261613",
-      "id_usuario": "788683877",
-      "total_apostado": 9360.25,
-      "transacciones": 582,
-      "tipo": "Player Online",
-      "ultima_actividad": "2026-09-15 02:18:04",
-      "productos": [
-        "Payments",
-        "Casino Live",
-        "Casino"
-      ]
-    },
-    {
-      "usuario": "50379851359",
-      "id_usuario": "788443151",
-      "total_apostado": 9331.8,
-      "transacciones": 5605,
-      "tipo": "Player Online",
-      "ultima_actividad": "2026-09-14 23:21:31",
-      "productos": [
-        "Payments",
-        "Casino"
+        "Payments"
       ]
     },
     {
@@ -111,9 +111,9 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 22:23:13",
       "productos": [
-        "Payments",
         "Deporte",
-        "Casino"
+        "Casino",
+        "Payments"
       ]
     },
     {
@@ -124,8 +124,8 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 17:17:54",
       "productos": [
-        "Payments",
-        "Casino"
+        "Casino",
+        "Payments"
       ]
     },
     {
@@ -137,9 +137,9 @@
       "ultima_actividad": "2026-09-14 16:13:03",
       "productos": [
         "Deporte",
+        "Casino",
         "Miscellaneous",
-        "Payments",
-        "Casino"
+        "Payments"
       ]
     },
     {
@@ -163,9 +163,9 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 19:03:23",
       "productos": [
-        "Payments",
         "Deporte",
-        "Casino"
+        "Casino",
+        "Payments"
       ]
     },
     {
@@ -176,8 +176,8 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 19:35:32",
       "productos": [
-        "Payments",
-        "Casino"
+        "Casino",
+        "Payments"
       ]
     },
     {
@@ -188,9 +188,9 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 21:01:49",
       "productos": [
+        "Deporte",
         "Miscellaneous",
-        "Payments",
-        "Deporte"
+        "Payments"
       ]
     },
     {
@@ -201,9 +201,9 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 22:55:53",
       "productos": [
-        "Payments",
         "Deporte",
-        "Casino Live"
+        "Casino Live",
+        "Payments"
       ]
     },
     {
@@ -215,9 +215,9 @@
       "ultima_actividad": "2026-09-15 00:12:41",
       "productos": [
         "Miscellaneous",
+        "Payments",
         "Casino",
         "Deporte",
-        "Payments",
         "Casino Live"
       ]
     },
@@ -229,8 +229,8 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-15 02:15:53",
       "productos": [
-        "Payments",
-        "Casino"
+        "Casino",
+        "Payments"
       ]
     },
     {
@@ -241,9 +241,9 @@
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 19:37:46",
       "productos": [
-        "Miscellaneous",
         "Deporte",
-        "Casino"
+        "Casino",
+        "Miscellaneous"
       ]
     },
     {
@@ -254,10 +254,10 @@
       "tipo": "Player Retail",
       "ultima_actividad": "2026-09-14 11:34:04",
       "productos": [
-        "Miscellaneous",
         "Deporte",
-        "Payments",
-        "Casino"
+        "Casino",
+        "Miscellaneous",
+        "Payments"
       ]
     }
   ],
@@ -353,6 +353,16 @@
       "ultima_actividad": "2026-09-14 18:19:31"
     },
     {
+      "usuario": "50379530556",
+      "id_usuario": "788612300",
+      "perdida_neta": 121.08,
+      "total_apostado": 466.0,
+      "total_ganado": 344.92,
+      "transacciones": 58,
+      "tipo": "Player Retail",
+      "ultima_actividad": "2026-09-15 07:40:29"
+    },
+    {
       "usuario": "50369881465",
       "id_usuario": "788606633",
       "perdida_neta": 106.75,
@@ -383,6 +393,16 @@
       "ultima_actividad": "2026-09-14 16:28:44"
     },
     {
+      "usuario": "50372120481",
+      "id_usuario": "788505701",
+      "perdida_neta": 89.61,
+      "total_apostado": 273.86,
+      "total_ganado": 184.25,
+      "transacciones": 28,
+      "tipo": "Player Online",
+      "ultima_actividad": "2026-09-15 07:19:37"
+    },
+    {
       "usuario": "50378797844",
       "id_usuario": "788471003",
       "perdida_neta": 79.39,
@@ -403,16 +423,6 @@
       "ultima_actividad": "2026-09-14 10:54:16"
     },
     {
-      "usuario": "50375885220",
-      "id_usuario": "788560169",
-      "perdida_neta": 63.46,
-      "total_apostado": 122.9,
-      "total_ganado": 59.44,
-      "transacciones": 65,
-      "tipo": "Player Online",
-      "ultima_actividad": "2026-09-14 14:26:51"
-    },
-    {
       "usuario": "50378952770",
       "id_usuario": "788442194",
       "perdida_neta": 60.95,
@@ -421,16 +431,6 @@
       "transacciones": 315,
       "tipo": "Player Online",
       "ultima_actividad": "2026-09-14 19:42:50"
-    },
-    {
-      "usuario": "50372120481",
-      "id_usuario": "788505701",
-      "perdida_neta": 59.61,
-      "total_apostado": 243.86,
-      "total_ganado": 184.25,
-      "transacciones": 25,
-      "tipo": "Player Online",
-      "ultima_actividad": "2026-09-14 14:39:50"
     },
     {
       "usuario": "50370112505",
@@ -453,20 +453,20 @@
       "ultima_actividad": "2026-09-14 10:55:38"
     },
     {
-      "usuario": "50378418115",
-      "id_usuario": "787955897",
-      "perdida_neta": 42.99,
-      "total_apostado": 324.69,
-      "total_ganado": 281.7,
-      "transacciones": 41,
-      "tipo": "Player Retail",
-      "ultima_actividad": "2026-09-14 20:56:25"
+      "usuario": "50375885220",
+      "id_usuario": "788560169",
+      "perdida_neta": 43.46,
+      "total_apostado": 127.9,
+      "total_ganado": 84.44,
+      "transacciones": 67,
+      "tipo": "Player Online",
+      "ultima_actividad": "2026-09-15 03:08:39"
     }
   ],
   "resumen": {
-    "total_usuarios": 698,
-    "usuarios_activos_hoy": 37,
-    "volumen_total_apostado": 388690.41,
-    "perdida_neta_total": -7607.96
+    "total_usuarios": 703,
+    "usuarios_activos_hoy": 86,
+    "volumen_total_apostado": 395023.33,
+    "perdida_neta_total": -6712.32
   }
 }

@@ -1,6 +1,6 @@
 {
  "version": 1,
- "actualizado": "2026-09-15T08:33:12",
+ "actualizado": "2026-09-15T13:59:19",
  "dias": {
   "2026-08-01": {
    "transacciones": 46649,
@@ -1095,38 +1095,38 @@
    }
   },
   "2026-09-15": {
-   "transacciones": 7946,
+   "transacciones": 15100,
    "disciplina": {
-    "casino": 7884,
-    "deportes": 62,
+    "casino": 14923,
+    "deportes": 177,
     "otros": 0
    },
    "conexion": {
-    "online": 6234,
-    "retail": 1712,
+    "online": 10928,
+    "retail": 4172,
     "desconocido": 0
    },
    "clientes": {
-    "total": 37,
-    "online": 28,
-    "retail": 9
+    "total": 86,
+    "online": 65,
+    "retail": 21
    },
    "estados_cliente": {
-    "activo": 28,
-    "inactivo": 9,
+    "activo": 65,
+    "inactivo": 21,
     "desconectado": 0,
     "suspendido": 0,
     "otros": 0
    },
    "money": {
     "casino": {
-     "income": 11679.73,
-     "total": -1010.46,
+     "income": 16522.9,
+     "total": -1008.12,
      "commission": 0.0
     },
     "deportes": {
-     "income": 624.0,
-     "total": -917.37,
+     "income": 1218.11,
+     "total": -1815.35,
      "commission": 0.0
     },
     "otros": {
